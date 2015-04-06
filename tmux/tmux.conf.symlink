@@ -1,0 +1,59 @@
+# tmux configuration by Ignas Anikevicius
+
+# Make the key bindings behave more similarly to vi
+set -g status-keys vi
+setw -g mode-keys vi
+
+# set the bell action properly
+set -g bell-action any
+
+# Set the default terminal
+set -g default-terminal screen-256color
+
+# Set the terminal titles
+set -g set-titles on                                                 
+#set -g set-titles-string '#H:#S.#I.#P #W'
+setw -g automatic-rename on
+
+# start numbering windows with 1
+set -g base-index 1
+
+# Theme: based on base16 color scheme ----------------------------------------------
+#set  -g status-bg colour11
+#set  -g status-fg colour15
+#set  -g status-left " #S "
+#set  -g status-left-bg colour12
+#set  -g status-left-fg colour0
+#set  -g status-right " #T "
+#set  -g status-right-length 50
+#setw -g window-status-format " #I #W#[fg=colour8]#F "
+#setw -g window-status-current-format " #I #W#[fg=colour11]#F "
+#setw -g window-status-current-attr none
+#setw -g window-status-current-bg colour0
+#setw -g window-status-current-fg colour2
+
+# Bindings -------------------------------------------------------------------------
+bind e previous-window
+bind f next-window
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+bind R source-file ~/.tmux.conf \; display-message "Config reloaded..."
+
+# Pass through the prefix
+bind ` send-prefix
+
+# Clipboard selection integration --------------------------------------------------
+
+#Copy tmux paste buffer to clipboard
+bind Y run "tmux show-buffer | xclip -i -selection clipboard"
+#Copy clipboard to tmux paste buffer and paste tmux paste buffer
+bind P run "tmux set-buffer -- \"$(xclip -o -selection clipboard)\"; tmux paste-buffer"
+
+# Powerline ------------------------------------------------------------------------
+source ~/src/github/powerline/powerline/bindings/tmux/powerline.conf
+source ~/src/github/powerline/powerline/bindings/tmux/powerline_tmux_1.8_plus.conf
+source ~/src/github/powerline/powerline/bindings/tmux/powerline_tmux_1.9_plus.conf
+
