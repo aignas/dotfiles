@@ -1,3 +1,6 @@
+# My zshrc configuration. Use or reuse however you like.
+#       by gns-ank
+
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
 
@@ -38,3 +41,14 @@ do
 done
 
 unset config_files
+
+
+# Load Prezto files:
+if [ -d ${HOME}/.config/zshrc.d ]; then
+    for rcfile in ${HOME}/.config/zshrc.d/*.zsh; do
+        . ${rcfile}
+    done
+fi
+
+
+# vim tw=80

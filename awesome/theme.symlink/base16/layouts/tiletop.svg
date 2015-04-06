@@ -1,0 +1,34 @@
+<svg
+   version="1.1"
+   width="64"
+   height="64"
+   id="svg2">
+  <rect
+     width="56"
+     height="26"
+     x="4"
+     y="4"
+     id="main"
+     style="fill:#ac4142;fill-opacity:1;stroke:none" />
+  <rect
+     width="16"
+     height="26"
+     x="4"
+     y="34"
+     id="slave1"
+     style="fill:#d28445;fill-opacity:1;stroke:none" />
+  <rect
+     width="16"
+     height="26"
+     x="24"
+     y="34"
+     id="slave2"
+     style="fill:#90a959;fill-opacity:1;stroke:none" />
+  <rect
+     width="16"
+     height="26"
+     x="44"
+     y="34"
+     id="slave3"
+     style="fill:#75b5aa;fill-opacity:1;stroke:none" />
+</svg>

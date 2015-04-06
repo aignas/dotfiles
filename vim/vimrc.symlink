@@ -1,4 +1,373 @@
-syntax on
+" .vimrc configuration by Ignas Anikevičius
+"
+" There are numerous people, whose configuration files were copied and adapted
+" and it's hard to list everybody, but the main ones are:
+"
+"   * Amir Salihefendic <amix3k at gmail.com>
+"       http://amix.dk/blog/post/19486#The-ultimative-Vim-configuration-vimrc
+"
+"   * Steve Losh
+"       http://stevelosh.com/blog/2010/09/coming-home-to-vim/#
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+" Set the runtime
+set nocompatible                        " required for Vundle
+filetype off                            " Turn this plugin off
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle
+Plugin 'gmarik/Vundle.vim'
+
+" Install plugins
+" NOTE: comments after Bundle command are not allowed..
+" original repos on github
+
+" Syntax files
+Plugin 'PKGBUILD'
+Plugin 'YankRing.vim'
+
+" Colour-schemes
+Plugin 'chriskempson/base16-vim'
+
+" Some plugins
+Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-surround'
+Plugin 'kien/ctrlp.vim'
+"
+" NOTE: Clang-complete needs Clang to operate properly
+Plugin 'Rip-Rip/clang_complete'
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+
+Plugin 'vim-pandoc/vim-pandoc'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'coot/atp_vim'
+
+Plugin 'ivanov/vim-ipython'
+
+" non github repos
+"Plugin 'git://git.code.sf.net/p/atp-vim/code'
+
+call vundle#end()                       " required
+let g:vundle_default_git_proto = 'git'  " use git for fetching
+filetype plugin indent on               " Enable filetype plugin
+syntax enable                           " Enable syntax hl
+
+"Get out of VI's compatible mode..
+set encoding=utf-8
+set autoread                            " Automatically read when the file is changed from outside
+set history=600                         " History size
+
+let mapleader=","                       " Change the def leader
+let maplocalleader="-"                  " Change the def leader
+
+set go=aeg                              " remove toolbar and menubar
+if has("gui_running")
+    let g:base16_shell_path="~/src/github/base16/base16-builder/output/shell"
+    let base16colorspace=256
+else
+    let g:base16_shell_path="~/src/github/base16/base16-builder/output/shell"
+    set t_Co=16
+    let base16colorspace=16
+end
+set background=dark                     " Set a dark background
+colorscheme base16-default              " This is my new favorite
+" colorscheme solarized
+" let g:solarized_termcolors=256
+"set mouse=i                             " Enable mouse in vim as well
+
+"Favorite filetypes
+set ffs=unix,dos,mac
+
+nmap <leader>fd :se ff=dos<cr>
+nmap <leader>fu :se ff=unix<cr>
+
+set scrolloff=3             "Set 3 lines to the curors - when moving vertical..
+
+"Turn on Wild menu
+set wildmenu
+set wildmode=list:longest
+
+set laststatus=2            " Always show the status line
+set cmdheight=2             " The commandbar is 2 high
+set relativenumber          " Show relative line numbers
+set lazyredraw              " Do not redraw, when running macros.. lazyredraw
+set hid                     " Change buffer - without saving
+set backspace=eol,start,indent "Set backspace
+set autoindent              " Set autoindent
+set whichwrap+=<,>          " Backspace and cursor keys wrap to
+set ignorecase smartcase    " Ignore case when searching
+set incsearch hlsearch showmatch "Highlight search results
+set magic                   " Set magic on
+"set noerrorbells            " No sound on errors.
+au FocusLost * :wa          " Save when loosing focus
+
+function! CurDir()
+    let curdir=substitute(getcwd(), '/home/gns-ank/', "~/", "g")
+    return curdir
+endfunction
+
+"Format the statusline
+set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" Disable arrow keys
+nnoremap <up> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+
+" Fixing the modifier key and arrow combinations
+map [1;5B <C-Down>
+
+" leave the insert mode faster
+inoremap <Up> <ESC>
+inoremap jj <ESC>
+
+"Actually, the tab does not switch buffers, but my arrows
+noremap <Right> :bn<cr>
+noremap <Left> :bp<cr>
+nnoremap <C-Down> :Bclose<cr>
+
+" Don't close window, when deleting a buffer
+command! Bclose call <SID>BufcloseCloseIt()
+
+"Fast open a buffer by search for a name
+map <C-q> :sb
+
+"Open a dummy buffer for paste
+map <leader>q :e ~/buffer<cr>
+map <leader>w :w<cr>
+
+function! <SID>BufcloseCloseIt()
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
+
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
+
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
+
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
+
+"Restore cursor to file position in previous editing session
+set viminfo='10,\"100,:20,%,n~/.viminfo
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+"Switch to current dir
+map <leader>cd :cd %:p:h<cr>
+
+" Retain indentation when we are word wrapping
+set breakindent
+" Set the showbreak to something useful
+set showbreak=..
+
+"If the directory in which we want to save a file is not there, create it
+augroup BWCCreateDir
+    au!
+    autocmd BufWritePre * if expand("<afile>")!~#'^\w\+:/' && !isdirectory(expand("%:h")) | execute "silent! !mkdir -p ".shellescape(expand('%:h'), 1) | redraw! | endif
+augroup END
+
+" General Abbrevs
+iab xxdate <c-r>=strftime("%d/%m/%Y")<cr>
+iab xxtime <c-r>=strftime("%H:%M:%S")<cr>
+iab xxname Ignas Anikevičius
+iab xxemail anikevicius@gmail.com
+
+" Files and backups
+"
+"Turn backup and swap on
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swp//
+set undodir=~/.vim/undo//
+set backupcopy=yes
+set undofile
+
+"Enable folding, I find it very useful
+set foldenable
+set foldlevel=1
+set foldmethod=indent
+
+set expandtab
+set shiftwidth=4
+set tabstop=4
+
+set smarttab
+set lbr
+set textwidth=80
+
+"Paste toggle - when pasting something in, don't indent.
+nnoremap <F4> :set invpaste paste?<CR>
+set pastetoggle=<F4>
+set showmode
+
+"Remove indenting on empty lines
+map <F2> :%s/\s*$//g<cr>:noh<cr>''
+
+"Wrap lines
+set wrap
+
+" Don't do spell check by default
+set nospell
+
+" Some mapping for spell checking
+map <leader>se :setlocal spell spelllang=en_gb<CR>
+map <leader>sl :setlocal spell spelllang=lt<CR>
+map <leader>ss :setlocal spell<CR>
+map <leader>sn :setlocal nospell<CR>
+
+" Gzipped files
+augroup gzip
+    autocmd!
+    autocmd BufReadPre,FileReadPre *.gz set bin
+    autocmd BufReadPost,FileReadPost   *.gz '[,']!gunzip
+    autocmd BufReadPost,FileReadPost   *.gz set nobin
+    autocmd BufReadPost,FileReadPost   *.gz execute ":doautocmd BufReadPost " . expand("%:r")
+    autocmd BufWritePost,FileWritePost *.gz !mv <afile> <afile>:r
+    autocmd BufWritePost,FileWritePost *.gz !gzip <afile>:r
+    autocmd FileAppendPre      *.gz !gunzip <afile>
+    autocmd FileAppendPre      *.gz !mv <afile>:r <afile>
+    autocmd FileAppendPost     *.gz !mv <afile> <afile>:r
+    autocmd FileAppendPost     *.gz !gzip <afile>:r
+augroup END
+"}}}
+"{{{ Plugin configuration
+
+" Gist
+let g:gist_clip_command = 'xclip -selection clipboard'
+let g:gist_detect_filetype = 1
+let g:gist_browser_command = 'dwb %URL%'
+
+" Yank Ring
+"map <leader>y :YRShow<cr>
+"let g:yankring_history_dir='$HOME/.vim'
+
+" Syntastic
+let g:syntastic_cpp_compiler_options="-std=c++11"   " Use a new C++ standard
+" populate the errors
+" let g:syntastic_always_populate_loc_list
+
+" Automatic LaTeX Plugin
+au FileType tex set sw=4
+au FileType tex set iskeyword+=:
+
+au FileType tex let b:atp_TexFlavor	= "latex"
+
+au BufReadPre *.tex let b:atp_Viewer="zathura"
+au BufReadPre *.tex let b:atp_TexCompiler = "lualatex"
+au BufReadPre *.tex let b:atp_TexOptions = "-synctex=1,-shell-escape"
+au FileType tex let b:atp_OpenViewer = 1
+
+au FileType tex let  g:atp_MathVimOptions = { 'textwidth': [ 0, 78 ] }
+
+au BufReadPre *.tex let g:atp_Compiler = "python"
+
+au FileType tex let g:atp_folding=1
+au FileType tex let g:atp_fold_environments="[ 'enumerate', 'itemize', 'align', 'equation', 'algorithm']"
+
+" NERDTree
+map <leader>n :NERDTreeToggle<cr>
+let NERDTreeIgnore=['\.pyo$', '\.pyc$',
+                  \ '\._aux$', '\.aux$', '\.bcf$', '\.loa$', '\.lof$', 
+                  \ '\._log$', '\.log$', '\.out$', '\.pyg$', '\.run\.xml$', 
+                  \ '\.toc$', '\.synctex.gz$']
+
+" CtrlP for searching files, buffers and mixed search
+map <leader>pb :CtrlPBuffer<CR>
+map <leader>pm :CtrlPMixed<CR>
+
+"}}}
+
+" Filetype generic
+
+"{{{ VIM
+augroup reload_vimrc
+    autocmd!
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
+autocmd FileType vim set nofen
+autocmd FileType vim set foldmethod=marker
+"}}}
+"{{{ Python section
+"Run the current buffer in python - ie. on leader+space
+"au FileType python so ~/vim_local/syntax/python.vim
+au FileType python map <buffer> <leader>ll :w!<cr>:!./%<cr>
+au FileType pyrex  map <buffer> <leader>ll :w!<cr>:!python setup.py build_ext --inplace<cr>
+"autocmd FileType python so ~/vim_local/plugin/python_fold.vim
+
+"Set some bindings up for 'compile' of python
+au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+au FileType python setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+au FileType python setlocal textwidth=79 " PEP8 friendly
+
+au FileType python setlocal foldmethod=indent
+
+au FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+au FileType python set formatoptions=cq textwidth=72 foldignore= wildignore+=*.py[co]
+
+"Python iMaps
+"au FileType python set cindent
+au FileType python inoremap <buffer> $r return
+au FileType python inoremap <buffer> $s self
+au FileType python inoremap <buffer> $c ##<cr>#<space><cr>#<esc>kla
+au FileType python inoremap <buffer> $i import
+au FileType python inoremap <buffer> $p print
+au FileType python inoremap <buffer> $d """<cr>"""<esc>O
+
+"Run in the Python interpreter
+function! Python_Eval_VSplit_Old(interpreter) range
+    let src = tempname()
+    let dst = tempname()
+    execute ": " . a:firstline . "," . a:lastline . "w " . src
+    execute ":!" . interpreter " " . src . " > " . dst
+    execute ":pedit! " . dst
+endfunction
+au FileType python vmap <F7>2 :call Python_Eval_VSplit("ipython2")<cr>
+au FileType python vmap <F7>3 :call Python_Eval_VSplit("ipython")<cr>
+"}}}
+"{{{ LUA section
+au FileType lua set expandtab
+au FileType lua set shiftwidth=4
+au FileType lua set tabstop=4
+au FileType lua set softtabstop=4
+au FileType lua set textwidth=79
+au FileType lua set foldmethod=marker
+"}}}
+"{{{ C++ mappings
+autocmd FileType cc map <buffer> <leader><space> :w<cr>:!make %<cr>
+"}}}
+"{{{ mail
+au FileType mail set tw=78
+au FileType mail set spell
+au FileType mail set spelllang=en_gb
+"}}}
+"{{{ LilyPond
+" Silent lilypond pdf reader
+au FileType lilypond map <buffer> <F5> :!lilypond %" 2> /dev/null &<Return><Return>
+au FileType lilypond map <buffer> <F6> :!zathura "%<.pdf" 2> /dev/null &<Return><Return>
+"}}}
+"{{{ Git
+au FileType gitcommit set tw=72
+"}}}
+" {{{ Pandoc
+let g:patondoc_command_latex_engine = "lualatex"
+
+" The following is related to some highliting issues
+au FileType pandoc hi! link Conceal Operator
+" }}}

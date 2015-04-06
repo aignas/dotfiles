@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Run xmodmap and return zero
+xmodmap ${HOME}/.xmodmap && exit 0
+
+# Otherwise return 1
+exit 1

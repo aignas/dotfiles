@@ -1,0 +1,17 @@
+<svg
+   version="1.1"
+   width="64"
+   height="64"
+   id="svg2">
+  <rect
+     width="28"
+     height="28"
+     x="4"
+     y="32"
+     id="rect2989"
+     style="fill:#ac4142;fill-opacity:1;stroke:none" />
+  <path
+     d="m 8,4 0,24 28,0 0,28 24,0 0,-52 z"
+     id="path2991"
+     style="fill:#d28445;fill-opacity:1;stroke:none" />
+</svg>
