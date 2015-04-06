@@ -131,7 +131,21 @@ install_dotfiles () {
 
   for src in $(find "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink')
   do
-    dst="$HOME/.$(basename "${src%.*}")"
+    # Check if we have a destination config file, which tells us where the
+    # symlink will endup:
+    postfix="$HOME"
+    if [ -f "$(dirname $src)/destination" ]; then
+      postfix="$postfix/$(cat $(dirname $src)/destination)"
+    else
+      postfix="$postfix/."
+    fi
+
+    # Check that the postfix directory exists, if not, create it:
+    if [ ! -d "$postfix" ]; then
+      mkdir -p $postfix
+    fi
+      
+    dst="$postfix$(basename "${src%.*}")"
     link_file "$src" "$dst"
   done
 }
