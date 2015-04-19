@@ -26,12 +26,11 @@ Plugin 'gmarik/Vundle.vim'
 
 " Syntax files
 Plugin 'PKGBUILD'
-Plugin 'YankRing.vim'
 
 " Colour-schemes
 Plugin 'chriskempson/base16-vim'
 
-" Some plugins
+" General purpose plugins
 Plugin 'tpope/vim-dispatch'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-abolish'
@@ -41,17 +40,22 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'Shougo/unite.vim'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim'}
 Plugin 'duff/vim-bufonly'
-"
+Plugin 'YankRing.vim'
+
+" Coding tools
 " NOTE: Clang-complete needs Clang to operate properly
 Plugin 'Rip-Rip/clang_complete'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 
+" Word processing: LaTeX and Pandoc
 Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'coot/atp_vim'
 
+" Some science related things
+Plugin 'lsdr/octave.vim'
 Plugin 'ivanov/vim-ipython'
 
 " non github repos
@@ -253,10 +257,18 @@ let g:gist_browser_command = 'dwb %URL%'
 "map <leader>y :YRShow<cr>
 "let g:yankring_history_dir='$HOME/.vim'
 
+" Unite
+nnoremap <leader>uf :Unite file<CR>
+nnoremap <leader>ur :Unite file_rec<CR>
+nnoremap <leader>um :Unite mru<CR>
+
 " Syntastic
 let g:syntastic_cpp_compiler_options="-std=c++11"   " Use a new C++ standard
-" populate the errors
-" let g:syntastic_always_populate_loc_list
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " Automatic LaTeX Plugin
 au FileType tex set sw=4
@@ -282,10 +294,6 @@ let NERDTreeIgnore=['\.pyo$', '\.pyc$',
                   \ '\._aux$', '\.aux$', '\.bcf$', '\.loa$', '\.lof$', 
                   \ '\._log$', '\.log$', '\.out$', '\.pyg$', '\.run\.xml$', 
                   \ '\.toc$', '\.synctex.gz$']
-
-" CtrlP for searching files, buffers and mixed search
-map <leader>pb :CtrlPBuffer<CR>
-map <leader>pm :CtrlPMixed<CR>
 
 "}}}
 
