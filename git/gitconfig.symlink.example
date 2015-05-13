@@ -1,0 +1,48 @@
+[user]
+	name = AUTHORNAME
+	email = AUTHOREMAIL
+
+[credential]
+    helper = GIT_CREDENTIAL_HELPER
+
+[color]
+    status = auto
+    branch = auto
+    interactive = auto
+    diff = auto
+    ui = true
+
+[push]
+    default = matching
+
+[core]
+	editor = vim
+	whitespace = fix,-indent-with-non-tab,trailing-space
+
+[diff]
+    tool = vimdiff
+
+[difftool]
+    prompt = false
+
+[alias]
+	ci = commit -v
+	st = status -uno
+	br = branch
+	co = checkout
+    chp = cherry-pick
+    chpx = cherry-pick -x
+    pl = pull
+    pb = pull --rebase
+
+    promote = !$ZSH/bin/git-promote
+    wtf     = !$ZSH/bin/git-wtf
+    rank-contributors = !$ZSH/bin/git-rank-contributors
+    count   = !git shortlog -sn
+
+[push]
+    # See `git help config` (search for push.default)
+    # for more information on different options of the below setting.
+    #
+    # Setting to git 2.0 default to suppress warning message
+    default = simple

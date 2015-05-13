@@ -6,3 +6,6 @@ atom.symlink/storage
 atom.symlink/themes
 
 git/gitconfig.symlink
+
+# Ignore local gitconfig
+.gitconfig

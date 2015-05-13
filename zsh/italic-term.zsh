@@ -1,4 +1,4 @@
-TERMINAL_PRG=${$(ps -p $(ps -p $$ -o ppid=) -o cmd=):t}
+TERMINAL_PRG=${$(ps -p $(ps -p $$ -o ppid=) -o command=):t}
 
 case ${TERMINAL_PRG}+${COLORTERM} in
     gnome-terminal*+*)
