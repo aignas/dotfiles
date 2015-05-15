@@ -84,7 +84,7 @@ colorscheme base16-default              " This is my new favorite
 set laststatus=2
 set showtabline=2
 set noshowmode
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+set guifont=Inconsolata\ for\ Powerline\ 13
 
 "Favorite filetypes
 set ffs=unix,dos,mac
@@ -330,8 +330,16 @@ au FileType python inoremap <buffer> $r return
 au FileType python inoremap <buffer> $s self
 au FileType python inoremap <buffer> $c ##<cr>#<space><cr>#<esc>kla
 au FileType python inoremap <buffer> $i import
-au FileType python inoremap <buffer> $p print
+au FileType python inoremap <buffer> $p print(
+au FileType python inoremap <buffer> $l LOG.
 au FileType python inoremap <buffer> $d """<cr>"""<esc>O
+
+function! PythonRetab(...)
+    set ts=(a:0) sts=a:0 et
+    retab!
+    set ts=(a:1) sts=a:1 noet
+    retab
+endfunction
 
 "Run in the Python interpreter
 function! Python_Eval_VSplit_Old(interpreter) range
