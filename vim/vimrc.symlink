@@ -9,61 +9,89 @@
 "   * Steve Losh
 "       http://stevelosh.com/blog/2010/09/coming-home-to-vim/#
 
-" Set the runtime
-set nocompatible                        " required for Vundle
-filetype off                            " Turn this plugin off
+" Note: Skip initialization for vim-tiny or vim-small.
+if 0 | endif
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if has('vim_starting')
+  if &compatible
+    set nocompatible               " Be iMproved
+  endif
 
-" let Vundle manage Vundle
-Plugin 'gmarik/Vundle.vim'
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
 
-" Install plugins
-" NOTE: comments after Bundle command are not allowed..
-" original repos on github
+" Automatically download NeoBundle if it is not there already
+let neobundle_readme=expand($HOME.'/.vim/bundle/neobundle.vim/README.md')
+if !filereadable(neobundle_readme)
+    silent !curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+endif
 
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" My Bundles here:
+" Refer to |:NeoBundle-examples|.
+" Note: You don't set neobundle setting in .gvimrc!
 " Syntax files
-Plugin 'PKGBUILD'
+NeoBundle 'PKGBUILD'
 
 " Colour-schemes
-Plugin 'chriskempson/base16-vim'
+NeoBundle 'chriskempson/base16-vim'
 
 " General purpose plugins
-Plugin 'tpope/vim-dispatch'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-abolish'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'Shougo/unite.vim'
-Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim'}
-Plugin 'duff/vim-bufonly'
-Plugin 'YankRing.vim'
+NeoBundle 'tpope/vim-dispatch'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-abolish'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-git'
+NeoBundle 'tpope/vim-unimpaired'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'bling/vim-airline'
+NeoBundle 'duff/vim-bufonly'
+
+NeoBundle 'Shougo/vimproc.vim', {
+\   'build': {
+\       'windows': 'tools\\update-dll-mingw',
+\       'cygwin': 'make -f make_cygwin.mak',
+\       'mac': 'make -f make_mac.mak',
+\       'linux': 'make',
+\       'unix': 'gmake',
+\       },
+\   }
 
 " Coding tools
 " NOTE: Clang-complete needs Clang to operate properly
-Plugin 'Rip-Rip/clang_complete'
-Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
+NeoBundle 'Rip-Rip/clang_complete', {
+\   'build': {
+\       'linux': 'make',
+\       },
+\   }
+NeoBundle 'scrooloose/syntastic'
 
 " Word processing: LaTeX and Pandoc
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-Plugin 'coot/atp_vim'
+NeoBundle 'vim-pandoc/vim-pandoc'
+NeoBundle 'vim-pandoc/vim-pandoc-syntax'
+NeoBundle 'coot/atp_vim'
 
 " Some science related things
-Plugin 'lsdr/octave.vim'
-Plugin 'ivanov/vim-ipython'
+NeoBundle 'lsdr/octave.vim'
+NeoBundle 'ivanov/vim-ipython'
 
-" non github repos
-"Plugin 'git://git.code.sf.net/p/atp-vim/code'
+call neobundle#end()
 
-call vundle#end()                       " required
-let g:vundle_default_git_proto = 'git'  " use git for fetching
-filetype plugin indent on               " Enable filetype plugin
+" Required:
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+
 syntax enable                           " Enable syntax hl
 
 "Get out of VI's compatible mode..
@@ -80,11 +108,12 @@ let base16colorspace=256
 set background=dark                     " Set a dark background
 colorscheme base16-default              " This is my new favorite
 
-" Some Powerline settings
+" Some Airline settings
 set laststatus=2
 set showtabline=2
 set noshowmode
 set guifont=Inconsolata\ for\ Powerline\ 13
+let g:airline_powerline_fonts = 1
 
 "Favorite filetypes
 set ffs=unix,dos,mac
@@ -255,12 +284,54 @@ let g:gist_browser_command = 'dwb %URL%'
 
 " Yank Ring
 "map <leader>y :YRShow<cr>
-"let g:yankring_history_dir='$HOME/.vim'
+let g:yankring_history_dir='$HOME/.vim'
 
 " Unite
-nnoremap <leader>uf :Unite file<CR>
-nnoremap <leader>ur :Unite file_rec<CR>
-nnoremap <leader>um :Unite mru<CR>
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
+
+" VimFiler
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_safe_mode_by_default = 0
+let g:vimfiler_tree_leaf_icon = " "
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_file_icon = '-'
+let g:vimfiler_marked_file_icon = '✓'
+let g:vimfiler_readonly_file_icon = '✗'
+let g:vimfiler_time_format = '%m-%d-%y %H:%M:%S'
+let g:vimfiler_expand_jump_to_first_child = 0
+let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
+
+nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
+nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
+autocmd FileType vimfiler nunmap <buffer> x
+autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
+autocmd FileType vimfiler vmap <buffer> x <Plug>(vimfiler_toggle_mark_selected_lines)
+autocmd FileType vimfiler nunmap <buffer> l
+autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_cd_or_edit)
+autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_switch_to_parent_directory)
+autocmd FileType vimfiler nmap <buffer> H <Plug>(vimfiler_switch_to_home_directory)
+autocmd FileType vimfiler nmap <buffer> <C-R> <Plug>(vimfiler_redraw_screen)
+autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
+            \ "\<Plug>(vimfiler_expand_tree)",
+            \ "\<Plug>(vimfiler_edit_file)")
 
 " Syntastic
 let g:syntastic_cpp_compiler_options="-std=c++11"   " Use a new C++ standard
@@ -302,7 +373,7 @@ let NERDTreeIgnore=['\.pyo$', '\.pyc$',
 "{{{ VIM
 augroup reload_vimrc
     autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    autocmd reload_vimrc BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END
 autocmd FileType vim set nofen
 autocmd FileType vim set foldmethod=marker
