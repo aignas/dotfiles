@@ -14,7 +14,8 @@ echo "Downloading Base16"
 TARGET_BASE16_DIR="${HOME}/src/github/base16"
 if [ -d ${TARGET_BASE16_DIR}/base16-builder ]; then
     cd ${TARGET_BASE16_DIR}/base16-builder
-    git pull --rebase
+    git pull
+    git submodule update --init --recursive
     cd -
 else
     GIT_REPO="https://github.com/chriskempson/base16-builder.git"
@@ -24,5 +25,5 @@ fi
 
 echo "Generating the themes"
 cd ${TARGET_BASE16_DIR}/base16-builder
-./base16
+./base16 > /dev/null
 cd -
