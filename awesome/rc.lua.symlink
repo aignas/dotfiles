@@ -12,9 +12,6 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local lookup_icon = require("menubar.utils").lookup_icon
 
--- Require lfs for this awesome config to run
-local lfs = require("lfs")
-
 -- C API for awesome modules. It is useful to distinguish the LUA libraries and
 -- the C API as in the modules it is done this way.
 capi = {
@@ -100,46 +97,6 @@ shifty.tagsinit = function (tags)
         tags[s] = tag
     end
     awful.screen.focus(1)
-end
-
-function luals (path, ext)
-    local ext = ext or ''
-    local r = {}
-    for file in lfs.dir(path) do
-        if file ~= "." and file ~= ".." and file:match('.' .. ext) then
-            r[#r + 1] = path .. file
-        end
-    end
-
-    return r
-end
-
-function rand_wallp (dir)
-    local dir = dir or beautiful.wallpaper_dir or false
-    local r = {}
-
-    if not dir then
-        for s = 1, capi.screen.count() do
-            gears.wallpaper.maximized(beautiful.wallpaper, s)
-        end
-        return true
-    end
-
-    -- If the dir is a table of directories, load each
-    for _,i in ipairs(dir) do
-        -- FIXME we should traverse them recursively for better convenience
-        r = awful.util.table.join(r, luals (i, 'jpg'))
-    end
-
-    for s = 1, capi.screen.count() do
-        local selected = false
-        while not selected do
-            local t = r[math.random(#r)]
-            selected = beautiful.wallpaper[s] ~= t
-            beautiful.wallpaper[s] = t
-        end
-        gears.wallpaper.maximized(beautiful.wallpaper[s], s)
-    end
 end
 -- }}}
 
@@ -363,7 +320,6 @@ mymenu.main = awful.menu({
         { "T&erminal",     commands.terminal, lookup_icon('terminal') },
         { "&Tmux",         commands.terminal .. " -e \"tmux -2\"", lookup_icon('terminal') },
         { "&Editor",       commands.editor },
-        { "&Next Wallpaper", function() rand_wallp() end },
         { "&Xrandr",       mymenu.xrandr },
         { "&Multimedia",   mymenu.audio,       lookup_icon('applications-multimedia') },
         { "A&wesome",      mymenu.awesome,     beautiful.awesome_icon },
@@ -839,12 +795,6 @@ awful.rules.rules = {
 -- }}}
 
 -- {{{ Signals and changing random wallpaper
-
--- Register a timer for changing the wallpaper
-local timer = capi.timer { timeout = 5*60 }
-timer:connect_signal("timeout", function () rand_wallp() end)
-timer:start()
-timer:emit_signal("timeout")
 
 -- Register a timer, which checks if I am running software, which is configured
 -- to run all the time.
