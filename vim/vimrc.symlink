@@ -405,6 +405,10 @@ au FileType python inoremap <buffer> $p print(
 au FileType python inoremap <buffer> $l LOG.
 au FileType python inoremap <buffer> $d """<cr>"""<esc>O
 
+au FileType python iab xxparams Parameters:<cr>-----------
+au FileType python iab xxret Returns:<cr>--------
+au FileType python iab xxlog import logging<cr>LOG = logging.getLogger(__name__)
+
 function! PythonRetab(...)
     set ts=(a:0) sts=a:0 et
     retab!
@@ -422,6 +426,7 @@ function! Python_Eval_VSplit_Old(interpreter) range
 endfunction
 au FileType python vmap <F7>2 :call Python_Eval_VSplit("ipython2")<cr>
 au FileType python vmap <F7>3 :call Python_Eval_VSplit("ipython")<cr>
+
 "}}}
 "{{{ LUA section
 au FileType lua set expandtab
