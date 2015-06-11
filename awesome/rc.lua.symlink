@@ -114,7 +114,7 @@ beautiful.init(cfgdir.."/theme/base16.lua")
 
 -- Default application definitions.
 local commands = {
-    terminal = "xfce4-terminal",
+    terminal = "st",
     editor = "gvim",
     browser = "dwb",
     screensaver = {
@@ -318,7 +318,7 @@ mymenu.audio = {
 mymenu.main = awful.menu({
     items = {
         { "T&erminal",     commands.terminal, lookup_icon('terminal') },
-        { "&Tmux",         commands.terminal .. " -e \"tmux -2\"", lookup_icon('terminal') },
+        { "&Tmux",         commands.terminal .. " -e tmux", lookup_icon('terminal') },
         { "&Editor",       commands.editor },
         { "&Xrandr",       mymenu.xrandr },
         { "&Multimedia",   mymenu.audio,       lookup_icon('applications-multimedia') },
