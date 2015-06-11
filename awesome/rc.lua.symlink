@@ -275,7 +275,7 @@ acpid.Cmd = {
     Hybrid      = "systemctl hybrid-sleep",
     Poweroff    = "systemctl poweroff",
     Reboot      = "systemctl reboot",
-    Lock        = "slock"
+    Lock        = "i3lock -d"
 }
 
 mymenu.awesome = {
@@ -459,6 +459,7 @@ globalkeys = awful.util.table.join(
             end
         end),
     awful.key({ mod.M,       }, "F2",     function () exec(acpid.Cmd.Lock) end),
+    awful.key({ mod.M,       }, "s",     function () exec(acpid.Cmd.Lock) end),
     awful.key({ mod.M,       }, "Left",   awful.tag.viewprev       ),
     awful.key({ mod.M,       }, "Right",  awful.tag.viewnext       ),
     awful.key({ mod.M,       }, "Escape", awful.tag.history.restore),
@@ -518,12 +519,11 @@ globalkeys = awful.util.table.join(
     awful.key({ mod.M        }, "w",    function () mymenu.main:toggle({keygrabber=true}) end),
 
     -- KBDee layout switching
-    awful.key({ mod.S, mod.A }, "#42", function () mykbdmenu:toggle({ keygrabber = true }) end),
-    awful.key({ mod.S, mod.A }, "#43", function () kbdee.variant.rotate() end),
-    awful.key({ mod.S, mod.A }, "#44", function () kbdee.layout.switch(1,1) end),
-    awful.key({ mod.S, mod.A }, "#45", function () kbdee.layout.switch(2,1) end),
-    awful.key({ mod.S, mod.A }, "#46", function () kbdee.layout.switch(3,1) end),
-    awful.key({ mod.S, mod.A }, "#47", function () kbdee.layout.switch(4,1) end),
+    awful.key({ mod.S, mod.A }, "#15", function () kbdee.variant.rotate() end),
+    awful.key({ mod.S, mod.A }, "#16", function () kbdee.layout.switch(1,1) end),
+    awful.key({ mod.S, mod.A }, "#17", function () kbdee.layout.switch(2,1) end),
+    awful.key({ mod.S, mod.A }, "#18", function () kbdee.layout.switch(3,1) end),
+    awful.key({ mod.S, mod.A }, "#19", function () kbdee.layout.switch(4,1) end),
 
     -- Print screen
     -- Capture the whole screen
