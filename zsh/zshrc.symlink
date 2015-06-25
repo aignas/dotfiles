@@ -1,8 +1,29 @@
 # My zshrc configuration. Use or reuse however you like.
 #       by gns-ank
 
+# load zgen
+source "${HOME}/src/github/zgen/zgen.zsh"
+
+# check if there's no init script
+if ! zgen saved; then
+    echo "Creating a zgen save"
+
+    # plugins
+
+    # completions
+    zgen load zsh-users/zsh-completions src
+
+    # theme
+    zgen load sindresorhus/pure async.zsh
+    zgen load sindresorhus/pure
+
+    # save all to init script
+    zgen save
+fi
+
+
 # shortcut to this dotfiles path is $ZSH
-export ZSH=$HOME/.dotfiles
+export ZSH_DOTFILES=$HOME/.dotfiles
 
 # your project folder that we can `c [tab]` to
 export PROJECTS=~/src
@@ -16,7 +37,7 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=($ZSH/**/*.zsh)
+config_files=($ZSH_DOTFILES/**/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}
@@ -42,25 +63,10 @@ done
 
 unset config_files
 
-# # load zgen
-source "${HOME}/src/github/zgen/zgen.zsh"
+zstyle \
+    'history' \
+    'completion' \
+    'git' \
+    'history-substring-search'
 
-# check if there's no init script
-if ! zgen saved; then
-    echo "Creating a zgen save"
-
-    # plugins
-
-    # completions
-    zgen load zsh-users/zsh-completions src
-
-    # theme
-    zgen load sindresorhus/pure async.zsh
-    zgen load sindresorhus/pure
-
-    # save all to init script
-    zgen save
-fi
-
-
-# vim tw=80
+# vim: tw=80:ft=zsh

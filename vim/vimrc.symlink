@@ -268,7 +268,8 @@ map <leader>ss :setlocal spell<CR>
 map <leader>sn :setlocal nospell<CR>
 
 " Double spacing between sentences
-set cpo+=J
+set cpoptions+=J
+set joinspaces
 
 " Gzipped files
 augroup gzip
