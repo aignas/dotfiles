@@ -260,6 +260,9 @@ map <leader>sl :setlocal spell spelllang=lt<CR>
 map <leader>ss :setlocal spell<CR>
 map <leader>sn :setlocal nospell<CR>
 
+" Double spacing between sentences
+set cpo+=J
+
 " Gzipped files
 augroup gzip
     autocmd!
@@ -319,19 +322,8 @@ let g:vimfiler_time_format = '%m-%d-%y %H:%M:%S'
 let g:vimfiler_expand_jump_to_first_child = 0
 let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 
-nnoremap <Leader>d :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
+nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
 nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
-autocmd FileType vimfiler nunmap <buffer> x
-autocmd FileType vimfiler nmap <buffer> x <Plug>(vimfiler_toggle_mark_current_line)
-autocmd FileType vimfiler vmap <buffer> x <Plug>(vimfiler_toggle_mark_selected_lines)
-autocmd FileType vimfiler nunmap <buffer> l
-autocmd FileType vimfiler nmap <buffer> l <Plug>(vimfiler_cd_or_edit)
-autocmd FileType vimfiler nmap <buffer> h <Plug>(vimfiler_switch_to_parent_directory)
-autocmd FileType vimfiler nmap <buffer> H <Plug>(vimfiler_switch_to_home_directory)
-autocmd FileType vimfiler nmap <buffer> <C-R> <Plug>(vimfiler_redraw_screen)
-autocmd FileType vimfiler nmap <silent><buffer><expr> <CR> vimfiler#smart_cursor_map(
-            \ "\<Plug>(vimfiler_expand_tree)",
-            \ "\<Plug>(vimfiler_edit_file)")
 
 " Syntastic
 let g:syntastic_cpp_compiler_options="-std=c++11"   " Use a new C++ standard
