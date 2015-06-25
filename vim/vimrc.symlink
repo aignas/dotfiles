@@ -53,6 +53,7 @@ NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'bling/vim-airline'
+NeoBundle 'edkolev/tmuxline.vim'
 NeoBundle 'duff/vim-bufonly'
 
 NeoBundle 'Shougo/vimproc.vim', {
@@ -113,7 +114,12 @@ set laststatus=2
 set showtabline=2
 set noshowmode
 set guifont=Inconsolata\ for\ Powerline\ 13
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+" Tmux Line
+let g:tmuxline_powerline_separators = 0
 
 "Favorite filetypes
 set ffs=unix,dos,mac
