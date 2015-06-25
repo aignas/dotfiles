@@ -86,3 +86,9 @@ weight of my changes and tweaks inspired me to finally roll my own. But Ryan's
 dotfiles were an easy way to get into bash customization, and then to jump ship
 to zsh a bit later. A decent amount of the code in these dotfiles stem or are
 inspired from Ryan's original project.
+
+## todo
+
+I need to include the following for easy installation:
+    * My version of the Inconsolata font.
+    * Installation of Montserat and similar hipster fonts.
