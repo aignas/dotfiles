@@ -158,7 +158,8 @@ commands.startup = {
         -- GNUPG agent, which is needed for emails
         --{ "gpg-agent", "gpg-agent --daemon", true},
         -- Gnome keyring unlocking
-        --{ "keyring", exec="/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh" },
+        { "keyring", exec="/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh" },
+        -- Dropbox and other daemons:
         { "dropbox" },
         --]]
 }
