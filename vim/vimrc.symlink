@@ -52,6 +52,7 @@ NeoBundle 'tpope/vim-git'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'edkolev/tmuxline.vim'
 NeoBundle 'duff/vim-bufonly'
@@ -329,7 +330,6 @@ let g:vimfiler_expand_jump_to_first_child = 0
 let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 
 nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
-nnoremap <Leader>jf :<C-u>VimFilerExplorer -split -simple -parent -winwidth=35 -no-quit -find<CR>
 
 " Syntastic
 let g:syntastic_cpp_compiler_options="-std=c++11"   " Use a new C++ standard
@@ -360,8 +360,8 @@ au FileType tex let g:atp_fold_environments="[ 'enumerate', 'itemize', 'align', 
 " NERDTree
 map <leader>n :NERDTreeToggle<cr>
 let NERDTreeIgnore=['\.pyo$', '\.pyc$',
-                  \ '\._aux$', '\.aux$', '\.bcf$', '\.loa$', '\.lof$', 
-                  \ '\._log$', '\.log$', '\.out$', '\.pyg$', '\.run\.xml$', 
+                  \ '\._aux$', '\.aux$', '\.bcf$', '\.loa$', '\.lof$',
+                  \ '\._log$', '\.log$', '\.out$', '\.pyg$', '\.run\.xml$',
                   \ '\.toc$', '\.synctex.gz$']
 
 "}}}
@@ -387,6 +387,7 @@ au FileType pyrex  map <buffer> <leader>ll :w!<cr>:!python setup.py build_ext --
 au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 au FileType python setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 au FileType python setlocal textwidth=79 " PEP8 friendly
+au FileType python setlocal colorcolumn=80 " It's much easier visually
 
 au FileType python setlocal foldmethod=indent
 
