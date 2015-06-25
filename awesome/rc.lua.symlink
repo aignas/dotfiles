@@ -115,6 +115,7 @@ beautiful.init(cfgdir.."/theme/base16.lua")
 -- Default application definitions.
 local commands = {
     terminal = "st",
+    tmux = "st -e tmux",
     editor = "gvim",
     browser = "dwb",
     screensaver = {
@@ -152,15 +153,13 @@ commands.startup = {
         -- { "skype" }, 
         { "workrave", restart=true}, 
         -- Mounting
-        -- { "udisksvm", restart=true},
         -- XAutoLock
         { commands.screensaver.cmd, exec=commands.screensaver.cmd .. commands.screensaver.opts, force=true },
         -- GNUPG agent, which is needed for emails
         --{ "gpg-agent", "gpg-agent --daemon", true},
         -- Gnome keyring unlocking
-        { "keyring", exec="/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh" },
-        -- URXVT daemon
-        --{ "urxvtd" },
+        --{ "keyring", exec="/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh" },
+        { "dropbox" },
         --]]
 }
 
@@ -275,7 +274,7 @@ acpid.Cmd = {
     Hybrid      = "systemctl hybrid-sleep",
     Poweroff    = "systemctl poweroff",
     Reboot      = "systemctl reboot",
-    Lock        = "i3lock -d"
+    Lock        = "i3lock -d -c " .. string.sub(beautiful.colorscheme[1], 2)
 }
 
 mymenu.awesome = {
@@ -318,7 +317,7 @@ mymenu.audio = {
 mymenu.main = awful.menu({
     items = {
         { "T&erminal",     commands.terminal, lookup_icon('terminal') },
-        { "&Tmux",         commands.terminal .. " -e tmux", lookup_icon('terminal') },
+        { "&Tmux",         commands.tmux, lookup_icon('terminal') },
         { "&Editor",       commands.editor },
         { "&Xrandr",       mymenu.xrandr },
         { "&Multimedia",   mymenu.audio,       lookup_icon('applications-multimedia') },
@@ -341,6 +340,7 @@ kbdee.cfg.layout = {
 }
 kbdee.cfg.defaults = {1, 1}
 kbdee.cfg.xmodmap = "~/.xmodmap"
+kbdee.cfg.img_dir = nil
 
 mykbdwi, mykbdmenu = kbdee.init()
 
@@ -440,6 +440,14 @@ capi.root.buttons(awful.util.table.join(
 ))
 -- }}}
 
+-- {{{ Wallpaper
+if beautiful.wallpaper then
+    for s = 1, screen.count() do
+        gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+    end
+end
+-- }}}
+
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ mod.M,       }, "F1",     
@@ -500,7 +508,7 @@ globalkeys = awful.util.table.join(
     awful.key({ mod.M, mod.S }, "space", function () awful.layout.inc(-1)       end),
 
     -- Standard program shortcuts
-    awful.key({ mod.M        }, "Return", function () exec(commands.terminal .. " -e \"tmux -2\"") end),
+    awful.key({ mod.M        }, "Return", function () exec(commands.tmux) end),
     awful.key({ mod.M, mod.S }, "Return", function () exec(commands.terminal) end),
     awful.key({ mod.M        }, "\\",     function () exec(commands.browser) end),
     awful.key({ mod.M        }, "e",      function () exec(commands.editor) end),
@@ -531,8 +539,10 @@ globalkeys = awful.util.table.join(
     -- Capture some a window or selection
     awful.key({ mod.M        }, "Print", function () sexec('escrotum -s') end),
 
-    -- FIXME think of suitable modal keys, so that I can use this with
-    -- alternative keyboards
+    -- The bellow is for my ThinkPad Laptop. Currently configured for T420s.
+    -- The problem though is that this setup is highly machine specific as
+    -- ponymix might not be available and it may be a case that the name of the
+    -- interface might differ on different machines.
     awful.key({ }, "XF86AudioMute", 
     function () 
         local opt = '-t sink -d alsa_output.pci-0000_00_1b.0.analog-stereo '
@@ -583,20 +593,20 @@ globalkeys = awful.util.table.join(
             opt = opt
         })
     end),
-    awful.key({ }, "XF86Launch2",  -- This is a remapped micmute key because of the keycode limit
-    function () 
-        local opt = '-t source -d alsa_input.pci-0000_00_1b.0.analog-stereo '
-        sexec('ponymix ' .. opt .. 'toggle')
-        hfunc.mixer.get({ 
-            cmd = 'get-volume',
-            icon = 'microphone-sensitivity-',
-            opt = opt
-        })
-    end),
+    awful.key({ }, "XF86AudioMicMute",
+        function () 
+            local opt = '-t source -d alsa_input.pci-0000_00_1b.0.analog-stereo '
+            sexec('ponymix ' .. opt .. 'toggle')
+            hfunc.mixer.get({ 
+                cmd = 'get-volume',
+                icon = 'microphone-sensitivity-',
+                opt = opt
+            })
+        end),
     awful.key({ }, "XF86Launch1",
-    function ()
-        sexec("if pgrep pavucontrol; then pkill pavucontrol; else pavucontrol; fi") 
-    end),
+        function ()
+            sexec("if pgrep pavucontrol; then pkill pavucontrol; else pavucontrol; fi") 
+        end),
 
     -- ACPI
     -- Empty bindings to not have any special keys grabbed by programs.

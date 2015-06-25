@@ -11,6 +11,7 @@ local awful = require('awful')
 local theme = require('beautiful').get()
 local naughty = require('naughty')
 local imagebox = require('wibox.widget.imagebox')
+local textbox = require('wibox.widget.textbox')
 
 local capi = {
     client = client,
@@ -29,7 +30,8 @@ kbdee.cfg = setmetatable({}, { __mode = 'k' })
 
 -- Some aliases to ease my life
 kbdee.cfg = {
-    img_dir = awful.util.getdir("config") .. "/icons/wi_kbd",
+    img_dir = nil,
+    icon_ext = nil,
     layout = {
         { "gb" },
     },
@@ -187,11 +189,16 @@ kbdee.variant.rotate = function(idx)
         t[2] = "default"
     end
 
+    icon_path = nil
+    if kbdee.cfg.img_dir ~= nil then
+        icon_path = kbdee.cfg.img_dir .. t[1] .. kbdee.cfg.icon_ext
+    end
+
     naughty.notify({
         title="KBDee",
         text="Default layout for slot " .. idx .. " is\n"
              .. t[1] .. "(" .. t[2] .. ")",
-        icon=kbdee.cfg.img_dir .. "/24/" .. t[1] .. ".png"
+        icon=icon_path
     })
 end
 
@@ -235,8 +242,7 @@ function kbdee.layout.menu_gen ()
             menu_table[#menu_table + 1] = { 
                 -- Name of the layout
                 t[1] .. " " .. t[2],
-                function () kbdee.layout.switch(i,j) end, 
-                kbdee.cfg.img_dir .. "/24/" .. t[1] .. ".png"
+                function () kbdee.layout.switch(i,j) end
             }
         end
     end
@@ -245,7 +251,7 @@ function kbdee.layout.menu_gen ()
 end
 --}}}
 
---{{{ Imgbox commands
+--{{{ Widget commands
 local update = function (w)
     local layout = kbdee.cfg.layout[cache.current][cache.variant]
 
@@ -253,11 +259,19 @@ local update = function (w)
         layout = Split(layout, "_")
     end
 
-    w:set_image(kbdee.cfg.img_dir .. "/48/" .. layout[1] .. ".png")
+    if kbdee.cfg.img_dir ~= nil then
+        w:set_image(kbdee.cfg.img_dir .. "/48/" .. layout[1] .. ".png")
+    else
+        w:set_text(layout[1])
+    end
 end
 
 kbdee.new = function ()
-    w = imagebox()
+    if kbdee.cfg.img_dir ~= nil then
+        w = imagebox()
+    else
+        w = textbox()
+    end
 
     -- Update the widget
     update(w)
@@ -291,6 +305,7 @@ kbdee.new = function ()
     return w
 end
 --}}}
+
 
 kbdee.init = function()
     -- Set the caches properly

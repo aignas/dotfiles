@@ -11,11 +11,6 @@ local home = os.getenv("HOME")
 -- Load the default theme
 theme = dofile(home .. '/.config/awesome/theme/base16/theme.lua')
 
-theme.wallpaper_dir = { 
-     home .. '/Wallpapers/nature_2011/',
-     home .. '/Wallpapers/nature_2012/'
-}
-theme.wallpaper = {}
 
 theme.font      = "Droid Sans Mono 8"
 theme.icon_theme= "elementary"
