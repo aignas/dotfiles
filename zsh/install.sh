@@ -1,14 +1,8 @@
 #!/bin/bash
 
-if [ "$(uname -s)" != "Darwin" ]; then
-    echo "Installing custom term infos for linux terminals to support italics"
-    for terminfo in xterm screen; do
-        tic "$(dirname $(realpath $0))/terminfos/$terminfo-256color-italic.terminfo"
-    done
-fi
-
-echo "Setting up Zprezto"
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+echo "Setting up Zgen"
+mkdir -p "${HOME}/src/github/zgen"
+git clone https://github.com/tarjoilija/zgen.git "${HOME}/src/github/zgen"
 
 echo "Downloading Base16"
 TARGET_BASE16_DIR="${HOME}/src/github/base16"

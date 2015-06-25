@@ -42,9 +42,24 @@ done
 
 unset config_files
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+# # load zgen
+source "${HOME}/src/github/zgen/zgen.zsh"
+
+# check if there's no init script
+if ! zgen saved; then
+    echo "Creating a zgen save"
+
+    # plugins
+
+    # completions
+    zgen load zsh-users/zsh-completions src
+
+    # theme
+    zgen load sindresorhus/pure async.zsh
+    zgen load sindresorhus/pure
+
+    # save all to init script
+    zgen save
 fi
 
 

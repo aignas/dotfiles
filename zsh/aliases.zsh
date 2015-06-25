@@ -11,3 +11,11 @@ alias gexp='git archive master | tar -x -C'
 function fontadd () {
     cp $@ ~/.fonts/
 }
+
+function aurd () {
+    git clone https://aur4.archlinux.org/$1.git/ ${HOME}/src/aur/$1
+}
+
+function aurb () {
+    aurd $1 && cd ${HOME}/src/aur/$1 && makepkg -si && cd -
+}
