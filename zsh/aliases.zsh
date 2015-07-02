@@ -6,7 +6,12 @@ alias visudo='sudo -E EDITOR=vim visudo'
 #alias ls='ls --color=auto -FX'
 alias se='sudo -E'
 alias tm='tmux'
+alias tmn='tmux neww'
 alias gexp='git archive master | tar -x -C'
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias less='less --color=auto'
 
 function fontadd () {
     cp $@ ~/.fonts/

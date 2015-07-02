@@ -1,4 +1,5 @@
-export LSCOLORS="exfxcxdxbxegedabagacad"
+# This is included in my dot files
+eval `dircolors ${HOME}/.dir_colors`
 export CLICOLOR=true
 
 fpath=($ZSH_DOTFILES/functions $fpath)
@@ -16,8 +17,6 @@ setopt NO_LIST_BEEP
 setopt LOCAL_OPTIONS            # allow functions to have local options
 setopt LOCAL_TRAPS              # allow functions to have local traps
 setopt HIST_VERIFY
-setopt SHARE_HISTORY            # share history between sessions ???
-setopt EXTENDED_HISTORY         # add timestamps to history
 setopt PROMPT_SUBST
 setopt CORRECT
 setopt COMPLETE_IN_WORD
@@ -25,6 +24,8 @@ setopt COMPLETE_IN_WORD
 setopt APPEND_HISTORY           # adds history
 # adds history incrementally and share it across sessions
 setopt INC_APPEND_HISTORY SHARE_HISTORY
+setopt EXTENDED_HISTORY         # add timestamps to history
+
 # don't record dupes in history
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
@@ -36,8 +37,11 @@ setopt complete_aliases
 
 # Key bindings {{{
 bindkey -v      # vim keybinding mode
-bindkey '\e[A'  history-beginning-search-backward
-bindkey '\e[B'  history-beginning-search-forward
+# Set some bindings
+zmodload zsh/terminfo
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+
 bindkey '^?'    backward-delete-char
 bindkey '^[OH~' vi-beginning-of-line
 bindkey '^[OF~' vi-end-of-line
