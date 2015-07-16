@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # bootstrap installs things.
 
 cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd)
+DOTFILES_ROOT="$(pwd)"
 
 set -e
 
@@ -129,7 +129,7 @@ install_dotfiles () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  for src in $(find "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink')
+  for src in $(find "$DOTFILES_ROOT/" -maxdepth 2 -name '*.symlink')
   do
     # Check if we have a destination config file, which tells us where the
     # symlink will endup:
