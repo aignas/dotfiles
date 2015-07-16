@@ -114,7 +114,7 @@ colorscheme base16-default              " This is my new favorite
 set laststatus=2
 set showtabline=2
 set noshowmode
-set guifont=Inconsolata\ for\ Powerline\ 13
+set guifont=Inconsolata
 let g:airline_powerline_fonts = 0
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
