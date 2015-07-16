@@ -4,32 +4,6 @@
 # load zgen
 source "${HOME}/src/github/zgen/zgen.zsh"
 
-# check if there's no init script
-if ! zgen saved; then
-    echo "Creating a zgen save"
-
-    # plugins
-
-    # completions
-    zgen load zsh-users/zsh-completions src
-    zgen load zsh-users/zsh-syntax-highlighting
-    zgen load zsh-users/zsh-history-substring-search
-
-    # Oh-my-zsh plugins
-    zgen oh-my-zsh plugins/sudo
-    zgen oh-my-zsh plugins/git
-    zgen oh-my-zsh plugins/github
-    zgen oh-my-zsh plugins/python
-
-    # theme
-    zgen load sindresorhus/pure async.zsh
-    zgen load sindresorhus/pure
-
-    # save all to init script
-    zgen save
-fi
-
-
 # shortcut to this dotfiles path is $ZSH
 export ZSH_DOTFILES=$HOME/.dotfiles
 
@@ -68,6 +42,31 @@ for file in ${(M)config_files:#*/completion.zsh}
 do
   source $file
 done
+
+# check if there's no init script
+if ! zgen saved; then
+    echo "Creating a zgen save"
+
+    # Oh-my-zsh plugins
+    zgen oh-my-zsh plugins/sudo
+    zgen oh-my-zsh plugins/github
+    zgen oh-my-zsh plugins/command-not-found
+    zgen oh-my-zsh plugins/python
+ 
+    # completions
+    zgen load zsh-users/zsh-completions src
+    zgen load zsh-users/zsh-syntax-highlighting
+    zgen load zsh-users/zsh-history-substring-search
+
+    # theme
+    # Note: we include the async.zsh script in order to run git commands
+    # asynchronously.
+    zgen load sindresorhus/pure async.zsh
+    zgen load sindresorhus/pure
+
+    # save all to init script
+    zgen save
+fi
 
 unset config_files
 

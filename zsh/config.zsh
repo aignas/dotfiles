@@ -42,6 +42,8 @@ zmodload zsh/terminfo
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
+bindkey -M vicmd '\es' sudo-command-line
+
 bindkey '^?'    backward-delete-char
 bindkey '^[OH~' vi-beginning-of-line
 bindkey '^[OF~' vi-end-of-line
