@@ -33,6 +33,13 @@ do
   source $file
 done
 
+# Normal completion behaviour
+zstyle ':completion:*' completer _complete
+# Case insensitive matching and matching can occur on both sides of the current
+# word.
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
+# See: http://stackoverflow.com/a/22627273/1105870
+
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
 compinit
@@ -75,5 +82,6 @@ zstyle \
     'completion' \
     'git' \
     'history-substring-search'
+
 
 # vim: tw=80:ft=zsh
