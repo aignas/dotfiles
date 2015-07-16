@@ -79,6 +79,7 @@ NeoBundle 'scrooloose/syntastic'
 " Word processing: LaTeX and Pandoc
 NeoBundle 'vim-pandoc/vim-pandoc'
 NeoBundle 'vim-pandoc/vim-pandoc-syntax'
+NeoBundle 'vim-pandoc/vim-pandoc-after'
 NeoBundle 'coot/atp_vim'
 
 " Some science related things
@@ -220,6 +221,7 @@ augroup BWCCreateDir
 augroup END
 
 " General Abbrevs
+iab xxtoday <c-r>=strftime("%d/%m/%Y %A")<cr>
 iab xxdate <c-r>=strftime("%d/%m/%Y")<cr>
 iab xxtime <c-r>=strftime("%H:%M:%S")<cr>
 iab xxname Ignas Anikevičius
@@ -319,15 +321,13 @@ endfunction
 
 " VimFiler
 let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_tree_leaf_icon = " "
 let g:vimfiler_tree_opened_icon = '▾'
-let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_tree_closed_icon = '▹'
 let g:vimfiler_file_icon = '-'
 let g:vimfiler_marked_file_icon = '✓'
 let g:vimfiler_readonly_file_icon = '✗'
 let g:vimfiler_time_format = '%m-%d-%y %H:%M:%S'
-let g:vimfiler_expand_jump_to_first_child = 0
 let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 
 nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
@@ -453,7 +453,8 @@ au FileType lilypond map <buffer> <F6> :!zathura "%<.pdf" 2> /dev/null &<Return>
 au FileType gitcommit set tw=72
 "}}}
 " {{{ Pandoc
-let g:patondoc_command_latex_engine = "lualatex"
+let g:pandoc_command_latex_engine = "lualatex"
+let g:pandoc#after#modules#enabled = ["unite"]
 
 " The following is related to some highliting issues
 au FileType pandoc hi! link Conceal Operator
