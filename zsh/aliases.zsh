@@ -1,6 +1,8 @@
 # ZSH related aliases
 alias reload!='. ~/.zshrc'
 
+DOTFILES_OS=`uname -s`
+
 # Normal aliases
 alias visudo='sudo -E EDITOR=vim visudo'
 #alias ls='ls --color=auto -FX'
@@ -9,9 +11,13 @@ alias tm='tmux'
 alias tmn='tmux neww'
 alias gexp='git archive master | tar -x -C'
 
-alias ls='ls --color=auto'
+if [[ ${DOTFILES_OS} == "Darwin" ]]; then
+    alias ls='ls -G'
+else
+    alias ls='ls --color=auto'
+fi
+
 alias grep='grep --color=auto'
-alias less='less --color=auto'
 
 function fontadd () {
     cp $@ ~/.fonts/

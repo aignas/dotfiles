@@ -1,5 +1,9 @@
 # This is included in my dot files
-eval `dircolors ${HOME}/.dir_colors`
+OS_DOTFILES=`uname -s`
+
+if [[ ${OS_DOTFILES} != "Darwin" ]]; then
+    eval `dircolors ${HOME}/.dir_colors`
+fi
 export CLICOLOR=true
 
 fpath=($ZSH_DOTFILES/functions $fpath)
