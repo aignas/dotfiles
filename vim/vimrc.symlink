@@ -316,24 +316,6 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" Automatic LaTeX Plugin
-au FileType tex set sw=4
-au FileType tex set iskeyword+=:
-
-au FileType tex let b:atp_TexFlavor	= "latex"
-
-au BufReadPre *.tex let b:atp_Viewer="zathura"
-au BufReadPre *.tex let b:atp_TexCompiler = "lualatex"
-au BufReadPre *.tex let b:atp_TexOptions = "-synctex=1,-shell-escape"
-au FileType tex let b:atp_OpenViewer = 1
-
-au FileType tex let  g:atp_MathVimOptions = { 'textwidth': [ 0, 79 ] }
-
-au BufReadPre *.tex let g:atp_Compiler = "python"
-
-au FileType tex let g:atp_folding=1
-au FileType tex let g:atp_fold_environments="[ 'enumerate', 'itemize', 'align', 'equation', 'algorithm']"
-
 " Clang-complete
 " Clang Complete Settings
 let g:clang_use_library=1
