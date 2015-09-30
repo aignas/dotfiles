@@ -114,6 +114,7 @@ beautiful.init(cfgdir.."/theme/base16.lua")
 
 -- Default application definitions.
 local commands = {
+    google_chrome = "google-chrome-stable",
     terminal = "st",
     tmux = "st -e tmux",
     editor = "gvim",
@@ -218,7 +219,7 @@ mod = {
 
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-awful.layout.layouts = {
+local layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
@@ -235,20 +236,20 @@ awful.layout.layouts = {
 tags = {
     -- For the primary screen
     { 
-        { "term",   { layout = awful.layout.layouts[1] } },
-        { "www",    { layout = awful.layout.layouts[5] } },
-        { "im",     { layout = awful.layout.layouts[1], mwfact = 0.7 } },
+        { "term",   { layout = layouts[1] } },
+        { "www",    { layout = layouts[5] } },
+        { "im",     { layout = layouts[1], mwfact = 0.7 } },
     },
     -- For the secondary screen
     {
-        { "term",   { layout = awful.layout.layouts[1] } },
-        { "www",    { layout = awful.layout.layouts[5] } },
-        { "im",     { layout = awful.layout.layouts[1], mwfact = 0.7 } },
+        { "term",   { layout = layouts[1] } },
+        { "www",    { layout = layouts[5] } },
+        { "im",     { layout = layouts[1], mwfact = 0.7 } },
     }
 }
 
-shifty.tagsfill(tags, 1, 9, {layout = awful.layout.layouts[1]})
-shifty.tagsfill(tags, 2, 6, {layout = awful.layout.layouts[1]})
+shifty.tagsfill(tags, 1, 9, {layout = layouts[1]})
+shifty.tagsfill(tags, 2, 6, {layout = layouts[1]})
 shifty.tagsinit(tags)
 
 -- Menu
@@ -321,6 +322,7 @@ mymenu.main = awful.menu({
         { "&Tmux",         commands.tmux, lookup_icon('terminal') },
         { "&Editor",       commands.editor },
         { "&Xrandr",       mymenu.xrandr },
+        { "&Owa app",      commands.google_chrome .. " --app=https://owa.realvnc.com" },
         { "&Multimedia",   mymenu.audio,       lookup_icon('applications-multimedia') },
         { "A&wesome",      mymenu.awesome,     beautiful.awesome_icon },
     },
@@ -329,12 +331,12 @@ mymenu.main = awful.menu({
 
 -- Menubar configuration
 menubar.utils.terminal = commands.terminal -- Set the term for apps that require it
-menubar.utils.wm_name  = "XFCE4"
+menubar.utils.wm_name  = "GNOME"
 
 -- Keyboard switching
 -- configure the default layouts
 kbdee.cfg.layout = {
-    { "us", "us_dvorak-intl", "gb_dvorak" },
+    { "us", "us_intl", "gb_dvorak" },
     { "lt_std", "lt" },
     { "fr", "fr_bepo" },
     { "ru_phonetic" },
@@ -471,7 +473,7 @@ globalkeys = awful.util.table.join(
     awful.key({ mod.M,       }, "s",     function () exec(acpid.Cmd.Lock) end),
     awful.key({ mod.M,       }, "Left",   awful.tag.viewprev       ),
     awful.key({ mod.M,       }, "Right",  awful.tag.viewnext       ),
-    awful.key({ mod.M,       }, "Escape", awful.tag.history.restore),
+    --awful.key({ mod.M,       }, "Escape", awful.tag.history.restore),
 
     awful.key({ mod.M,       }, "j",
         function ()
@@ -505,8 +507,8 @@ globalkeys = awful.util.table.join(
     awful.key({ mod.M, mod.S }, "l",     function () awful.tag.incnmaster(-1)   end),
     awful.key({ mod.M, mod.C }, "h",     function () awful.tag.incncol( 1)      end),
     awful.key({ mod.M, mod.C }, "l",     function () awful.tag.incncol(-1)      end),
-    awful.key({ mod.M,       }, "space", function () awful.layout.inc( 1)       end),
-    awful.key({ mod.M, mod.S }, "space", function () awful.layout.inc(-1)       end),
+    awful.key({ mod.M,       }, "space", function () awful.layout.inc(layouts, 1) end),
+    awful.key({ mod.M, mod.S }, "space", function () awful.layout.inc(layouts,-1) end),
 
     -- Standard program shortcuts
     awful.key({ mod.M        }, "Return", function () exec(commands.tmux) end),
@@ -789,7 +791,7 @@ awful.rules.rules = {
     -- Web browsers, MUA and RSS
     { rule = { class = "Chromium" },
       properties = { tag = shifty.name2tags('www',1)[1] } },
-    { rule_any = { instance = { "Mail" }, class = { "Thunderbird" } },
+    { rule_any = { instance = { "Mail", "owa.realvnc.com" }, class = { "Chromium-browser", "Thunderbird" } },
       except = { type = "dialog" },
       properties = { tag = shifty.name2tags('im',1)[1], floating = false } },
     { rule_any = { instance = { "Navigator" }, class = { "Firefox", "Dwb" } },
