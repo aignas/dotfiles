@@ -19,6 +19,8 @@ fi
 
 alias grep='grep --color=auto'
 
+alias ranger='if [ -z "$RANGER_LEVEL" ]; then ranger; else exit; fi'
+
 function fontadd () {
     cp $@ ~/.fonts/
 }
