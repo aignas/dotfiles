@@ -114,30 +114,36 @@ beautiful.init(cfgdir.."/theme/base16.lua")
 
 -- Default application definitions.
 local commands = {
-    google_chrome = "google-chrome-stable",
-    terminal = "st",
-    tmux = "st -e tmux",
+    chrome = "google-chrome-stable",
+    browser = "qutebrowser",
+
+    terminal = "gnome-terminal",
+    tmux = "gnome-terminal -e tmux",
     editor = "gvim",
-    browser = "dwb",
+
     screensaver = {
         cmd = "xautolock",
         notify = "xeyes",
         opts = ""
     },
+
     touchpad = {
         toggle = "xinput set-prop \"SynPS/2 Synaptics TouchPad\" \"Device Enabled\" "
     },
+
     trackpoint = {
         toggle = "xinput set-prop \"TPPS/2 IBM TrackPoint\" \"Device Enabled\" "
     },
+
     logitech = {
         mouse_sens = "xinput set-prop \"Logitech Unifying Device. Wireless PID:1028\" \"Device Accel Velocity Scalling\" ",
     },
+
     mpc = {
-        toggle  = 'ncmpcpp toggle',
-        next    = 'ncmpcpp next',
-        prev    = 'ncmpcpp prev',
-        stop    = 'ncmpcpp stop'
+        toggle = 'ncmpcpp toggle',
+        next = 'ncmpcpp next',
+        prev = 'ncmpcpp prev',
+        stop = 'ncmpcpp stop'
     },
 }
 
@@ -301,6 +307,14 @@ mymenu.awesome = {
     { "&Suspend to Disk",  acpid.Suspend.disk },
 }
 
+mymenu.webapps = {
+    { "&Outlook RealVNC",   commands.chrome .. " --app=https://owa.realvnc.com" },
+    { "&Facebook",          commands.chrome .. " --app=https://facebook.com" },
+    { "&Evernote",          commands.chrome .. " --app=https://www.evernote.com/Home.action" },
+    { "&Inbox",             commands.chrome .. " --app=https://inbox.google.com" },
+    { "&Money matters",     commands.chrome .. " --app=https://docs.google.com/spreadsheets/d/186DE18YgCEMaTBxHatHKPjQZQk-lJzeyUF5HnA8TwUI/edit#gid=724775945" },
+}
+
 mymenu.xrandr = {
     { "VGA1", {
         { "Left", "xrandr --output VGA1 --auto --left-of LVDS1 --output LVDS1 --auto --primary" },
@@ -321,8 +335,8 @@ mymenu.main = awful.menu({
         { "T&erminal",     commands.terminal, lookup_icon('terminal') },
         { "&Tmux",         commands.tmux, lookup_icon('terminal') },
         { "&Editor",       commands.editor },
+        { "Web &apps",     mymenu.webapps },
         { "&Xrandr",       mymenu.xrandr },
-        { "&Owa app",      commands.google_chrome .. " --app=https://owa.realvnc.com" },
         { "&Multimedia",   mymenu.audio,       lookup_icon('applications-multimedia') },
         { "A&wesome",      mymenu.awesome,     beautiful.awesome_icon },
     },
