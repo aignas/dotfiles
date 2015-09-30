@@ -18,6 +18,7 @@ else
 fi
 
 alias grep='grep --color=auto'
+alias less='less -R'
 
 alias ranger='if [ -z "$RANGER_LEVEL" ]; then ranger; else exit; fi'
 

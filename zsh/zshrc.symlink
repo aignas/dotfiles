@@ -1,6 +1,10 @@
 # My zshrc configuration. Use or reuse however you like.
 #       by gns-ank
 
+function profile() {
+    echo "PROFILE: $@"
+}
+
 # load zgen
 source "${HOME}/src/github/zgen/zgen.zsh"
 
