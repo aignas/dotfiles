@@ -67,23 +67,20 @@ NeoBundle 'Shougo/vimproc.vim', {
 \       'cygwin': 'make -f make_cygwin.mak',
 \       'mac': 'make -f make_mac.mak',
 \       'linux': 'make',
-\       'unix': 'gmake',
 \       },
 \   }
 
 " Coding tools
 " NOTE: Clang-complete needs Clang to operate properly
-NeoBundle 'Rip-Rip/clang_complete', {
-\   'build': {
-\       'linux': 'make',
-\       },
-\   }
+NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'scrooloose/syntastic'
 
 " Word processing: LaTeX and Pandoc
 NeoBundle 'vim-pandoc/vim-pandoc'
 NeoBundle 'vim-pandoc/vim-pandoc-syntax'
 NeoBundle 'vim-pandoc/vim-pandoc-after'
+
+NeoBundle 'lambdalisue/vim-gista'
 
 " Some science related things
 NeoBundle 'lsdr/octave.vim'
@@ -111,7 +108,7 @@ set go=aeg                              " remove toolbar and menubar
 let g:base16_shell_path="~/src/github/base16/base16-builder/output/shell"
 let base16colorspace=256
 set background=dark                     " Set a dark background
-colorscheme base16-default              " This is my new favorite
+colorscheme base16-default              " This is my favorite
 
 " Some Airline settings
 set laststatus=2
@@ -140,6 +137,7 @@ set wildmode=list:longest
 set laststatus=2            " Always show the status line
 set cmdheight=2             " The commandbar is 2 high
 set relativenumber          " Show relative line numbers
+set number                  " Show the current line number
 set lazyredraw              " Do not redraw, when running macros.. lazyredraw
 set hid                     " Change buffer - without saving
 set backspace=eol,start,indent "Set backspace
@@ -150,6 +148,11 @@ set incsearch hlsearch showmatch "Highlight search results
 set magic                   " Set magic on
 "set noerrorbells            " No sound on errors.
 au FocusLost * :wa          " Save when loosing focus
+
+" Retain indentation when we are word wrapping
+set breakindent
+" Set the showbreak to something useful
+set showbreak=..
 
 function! CurDir()
     let curdir=substitute(getcwd(), '/home/gns-ank/', "~/", "g")
@@ -173,36 +176,6 @@ inoremap jj <ESC>
 "Actually, the tab does not switch buffers, but my arrows
 noremap <Right> :bn<cr>
 noremap <Left> :bp<cr>
-nnoremap <C-Down> :Bclose<cr>
-
-" Don't close window, when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-
-"Fast open a buffer by search for a name
-map <C-q> :sb
-
-"Open a dummy buffer for paste
-map <leader>q :e ~/buffer<cr>
-map <leader>w :w<cr>
-
-function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
-
-    if buflisted(l:alternateBufNum)
-        buffer #
-    else
-        bnext
-    endif
-
-    if bufnr("%") == l:currentBufNum
-        new
-    endif
-
-    if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
-    endif
-endfunction
 
 "Restore cursor to file position in previous editing session
 set viminfo='10,\"100,:20,%,n~/.viminfo
@@ -210,11 +183,6 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 
 "Switch to current dir
 map <leader>cd :cd %:p:h<cr>
-
-" Retain indentation when we are word wrapping
-set breakindent
-" Set the showbreak to something useful
-set showbreak=..
 
 "If the directory in which we want to save a file is not there, create it
 augroup BWCCreateDir
@@ -297,7 +265,9 @@ let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'dwb %URL%'
 
-" Ultisnip
+" Ultisnips
+" Trigger configuration. Do not use <tab> if you use
+" https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -357,19 +327,37 @@ au BufReadPre *.tex let b:atp_TexCompiler = "lualatex"
 au BufReadPre *.tex let b:atp_TexOptions = "-synctex=1,-shell-escape"
 au FileType tex let b:atp_OpenViewer = 1
 
-au FileType tex let  g:atp_MathVimOptions = { 'textwidth': [ 0, 78 ] }
+au FileType tex let  g:atp_MathVimOptions = { 'textwidth': [ 0, 79 ] }
 
 au BufReadPre *.tex let g:atp_Compiler = "python"
 
 au FileType tex let g:atp_folding=1
 au FileType tex let g:atp_fold_environments="[ 'enumerate', 'itemize', 'align', 'equation', 'algorithm']"
 
-" NERDTree
-map <leader>n :NERDTreeToggle<cr>
-let NERDTreeIgnore=['\.pyo$', '\.pyc$',
-                  \ '\._aux$', '\.aux$', '\.bcf$', '\.loa$', '\.lof$',
-                  \ '\._log$', '\.log$', '\.out$', '\.pyg$', '\.run\.xml$',
-                  \ '\.toc$', '\.synctex.gz$']
+" Clang-complete
+" Clang Complete Settings
+let g:clang_use_library=1
+" if there's an error, allow us to see it
+let g:clang_complete_copen=1
+let g:clang_complete_macros=1
+let g:clang_complete_patterns=0
+" Limit memory use
+let g:clang_memory_percent=70
+" Remove -std=c++11 if you don't use C++ for everything like I do.
+let g:clang_user_options=' -std=c++11 || exit 0'
+" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
+" and 2 if you want autoselect. 0 will make you arrow down to select the first
+" option, 1 will select the first option for you, but won't insert it unless you
+" press enter. 2 will automatically insert what it thinks is right. 1 is the most
+" convenient IMO, and it defaults to 0.
+let g:clang_auto_select=1
+
+set conceallevel=2
+set concealcursor=vin
+let g:clang_snippets=1
+let g:clang_conceal_snippets=1
+" The single one that works with clang_complete
+let g:clang_snippets_engine='clang_complete'
 
 "}}}
 
