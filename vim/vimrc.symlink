@@ -57,6 +57,11 @@ NeoBundle 'bling/vim-airline'
 NeoBundle 'edkolev/tmuxline.vim'
 NeoBundle 'duff/vim-bufonly'
 
+" Line required to force the right plugin name -> lh-vim-lib, and not trunk
+NeoBundle 'LucHermitte/lh-vim-lib', {'name': 'lh-vim-lib'}
+" Note: I haven't found the syntax to merge the two NeoBundle lines into one...
+NeoBundle 'LucHermitte/local_vimrc', {'depends': 'lh-vim-lib'}
+
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'SirVer/ultisnips'
 NeoBundle 'honza/vim-snippets'
