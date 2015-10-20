@@ -123,18 +123,21 @@ set guioptions=ag                       " remove toolbar, menubar and
 "   http://ux.stackexchange.com/a/53268/74384
 set background=light                     " Set a light background
 colorscheme pencil
-" colorscheme solarized
+let g:pencil_higher_contrast_ui = 1   " 0=low (def), 1=high
+let g:pencil_neutral_headings = 1   " 0=blue (def), 1=normal
+let g:pencil_terminal_italics = 1
 
-" Some Airline settings
+" Some statusline and Airline settings
 set laststatus=2
 set showtabline=2
 set noshowmode
 set guifont=Hack\ 9
+
 let g:airline_powerline_fonts = 0
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
+let g:airline_theme = 'pencil'
 
-" Tmux Line
 let g:tmuxline_powerline_separators = 0
 
 "Favorite filetypes
@@ -143,31 +146,31 @@ set ffs=unix,dos,mac
 nmap <leader>fd :se ff=dos<cr>
 nmap <leader>fu :se ff=unix<cr>
 
-set scrolloff=3             "Set 3 lines to the curors - when moving vertical..
+set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 
 "Turn on Wild menu
 set wildmenu
 set wildmode=list:longest
 
 set laststatus=2            " Always show the status line
-set cmdheight=2             " The commandbar is 2 high
+set cmdheight=2             " The command bar is 2 high
 set relativenumber          " Show relative line numbers
 set number                  " Show the current line number
-set lazyredraw              " Do not redraw, when running macros.. lazyredraw
+set lazyredraw              " Do not redraw, when running macros: lazy redraw
 set hid                     " Change buffer - without saving
 set backspace=eol,start,indent "Set backspace
-set autoindent              " Set autoindent
+set autoindent              " Set auto-indent
 set whichwrap+=<,>          " Backspace and cursor keys wrap to
 set ignorecase smartcase    " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
 set magic                   " Set magic on
-"set noerrorbells            " No sound on errors.
-autocmd FocusLost * :wa          " Save when loosing focus
+autocmd FocusLost * :wa     " Save when loosing focus
 
-" Retain indentation when we are word wrapping
+" Retain indentation when we are word wrapping (needs >= Vim-7.388)
 set breakindent
-" Set the showbreak to something useful
-set showbreak=..
+" Set the show break to something useful and make sure that it is not something
+" that can easily occur in the code/text
+set showbreak=»»
 
 function! CurDir()
     let curdir=substitute(getcwd(), '/home/gns-ank/', "~/", "g")
@@ -181,20 +184,22 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
-" Fixing the modifier key and arrow combinations
-map [1;5B <C-Down>
+" Do useful things with arrows
+" Fugitive git status
+nnoremap <Up> :Gstatus<cr>
+" VimFiller window
+nnoremap <Left> :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
+" List of buffers
+nnoremap <Right> :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+" Syntastic errors
+nnoremap <Down> :Errors<cr>
 
 " leave the insert mode faster
-inoremap <Up> <ESC>
-inoremap jj <ESC>
+inoremap jk <ESC>
 
-"Actually, the tab does not switch buffers, but my arrows
-noremap <Right> :bn<cr>
-noremap <Left> :bp<cr>
-
-"Restore cursor to file position in previous editing session
+" Restore cursor to file position in previous editing session
 set viminfo='10,\"100,:20,%,n~/.viminfo
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 "Switch to current dir
 map <leader>cd :cd %:p:h<cr>
@@ -205,23 +210,16 @@ augroup BWCCreateDir
     autocmd BufWritePre * if expand("<afile>")!~#'^\w\+:/' && !isdirectory(expand("%:h")) | execute "silent! !mkdir -p ".shellescape(expand('%:h'), 1) | redraw! | endif
 augroup END
 
-" General Abbrevs
-iab xxtoday <c-r>=strftime("%d/%m/%Y %A")<cr>
-iab xxdate <c-r>=strftime("%d/%m/%Y")<cr>
-iab xxtime <c-r>=strftime("%H:%M:%S")<cr>
-iab xxname Ignas Anikevičius
-iab xxemail anikevicius@gmail.com
-
 " Files and backups
 "
-"Turn backup and swap on
+" Turn backup and swap on
 set backupdir=~/.vim/backup//
 set directory=~/.vim/swp//
 set undodir=~/.vim/undo//
 set backupcopy=yes
 set undofile
 
-"Enable folding, I find it very useful
+" Enable folding, I find it very useful
 set foldenable
 set foldlevel=1
 set foldmethod=indent
@@ -234,7 +232,7 @@ set smarttab
 set lbr
 set textwidth=79
 
-"Paste toggle - when pasting something in, don't indent.
+" Paste toggle - when pasting something in, don't indent.
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set showmode
@@ -246,7 +244,7 @@ map <leader>di :%s/\s*$//g<cr>:noh<cr>''
 set wrap
 
 " Don't do spell check by default
-set nospell
+set spell
 
 " Some mapping for spell checking
 map <leader>se :setlocal spell spelllang=en_gb<CR>
@@ -261,16 +259,16 @@ set joinspaces
 " Gzipped files
 augroup gzip
     autocmd!
-    autocmd BufReadPre,FileReadPre *.gz set bin
+    autocmd BufReadPre,FileReadPre     *.gz set bin
     autocmd BufReadPost,FileReadPost   *.gz '[,']!gunzip
     autocmd BufReadPost,FileReadPost   *.gz set nobin
     autocmd BufReadPost,FileReadPost   *.gz execute ":doautocmd BufReadPost " . expand("%:r")
     autocmd BufWritePost,FileWritePost *.gz !mv <afile> <afile>:r
     autocmd BufWritePost,FileWritePost *.gz !gzip <afile>:r
-    autocmd FileAppendPre      *.gz !gunzip <afile>
-    autocmd FileAppendPre      *.gz !mv <afile>:r <afile>
-    autocmd FileAppendPost     *.gz !mv <afile> <afile>:r
-    autocmd FileAppendPost     *.gz !gzip <afile>:r
+    autocmd FileAppendPre              *.gz !gunzip <afile>
+    autocmd FileAppendPre              *.gz !mv <afile>:r <afile>
+    autocmd FileAppendPost             *.gz !mv <afile> <afile>:r
+    autocmd FileAppendPost             *.gz !gzip <afile>:r
 augroup END
 "}}}
 "{{{ Plugin configuration
@@ -278,7 +276,7 @@ augroup END
 " Gist
 let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_detect_filetype = 1
-let g:gist_browser_command = 'dwb %URL%'
+let g:gist_browser_command = 'qutebrowser %URL%'
 
 " Ultisnips
 " Trigger configuration. Do not use <tab> if you use
@@ -303,8 +301,6 @@ nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
-  " Play nice with supertab
-  let b:SuperTabDisabled=1
   " Enable navigation with control-j and control-k in insert mode
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
@@ -324,12 +320,23 @@ let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
 
 " Syntastic
-let g:syntastic_cpp_compiler_options="-std=c++11"   " Use a new C++ standard
+let g:syntastic_cpp_compiler_options="-std=c++14"   " Use a new C++ standard
 
+" Some recommended options
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" Some nice extras
+let g:syntastic_error_symbol = "✗✗"
+let g:syntastic_warning_symbol = "!!"
+let g:syntastic_auto_jump = 3
+let g:syntastic_loc_list_height = 5
+
+" Add key bindings to quickly go through the errors syntastic finds.
+nnoremap <Leader><Left> :lprevious<cr>
+nnoremap <Leader><Right> :lnext<cr>
 
 " Clang-complete
 " Clang Complete Settings
@@ -355,7 +362,6 @@ let g:clang_snippets=1
 let g:clang_conceal_snippets=1
 " The single one that works with clang_complete
 let g:clang_snippets_engine='clang_complete'
-
 "}}}
 
 " Filetype generic
@@ -410,33 +416,33 @@ autocmd FileType python vmap <F7>3 :call Python_Eval_VSplit("ipython")<cr>
 
 "}}}
 "{{{ LUA section
-au FileType lua set expandtab
-au FileType lua set shiftwidth=4
-au FileType lua set tabstop=4
-au FileType lua set softtabstop=4
-au FileType lua set textwidth=79
-au FileType lua set foldmethod=marker
+autocmd FileType lua set expandtab
+autocmd FileType lua set shiftwidth=4
+autocmd FileType lua set tabstop=4
+autocmd FileType lua set softtabstop=4
+autocmd FileType lua set textwidth=79
+autocmd FileType lua set foldmethod=marker
 "}}}
 "{{{ C++ mappings
 autocmd FileType cc map <buffer> <leader><space> :w<cr>:!make %<cr>
 "}}}
 "{{{ mail
-au FileType mail set tw=78
-au FileType mail set spell
-au FileType mail set spelllang=en_gb
+autocmd FileType mail set tw=78
+autocmd FileType mail set spell
+autocmd FileType mail set spelllang=en_gb
 "}}}
 "{{{ LilyPond
 " Silent lilypond pdf reader
-au FileType lilypond map <buffer> <F5> :!lilypond %" 2> /dev/null &<Return><Return>
-au FileType lilypond map <buffer> <F6> :!zathura "%<.pdf" 2> /dev/null &<Return><Return>
+autocmd FileType lilypond map <buffer> <F5> :!lilypond %" 2> /dev/null &<Return><Return>
+autocmd FileType lilypond map <buffer> <F6> :!zathura "%<.pdf" 2> /dev/null &<Return><Return>
 "}}}
 "{{{ Git
-au FileType gitcommit set tw=72
+autocmd FileType gitcommit set tw=72
 "}}}
 " {{{ Pandoc
 let g:pandoc_command_latex_engine = "lualatex"
 let g:pandoc#after#modules#enabled = ["unite", "ultisnips"]
 let g:pandoc#folding#mode = "syntax"
-
-autocmd FileType pandoc set foldmethod=syntax
 " }}}
+
+" vim: foldmethod=marker
