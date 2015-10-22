@@ -42,7 +42,6 @@ NeoBundle 'PKGBUILD'
 
 " Colour-schemes
 NeoBundle 'reedes/vim-colors-pencil'
-NeoBundle 'altercation/vim-colors-solarized'
 
 " General purpose plugins
 NeoBundle 'tpope/vim-dispatch'
@@ -122,6 +121,7 @@ set guioptions=ag                       " remove toolbar, menubar and
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
 set background=light                     " Set a light background
+
 colorscheme pencil
 let g:pencil_higher_contrast_ui = 1   " 0=low (def), 1=high
 let g:pencil_neutral_headings = 1   " 0=blue (def), 1=normal
@@ -164,7 +164,8 @@ set whichwrap+=<,>          " Backspace and cursor keys wrap to
 set ignorecase smartcase    " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
 set magic                   " Set magic on
-autocmd FocusLost * :wa     " Save when loosing focus
+set list
+autocmd FocusLost * :wa          " Save when loosing focus
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
 set breakindent
@@ -210,6 +211,16 @@ augroup BWCCreateDir
     autocmd BufWritePre * if expand("<afile>")!~#'^\w\+:/' && !isdirectory(expand("%:h")) | execute "silent! !mkdir -p ".shellescape(expand('%:h'), 1) | redraw! | endif
 augroup END
 
+" Exiting Gvim with a confirmation dialog:
+nnoremap ZZ :call QuitPrompt()<cr>
+
+fun! QuitPrompt()
+   if has("gui_running") && tabpagenr("$") == 1 && winnr("$") == 1
+      let choice = confirm("Do you really want to quit gVim?", "&yes\n&no", 1)
+      if choice == 1 | wq | endif
+   else | wq | endif
+endfun
+
 " Files and backups
 "
 " Turn backup and swap on
@@ -222,7 +233,7 @@ set undofile
 " Enable folding, I find it very useful
 set foldenable
 set foldlevel=1
-set foldmethod=indent
+set foldmethod=syntax
 
 set expandtab
 set shiftwidth=4
@@ -394,12 +405,10 @@ autocmd FileType python setlocal foldmethod=indent
 autocmd FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd FileType python set formatoptions=cq textwidth=72 foldignore= wildignore+=*.py[co]
 
-function! PythonRetab(...)
-    let from=a:0
-    let to=a:1
-    set ts=a:from sts=a:from et
+function! PythonRetab()
+    setlocal ts=2 sts=2 noet
     retab!
-    set ts=a:to sts=a:to noet
+    setlocal ts=4 sts=4 et
     retab
 endfunction
 
