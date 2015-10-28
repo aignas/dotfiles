@@ -167,6 +167,7 @@ set ignorecase smartcase    " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
 set magic                   " Set magic on
 set list
+set listchars=tab:»-,eol:$
 autocmd FocusLost * :wa          " Save when loosing focus
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
