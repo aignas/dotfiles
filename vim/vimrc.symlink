@@ -39,23 +39,27 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Note: You don't set neobundle setting in .gvimrc!
 " Syntax files
 NeoBundle 'PKGBUILD'
+NeoBundle 'ekalinin/Dockerfile.vim'
+NeoBundle 'pearofducks/ansible-vim'
 
 " Colour-schemes
 NeoBundle 'reedes/vim-colors-pencil'
 
 " General purpose plugins
 NeoBundle 'tpope/vim-dispatch'
-NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-git'
 NeoBundle 'tpope/vim-unimpaired'
+
+" Git runtime files and interface to git
+NeoBundle 'tpope/vim-git'
+NeoBundle 'tpope/vim-fugitive'
+
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'bling/vim-airline'
 NeoBundle 'edkolev/tmuxline.vim'
-NeoBundle 'duff/vim-bufonly'
 
 " Line required to force the right plugin name -> lh-vim-lib, and not trunk
 NeoBundle 'LucHermitte/lh-vim-lib', {'name': 'lh-vim-lib'}
@@ -79,15 +83,13 @@ NeoBundle 'Shougo/vimproc.vim', {
 " NOTE: Clang-complete needs Clang to operate properly
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'scrooloose/syntastic'
+" Python IDE like completion. Requires sudo pip install jedi
+NeoBundle 'davidhalter/jedi-vim'
 
 " Text writing: LaTeX and Pandoc
 NeoBundle 'vim-pandoc/vim-pandoc'
 NeoBundle 'vim-pandoc/vim-pandoc-syntax'
 NeoBundle 'vim-pandoc/vim-pandoc-after'
-
-NeoBundle 'reedes/vim-pencil'
-
-NeoBundle 'lambdalisue/vim-gista'
 
 " Some science related things
 NeoBundle 'lsdr/octave.vim'
@@ -248,20 +250,19 @@ nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set showmode
 
-"Remove indenting on empty lines
+" Remove indenting on empty lines
 map <leader>di :%s/\s*$//g<cr>:noh<cr>''
 
-"Wrap lines
+" Wrap lines
 set wrap
 
-" Don't do spell check by default
+" Do spell check by default
 set spell
 
 " Some mapping for spell checking
 map <leader>se :setlocal spell spelllang=en_gb<CR>
 map <leader>sl :setlocal spell spelllang=lt<CR>
-map <leader>ss :setlocal spell<CR>
-map <leader>sn :setlocal nospell<CR>
+" Vim unimpaired has [os and ]os mappings to toggle spelling
 
 " Double spacing between sentences
 set cpoptions+=J
@@ -346,8 +347,7 @@ let g:syntastic_auto_jump = 3
 let g:syntastic_loc_list_height = 5
 
 " Add key bindings to quickly go through the errors syntastic finds.
-nnoremap <Leader><Left> :lprevious<cr>
-nnoremap <Leader><Right> :lnext<cr>
+" unimpaired has [l ]l for going through the errors
 
 " Clang-complete
 " Clang Complete Settings
