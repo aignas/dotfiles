@@ -8,6 +8,8 @@
 "
 "   * Steve Losh
 "       http://stevelosh.com/blog/2010/09/coming-home-to-vim/#
+"
+"   * Neovim project defaults
 
 " Note: Skip initialization for vim-tiny or vim-small.
 if 0 | endif
@@ -59,12 +61,6 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'bling/vim-airline'
-" NeoBundle 'edkolev/tmuxline.vim'
-
-" Line required to force the right plugin name -> lh-vim-lib, and not trunk
-NeoBundle 'LucHermitte/lh-vim-lib', {'name': 'lh-vim-lib'}
-" Note: I haven't found the syntax to merge the two NeoBundle lines into one...
-NeoBundle 'LucHermitte/local_vimrc', {'depends': 'lh-vim-lib'}
 
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'SirVer/ultisnips'
@@ -81,7 +77,6 @@ NeoBundle 'Shougo/vimproc.vim', {
 
 " Coding tools
 " NOTE: Clang-complete needs Clang to operate properly
-NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'scrooloose/syntastic'
 
 " Text writing: LaTeX and Pandoc
@@ -109,7 +104,7 @@ syntax enable                           " Enable syntax hl
 "Get out of VI's compatible mode..
 set encoding=utf-8
 set autoread                            " Automatically read when the file is changed from outside
-set history=600                         " History size
+set history=10000                       " History size
 
 let mapleader=","                       " Change the def leader
 let maplocalleader="-"                  " Change the def leader
@@ -121,10 +116,7 @@ set guioptions=ag                       " remove toolbar, menubar and
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
 set background=light                     " Set a light background
-
 colorscheme pencil
-let g:pencil_higher_contrast_ui = 1   " 0=low (def), 1=high
-let g:pencil_neutral_headings = 1   " 0=blue (def), 1=normal
 let g:pencil_terminal_italics = 1
 
 " Some statusline and Airline settings
@@ -138,8 +130,6 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_theme = 'pencil'
 
-" let g:tmuxline_powerline_separators = 0
-
 "Favorite filetypes
 set ffs=unix,dos,mac
 
@@ -152,20 +142,19 @@ set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 set wildmenu
 set wildmode=list:longest
 
-set laststatus=2            " Always show the status line
-set cmdheight=2             " The command bar is 2 high
-set relativenumber          " Show relative line numbers
-set number                  " Show the current line number
-set lazyredraw              " Do not redraw, when running macros: lazy redraw
-set hid                     " Change buffer - without saving
-set backspace=eol,start,indent "Set backspace
-set autoindent              " Set auto-indent
-set whichwrap+=<,>          " Backspace and cursor keys wrap to
-set ignorecase smartcase    " Ignore case when searching
+set laststatus=2                " Always show the status line
+set cmdheight=2                 " The command bar is 2 high
+set number relativenumber       " Show relative line numbers, with the current absolute
+set lazyredraw                  " Do not redraw, when running macros: lazy redraw
+set hid                         " Change buffer - without saving
+set backspace=eol,start,indent  " Set backspace
+set autoindent                  " Set auto-indent
+set whichwrap+=<,>              " Backspace and cursor keys wrap to
+set ignorecase smartcase        " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
-set magic                   " Set magic on
+set magic                       " Set magic on
 set list
-set listchars=tab:»-,eol:$
+set listchars=tab:»-,eol:$,trail:-,
 autocmd FocusLost * :wa          " Save when loosing focus
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
@@ -173,11 +162,6 @@ set breakindent
 " Set the show break to something useful and make sure that it is not something
 " that can easily occur in the code/text
 set showbreak=»»
-
-function! CurDir()
-    let curdir=substitute(getcwd(), '/home/gns-ank/', "~/", "g")
-    return curdir
-endfunction
 
 " Disable arrow keys
 nnoremap <up> <nop>
@@ -206,21 +190,20 @@ autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '
 "Switch to current dir
 map <leader>cd :cd %:p:h<cr>
 
-"If the directory in which we want to save a file is not there, create it
+" If the directory in which we want to save a file is not there, create it
+" This is taken from http://stackoverflow.com/a/4294176
+function! s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+        let dir=fnamemodify(a:file, ':h')
+        if !isdirectory(dir)
+            call mkdir(dir, 'p')
+        endif
+    endif
+endfunction
 augroup BWCCreateDir
-    au!
-    autocmd BufWritePre * if expand("<afile>")!~#'^\w\+:/' && !isdirectory(expand("%:h")) | execute "silent! !mkdir -p ".shellescape(expand('%:h'), 1) | redraw! | endif
+    autocmd!
+    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
-
-" Exiting Gvim with a confirmation dialog:
-nnoremap ZZ :call QuitPrompt()<cr>
-
-fun! QuitPrompt()
-   if has("gui_running") && tabpagenr("$") == 1 && winnr("$") == 1
-      let choice = confirm("Do you really want to quit gVim?", "&yes\n&no", 1)
-      if choice == 1 | wq | endif
-   else | wq | endif
-endfun
 
 " Files and backups
 "
@@ -239,10 +222,8 @@ set foldmethod=syntax
 set expandtab
 set shiftwidth=4
 set tabstop=4
-
 set smarttab
 set lbr
-set textwidth=79
 
 " Paste toggle - when pasting something in, don't indent.
 nnoremap <F2> :set invpaste paste?<CR>
@@ -255,32 +236,15 @@ map <leader>di :%s/\s*$//g<cr>:noh<cr>''
 " Wrap lines
 set wrap
 
-" Do spell check by default
+" Spelling
+" Vim unimpaired provides [os and ]os mappings to toggle spelling
 set spell
-
-" Some mapping for spell checking
 map <leader>se :setlocal spell spelllang=en_gb<CR>
 map <leader>sl :setlocal spell spelllang=lt<CR>
-" Vim unimpaired has [os and ]os mappings to toggle spelling
 
 " Double spacing between sentences
 set cpoptions+=J
 set joinspaces
-
-" Gzipped files
-augroup gzip
-    autocmd!
-    autocmd BufReadPre,FileReadPre     *.gz set bin
-    autocmd BufReadPost,FileReadPost   *.gz '[,']!gunzip
-    autocmd BufReadPost,FileReadPost   *.gz set nobin
-    autocmd BufReadPost,FileReadPost   *.gz execute ":doautocmd BufReadPost " . expand("%:r")
-    autocmd BufWritePost,FileWritePost *.gz !mv <afile> <afile>:r
-    autocmd BufWritePost,FileWritePost *.gz !gzip <afile>:r
-    autocmd FileAppendPre              *.gz !gunzip <afile>
-    autocmd FileAppendPre              *.gz !mv <afile>:r <afile>
-    autocmd FileAppendPost             *.gz !mv <afile> <afile>:r
-    autocmd FileAppendPost             *.gz !gzip <afile>:r
-augroup END
 "}}}
 "{{{ Plugin configuration
 
@@ -344,34 +308,6 @@ let g:syntastic_error_symbol = "✗✗"
 let g:syntastic_warning_symbol = "!!"
 let g:syntastic_auto_jump = 3
 let g:syntastic_loc_list_height = 5
-
-" Add key bindings to quickly go through the errors syntastic finds.
-" unimpaired has [l ]l for going through the errors
-
-" Clang-complete
-" Clang Complete Settings
-let g:clang_use_library=1
-" if there's an error, allow us to see it
-let g:clang_complete_copen=1
-let g:clang_complete_macros=1
-let g:clang_complete_patterns=0
-" Limit memory use
-let g:clang_memory_percent=70
-" Remove -std=c++11 if you don't use C++ for everything like I do.
-let g:clang_user_options=' -std=c++11 || exit 0'
-" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
-" and 2 if you want autoselect. 0 will make you arrow down to select the first
-" option, 1 will select the first option for you, but won't insert it unless you
-" press enter. 2 will automatically insert what it thinks is right. 1 is the most
-" convenient IMO, and it defaults to 0.
-let g:clang_auto_select=1
-
-set conceallevel=2
-set concealcursor=vin
-let g:clang_snippets=1
-let g:clang_conceal_snippets=1
-" The single one that works with clang_complete
-let g:clang_snippets_engine='clang_complete'
 "}}}
 
 " Filetype generic
@@ -385,31 +321,27 @@ autocmd FileType vim set nofen
 autocmd FileType vim set foldmethod=marker
 "}}}
 "{{{ Python section
-"Run the current buffer in python - ie. on leader+space
-"autocmd FileType python so ~/vim_local/syntax/python.vim
-autocmd FileType python map <buffer> <leader>ll1 :w!<cr>:!./%<cr>
-autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!python2 %<cr>
-autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!python3 %<cr>
-autocmd FileType pyrex  map <buffer> <leader>ll :w!<cr>:!python setup.py build_ext --inplace<cr>
-"autocmd FileType python so ~/vim_local/plugin/python_fold.vim
+autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!/usr/bin/env python2 %<cr>
+autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!/usr/bin/env python3 %<cr>
+set foldenable
+set foldlevel=1
+set foldmethod=syntax
 
-"Set some bindings up for 'compile' of python
-autocmd FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-autocmd FileType python setlocal efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-autocmd FileType python setlocal textwidth=79 " PEP8 friendly
-autocmd FileType python setlocal colorcolumn=80 " It's much easier visually
+set expandtab
+set shiftwidth=4
+set tabstop=4
 
+set smarttab
+set lbr
+set textwidth=79
+
+autocmd FileType python setlocal makeprg=/usr/bin/env\ python\ %
+autocmd FileType python setlocal expandtab          " PEP8 friendly
+autocmd FileType python setlocal shiftwidth         "
+autocmd FileType python setlocal tabstop            "
+autocmd FileType python setlocal textwidth=79       "
+autocmd FileType python setlocal colorcolumn=80     " It's much easier visually
 autocmd FileType python setlocal foldmethod=indent
-
-autocmd FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-autocmd FileType python set formatoptions=cq textwidth=72 foldignore= wildignore+=*.py[co]
-
-function! PythonRetab()
-    setlocal ts=2 sts=2 noet
-    retab!
-    setlocal ts=4 sts=4 et
-    retab
-endfunction
 
 "Run in the Python interpreter
 function! Python_Eval_VSplit_Old(interpreter) range
@@ -431,19 +363,6 @@ autocmd FileType lua set softtabstop=4
 autocmd FileType lua set textwidth=79
 autocmd FileType lua set foldmethod=marker
 "}}}
-"{{{ C++ mappings
-autocmd FileType cc map <buffer> <leader><space> :w<cr>:!make %<cr>
-"}}}
-"{{{ mail
-autocmd FileType mail set tw=78
-autocmd FileType mail set spell
-autocmd FileType mail set spelllang=en_gb
-"}}}
-"{{{ LilyPond
-" Silent lilypond pdf reader
-autocmd FileType lilypond map <buffer> <F5> :!lilypond %" 2> /dev/null &<Return><Return>
-autocmd FileType lilypond map <buffer> <F6> :!zathura "%<.pdf" 2> /dev/null &<Return><Return>
-"}}}
 "{{{ Git
 autocmd FileType gitcommit set tw=72
 "}}}
@@ -451,6 +370,7 @@ autocmd FileType gitcommit set tw=72
 let g:pandoc_command_latex_engine = "lualatex"
 let g:pandoc#after#modules#enabled = ["unite", "ultisnips"]
 let g:pandoc#folding#mode = "syntax"
+let g:pandoc#syntax#conceal#use = 0
 " }}}
 
 " vim: foldmethod=marker
