@@ -1,6 +1,9 @@
 #!/bin/bash
 
-mkdir -p ~/.vim/bundle
+VIM_DATA=${HOME}/.vim
+
+echo "Create a directory for NeoBundle"
+mkdir -p ${VIM_DATA}/bundle
 
 echo "Create backup, swp and undo directories"
-mkdir -p ${HOME}/.vim/{backup,swp,undo}
+mkdir -p ${VIM_DATA}/{backup,swp,undo}
