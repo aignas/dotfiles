@@ -2,6 +2,7 @@
 alias reload!='. ~/.zshrc'
 
 DOTFILES_OS=`uname -s`
+PKGBUILD_DIR="${HOME}/src/aur"
 
 # Normal aliases
 alias visudo='sudo -E EDITOR=vim visudo'
@@ -28,9 +29,20 @@ function fontadd () {
 }
 
 function aurd () {
-    git clone https://aur4.archlinux.org/$1.git/ ${HOME}/src/aur/$1
+    mkdir -p ${PKGBUILD_DIR}
+    for pkg in $@; do
+        git clone ssh://aur@aur.archlinux.org/$pkg.git/ ${PKGBUILD_DIR}/$pkg
+    done
 }
 
 function aurb () {
-    aurd $1 && cd ${HOME}/src/aur/$1 && makepkg -si && cd -
+    mkdir -p ${PKGBUILD_DIR}
+    # Download everything first
+    aurd $@
+
+    for pkg in $@; do
+        pushd ${PKGBUILD_DIR}/$pkg
+        makepkg -si
+        popd # ${PKGBUILD_DIR}/$pkg
+    done
 }
