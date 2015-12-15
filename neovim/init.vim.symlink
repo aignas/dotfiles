@@ -33,11 +33,11 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 
 " Git runtime files and interface to git
-Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimfiler.vim'
+Plug 'Shougo/deoplete.nvim'
 Plug 'bling/vim-airline'
 
 " Group dependencies, vim-snippets depends on ultisnips
@@ -102,6 +102,8 @@ set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 "Turn on Wild menu
 set wildmenu
 set wildmode=list:longest
+
+set noerrorbells
 
 set laststatus=2                " Always show the status line
 set cmdheight=2                 " The command bar is 2 high
@@ -212,6 +214,9 @@ set joinspaces
 " Neomake
 autocmd! BufWritePost * Neomake
 
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+
 " Gist
 let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_detect_filetype = 1
@@ -223,6 +228,13 @@ let g:gist_browser_command = 'qutebrowser %URL%'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+let g:ultisnips_python_style="google"
+let g:ultisnips_python_triple_quoting_style="single"
+let g:ultisnips_python_quoting_style="single"
 
 let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
 

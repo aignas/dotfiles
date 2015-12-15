@@ -10,3 +10,6 @@ mkdir -p ${NEOVIM_LOCAL}/plugged
 
 echo "Create backup, swp and undo directories"
 mkdir -p ${NEOVIM_LOCAL}/{backup,swp,undo}
+
+echo "In order to make Neovim work with unite and deoplete, one must install"
+echo "python-neovim-git from AUR and execute :UpdateRemotePlugins"
