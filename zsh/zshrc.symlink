@@ -87,5 +87,8 @@ zstyle \
     'git' \
     'history-substring-search'
 
+# Load the fuzzy finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 
 # vim: tw=80:ft=zsh

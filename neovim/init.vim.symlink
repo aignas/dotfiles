@@ -26,6 +26,16 @@ Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
 
 " Colour-schemes
 Plug 'reedes/vim-colors-pencil'
+Plug 'jnurmine/Zenburn'
+Plug 'romainl/Apprentice'
+Plug 'junegunn/seoul256.vim'
+Plug 'sjl/badwolf'
+Plug 'noahfrederick/vim-hemisu'
+Plug 'w0ng/vim-hybrid'
+Plug 'morhetz/gruvbox'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " General purpose plugins
 Plug 'tpope/vim-abolish'
@@ -75,10 +85,10 @@ set guioptions=ag                       " remove toolbar, menubar and
 " The study, which says that white colorscheme is better for your
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
-set background=light                     " Set a light background
-colorscheme pencil
-let g:pencil_terminal_italics = 1
-let NVIM_TUI_ENABLE_TRUE_COLOR=1
+set background=dark                     " Set a light background
+colorscheme seoul256
+" let g:pencil_terminal_italics = 1
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 " Some statusline and Airline settings
 set laststatus=2
@@ -145,10 +155,6 @@ nnoremap <Down> :copen<cr>
 
 " leave the insert mode faster
 inoremap jk <ESC>
-
-" Restore cursor to file position in previous editing session
-set viminfo='10,\"100,:20,%,n~/.cache/nvim/nviminfo
-autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 "Switch to current dir
 map <leader>cd :cd %:p:h<cr>
@@ -284,22 +290,18 @@ autocmd FileType vim set foldmethod=marker
 "{{{ Python section
 autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!/usr/bin/env python2 %<cr>
 autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!/usr/bin/env python3 %<cr>
-set foldenable
-set foldlevel=1
-set foldmethod=syntax
+autocmd FileType python setlocal foldenable
+autocmd FileType python setlocal foldlevel=1
+autocmd FileType python setlocal foldmethod=syntax
 
-set expandtab
-set shiftwidth=4
-set tabstop=4
-
-set smarttab
-set lbr
-set textwidth=79
+autocmd FileType python setlocal smarttab
+autocmd FileType python setlocal lbr
+autocmd FileType python setlocal textwidth=79
 
 " autocmd FileType python setlocal makeprg=/usr/bin/env\ python\ %
 autocmd FileType python setlocal expandtab          " PEP8 friendly
-autocmd FileType python setlocal shiftwidth         "
-autocmd FileType python setlocal tabstop            "
+autocmd FileType python setlocal shiftwidth=4       "
+autocmd FileType python setlocal tabstop=4          "
 autocmd FileType python setlocal textwidth=79       "
 autocmd FileType python setlocal colorcolumn=80     " It's much easier visually
 autocmd FileType python setlocal foldmethod=indent
