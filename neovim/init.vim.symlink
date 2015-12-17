@@ -217,8 +217,12 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 
+" FZF
+map <leader>ff :FZF<CR>
+
 " Neomake
 autocmd! BufWritePost * Neomake
+let g:neomake_open_list = 2
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
@@ -248,8 +252,6 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>fn :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-nnoremap <leader>fl :<C-u>Unite -no-split -buffer-name=files   -start-insert line<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
 nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>

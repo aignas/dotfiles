@@ -12,6 +12,8 @@ alias tm='tmux'
 alias tmn='tmux neww'
 alias gexp='git archive master | tar -x -C'
 alias vim='nvim'
+alias neovim='nvim'
+alias vimconfig='nvim ~/.config/nvim/init.vim'
 
 if [[ ${DOTFILES_OS} == "Darwin" ]]; then
     alias ls='ls -G'
