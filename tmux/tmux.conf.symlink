@@ -1,44 +1,189 @@
-# tmux configuration by Ignas Anikevicius
+# # tmux configuration by Ignas Anikevicius
+# 
+# # Make the key bindings behave more similarly to vi
+# set -g status-keys vi
+# setw -g mode-keys vi
+# 
+# # set the bell action properly
+# set -g bell-action any
+# 
+# # Set the default terminal
+# set -g default-terminal screen-256color
+# 
+# # Set the terminal titles
+# set -g set-titles on                                                 
+# #set -g set-titles-string '#H:#S.#I.#P #W'
+# setw -g automatic-rename on
+# 
+# # start numbering windows with 1
+# set -g base-index 1
+# 
+# set-option -g history-limit 4000
+# 
+# # Bindings -------------------------------------------------------------------------
+# bind e previous-window
+# bind f next-window
+# bind h select-pane -L
+# bind j select-pane -D
+# bind k select-pane -U
+# bind l select-pane -R
+# 
+# bind R source-file ~/.tmux.conf \; display-message "Config reloaded..."
+# 
+# # Pass through the prefix
+# bind ` send-prefix
+# 
+# # Clipboard selection integration --------------------------------------------------
+# 
+# #Copy tmux paste buffer to clipboard
+# bind Y run "tmux show-buffer | xclip -i -selection clipboard"
+# #Copy clipboard to tmux paste buffer and paste tmux paste buffer
+# bind P run "tmux set-buffer -- \"$(xclip -o -selection clipboard)\"; tmux paste-buffer"
+# 
+# # Tmux line ------------------------------------------------------------------------
+# source ${HOME}/.dotfiles/tmux/tmuxline.conf
 
-# Make the key bindings behave more similarly to vi
-set -g status-keys vi
-setw -g mode-keys vi
+# Hierarchy:
+#  Server
+#  ㄴSession
+#    ㄴWindow
+#      ㄴPane
 
-# set the bell action properly
-set -g bell-action any
+# Options:
+# - Session options (set-option [-g])
+# - Window options (set-window-option [-g])
 
-# Set the default terminal
-set -g default-terminal screen-256color
+# -------------------------------------------------------------------
+# Session options
+# -------------------------------------------------------------------
+# Change bind key to ctrl-a
+unbind-key c-b
+set-option -g prefix c-a
 
-# Set the terminal titles
-set -g set-titles on                                                 
-#set -g set-titles-string '#H:#S.#I.#P #W'
-setw -g automatic-rename on
+# Index starts from 1
+set-option -g base-index 1
 
-# start numbering windows with 1
-set -g base-index 1
+# Renumber windows when a window is closed
+set-option -g renumber-windows on
 
-set-option -g history-limit 4000
+# History
+set-option -g history-limit 102400
 
-# Bindings -------------------------------------------------------------------------
-bind e previous-window
-bind f next-window
-bind h select-pane -L
-bind j select-pane -D
-bind k select-pane -U
-bind l select-pane -R
+# Repeat time limit (ms)
+set-option -g repeat-time 500
 
-bind R source-file ~/.tmux.conf \; display-message "Config reloaded..."
+# 256-color terminal
+set-option -g default-terminal "screen-256color"
 
-# Pass through the prefix
-bind ` send-prefix
+# Key binding in the status line (bind-key :)
+set-option -g status-keys emacs
 
-# Clipboard selection integration --------------------------------------------------
+# Mouse
+set-option -g mouse on
 
-#Copy tmux paste buffer to clipboard
-bind Y run "tmux show-buffer | xclip -i -selection clipboard"
-#Copy clipboard to tmux paste buffer and paste tmux paste buffer
-bind P run "tmux set-buffer -- \"$(xclip -o -selection clipboard)\"; tmux paste-buffer"
+# -------------------------------------------------------------------
+# Window options
+# -------------------------------------------------------------------
+# UTF-8
+set-window-option -g utf8 on
 
-# Tmux line ------------------------------------------------------------------------
-source ${HOME}/.dotfiles/tmux/tmuxline.conf
+# Copy-mode
+set-window-option -g mode-keys vi
+
+# -------------------------------------------------------------------
+# Key bindings
+# -------------------------------------------------------------------
+# prefix c
+bind-key c new-window -c "#{pane_current_path}"
+
+# prefix ctrl-a
+bind-key c-a last-window
+
+# prefix a
+bind-key a send-prefix
+
+# prefix |
+bind-key | split-window -h -c "#{pane_current_path}"
+
+# prefix -
+bind-key - split-window -c "#{pane_current_path}"
+
+# Moving windows
+bind-key -r > swap-window -t :+
+bind-key -r < swap-window -t :-
+
+# Back and forth
+bind-key bspace previous-window
+bind-key space next-window
+bind-key / next-layout # Overridden
+
+# Pane-movement
+bind-key h select-pane -L
+bind-key l select-pane -R
+bind-key j select-pane -D
+bind-key k select-pane -U
+bind-key tab select-pane -t :.+
+bind-key btab select-pane -t :.-
+
+# Synchronize panes
+bind-key * set-window-option synchronize-pane
+
+# Reload ~/.tmux.conf
+bind-key R source-file ~/.tmux.conf \; display-message "Reloaded!"
+
+# copy-mode
+bind-key -t vi-copy 'v' begin-selection
+bind-key -t vi-copy 'y' copy-pipe "pbcopy"
+
+# Capture pane and open in Vim
+bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
+             new-window "view /tmp/tmux-capture.txt"
+
+# Notes
+bind-key C-n if-shell "tmux select-window -t NOTES" "" \
+  "new-window -n NOTES 'bash -i ~/gdrive/sync/notes/list'"
+
+# -------------------------------------------------------------------
+# Decoration (256-color)
+# -------------------------------------------------------------------
+set-option -g status-justify left
+set-option -g status-left '#[bg=colour72] #[bg=colour237] #[bg=colour236] #[bg=colour235]#[fg=colour185] #h #[bg=colour236] '
+set-option -g status-left-length 16
+set-option -g status-bg colour237
+set-option -g status-right '#[bg=colour236] #[bg=colour235]#[fg=colour185] #(date "+%a %b %d %H:%M") #[bg=colour236] #[bg=colour237] #[bg=colour72] '
+set-option -g status-interval 60
+
+set-option -g pane-active-border-fg colour240
+set-option -g pane-border-fg colour238
+
+set-window-option -g window-status-format '#[bg=colour238]#[fg=colour107] #I #[bg=colour239]#[fg=colour110] #[bg=colour240]#W#[bg=colour239]#[fg=colour195]#F#[bg=colour238] '
+set-window-option -g window-status-current-format '#[bg=colour236]#[fg=colour215] #I #[bg=colour235]#[fg=colour167] #[bg=colour234]#W#[bg=colour235]#[fg=colour195]#F#[bg=colour236] '
+
+# -------------------------------------------------------------------
+# fzf integration
+# -------------------------------------------------------------------
+# Tmux completion
+bind-key -n 'M-t' run "tmux split-window -p 40 'tmux send-keys -t #{pane_id} \"$(tmuxwords.rb --all --scroll 1000 --min 5 | fzf --multi | paste -sd\\  -)\"'"
+
+# fzf-locate (all)
+bind-key -n 'M-`' run "tmux split-window -p 40 'tmux send-keys -t #{pane_id} \"$(locate / | fzf -m | paste -sd\\  -)\"'"
+
+# select-pane (@george-b)
+bind-key 0 run "tmux split-window -l 12 'bash -ci ftpane'"
+
+# -------------------------------------------------------------------
+# Here be dragons!
+# -------------------------------------------------------------------
+# Backslash bind-key
+if-shell "test $USER = ia" \
+  "unbind C-a; set-option -g prefix \\ ; bind-key ] send-prefix; bind-key p paste-buffer; bind-key \\ last-window"
+
+# Bind-key switch
+bind-key F9  set-option -g prefix C-a   \;\
+             bind-key a send-prefix     \;\
+             bind-key p previous-window \;\
+             bind-key C-a last-window
+bind-key F10 set-option -g prefix "\\"  \;\
+             bind-key ] send-prefix     \;\
+             bind-key p paste-buffer    \;\
+             bind-key "\\" last-window

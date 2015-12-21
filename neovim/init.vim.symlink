@@ -21,18 +21,15 @@ call plug#begin('~/.local/nvim/plugged')
 " My Bundles here:
 " Syntax files
 Plug 'PKGBUILD', {'for': 'pkgbuild'}
-Plug 'ekalinin/Dockerfile.vim', {'for': 'DockerFile'}
+Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
+Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
+
 
 " Colour-schemes
 Plug 'reedes/vim-colors-pencil'
-Plug 'jnurmine/Zenburn'
-Plug 'romainl/Apprentice'
 Plug 'junegunn/seoul256.vim'
 Plug 'sjl/badwolf'
-Plug 'noahfrederick/vim-hemisu'
-Plug 'w0ng/vim-hybrid'
-Plug 'morhetz/gruvbox'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -60,6 +57,10 @@ Plug 'benekastah/neomake'
 Plug 'vim-pandoc/vim-pandoc', {'for': 'markdown'}
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'vim-pandoc/vim-pandoc-after', {'for': 'markdown'}
+Plug 'Rykka/riv.vim', {'for': 'rst'}
+
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 
 " Some science related things
 Plug 'lsdr/octave.vim', {'for': 'octave'}
