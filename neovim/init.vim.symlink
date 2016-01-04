@@ -128,7 +128,7 @@ set ignorecase smartcase        " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
 set magic                       " Set magic on
 set list
-set listchars=tab:»-,eol:$,trail:-,
+set listchars=tab:»-,trail:-,
 autocmd FocusLost * :wa          " Save when loosing focus
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
@@ -148,7 +148,14 @@ inoremap <right> <nop>
 " Fugitive git status
 nnoremap <Up> :Gstatus<cr>
 " VimFiller window
-nnoremap <Left> :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
+nnoremap <Left> :<C-u>VimFilerCurrentDir
+    \ -split
+    \ -simple
+    \ -parent
+    \ -winwidth=35
+    \ -auto-cd
+    \ -toggle
+    \ -no-quit<CR>
 " List of buffers
 nnoremap <Right> :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 " Neomake errors
@@ -157,7 +164,7 @@ nnoremap <Down> :copen<cr>
 " leave the insert mode faster
 inoremap jk <ESC>
 
-"Switch to current dir
+" Switch to current dir
 map <leader>cd :cd %:p:h<cr>
 
 " If the directory in which we want to save a file is not there, create it
