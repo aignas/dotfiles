@@ -11,6 +11,8 @@
 "
 "   * Neovim project defaults
 
+let s:darwin = has('mac')
+
 
 " Install vim plug by:
 " curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
@@ -18,55 +20,56 @@
 
 call plug#begin('~/.local/nvim/plugged')
 
-" My Bundles here:
-" Syntax files
-Plug 'PKGBUILD', {'for': 'pkgbuild'}
-Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
-Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
-Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
-
-
-" Colour-schemes
-Plug 'reedes/vim-colors-pencil'
-Plug 'junegunn/seoul256.vim'
-Plug 'sjl/badwolf'
-
+Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/neoyank.vim'
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
+Plug 'Shougo/vimfiler.vim'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'neomake/neomake'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" General purpose plugins
 Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-tbone'
 
-" Git runtime files and interface to git
-Plug 'tpope/vim-fugitive'
+" Colours
+Plug 'junegunn/seoul256.vim'
 
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimfiler.vim'
-Plug 'Shougo/deoplete.nvim'
-Plug 'bling/vim-airline'
-
-" Group dependencies, vim-snippets depends on ultisnips
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-" Coding tools
-Plug 'benekastah/neomake'
-
-" Text writing: LaTeX and Pandoc
+" Filetype
 Plug 'vim-pandoc/vim-pandoc', {'for': 'markdown'}
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'vim-pandoc/vim-pandoc-after', {'for': 'markdown'}
 Plug 'Rykka/riv.vim', {'for': 'rst'}
 
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
+if s:darwin
+  Plug 'OmniSharp/omnisharp-vim', {'do': 'yes \| cd server && xbuild', 'for': 'cs'}
+  Plug 'OrangeT/vim-csharp', {'for': 'cs'}
+  " vim-dispatch on neovim depends on vim-dispatch-neovim
+  Plug 'radenling/vim-dispatch-neovim' | Plug 'tpope/vim-dispatch'
+  Plug 'scrooloose/syntastic', {'for': 'cs'}
+endif
 
-" Some science related things
+Plug 'fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
+
+Plug 'PKGBUILD', {'for': 'pkgbuild'}
+Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
+Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
+Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
 Plug 'lsdr/octave.vim', {'for': 'octave'}
+
+" Plugin, which I am trying to develop from time to time.
+" Plug '~/src/github/omnisharp-neovim'
 
 " Add plugins to &runtimepath
 call plug#end()
+
+" Neovim stuff: this will assume that there is a Python venv for neovim uses.
+let g:python_host_prog = $HOME.'/.dotfiles/neovim/venv2/bin/python2'
+let g:python3_host_prog = $HOME.'/.dotfiles/neovim/venv/bin/python3'
 
 " Required:
 filetype plugin indent on
@@ -88,7 +91,6 @@ set guioptions=ag                       " remove toolbar, menubar and
 "   http://ux.stackexchange.com/a/53268/74384
 set background=dark                     " Set a light background
 colorscheme seoul256
-" let g:pencil_terminal_italics = 1
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 " Some statusline and Airline settings
@@ -259,11 +261,9 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
 " Unite
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <leader>g :<C-u>Unite -no-split -buffer-name=yank    grep<cr>
+nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -287,17 +287,17 @@ let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
 "}}}
 
-" Filetype generic
+" Filetype generic {{{
 
-"{{{ VIM
+" vim
 augroup reload_vimrc
     autocmd!
     autocmd reload_vimrc BufWritePost $MYVIMRC nested source $MYVIMRC
 augroup END
 autocmd FileType vim set nofen
 autocmd FileType vim set foldmethod=marker
-"}}}
-"{{{ Python section
+
+" Python
 autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!/usr/bin/env python2 %<cr>
 autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!/usr/bin/env python3 %<cr>
 autocmd FileType python setlocal foldenable
@@ -308,7 +308,6 @@ autocmd FileType python setlocal smarttab
 autocmd FileType python setlocal lbr
 autocmd FileType python setlocal textwidth=79
 
-" autocmd FileType python setlocal makeprg=/usr/bin/env\ python\ %
 autocmd FileType python setlocal expandtab          " PEP8 friendly
 autocmd FileType python setlocal shiftwidth=4       "
 autocmd FileType python setlocal tabstop=4          "
@@ -327,23 +326,51 @@ endfunction
 autocmd FileType python vmap <F7>2 :call Python_Eval_VSplit("ipython2")<cr>
 autocmd FileType python vmap <F7>3 :call Python_Eval_VSplit("ipython")<cr>
 
-"}}}
-"{{{ LUA section
+" LUA section
 autocmd FileType lua set expandtab
 autocmd FileType lua set shiftwidth=4
 autocmd FileType lua set tabstop=4
 autocmd FileType lua set softtabstop=4
 autocmd FileType lua set textwidth=79
 autocmd FileType lua set foldmethod=marker
-"}}}
-"{{{ Git
+
+" Git
 autocmd FileType gitcommit set tw=72
-"}}}
-" {{{ Pandoc
+
+" Pandoc
 let g:pandoc_command_latex_engine = "lualatex"
 let g:pandoc#after#modules#enabled = ["unite", "ultisnips"]
 let g:pandoc#folding#mode = "syntax"
 let g:pandoc#syntax#conceal#use = 0
+
+" C#
+"let g:syntastic_cs_checkers = ['code_checker']
+let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+augroup omnisharp_commands
+    autocmd!
+
+    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+
+    autocmd FileType cs let g:Omnisharp_start_server = 1
+    "autocmd FileType cs let g:Omnisharp_server_type = 'roslyn'
+    autocmd FileType cs let g:Omnisharp_server_type = 'v1'
+    autocmd FileType cs let g:Omnisharp_server_config_name = '~/.local/nvim/plugged/omnisharp-vim/server/config.json'
+    autocmd FileType cs let g:Omnisharp_selector_ui = 'unite'
+
+    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+
+    autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
+
+    autocmd FileType cs nnoremap <leader>ss :OmniSharpStartServer<cr>
+    autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
+augroup END
 " }}}
 
 " vim: ft=vim:foldmethod=marker

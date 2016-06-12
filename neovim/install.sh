@@ -1,15 +1,36 @@
 #!/bin/bash
 
+HOST_OS=$(uname -s)
 NEOVIM_LOCAL=${HOME}/.local/nvim
+NEOVIM_VENV=${HOME}/.dotfiles/neovim/venv
 
 echo "Install Vim-plug"
 curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+echo "Setting venv for use with neovim"
 mkdir -p ${NEOVIM_LOCAL}/plugged
 
 echo "Create backup, swp and undo directories"
 mkdir -p ${NEOVIM_LOCAL}/{backup,swp,undo}
 
-echo "In order to make Neovim work with unite and deoplete, one must install"
-echo "python-neovim-git from AUR and execute :UpdateRemotePlugins"
+echo "Installing Mono"
+echo "Visit http://www.mono-project.com/download/"
+read "Press [Enter] to contitue"
+
+echo "Setting up python"
+pyvenv ${NEOVIM_VENV}
+${NEOVIM_VENV}/bin/pip install --upgrade \
+    pip \
+    setuptools \
+    neovim
+
+# This is only needed because of the omnisharp plugin
+python2 -m pip install virtualenv
+python2 -m virtualenv ${NEOVIM_VENV}2
+${NEOVIM_VENV}2/bin/pip install --upgrade \
+    pip \
+    setuptools \
+    neovim
+
+nvim +PlugInstall +UpdateRemotePlugins +qall
