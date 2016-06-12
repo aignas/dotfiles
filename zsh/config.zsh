@@ -6,6 +6,17 @@ if [[ ${OS_DOTFILES} != "Darwin" ]]; then
 fi
 export CLICOLOR=true
 
+# Add Ports stuff into path:
+if [[ ${OS_DOTFILES} == "Darwin" ]]; then
+    export PATH="/opt/local/bin:${PATH}"
+fi
+
+# Add local bin folder
+if [[ -d ${ZSH_DOTFILES}/bin ]]; then
+    export PATH="${ZSH_DOTFILES}/bin:${PATH}"
+fi
+
+export CLICOLOR=true
 fpath=($ZSH_DOTFILES/functions $fpath)
 
 autoload -U $ZSH_DOTFILES/functions/*(:t)
@@ -43,8 +54,8 @@ setopt complete_aliases
 bindkey -v      # vim keybinding mode
 # Set some bindings
 zmodload zsh/terminfo
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
+bindkey "^P" history-substring-search-up
+bindkey "^N" history-substring-search-down
 
 bindkey -M vicmd '\es' sudo-command-line
 

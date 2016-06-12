@@ -5,9 +5,6 @@ function profile() {
     echo "PROFILE: $@"
 }
 
-# load zgen
-source "${HOME}/src/github/zgen/zgen.zsh"
-
 # shortcut to this dotfiles path is $ZSH
 export ZSH_DOTFILES=$HOME/.dotfiles
 
@@ -54,30 +51,36 @@ do
   source $file
 done
 
-# check if there's no init script
-if ! zgen saved; then
-    echo "Creating a zgen save"
+# My plugins
+source ~/.zplug/init.zsh
 
-    # Oh-my-zsh plugins
-    zgen oh-my-zsh plugins/sudo
-    zgen oh-my-zsh plugins/github
-    zgen oh-my-zsh plugins/command-not-found
-    zgen oh-my-zsh plugins/python
- 
-    # completions
-    zgen load zsh-users/zsh-completions src
-    zgen load zsh-users/zsh-syntax-highlighting
-    zgen load zsh-users/zsh-history-substring-search
+# Manage zplug the same way:
+zplug "zplug/zplug"
 
-    # theme
-    # Note: we include the async.zsh script in order to run git commands
-    # asynchronously.
-    zgen load sindresorhus/pure async.zsh
-    zgen load sindresorhus/pure
+zplug "plugins/sudo", from:oh-my-zsh
+zplug "plugins/github", from:oh-my-zsh
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "plugins/python", from:oh-my-zsh
 
-    # save all to init script
-    zgen save
+# completions
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-history-substring-search"
+
+# theme
+# Note: we include the async.zsh script in order to run git commands
+# asynchronously.
+zplug "sindresorhus/pure", use:async.zsh
+zplug "sindresorhus/pure"
+
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
 fi
+
+zplug load
 
 unset config_files
 
@@ -90,5 +93,7 @@ zstyle \
 # Load the fuzzy finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# .NET Core related stuff
+[ -s "${HOME}/.dnx/dnvm/dnvm.sh" ] && . "${HOME}/.dnx/dnvm/dnvm.sh" # Load dnvm
 
 # vim: tw=80:ft=zsh

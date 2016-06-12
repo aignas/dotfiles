@@ -41,9 +41,6 @@ set-option -g mouse on
 # -------------------------------------------------------------------
 # Window options
 # -------------------------------------------------------------------
-# UTF-8
-set-window-option -g utf8 on
-
 # Copy-mode
 set-window-option -g mode-keys vi
 
@@ -94,11 +91,13 @@ bind-key -t vi-copy 'y' copy-pipe "pbcopy"
 
 # Capture pane and open in Vim
 bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
-             new-window "view /tmp/tmux-capture.txt"
+             new-window "nvim /tmp/tmux-capture.txt"
 
 # Notes
 bind-key C-n if-shell "tmux select-window -t NOTES" "" \
-  "new-window -n NOTES 'bash -i ~/gdrive/sync/notes/list'"
+  "new-window -n NOTES 'nvim \"~/Dropbox (Personal)/_GTD\"'"
+bind-key C-w if-shell "tmux select-window -t NOTES" "" \
+  "new-window -n NOTES 'nvim \"~/Dropbox (TRAFI)/Notes\"'"
 
 # -------------------------------------------------------------------
 # Decoration (256-color)
