@@ -27,7 +27,8 @@ alias grep='grep --color=auto'
 alias less='less -R'
 
 alias ranger='if [ -z "$RANGER_LEVEL" ]; then ranger; else exit; fi'
-alias f='fzf-fs'
+# Have only one fzf-fs session running
+alias f='if [[ -z ${FZF_FS_DEFAULT_OPTS_OLD+x} ]]; then fzf-fs; else exit; fi'
 
 if [[ ${DOTFILES_OS} != "Darwin" ]]; then
     PKGBUILD_DIR="${HOME}/src/aur"
