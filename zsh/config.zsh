@@ -11,6 +11,11 @@ if [[ ${OS_DOTFILES} == "Darwin" ]]; then
     export PATH="/opt/local/bin:${PATH}"
 fi
 
+# Add fzf-fs
+if [[ -d ${ZSH_DOTFILES}/fzf/fzf-fs ]]; then
+    export PATH="${ZSH_DOTFILES}/fzf/fzf-fs:${PATH}"
+fi
+
 # Add local bin folder
 if [[ -d ${ZSH_DOTFILES}/bin ]]; then
     export PATH="${ZSH_DOTFILES}/bin:${PATH}"
