@@ -2,8 +2,9 @@
 
 VIM_DATA=${HOME}/.vim
 
-echo "Create a directory for NeoBundle"
-mkdir -p ${VIM_DATA}/bundle
+echo "Install Vim-plug"
+curl -fLo ${VIM_DATA}/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 echo "Create backup, swp and undo directories"
 mkdir -p ${VIM_DATA}/{backup,swp,undo}

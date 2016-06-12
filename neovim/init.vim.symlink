@@ -67,9 +67,11 @@ Plug 'lsdr/octave.vim', {'for': 'octave'}
 " Add plugins to &runtimepath
 call plug#end()
 
-" Neovim stuff: this will assume that there is a Python venv for neovim uses.
-let g:python_host_prog = $HOME.'/.dotfiles/neovim/venv2/bin/python2'
-let g:python3_host_prog = $HOME.'/.dotfiles/neovim/venv/bin/python3'
+if has('nvim')
+  " Neovim stuff: this will assume that there is a Python venv for neovim uses.
+  let g:python_host_prog = $HOME.'/.dotfiles/neovim/venv2/bin/python2'
+  let g:python3_host_prog = $HOME.'/.dotfiles/neovim/venv/bin/python3'
+endif
 
 " Required:
 filetype plugin indent on
