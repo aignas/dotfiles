@@ -7,6 +7,7 @@ function profile() {
 
 # shortcut to this dotfiles path is $ZSH
 export ZSH_DOTFILES=$HOME/.dotfiles
+source ${ZSH_DOTFILES}/bin/dot
 
 # your project folder that we can `c [tab]` to
 export PROJECTS=~/src

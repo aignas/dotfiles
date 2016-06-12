@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo "Setting up Zplug"
+echo "Getting up Zplug"
 curl -sL get.zplug.sh | zsh
