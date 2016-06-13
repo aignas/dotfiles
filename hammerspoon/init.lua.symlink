@@ -1,0 +1,22 @@
+local mash = {"cmd", "alt", "ctrl"}
+
+hs.hotkey.bind(mash, "W", function()
+    hs.alert.show("Hello World!")
+end)
+
+hs.hotkey.bind(mash, "R", function()
+    hs.notify.new({
+        title="Hammerspoon",
+        informativeText="Reloading config"
+    }):send()
+    hs.reload()
+end)
+
+hs.hotkey.bind(mash, "L", function()
+    local focusedScreen = hs.screen.mainScreen()
+    local nextScreen = focusedScreen:next()
+    local xy = nextScreen:frame().center
+
+    -- Move mouse to a different screen
+    hs.mouse.setAbsolutePosition(xy)
+end)
