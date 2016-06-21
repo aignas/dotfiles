@@ -1,8 +1,9 @@
 #!/bin/bash
 
 HOST_OS=$(uname -s)
+VIM_LOCAL=${HOME}/.vim
 NEOVIM_LOCAL=${HOME}/.local/nvim
-NEOVIM_VENV=${HOME}/.dotfiles/neovim/venv
+NEOVIM_VENV=${NEOVIM_LOCAL}/venv
 
 echo "Install Vim-plug"
 curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
@@ -11,8 +12,8 @@ curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
 echo "Setting venv for use with neovim"
 mkdir -p ${NEOVIM_LOCAL}/plugged
 
-echo "Create backup, swp and undo directories"
-mkdir -p ${NEOVIM_LOCAL}/{backup,swp,undo}
+echo "Create backup, swp and undo directories.  Shared with vim."
+mkdir -p ${VIM_LOCAL}/{backup,swp,undo}
 
 echo "Installing Mono"
 echo "Visit http://www.mono-project.com/download/"

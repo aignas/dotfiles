@@ -44,6 +44,8 @@ Plug 'vim-pandoc/vim-pandoc', {'for': 'markdown'}
 Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
 Plug 'vim-pandoc/vim-pandoc-after', {'for': 'markdown'}
 Plug 'Rykka/riv.vim', {'for': 'rst'}
+Plug 'rust-lang/rust.vim', {'for': 'rust'}
+Plug 'cespare/vim-toml', {'for': 'toml'}
 
 if s:darwin
   Plug 'OmniSharp/omnisharp-vim', {'do': 'yes \| cd server && xbuild', 'for': 'cs'}
@@ -69,8 +71,8 @@ call plug#end()
 
 if has('nvim')
   " Neovim stuff: this will assume that there is a Python venv for neovim uses.
-  let g:python_host_prog = $HOME.'/.dotfiles/neovim/venv2/bin/python2'
-  let g:python3_host_prog = $HOME.'/.dotfiles/neovim/venv/bin/python3'
+  let g:python_host_prog = $HOME.'/.local/nvim/venv2/bin/python2'
+  let g:python3_host_prog = $HOME.'/.local/nvim/venv/bin/python3'
 endif
 
 " Required:
@@ -222,6 +224,8 @@ set wrap
 set spell
 map <leader>se :setlocal spell spelllang=en_gb<CR>
 map <leader>sl :setlocal spell spelllang=lt<CR>
+
+map <leader>ll :w<CR>:!!<CR>
 
 " Double spacing between sentences
 set cpoptions+=J
