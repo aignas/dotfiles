@@ -12,7 +12,7 @@
 "   * Neovim project defaults
 
 let s:darwin = has('mac')
-
+set nocompatible
 
 " Install vim plug by:
 " curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
@@ -20,7 +20,7 @@ let s:darwin = has('mac')
 
 call plug#begin('~/.local/nvim/plugged')
 
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neoyank.vim'
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
@@ -29,20 +29,23 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'neomake/neomake'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-peekaboo'
 
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-tbone'
+Plug 'janko-m/vim-test'
 
 " Colours
 Plug 'junegunn/seoul256.vim'
 
 " Filetype
-Plug 'vim-pandoc/vim-pandoc', {'for': 'markdown'}
-Plug 'vim-pandoc/vim-pandoc-syntax', {'for': 'markdown'}
-Plug 'vim-pandoc/vim-pandoc-after', {'for': 'markdown'}
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'Rykka/riv.vim', {'for': 'rst'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
@@ -57,6 +60,10 @@ endif
 
 Plug 'fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
 
+Plug 'vimwiki/vimwiki'
+Plug 'farseer90718/vim-taskwarrior'
+Plug 'tbabej/taskwiki'
+
 Plug 'PKGBUILD', {'for': 'pkgbuild'}
 Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
@@ -68,6 +75,8 @@ Plug 'lsdr/octave.vim', {'for': 'octave'}
 
 " Add plugins to &runtimepath
 call plug#end()
+
+" Generic vim {{{
 
 if has('nvim')
   " Neovim stuff: this will assume that there is a Python venv for neovim uses.
@@ -110,9 +119,6 @@ let g:airline_theme = 'pencil'
 
 "Favorite filetypes
 set ffs=unix,dos,mac
-
-nmap <leader>fd :se ff=dos<cr>
-nmap <leader>fu :se ff=unix<cr>
 
 set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 
@@ -162,8 +168,6 @@ nnoremap <Left> :<C-u>VimFilerCurrentDir
     \ -auto-cd
     \ -toggle
     \ -no-quit<CR>
-" List of buffers
-nnoremap <Right> :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 " Neomake errors
 nnoremap <Down> :copen<cr>
 
@@ -200,7 +204,6 @@ set undofile
 " Enable folding, I find it very useful
 set foldenable
 set foldlevel=1
-set foldmethod=syntax
 
 set expandtab
 set shiftwidth=4
@@ -233,8 +236,33 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 
+" VimWiki
+let work_wiki = {}
+let work_wiki.path = '~/Dropbox (TRAFI)/vimwiki/'
+let work_wiki.auto_export = 1
+let work_wiki.auto_toc = 1
+let work_wiki.ext = '.wiki'
+
+let personal_wiki = {}
+let personal_wiki.path = '~/Dropbox (Personal)/vimwiki/'
+let personal_wiki.auto_export = 1
+let personal_wiki.auto_toc = 1
+let work_wiki.ext = '.wiki'
+
+let g:vimwiki_list = [work_wiki, personal_wiki]
+" nmap <Leader>wf <Plug>VimwikiFollowLink
+
+" Vim Test
+nmap <silent> <leader>t :TestNearest<CR>
+
 " FZF
 map <leader>ff :FZF<CR>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>ma :Marks<cr>
+nnoremap <leader>mp :Maps<cr>
+nnoremap <leader>h :History
+nnoremap <leader>sn :Snippets<cr>
+nnoremap <leader>gc :Commits<cr>
 
 " Neomake
 autocmd! BufWritePost * Neomake
@@ -268,8 +296,7 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>g :<C-u>Unite -no-split -buffer-name=yank    grep<cr>
-nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <leader>g :<C-u>Unite -no-split -buffer-name=grep    grep<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -281,7 +308,7 @@ endfunction
 
 " VimFiler
 let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_tree_leaf_icon = " "
+let g:vimfiler_tree_leaf_icon = "|"
 let g:vimfiler_tree_opened_icon = '▾'
 let g:vimfiler_tree_closed_icon = '▹'
 let g:vimfiler_file_icon = '-'
@@ -292,7 +319,6 @@ let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
 
 nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
 "}}}
-
 " Filetype generic {{{
 
 " vim
@@ -360,8 +386,8 @@ augroup omnisharp_commands
     autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
     autocmd FileType cs let g:Omnisharp_start_server = 1
-    "autocmd FileType cs let g:Omnisharp_server_type = 'roslyn'
-    autocmd FileType cs let g:Omnisharp_server_type = 'v1'
+    autocmd FileType cs let g:Omnisharp_server_type = 'roslyn'
+    "autocmd FileType cs let g:Omnisharp_server_type = 'v1'
     autocmd FileType cs let g:Omnisharp_server_config_name = '~/.local/nvim/plugged/omnisharp-vim/server/config.json'
     autocmd FileType cs let g:Omnisharp_selector_ui = 'unite'
 
@@ -378,5 +404,3 @@ augroup omnisharp_commands
     autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
 augroup END
 " }}}
-
-" vim: ft=vim:foldmethod=marker

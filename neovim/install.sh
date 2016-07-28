@@ -32,6 +32,10 @@ python2 -m virtualenv ${NEOVIM_VENV}2
 ${NEOVIM_VENV}2/bin/pip install --upgrade \
     pip \
     setuptools \
+    tasklib \
     neovim
+
+${NEOVIM_VENV}2/bin/pip install --upgrade \
+    git+git://github.com/tbabej/tasklib@develop
 
 nvim +PlugInstall +UpdateRemotePlugins +qall
