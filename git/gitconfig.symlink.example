@@ -1,6 +1,6 @@
 [user]
-	name = AUTHORNAME
-	email = AUTHOREMAIL
+    name = AUTHORNAME
+    email = AUTHOREMAIL
 
 [credential]
     helper = GIT_CREDENTIAL_HELPER
@@ -16,24 +16,34 @@
     default = matching
 
 [core]
-	editor = vim
-	whitespace = fix,-indent-with-non-tab,trailing-space
+    editor = nvim
+    whitespace = fix,-indent-with-non-tab,trailing-space
 
 [diff]
-    tool = vimdiff
+    tool = nvimdiff
 
 [difftool]
     prompt = false
 
 [alias]
-	ci = commit -v
-	st = status -uno
-	br = branch
-	co = checkout
+    ci = commit -v
+    cam = commit --amend --no-edit
+    st = status
+    stu = status -uno
+    br = branch
+    co = checkout
     chp = cherry-pick
     chpx = cherry-pick -x
     pl = pull
     pb = pull --rebase
+    p = push
+    psom = push --prune
+    brs = branch --set-upstream
+    ri = rebase -i
+    r = rebase
+    aa = add -A
+    au = add -u
+    a = add
 
     promote = !$ZSH/bin/git-promote
     wtf     = !$ZSH/bin/git-wtf
@@ -46,3 +56,9 @@
     #
     # Setting to git 2.0 default to suppress warning message
     default = simple
+[filter "lfs"]
+    clean = git-lfs clean %f
+    smudge = git-lfs smudge %f
+    required = true
+
+# vim: ft=gitconfig
