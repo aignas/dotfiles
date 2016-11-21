@@ -20,16 +20,20 @@ set nocompatible
 
 call plug#begin('~/.local/nvim/plugged')
 
-Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+else
+    Plug 'Shougo/neocomplete.vim'
+endif
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neoyank.vim'
-Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'Shougo/vimfiler.vim'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'neomake/neomake'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vader.vim'
 
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-fugitive'
@@ -38,26 +42,22 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-tbone'
 Plug 'janko-m/vim-test'
+Plug 'mhinz/vim-startify'
 
 " Colours
 Plug 'junegunn/seoul256.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'morhetz/gruvbox'
 
 " Filetype
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'vim-pandoc/vim-pandoc-after'
-Plug 'Rykka/riv.vim', {'for': 'rst'}
+Plug 'gabrielelana/vim-markdown'
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
 
-if s:darwin
-  Plug 'OmniSharp/omnisharp-vim', {'do': 'yes \| cd server && xbuild', 'for': 'cs'}
-  Plug 'OrangeT/vim-csharp', {'for': 'cs'}
-  " vim-dispatch on neovim depends on vim-dispatch-neovim
-  Plug 'radenling/vim-dispatch-neovim' | Plug 'tpope/vim-dispatch'
-  Plug 'scrooloose/syntastic', {'for': 'cs'}
-endif
-
+"Plug 'OmniSharp/omnisharp-vim', {'do': 'yes \| cd server && xbuild && cd ../omnisharp-roslyn && git checkout dev && ./build.sh', 'for': 'cs'}
+Plug '~/src/vim/omnisharp-vim', {'do': 'yes \| cd server && xbuild && cd ../omnisharp-roslyn && git checkout dev && ./build.sh', 'for': 'cs'}
+Plug 'OrangeT/vim-csharp', {'for': 'cs'}
 Plug 'fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
 
 Plug 'vimwiki/vimwiki'
@@ -68,10 +68,6 @@ Plug 'PKGBUILD', {'for': 'pkgbuild'}
 Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
 Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
-Plug 'lsdr/octave.vim', {'for': 'octave'}
-
-" Plugin, which I am trying to develop from time to time.
-" Plug '~/src/github/omnisharp-neovim'
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -102,23 +98,28 @@ set guioptions=ag                       " remove toolbar, menubar and
 " The study, which says that white colorscheme is better for your
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
-set background=dark                     " Set a light background
+if has("termguicolors")
+    set termguicolors
+endif
+set background=dark
+let g:seoul256_background = 235
 colorscheme seoul256
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+" colorscheme gruvbox
+" let g:gruvbox_undercurl = 1
+" let g:gruvbox_italic = 1
+" let g:gruvbox_italicize_strings = 1
+" let g:gruvbox_contrast_dark = "hard"
 
 " Some statusline and Airline settings
 set laststatus=2
 set showtabline=2
 set noshowmode
-set guifont=Hack\ 9
-
-let g:airline_powerline_fonts = 0
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_theme = 'pencil'
+set guifont=Hack\ 11
+" Hack has support for this OOTB
+let g:airline_powerline_fonts = 1
 
 "Favorite filetypes
-set ffs=unix,dos,mac
+set ffs=unix
 
 set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 
@@ -268,29 +269,31 @@ nnoremap <leader>gc :Commits<cr>
 autocmd! BufWritePost * Neomake
 let g:neomake_open_list = 2
 
-" Deoplete
-let g:deoplete#enable_at_startup = 1
+" Completion
+if has('nvim')
+    let g:deoplete#enable_at_startup = 1
+endif
 
 " Gist
 let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'qutebrowser %URL%'
 
-" Ultisnips
-" Trigger configuration. Do not use <tab> if you use
-" https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-let g:ultisnips_python_style="google"
-let g:ultisnips_python_triple_quoting_style="single"
-let g:ultisnips_python_quoting_style="single"
-
-let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
+" " Ultisnips
+" " Trigger configuration. Do not use <tab> if you use
+" " https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-j>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" 
+" " If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
+" 
+" let g:ultisnips_python_style="google"
+" let g:ultisnips_python_triple_quoting_style="single"
+" let g:ultisnips_python_quoting_style="single"
+" 
+" let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
 
 " Unite
 let g:unite_source_history_yank_enable = 1
@@ -369,38 +372,39 @@ autocmd FileType lua set foldmethod=marker
 " Git
 autocmd FileType gitcommit set tw=72
 
-" Pandoc
-let g:pandoc_command_latex_engine = "lualatex"
-let g:pandoc#after#modules#enabled = ["unite", "ultisnips"]
-let g:pandoc#folding#mode = "syntax"
-let g:pandoc#syntax#conceal#use = 0
-
 " C#
-"let g:syntastic_cs_checkers = ['code_checker']
-let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
-augroup omnisharp_commands
-    autocmd!
+"autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
-    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+let g:Omnisharp_start_server = 1
+let g:OmniSharp_server_type = 'roslyn'
+let g:OmniSharp_server_config_name = '~/.local/nvim/plugged/omnisharp-vim/server/config.json'
+let g:OmniSharp_selector_ui = 'fzf'
 
-    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+" Example of using the Neomake makers
+autocmd FileType cs let g:neomake_cs_issues_maker = neomake#makers#OmniSharp#issues()
+autocmd FileType cs let g:neomake_cs_code_checker_maker = neomake#makers#OmniSharp#code_checker()
+autocmd FileType cs let g:neomake_cs_semantic_maker = neomake#makers#OmniSharp#semantic()
+autocmd FileType cs let g:neomake_cs_syntax_maker = neomake#makers#OmniSharp#syntax()
+autocmd FileType cs let g:neomake_cs_enabled_makers = ['semantic', 'issues']
 
-    autocmd FileType cs let g:Omnisharp_start_server = 1
-    autocmd FileType cs let g:Omnisharp_server_type = 'roslyn'
-    "autocmd FileType cs let g:Omnisharp_server_type = 'v1'
-    autocmd FileType cs let g:Omnisharp_server_config_name = '~/.local/nvim/plugged/omnisharp-vim/server/config.json'
-    autocmd FileType cs let g:Omnisharp_selector_ui = 'unite'
+"let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
+" Only needed because I have trouble using the roslyn server
+let g:OmniSharp_server_path = '/home/ia/src/vim/omnisharp-vim/server/OmniSharp/bin/Debug/OmniSharp.exe'
+setlocal omnifunc=OmniSharp#Complete
 
-    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
 
-    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
-    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
-    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+autocmd FileType cs nnoremap <leader>fd :OmniSharpFindDefinition<cr>
+autocmd FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
 
-    autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
+autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
 
-    autocmd FileType cs nnoremap <leader>ss :OmniSharpStartServer<cr>
-    autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
-augroup END
+autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
+autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
 " }}}

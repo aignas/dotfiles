@@ -17,25 +17,14 @@ mkdir -p ${VIM_LOCAL}/{backup,swp,undo}
 
 echo "Installing Mono"
 echo "Visit http://www.mono-project.com/download/"
-read "Press [Enter] to contitue"
+read "Press [Enter] to continue"
 
-echo "Setting up python"
+echo "Setting up python venv in ${NEOVIM_VENV}"
 pyvenv ${NEOVIM_VENV}
 ${NEOVIM_VENV}/bin/pip install --upgrade \
     pip \
     setuptools \
-    neovim
-
-# This is only needed because of the omnisharp plugin
-python2 -m pip install virtualenv
-python2 -m virtualenv ${NEOVIM_VENV}2
-${NEOVIM_VENV}2/bin/pip install --upgrade \
-    pip \
-    setuptools \
     tasklib \
     neovim
-
-${NEOVIM_VENV}2/bin/pip install --upgrade \
-    git+git://github.com/tbabej/tasklib@develop
 
 nvim +PlugInstall +UpdateRemotePlugins +qall
