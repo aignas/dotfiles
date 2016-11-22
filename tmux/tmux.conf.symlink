@@ -38,6 +38,10 @@ set-option -g status-keys vi
 # Mouse
 set-option -g mouse on
 
+# Mac OS X Sierra workaround (Linux safe)
+set -g default-shell $SHELL
+set -g default-command "safe-reattach-to-user-namespace -l ${SHELL}"
+
 # -------------------------------------------------------------------
 # Window options
 # -------------------------------------------------------------------
