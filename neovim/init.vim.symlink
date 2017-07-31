@@ -11,29 +11,10 @@
 "
 "   * Neovim project defaults
 
-let s:darwin = has('mac')
+let s:data_dir = has('unix') ? '~/.local/share/nvim' : $HOME . '/AppData/Local/nvim-data'
 set nocompatible
 
-" Install vim plug by:
-" curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-call plug#begin('~/.local/nvim/plugged')
-
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
-else
-    Plug 'Shougo/neocomplete.vim'
-endif
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/neoyank.vim'
-Plug 'Shougo/vimfiler.vim'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'neomake/neomake'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/vader.vim'
+call plug#begin(s:data_dir . '/plugged')
 
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-fugitive'
@@ -41,43 +22,59 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-tbone'
+
 Plug 'janko-m/vim-test'
 Plug 'mhinz/vim-startify'
 
-" Colours
 Plug 'junegunn/seoul256.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'morhetz/gruvbox'
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'neomake/neomake'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/vader.vim'
+Plug 'equalsraf/neovim-gui-shim'
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 " Filetype
 Plug 'gabrielelana/vim-markdown'
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
-
-"Plug 'OmniSharp/omnisharp-vim', {'do': 'yes \| cd server && xbuild && cd ../omnisharp-roslyn && git checkout dev && ./build.sh', 'for': 'cs'}
-Plug '~/src/vim/omnisharp-vim', {'do': 'yes \| cd server && xbuild && cd ../omnisharp-roslyn && git checkout dev && ./build.sh', 'for': 'cs'}
-Plug 'OrangeT/vim-csharp', {'for': 'cs'}
-Plug 'fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
-
-Plug 'vimwiki/vimwiki'
-Plug 'farseer90718/vim-taskwarrior'
-Plug 'tbabej/taskwiki'
-
-Plug 'PKGBUILD', {'for': 'pkgbuild'}
+Plug 'vim-scripts/PKGBUILD', {'for': 'pkgbuild'}
 Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
 Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
+Plug 'OrangeT/vim-csharp', {'for': 'cs'}
 
-" Add plugins to &runtimepath
+" Local plugins which are in development
+Plug '/home/ia/src/vim/omnisharp-vim/', {'rev': 'feature/jobstart'}
+
 call plug#end()
+
+" let s:omnisharp_build_command = has('unix')
+"     \ ? 'cd omnisharp-roslyn && git checkout dev && ./build.sh'
+"     \ : 'cd omnisharp-roslyn && git checkout dev && .\build.ps1'
+" Plug 'aignas/omnisharp-vim', {
+"     \ 'branch': 'feature/jobstart',
+"     \ 'do': 'yes \| ' . s:omnisharp_build_command }
+" call dein#add('fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
 
 " Generic vim {{{
 
 if has('nvim')
-  " Neovim stuff: this will assume that there is a Python venv for neovim uses.
-  let g:python_host_prog = $HOME.'/.local/nvim/venv2/bin/python2'
-  let g:python3_host_prog = $HOME.'/.local/nvim/venv/bin/python3'
+  if has('win32')
+    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
+    let g:python_host_prog = 'python.exe'
+    let g:python3_host_prog = $HOME.'/AppData/Local/Programs/Python/Python36-32/python.exe'
+  else
+    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
+    "let g:python_host_prog = s:data_dir . '/venv2/bin/python2'
+    let g:python3_host_prog = s:data_dir . '/venv/bin/python'
+  endif
 endif
 
 " Required:
@@ -98,17 +95,10 @@ set guioptions=ag                       " remove toolbar, menubar and
 " The study, which says that white colorscheme is better for your
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
-if has("termguicolors")
-    set termguicolors
-endif
 set background=dark
 let g:seoul256_background = 235
 colorscheme seoul256
-" colorscheme gruvbox
-" let g:gruvbox_undercurl = 1
-" let g:gruvbox_italic = 1
-" let g:gruvbox_italicize_strings = 1
-" let g:gruvbox_contrast_dark = "hard"
+"colorscheme tender
 
 " Some statusline and Airline settings
 set laststatus=2
@@ -120,9 +110,18 @@ set guifont=Hack\ 11
 let g:airline_powerline_fonts = 1
 
 "Favorite filetypes
-set ffs=unix
+set ffs=unix,dos
 
 set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
+set sidescroll=1
+
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
 
 "Turn on Wild menu
 set wildmenu
@@ -140,10 +139,12 @@ set autoindent                  " Set auto-indent
 set whichwrap+=<,>              " Backspace and cursor keys wrap to
 set ignorecase smartcase        " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
+nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 set magic                       " Set magic on
 set list
 set listchars=tab:»-,trail:-,
 autocmd FocusLost * :wa          " Save when loosing focus
+nnoremap <leader>w :wa<cr>
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
 set breakindent
@@ -157,6 +158,9 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
+
+" Make backspace to go to the previous buffer
+nnoremap <Backspace> <C-^>
 
 " Do useful things with arrows
 " Fugitive git status
@@ -179,29 +183,16 @@ inoremap jk <ESC>
 " Switch to current dir
 map <leader>cd :cd %:p:h<cr>
 
-" If the directory in which we want to save a file is not there, create it
-" This is taken from http://stackoverflow.com/a/4294176
-function! s:MkNonExDir(file, buf)
-    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
-        let dir=fnamemodify(a:file, ':h')
-        if !isdirectory(dir)
-            call mkdir(dir, 'p')
-        endif
-    endif
-endfunction
-augroup BWCCreateDir
-    autocmd!
-    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
-augroup END
-
 " Files and backups
 "
 " Turn backup and swap on
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swp//
-set undodir=~/.vim/undo//
+set backup
 set backupcopy=yes
 set undofile
+
+let s:backup_dir = expand(s:data_dir . '/backups/')
+execute "set backupdir=" . s:backup_dir . ",./.backup,.,/tmp"
+execute "set directory=" . s:backup_dir . ",.,./.backup,/tmp"
 
 " Enable folding, I find it very useful
 set foldenable
@@ -254,17 +245,11 @@ let work_wiki.ext = '.wiki'
 let g:vimwiki_list = [work_wiki, personal_wiki]
 " nmap <Leader>wf <Plug>VimwikiFollowLink
 
-" Vim Test
+" janko-m/vim-test
 nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+let test#strategy = 'neovim'
 
-" FZF
-map <leader>ff :FZF<CR>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>ma :Marks<cr>
-nnoremap <leader>mp :Maps<cr>
-nnoremap <leader>h :History
-nnoremap <leader>sn :Snippets<cr>
-nnoremap <leader>gc :Commits<cr>
 
 " Neomake
 autocmd! BufWritePost * Neomake
@@ -272,7 +257,7 @@ let g:neomake_open_list = 2
 
 " Completion
 if has('nvim')
-    let g:deoplete#enable_at_startup = 1
+    call deoplete#enable()
 endif
 
 " Gist
@@ -280,49 +265,30 @@ let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'qutebrowser %URL%'
 
-" " Ultisnips
-" " Trigger configuration. Do not use <tab> if you use
-" " https://github.com/Valloric/YouCompleteMe.
-" let g:UltiSnipsExpandTrigger="<tab>"
-" let g:UltiSnipsJumpForwardTrigger="<c-j>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-" 
-" " If you want :UltiSnipsEdit to split your window.
-" let g:UltiSnipsEditSplit="vertical"
-" 
-" let g:ultisnips_python_style="google"
-" let g:ultisnips_python_triple_quoting_style="single"
-" let g:ultisnips_python_quoting_style="single"
-" 
-" let g:UltiSnipsSnippetDirectories=["UltiSnips", $HOME."/.dotfiles/vim-snippets"]
+" Ultisnips
+" Trigger configuration. Do not use <tab> if you use
+" https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
-" Unite
-let g:unite_source_history_yank_enable = 1
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>g :<C-u>Unite -no-split -buffer-name=grep    grep<cr>
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
-" Custom mappings for the unite buffer
-autocmd FileType unite call s:unite_settings()
-function! s:unite_settings()
-  " Enable navigation with control-j and control-k in insert mode
-  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-endfunction
+let g:ultisnips_python_style="google"
+let g:ultisnips_python_triple_quoting_style="single"
+let g:ultisnips_python_quoting_style="single"
 
-" VimFiler
-let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_tree_leaf_icon = "|"
-let g:vimfiler_tree_opened_icon = '▾'
-let g:vimfiler_tree_closed_icon = '▹'
-let g:vimfiler_file_icon = '-'
-let g:vimfiler_marked_file_icon = '✓'
-let g:vimfiler_readonly_file_icon = '✗'
-let g:vimfiler_time_format = '%m-%d-%y %H:%M:%S'
-let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc'
+" FZF
 
-nnoremap <Leader>d :<C-u>VimFilerCurrentDir -split -simple -parent -winwidth=35 -toggle -no-quit<CR>
-"}}}
+nmap <silent> <leader>ff :Files<CR>
+nmap <silent> <leader>b :Buffers<CR>
+nmap <leader>h :History
+nmap <silent> <leader>sn :Snippets<CR>
+nmap <silent> <leader>gc :Commits<CR>
+nmap <silent> <leader>gs :GFiles?<CR>
+
+
 " Filetype generic {{{
 
 " vim
@@ -376,21 +342,22 @@ autocmd FileType gitcommit set tw=72
 " C#
 "autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
-let g:Omnisharp_start_server = 1
-let g:OmniSharp_server_type = 'roslyn'
-let g:OmniSharp_server_config_name = '~/.local/nvim/plugged/omnisharp-vim/server/config.json'
+"let g:Omnisharp_start_server = 0
+let g:OmniSharp_server_type = 'v1'
+let g:OmniSharp_server_config_name = '/home/ia/.local/nvim/plugged/omnisharp-vim/server/config.json'
 let g:OmniSharp_selector_ui = 'fzf'
+let g:omnisharp_proc_debug = 1
 
 " Example of using the Neomake makers
-autocmd FileType cs let g:neomake_cs_issues_maker = neomake#makers#OmniSharp#issues()
-autocmd FileType cs let g:neomake_cs_code_checker_maker = neomake#makers#OmniSharp#code_checker()
-autocmd FileType cs let g:neomake_cs_semantic_maker = neomake#makers#OmniSharp#semantic()
-autocmd FileType cs let g:neomake_cs_syntax_maker = neomake#makers#OmniSharp#syntax()
-autocmd FileType cs let g:neomake_cs_enabled_makers = ['semantic', 'issues']
+" autocmd FileType cs let g:neomake_cs_issues_maker = neomake#makers#OmniSharp#issues()
+" autocmd FileType cs let g:neomake_cs_code_checker_maker = neomake#makers#OmniSharp#code_checker()
+" autocmd FileType cs let g:neomake_cs_semantic_maker = neomake#makers#OmniSharp#semantic()
+" autocmd FileType cs let g:neomake_cs_syntax_maker = neomake#makers#OmniSharp#syntax()
+" autocmd FileType cs let g:neomake_cs_enabled_makers = ['semantic', 'issues']
 
 "let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
 " Only needed because I have trouble using the roslyn server
-let g:OmniSharp_server_path = '/home/ia/src/vim/omnisharp-vim/server/OmniSharp/bin/Debug/OmniSharp.exe'
+" let g:OmniSharp_server_path = '/home/ia/src/vim/omnisharp-vim/server/OmniSharp/bin/Debug/OmniSharp.exe'
 setlocal omnifunc=OmniSharp#Complete
 
 autocmd BufWritePost *.cs call OmniSharp#AddToProject()
@@ -409,3 +376,5 @@ autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
 autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
 autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
 " }}}
+
+" vim: filetype=vim

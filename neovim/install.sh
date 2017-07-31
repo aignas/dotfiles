@@ -1,30 +1,17 @@
 #!/bin/bash
 
 HOST_OS=$(uname -s)
-VIM_LOCAL=${HOME}/.vim
-NEOVIM_LOCAL=${HOME}/.local/nvim
+NEOVIM_LOCAL=${HOME}/.local/share/nvim
 NEOVIM_VENV=${NEOVIM_LOCAL}/venv
 
-echo "Install Vim-plug"
-curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
+echo "Installing vim-plug"
+mkdir -p ${NEOVIM_LOCAL}/plugged
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-echo "Setting venv for use with neovim"
-mkdir -p ${NEOVIM_LOCAL}/plugged
-
-echo "Create backup, swp and undo directories.  Shared with vim."
-mkdir -p ${VIM_LOCAL}/{backup,swp,undo}
-
-echo "Installing Mono"
-echo "Visit http://www.mono-project.com/download/"
-read "Press [Enter] to continue"
-
 echo "Setting up python venv in ${NEOVIM_VENV}"
-pyvenv ${NEOVIM_VENV}
+python3.6 -m venv ${NEOVIM_VENV}
 ${NEOVIM_VENV}/bin/pip install --upgrade \
     pip \
     setuptools \
-    tasklib \
     neovim
-
-nvim +PlugInstall +UpdateRemotePlugins +qall
