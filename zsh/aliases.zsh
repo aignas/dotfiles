@@ -36,7 +36,7 @@ if [[ ${DOTFILES_OS} != "Darwin" ]]; then
     function aurd () {
         mkdir -p ${PKGBUILD_DIR}
         for pkg in $@; do
-            git clone ssh://aur@aur.archlinux.org/$pkg.git/ ${PKGBUILD_DIR}/$pkg
+            git clone https://aur.archlinux.org/$pkg.git/ ${PKGBUILD_DIR}/$pkg
         done
     }
 
@@ -77,4 +77,7 @@ EOF
 
     # Create a tests directory
     mkdir -p tests
+
+    # Make tests directory a module
+    touch tests/__init__.py
 }
