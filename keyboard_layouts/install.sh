@@ -6,7 +6,7 @@
 # Link to the drivers: http://ims.mii.lt/klav/tvarkyk.html
 #
 
-if [ ${DOTFILES_OS} == "Darwin" ]
+if [[ ${DOTFILES_OS} == "Darwin" ]]
 then
     echo "Installing Keyboard Layouts"
 
