@@ -11,8 +11,19 @@
 "
 "   * Neovim project defaults
 
-let s:data_dir = has('unix') ? '~/.local/share/nvim' : $HOME . '/AppData/Local/nvim-data'
+let s:data_dir = has('unix') ? '/home/ia/.local/share/nvim' : $HOME . '/AppData/Local/nvim-data'
 set nocompatible
+
+if has('nvim')
+  if has('win32')
+    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
+    let g:python_host_prog = 'python.exe'
+    let g:python3_host_prog = $HOME.'/AppData/Local/Programs/Python/Python36-32/python.exe'
+  else
+    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
+    let g:python3_host_prog = s:data_dir . '/venv/bin/python'
+  endif
+endif
 
 call plug#begin(s:data_dir . '/plugged')
 
@@ -51,7 +62,7 @@ Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
 Plug 'OrangeT/vim-csharp', {'for': 'cs'}
 
 " Local plugins which are in development
-Plug '/home/ia/src/vim/omnisharp-vim/', {'rev': 'feature/jobstart'}
+"Plug '/home/ia/src/vim/omnisharp-vim/', {'rev': 'feature/jobstart'}
 
 call plug#end()
 
@@ -64,18 +75,6 @@ call plug#end()
 " call dein#add('fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
 
 " Generic vim {{{
-
-if has('nvim')
-  if has('win32')
-    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
-    let g:python_host_prog = 'python.exe'
-    let g:python3_host_prog = $HOME.'/AppData/Local/Programs/Python/Python36-32/python.exe'
-  else
-    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
-    "let g:python_host_prog = s:data_dir . '/venv2/bin/python2'
-    let g:python3_host_prog = s:data_dir . '/venv/bin/python'
-  endif
-endif
 
 " Required:
 filetype plugin indent on
@@ -230,19 +229,12 @@ set joinspaces
 "{{{ Plugin configuration
 
 " VimWiki
-let work_wiki = {}
-let work_wiki.path = '~/Dropbox (TRAFI)/vimwiki/'
-let work_wiki.auto_export = 1
-let work_wiki.auto_toc = 1
-let work_wiki.ext = '.wiki'
-
 let personal_wiki = {}
 let personal_wiki.path = '~/Dropbox (Personal)/vimwiki/'
 let personal_wiki.auto_export = 1
 let personal_wiki.auto_toc = 1
-let work_wiki.ext = '.wiki'
 
-let g:vimwiki_list = [work_wiki, personal_wiki]
+let g:vimwiki_list = [personal_wiki]
 " nmap <Leader>wf <Plug>VimwikiFollowLink
 
 " janko-m/vim-test
@@ -266,8 +258,6 @@ let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'qutebrowser %URL%'
 
 " Ultisnips
-" Trigger configuration. Do not use <tab> if you use
-" https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -280,14 +270,12 @@ let g:ultisnips_python_triple_quoting_style="single"
 let g:ultisnips_python_quoting_style="single"
 
 " FZF
-
 nmap <silent> <leader>ff :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
 nmap <silent> <leader>sn :Snippets<CR>
 nmap <silent> <leader>gc :Commits<CR>
 nmap <silent> <leader>gs :GFiles?<CR>
-
 
 " Filetype generic {{{
 
@@ -343,10 +331,10 @@ autocmd FileType gitcommit set tw=72
 "autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
 "let g:Omnisharp_start_server = 0
-let g:OmniSharp_server_type = 'v1'
-let g:OmniSharp_server_config_name = '/home/ia/.local/nvim/plugged/omnisharp-vim/server/config.json'
-let g:OmniSharp_selector_ui = 'fzf'
-let g:omnisharp_proc_debug = 1
+"let g:OmniSharp_server_type = 'v1'
+"let g:OmniSharp_server_config_name = '/home/ia/.local/nvim/plugged/omnisharp-vim/server/config.json'
+"let g:OmniSharp_selector_ui = 'fzf'
+"let g:omnisharp_proc_debug = 1
 
 " Example of using the Neomake makers
 " autocmd FileType cs let g:neomake_cs_issues_maker = neomake#makers#OmniSharp#issues()
@@ -358,23 +346,23 @@ let g:omnisharp_proc_debug = 1
 "let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
 " Only needed because I have trouble using the roslyn server
 " let g:OmniSharp_server_path = '/home/ia/src/vim/omnisharp-vim/server/OmniSharp/bin/Debug/OmniSharp.exe'
-setlocal omnifunc=OmniSharp#Complete
+"setlocal omnifunc=OmniSharp#Complete
 
-autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-
-autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
-autocmd FileType cs nnoremap <leader>fd :OmniSharpFindDefinition<cr>
-autocmd FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
-autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
-autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
-autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
-autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
-
-autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
-
-autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
-autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
+"autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+"autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+"
+"autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+"autocmd FileType cs nnoremap <leader>fd :OmniSharpFindDefinition<cr>
+"autocmd FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+"autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+"autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+"autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+"autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+"
+"autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
+"
+"autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
+"autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
 " }}}
 
 " vim: filetype=vim
