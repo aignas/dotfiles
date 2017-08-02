@@ -11,6 +11,8 @@
 # - Session options (set-option [-g])
 # - Window options (set-window-option [-g])
 
+set-option -sg escape-time 10
+
 # -------------------------------------------------------------------
 # Session options
 # -------------------------------------------------------------------
