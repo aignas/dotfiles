@@ -13,6 +13,8 @@ alias gexp='git archive master | tar -x -C'
 alias vimconfig='vim ~/.vimrc'
 alias nvimconfig='nvim ~/.config/nvim/init.vim'
 alias g="git"
+alias push-notes="rclone sync ~/Dropbox/Notes db:Notes"
+alias pull-notes="rclone sync db:Notes ~/Dropbox/Notes"
 
 alias todo="$EDITOR +VimFiler \"$HOME/Dropbox (Personal)/_GTD/TODO.md\""
 alias worklog="$EDITOR +VimFiler \"$HOME/Dropbox (TRAFI)/Notes/\""
