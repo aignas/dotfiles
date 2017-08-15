@@ -92,8 +92,16 @@ bind-key * set-window-option synchronize-pane
 bind-key R source-file ~/.tmux.conf \; display-message "Reloaded!"
 
 # copy-mode
-bind-key -t vi-copy 'v' begin-selection
-bind-key -t vi-copy 'y' copy-pipe "pbcopy"
+bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+bind-key y send-keys C-l C-a \; run-shell 'sleep 0.25' \;\
+  copy-mode \; send-keys -X begin-selection \;\
+  send-keys -X -N 100 'cursor-down' \;\
+  send-keys -X 'end-of-line' \;\
+  send-keys -X 'previous-word' \;\
+  send-keys -X 'next-word-end' \;\
+  send-keys -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy" \;\
+  send-keys C-e \;\
+  display-message "Line copied"
 
 # Capture pane and open in Vim
 bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
