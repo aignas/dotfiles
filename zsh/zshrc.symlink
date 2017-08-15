@@ -55,9 +55,6 @@ done
 # My plugins
 source ~/.zplug/init.zsh
 
-# Manage zplug the same way:
-zplug "zplug/zplug"
-
 zplug "plugins/sudo", from:oh-my-zsh
 zplug "plugins/github", from:oh-my-zsh
 zplug "plugins/command-not-found", from:oh-my-zsh
@@ -74,6 +71,7 @@ zplug "zsh-users/zsh-history-substring-search"
 zplug "sindresorhus/pure", use:async.zsh
 zplug "sindresorhus/pure"
 
+# Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
     if read -q; then
@@ -81,7 +79,8 @@ if ! zplug check --verbose; then
     fi
 fi
 
-zplug load
+# Then, source plugins and add commands to $PATH
+zplug load --verbose
 
 unset config_files
 
