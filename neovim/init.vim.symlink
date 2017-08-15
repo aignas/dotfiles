@@ -52,7 +52,7 @@ Plug 'equalsraf/neovim-gui-shim'
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 " Filetype
-Plug 'gabrielelana/vim-markdown'
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
 Plug 'vim-scripts/PKGBUILD', {'for': 'pkgbuild'}
@@ -257,7 +257,7 @@ let g:gist_clip_command = 'xclip -selection clipboard'
 let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'qutebrowser %URL%'
 
-" Ultisnips
+" SirVer/ultisnips
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
@@ -269,7 +269,7 @@ let g:ultisnips_python_style="google"
 let g:ultisnips_python_triple_quoting_style="single"
 let g:ultisnips_python_quoting_style="single"
 
-" FZF
+" junegunn/fzf.vim
 nmap <silent> <leader>ff :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
