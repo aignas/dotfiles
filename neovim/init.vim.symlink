@@ -47,6 +47,7 @@ Plug 'neomake/neomake'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vader.vim'
 Plug 'equalsraf/neovim-gui-shim'
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
