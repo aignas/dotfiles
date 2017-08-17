@@ -11,19 +11,15 @@
 "
 "   * Neovim project defaults
 
-let s:data_dir = has('unix') ? '/home/ia/.local/share/nvim' : $HOME . '/AppData/Local/nvim-data'
 set nocompatible
 
-if has('nvim')
-  if has('win32')
-    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
-    let g:python_host_prog = 'python.exe'
-    let g:python3_host_prog = $HOME.'/AppData/Local/Programs/Python/Python36-32/python.exe'
-  else
-    " Neovim stuff: this will assume that there is a Python venv for neovim uses.
-    let g:python3_host_prog = s:data_dir . '/venv/bin/python'
-  endif
-endif
+let s:data_dir = has('unix')
+    \ ? $HOME . '/.local/share/nvim'
+    \ : $HOME . '/AppData/Local/nvim-data'
+" TODO: use venv on Windows
+let g:python3_host_prog = has('unix')
+    \ ? s:data_dir . '/venv/bin/python'
+    \ : $HOME . '/AppData/Local/Programs/Python/Python36-32/python.exe'
 
 call plug#begin(s:data_dir . '/plugged')
 
@@ -172,15 +168,6 @@ nnoremap <Backspace> <C-^>
 " Do useful things with arrows
 " Fugitive git status
 nnoremap <Up> :Gstatus<cr>
-" VimFiller window
-nnoremap <Left> :<C-u>VimFilerCurrentDir
-    \ -split
-    \ -simple
-    \ -parent
-    \ -winwidth=35
-    \ -auto-cd
-    \ -toggle
-    \ -no-quit<CR>
 " Neomake errors
 nnoremap <Down> :copen<cr>
 
@@ -230,29 +217,18 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 
-" VimWiki
-let personal_wiki = {}
-let personal_wiki.path = '~/Dropbox (Personal)/vimwiki/'
-let personal_wiki.auto_export = 1
-let personal_wiki.auto_toc = 1
-
-let g:vimwiki_list = [personal_wiki]
-" nmap <Leader>wf <Plug>VimwikiFollowLink
-
 " janko-m/vim-test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
 let test#strategy = 'neovim'
 
 
-" Neomake
+" neomake/neomake
 autocmd! BufWritePost * Neomake
 let g:neomake_open_list = 2
 
-" Completion
-if has('nvim')
-    call deoplete#enable()
-endif
+" Shougo/deoplete
+let g:deoplete#enable_at_startup = 1
 
 " Gist
 let g:gist_clip_command = 'xclip -selection clipboard'
