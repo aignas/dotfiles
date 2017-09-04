@@ -20,6 +20,14 @@ let s:data_dir = has('unix')
 let g:python3_host_prog = has('unix')
     \ ? s:data_dir . '/venv/bin/python'
     \ : $HOME . '/AppData/Local/Programs/Python/Python36-32/python.exe'
+let g:python_host_prog = has('unix')
+    \ ? s:data_dir . '/venv2/bin/python'
+    \ : 'no'
+let s:backup_dir = expand(s:data_dir . '/backups/')
+let s:create_backup_dir_cmd = has('unix')
+    \ ? '!mkdir -p ' . s:backup_dir
+    \ : '!if not exist "' . s:backup_dir . '" mkdir "' . s:backup_dir . '"'
+silent execute s:create_backup_dir_cmd
 
 call plug#begin(s:data_dir . '/plugged')
 
@@ -39,7 +47,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'neomake/neomake'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
@@ -58,17 +66,18 @@ Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
 Plug 'OrangeT/vim-csharp', {'for': 'cs'}
 
 " Local plugins which are in development
-"Plug '/home/ia/src/vim/omnisharp-vim/', {'rev': 'feature/jobstart'}
-
-call plug#end()
-
-" let s:omnisharp_build_command = has('unix')
-"     \ ? 'cd omnisharp-roslyn && git checkout dev && ./build.sh'
-"     \ : 'cd omnisharp-roslyn && git checkout dev && .\build.ps1'
+let s:omnisharp_build_command = has('unix')
+    \ ? 'cd omnisharp-roslyn && git checkout dev && ./build.sh'
+    \ : 'cd omnisharp-roslyn && git checkout dev && .\build.ps1'
 " Plug 'aignas/omnisharp-vim', {
 "     \ 'branch': 'feature/jobstart',
 "     \ 'do': 'yes \| ' . s:omnisharp_build_command }
-" call dein#add('fsharp/vim-fsharp', {'do': 'make fsautocomplete', 'for': 'fsharp'}
+Plug '/home/ia/src/vim/omnisharp-vim/', {
+    \ 'branch': 'feature/jobstart',
+    \}
+" \ 'do': 'yes \| ' . s:omnisharp_build_command 
+
+call plug#end()
 
 " Generic vim {{{
 
@@ -81,8 +90,8 @@ syntax enable                           " Enable syntax hl
 set autoread                            " Automatically read when the file is changed from outside
 set history=10000                       " History size
 
-let mapleader=","                       " Change the def leader
-let maplocalleader="-"                  " Change the def leader
+let g:mapleader=','                       " Change the def leader
+let g:maplocalleader='-'                  " Change the def leader
 
 set guioptions=ag                       " remove toolbar, menubar and
                                         " graphical tabs
@@ -93,7 +102,6 @@ set guioptions=ag                       " remove toolbar, menubar and
 set background=dark
 let g:seoul256_background = 235
 colorscheme seoul256
-"colorscheme tender
 
 " Some statusline and Airline settings
 set laststatus=2
@@ -113,18 +121,21 @@ let g:lightline = {
         \ }
 
 "Favorite filetypes
-set ffs=unix,dos
+set fileformats=unix,dos
 
 set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 set sidescroll=1
 
-" When editing a file, always jump to the last known cursor position.
-" Don't do it when the position is invalid or when inside an event handler
-" (happens when dropping a file on gvim).
-autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+augroup general_settings
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event handler
+    " (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+      \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
+    autocmd FocusLost * :wa          " Save when loosing focus
+augroup END
 
 "Turn on Wild menu
 set wildmenu
@@ -136,7 +147,7 @@ set laststatus=2                " Always show the status line
 set cmdheight=2                 " The command bar is 2 high
 set number relativenumber       " Show relative line numbers, with the current absolute
 set lazyredraw                  " Do not redraw, when running macros: lazy redraw
-set hid                         " Change buffer - without saving
+set hidden                      " Change buffer - without saving
 set backspace=eol,start,indent  " Set backspace
 set autoindent                  " Set auto-indent
 set whichwrap+=<,>              " Backspace and cursor keys wrap to
@@ -146,7 +157,6 @@ nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 set magic                       " Set magic on
 set list
 set listchars=tab:»-,trail:-,
-autocmd FocusLost * :wa          " Save when loosing focus
 nnoremap <leader>w :wa<cr>
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
@@ -170,9 +180,7 @@ nnoremap <Backspace> <C-^>
 nnoremap <Up> :Gstatus<cr>
 " Neomake errors
 nnoremap <Down> :copen<cr>
-
-" leave the insert mode faster
-inoremap jk <ESC>
+nnoremap <S-Down> :lopen<cr>
 
 " Switch to current dir
 map <leader>cd :cd %:p:h<cr>
@@ -183,10 +191,8 @@ map <leader>cd :cd %:p:h<cr>
 set backup
 set backupcopy=yes
 set undofile
-
-let s:backup_dir = expand(s:data_dir . '/backups/')
-execute "set backupdir=" . s:backup_dir . ",./.backup,.,/tmp"
-execute "set directory=" . s:backup_dir . ",.,./.backup,/tmp"
+execute 'set backupdir=' . s:backup_dir . ',./.backup,.,/tmp'
+execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
 
 " Enable folding, I find it very useful
 set foldenable
@@ -196,7 +202,7 @@ set expandtab
 set shiftwidth=4
 set tabstop=4
 set smarttab
-set lbr
+set linebreak
 set pastetoggle=<F2>
 map <leader>di :%s/\s*$//g<cr>:noh<cr>''
 
@@ -220,12 +226,11 @@ set joinspaces
 " janko-m/vim-test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
-let test#strategy = 'neovim'
-
+let g:test#strategy = 'neovim'
 
 " neomake/neomake
 autocmd! BufWritePost * Neomake
-let g:neomake_open_list = 2
+let g:neomake_open_list = 0
 
 " Shougo/deoplete
 let g:deoplete#enable_at_startup = 1
@@ -236,19 +241,19 @@ let g:gist_detect_filetype = 1
 let g:gist_browser_command = 'qutebrowser %URL%'
 
 " SirVer/ultisnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 
 " If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsEditSplit = 'vertical'
 
-let g:ultisnips_python_style="google"
-let g:ultisnips_python_triple_quoting_style="single"
-let g:ultisnips_python_quoting_style="single"
+let g:ultisnips_python_style = 'google'
+let g:ultisnips_python_triple_quoting_style = 'single'
+let g:ultisnips_python_quoting_style = 'single'
 
 " junegunn/fzf.vim
-nmap <silent> <leader>ff :Files<CR>
+nmap <silent> <leader><leader> :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
 nmap <silent> <leader>sn :Snippets<CR>
@@ -261,58 +266,65 @@ nmap <silent> <leader>gs :GFiles?<CR>
 augroup reload_vimrc
     autocmd!
     autocmd reload_vimrc BufWritePost $MYVIMRC nested source $MYVIMRC
+    autocmd FileType vim set nofen
+    autocmd FileType vim set foldmethod=marker
 augroup END
-autocmd FileType vim set nofen
-autocmd FileType vim set foldmethod=marker
 
 " Python
-autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!/usr/bin/env python2 %<cr>
-autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!/usr/bin/env python3 %<cr>
-autocmd FileType python setlocal foldenable
-autocmd FileType python setlocal foldlevel=1
-autocmd FileType python setlocal foldmethod=syntax
+augroup python_settings
+    autocmd!
+    autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!/usr/bin/env python2 %<cr>
+    autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!/usr/bin/env python3 %<cr>
+    autocmd FileType python setlocal foldenable
+    autocmd FileType python setlocal foldlevel=1
+    autocmd FileType python setlocal foldmethod=syntax
 
-autocmd FileType python setlocal smarttab
-autocmd FileType python setlocal lbr
-autocmd FileType python setlocal textwidth=79
+    autocmd FileType python setlocal smarttab
+    autocmd FileType python setlocal lbr
+    autocmd FileType python setlocal textwidth=79
 
-autocmd FileType python setlocal expandtab          " PEP8 friendly
-autocmd FileType python setlocal shiftwidth=4       "
-autocmd FileType python setlocal tabstop=4          "
-autocmd FileType python setlocal textwidth=79       "
-autocmd FileType python setlocal colorcolumn=80     " It's much easier visually
-autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal expandtab          " PEP8 friendly
+    autocmd FileType python setlocal shiftwidth=4       "
+    autocmd FileType python setlocal tabstop=4          "
+    autocmd FileType python setlocal textwidth=79       "
+    autocmd FileType python setlocal colorcolumn=80     " It's much easier visually
+    autocmd FileType python setlocal foldmethod=indent
 
-"Run in the Python interpreter
-function! Python_Eval_VSplit_Old(interpreter) range
-    let src = tempname()
-    let dst = tempname()
-    execute ": " . a:firstline . "," . a:lastline . "w " . src
-    execute ":!" . interpreter " " . src . " > " . dst
-    execute ":pedit! " . dst
-endfunction
-autocmd FileType python vmap <F7>2 :call Python_Eval_VSplit("ipython2")<cr>
-autocmd FileType python vmap <F7>3 :call Python_Eval_VSplit("ipython")<cr>
+    "Run in the Python interpreter
+    function! Python_eval_vsplit(interpreter) range
+        let l:src = tempname()
+        let l:dst = tempname()
+        execute ': ' . a:firstline . ',' . a:lastline . 'w ' . l:src
+        execute ':!' . a:interpreter ' ' . l:src . ' > ' . l:dst
+        execute ':pedit! ' . l:dst
+    endfunction
+    autocmd FileType python vmap <F7>2 :call Python_eval_vsplit("ipython2")<cr>
+    autocmd FileType python vmap <F7>3 :call Python_eval_vsplit("ipython")<cr>
+augroup END
 
 " LUA section
-autocmd FileType lua set expandtab
-autocmd FileType lua set shiftwidth=4
-autocmd FileType lua set tabstop=4
-autocmd FileType lua set softtabstop=4
-autocmd FileType lua set textwidth=79
-autocmd FileType lua set foldmethod=marker
+augroup lua_settings
+    autocmd FileType lua set expandtab
+    autocmd FileType lua set shiftwidth=4
+    autocmd FileType lua set tabstop=4
+    autocmd FileType lua set softtabstop=4
+    autocmd FileType lua set textwidth=79
+    autocmd FileType lua set foldmethod=marker
+augroup END
 
 " Git
-autocmd FileType gitcommit set tw=72
+augroup git_settings
+    autocmd FileType gitcommit set tw=72
+augroup END
 
 " C#
 "autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 
-"let g:Omnisharp_start_server = 0
-"let g:OmniSharp_server_type = 'v1'
-"let g:OmniSharp_server_config_name = '/home/ia/.local/nvim/plugged/omnisharp-vim/server/config.json'
-"let g:OmniSharp_selector_ui = 'fzf'
-"let g:omnisharp_proc_debug = 1
+let g:Omnisharp_start_server = 0
+let g:OmniSharp_server_type = 'v1'
+let g:OmniSharp_server_config_name = '/home/ia/.local/nvim/plugged/omnisharp-vim/server/config.json'
+let g:OmniSharp_selector_ui = 'fzf'
+let g:omnisharp_proc_debug = 1
 
 " Example of using the Neomake makers
 " autocmd FileType cs let g:neomake_cs_issues_maker = neomake#makers#OmniSharp#issues()
@@ -321,26 +333,28 @@ autocmd FileType gitcommit set tw=72
 " autocmd FileType cs let g:neomake_cs_syntax_maker = neomake#makers#OmniSharp#syntax()
 " autocmd FileType cs let g:neomake_cs_enabled_makers = ['semantic', 'issues']
 
-"let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
 " Only needed because I have trouble using the roslyn server
 " let g:OmniSharp_server_path = '/home/ia/src/vim/omnisharp-vim/server/OmniSharp/bin/Debug/OmniSharp.exe'
-"setlocal omnifunc=OmniSharp#Complete
+let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
+setlocal omnifunc=OmniSharp#Complete
 
-"autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-"autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-"
-"autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
-"autocmd FileType cs nnoremap <leader>fd :OmniSharpFindDefinition<cr>
-"autocmd FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
-"autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
-"autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
-"autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
-"autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
-"
-"autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
-"
-"autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
-"autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
+augroup omnisharp_settings
+    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    autocmd FileType cs nnoremap <leader>fd :OmniSharpFindDefinition<cr>
+    autocmd FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+
+    autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
+
+    autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
+    autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
+augroup END
 " }}}
 
 " vim: filetype=vim

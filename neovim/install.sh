@@ -15,3 +15,9 @@ ${NEOVIM_VENV}/bin/pip install --upgrade \
     pip \
     setuptools \
     neovim
+
+virtualenv2 ${NEOVIM_VENV}2
+${NEOVIM_VENV}2/bin/pip install --upgrade \
+    pip \
+    setuptools \
+    neovim
