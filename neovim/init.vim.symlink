@@ -60,6 +60,7 @@ Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
 Plug 'vim-scripts/PKGBUILD', {'for': 'pkgbuild'}
+Plug 'PProvost/vim-ps1', {'for': 'ps1'}
 Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
 Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
