@@ -1,6 +1,27 @@
 # My zshrc configuration. Use or reuse however you like.
 #       by gns-ank
 
+# My plugins
+source ~/.zplug/init.zsh
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
+
+zplug "plugins/sudo", from:oh-my-zsh
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-history-substring-search"
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
+
 function profile() {
     echo "PROFILE: $@"
 }
@@ -14,10 +35,7 @@ export PROJECTS=~/src
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
-if [[ -a ~/.localrc ]]
-then
-  source ~/.localrc
-fi
+if [[ -a ~/.localrc ]]; then source ~/.localrc; fi
 
 # all of our zsh files
 typeset -U config_files
@@ -52,36 +70,6 @@ do
   source $file
 done
 
-# My plugins
-source ~/.zplug/init.zsh
-
-zplug "plugins/sudo", from:oh-my-zsh
-zplug "plugins/github", from:oh-my-zsh
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "plugins/python", from:oh-my-zsh
-
-# completions
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting"
-zplug "zsh-users/zsh-history-substring-search"
-
-# theme
-# Note: we include the async.zsh script in order to run git commands
-# asynchronously.
-zplug "sindresorhus/pure", use:async.zsh
-zplug "sindresorhus/pure"
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# Then, source plugins and add commands to $PATH
-zplug load --verbose
-
 unset config_files
 
 zstyle \
@@ -92,8 +80,5 @@ zstyle \
 
 # Load the fuzzy finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# .NET Core related stuff
-[ -s "${HOME}/.dnx/dnvm/dnvm.sh" ] && . "${HOME}/.dnx/dnvm/dnvm.sh" # Load dnvm
 
 # vim: tw=80:ft=zsh
