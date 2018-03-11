@@ -1,4 +1,6 @@
-" .vimrc configuration by Ignas Anikevičius
+" vim: filetype=vim
+"
+" Neovim/Vim configuration by Ignas Anikevičius
 "
 " There are numerous people, whose configuration files were copied and adapted
 " and it's hard to list everybody, but the main ones are:
@@ -11,6 +13,9 @@
 "
 "   * Neovim project defaults
 
+scriptencoding utf-8
+" Set no compatible on purpose
+" vint: -ProhibitSetNoCompatible
 set nocompatible
 
 let s:data_dir = has('unix')
@@ -20,9 +25,6 @@ let s:data_dir = has('unix')
 let g:python3_host_prog = has('unix')
     \ ? s:data_dir . '/venv/bin/python'
     \ : $HOME . '/AppData/Local/Programs/Python/Python36-32/python.exe'
-let g:python_host_prog = has('unix')
-    \ ? s:data_dir . '/venv2/bin/python'
-    \ : 'no'
 let s:backup_dir = expand(s:data_dir . '/backups/')
 let s:create_backup_dir_cmd = has('unix')
     \ ? '!mkdir -p ' . s:backup_dir
@@ -42,7 +44,9 @@ Plug 'janko-m/vim-test'
 Plug 'mhinz/vim-startify'
 
 Plug 'junegunn/seoul256.vim'
+Plug 'fenetikm/falcon'
 Plug 'itchyny/lightline.vim'
+Plug 'tyru/eskk.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -52,8 +56,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vader.vim'
+Plug 'kana/vim-vspec'
 Plug 'equalsraf/neovim-gui-shim'
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': './install.sh'
+    \ }
+Plug 'haya14busa/vim-asterisk'
+Plug 'kassio/neoterm'
 
 " Filetype
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
@@ -65,18 +75,11 @@ Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
 Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
 Plug 'OrangeT/vim-csharp', {'for': 'cs'}
-
-" Local plugins which are in development
-let s:omnisharp_build_command = has('unix')
-    \ ? 'cd omnisharp-roslyn && git checkout dev && ./build.sh'
-    \ : 'cd omnisharp-roslyn && git checkout dev && .\build.ps1'
-" Plug 'aignas/omnisharp-vim', {
-"     \ 'branch': 'feature/jobstart',
-"     \ 'do': 'yes \| ' . s:omnisharp_build_command }
-Plug '/home/ia/src/vim/omnisharp-vim/', {
-    \ 'branch': 'feature/jobstart',
-    \}
-" \ 'do': 'yes \| ' . s:omnisharp_build_command 
+Plug 'fsharp/vim-fsharp', {
+      \ 'for': 'fsharp',
+      \ 'do':  'make fsautocomplete',
+      \}
+Plug 'Valloric/MatchTagAlways', {'for': 'html'}
 
 call plug#end()
 
@@ -87,7 +90,6 @@ filetype plugin indent on
 
 syntax enable                           " Enable syntax hl
 
-"Get out of VI's compatible mode..
 set autoread                            " Automatically read when the file is changed from outside
 set history=10000                       " History size
 
@@ -97,20 +99,20 @@ let g:maplocalleader='-'                  " Change the def leader
 set guioptions=ag                       " remove toolbar, menubar and
                                         " graphical tabs
 
-" The study, which says that white colorscheme is better for your
+" The study, which says that white colour scheme is better for your
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
 set background=dark
-let g:seoul256_background = 235
-colorscheme seoul256
+colorscheme falcon
 
 " Some statusline and Airline settings
 set laststatus=2
 set showtabline=2
 set noshowmode
-set guifont=Hack\ 11
+set guifont=Fira\ Code\ 11
 " Hack has support for this OOTB (NOTE: on ITerm you need to uncheck the
 " option which let's you use a different font for non-ASCII characters)
+let g:falcon_lightline = 1
 let g:lightline = {
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
@@ -119,6 +121,7 @@ let g:lightline = {
         \ 'component_function': {
         \   'gitbranch': 'fugitive#head'
         \ },
+        \ 'colorscheme': 'falcon',
         \ }
 
 "Favorite filetypes
@@ -183,7 +186,7 @@ nnoremap <Up> :Gstatus<cr>
 nnoremap <Down> :copen<cr>
 nnoremap <S-Down> :lopen<cr>
 
-" Switch to current dir
+" Switch to current directory
 map <leader>cd :cd %:p:h<cr>
 
 " Files and backups
@@ -216,8 +219,6 @@ set spell
 map <leader>se :setlocal spell spelllang=en_gb<CR>
 map <leader>sl :setlocal spell spelllang=lt<CR>
 
-map <leader>ll :w<CR>:!!<CR>
-
 " Double spacing between sentences
 set cpoptions+=J
 set joinspaces
@@ -227,19 +228,23 @@ set joinspaces
 " janko-m/vim-test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
-let g:test#strategy = 'neovim'
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
+let g:test#strategy = 'neoterm'
+let g:neoterm_position = 'vertical'
+
+" haya14busa/vim-asterisk
+map *   <Plug>(asterisk-*)
 
 " neomake/neomake
-autocmd! BufWritePost * Neomake
+augroup Neomake_autocmds
+    autocmd!
+    autocmd BufWritePost * Neomake
+augroup END
 let g:neomake_open_list = 0
 
 " Shougo/deoplete
 let g:deoplete#enable_at_startup = 1
-
-" Gist
-let g:gist_clip_command = 'xclip -selection clipboard'
-let g:gist_detect_filetype = 1
-let g:gist_browser_command = 'qutebrowser %URL%'
 
 " SirVer/ultisnips
 let g:UltiSnipsExpandTrigger = '<tab>'
@@ -253,6 +258,10 @@ let g:ultisnips_python_style = 'google'
 let g:ultisnips_python_triple_quoting_style = 'single'
 let g:ultisnips_python_quoting_style = 'single'
 
+let g:UltiSnipsSnippetsDir = has('unix')
+    \ ? $HOME . '/.config/nvim/UltiSnips/'
+    \ : $HOME . '/AppData/Local/nvim/UltiSnips/'
+
 " junegunn/fzf.vim
 nmap <silent> <leader><leader> :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
@@ -261,8 +270,7 @@ nmap <silent> <leader>sn :Snippets<CR>
 nmap <silent> <leader>gc :Commits<CR>
 nmap <silent> <leader>gs :GFiles?<CR>
 
-" Filetype generic {{{
-
+" file type handling
 " vim
 augroup reload_vimrc
     autocmd!
@@ -274,8 +282,6 @@ augroup END
 " Python
 augroup python_settings
     autocmd!
-    autocmd FileType python map <buffer> <leader>ll2 :w!<cr>:!/usr/bin/env python2 %<cr>
-    autocmd FileType python map <buffer> <leader>ll3 :w!<cr>:!/usr/bin/env python3 %<cr>
     autocmd FileType python setlocal foldenable
     autocmd FileType python setlocal foldlevel=1
     autocmd FileType python setlocal foldmethod=syntax
@@ -318,44 +324,37 @@ augroup git_settings
     autocmd FileType gitcommit set tw=72
 augroup END
 
-" C#
-"autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+let g:LanguageClient_rootMarkers = {
+        \ 'javascript': ['project.json'],
+        \ 'rust': ['Cargo.toml'],
+        \ 'cs': ['*.sln', '*.csproj'],
+        \ }
 
-let g:Omnisharp_start_server = 0
-let g:OmniSharp_server_type = 'v1'
-let g:OmniSharp_server_config_name = '/home/ia/.local/nvim/plugged/omnisharp-vim/server/config.json'
-let g:OmniSharp_selector_ui = 'fzf'
-let g:omnisharp_proc_debug = 1
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'cs': [
+        \ '/opt/omnisharp-roslyn/OmniSharp.exe',
+        \ '--languageserver',
+        \ '--stdio',
+        \ '--encoding', 'UTF-8',
+        \ ],
+    \ }
 
-" Example of using the Neomake makers
-" autocmd FileType cs let g:neomake_cs_issues_maker = neomake#makers#OmniSharp#issues()
-" autocmd FileType cs let g:neomake_cs_code_checker_maker = neomake#makers#OmniSharp#code_checker()
-" autocmd FileType cs let g:neomake_cs_semantic_maker = neomake#makers#OmniSharp#semantic()
-" autocmd FileType cs let g:neomake_cs_syntax_maker = neomake#makers#OmniSharp#syntax()
-" autocmd FileType cs let g:neomake_cs_enabled_makers = ['semantic', 'issues']
+let g:LanguageClient_loggingLevel = 'DEBUG'
 
-" Only needed because I have trouble using the roslyn server
-" let g:OmniSharp_server_path = '/home/ia/src/vim/omnisharp-vim/server/OmniSharp/bin/Debug/OmniSharp.exe'
-let g:OmniSharp_server_path = '/opt/omnisharp-roslyn/OmniSharp.exe'
-setlocal omnifunc=OmniSharp#Complete
+nnoremap <silent> <leader>K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> <leader>gd :call LanguageClient_textDocument_definition()<CR>
 
-augroup omnisharp_settings
-    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
-    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+set completefunc=LanguageClient#complete
 
-    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
-    autocmd FileType cs nnoremap <leader>fd :OmniSharpFindDefinition<cr>
-    autocmd FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
-    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
-    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
-    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
-    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+" eskk
 
-    autocmd FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
+set thesaurus=~/.dotfiles/neovim/skk/skk-jisyo-utf-8.l
 
-    autocmd FileType cs nnoremap <leader>ss :call OmniSharp#StartServerIfNotRunning()<cr>
-    autocmd FileType cs nnoremap <leader>sp :OmniSharpStopServer<cr>
+augroup essk_settings
+    autocmd VimEnter * imap <C-j> <Plug>(eskk:toggle)
+    autocmd VimEnter * cmap <C-j> <Plug>(eskk:toggle)
 augroup END
-" }}}
 
-" vim: filetype=vim
+"}}}
