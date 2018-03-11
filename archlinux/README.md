@@ -1,1 +1,0 @@
-# Installation scripts for arch
