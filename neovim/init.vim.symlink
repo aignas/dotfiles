@@ -42,22 +42,19 @@ Plug 'tpope/vim-tbone'
 
 Plug 'janko-m/vim-test'
 Plug 'mhinz/vim-startify'
-
-Plug 'junegunn/seoul256.vim'
 Plug 'fenetikm/falcon'
 Plug 'itchyny/lightline.vim'
 Plug 'tyru/eskk.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'neomake/neomake'
+Plug 'w0rp/ale'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vader.vim'
 Plug 'kana/vim-vspec'
-Plug 'equalsraf/neovim-gui-shim'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': './install.sh'
@@ -102,14 +99,13 @@ set guioptions=ag                       " remove toolbar, menubar and
 " The study, which says that white colour scheme is better for your
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
-set background=dark
+set termguicolors
 colorscheme falcon
 
 " Some statusline and Airline settings
 set laststatus=2
 set showtabline=2
 set noshowmode
-set guifont=Fira\ Code\ 11
 " Hack has support for this OOTB (NOTE: on ITerm you need to uncheck the
 " option which let's you use a different font for non-ASCII characters)
 let g:falcon_lightline = 1
@@ -235,13 +231,6 @@ let g:neoterm_position = 'vertical'
 
 " haya14busa/vim-asterisk
 map *   <Plug>(asterisk-*)
-
-" neomake/neomake
-augroup Neomake_autocmds
-    autocmd!
-    autocmd BufWritePost * Neomake
-augroup END
-let g:neomake_open_list = 0
 
 " Shougo/deoplete
 let g:deoplete#enable_at_startup = 1

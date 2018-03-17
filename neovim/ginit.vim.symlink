@@ -1,1 +1,1 @@
-call rpcnotify(1, 'Gui', 'Font', 'Fira Code 12')
+GuiFont Fira Code:h15

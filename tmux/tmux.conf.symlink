@@ -28,9 +28,9 @@ set-option -g history-limit 102400
 # Repeat time limit (ms)
 set-option -g repeat-time 500
 
-# 256-color terminal
-set-option -g default-terminal "tmux-256color"
-
+# # 256-color terminal
+# set-option -g default-terminal "tmux-256color"
+# 
 # set the bell action properly
 set -g bell-action any
 
@@ -109,49 +109,22 @@ bind-key p run "xclip -o -sel clip | tmux load-buffer - ; tmux paste-buffer"
 bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
              new-window "nvim /tmp/tmux-capture.txt"
 
-# Notes
-bind-key C-n if-shell "tmux select-window -t NOTES" "" \
-  "new-window -n NOTES 'e \"${HOME}/Dropbox/Notes/Notes.md\"'"
-bind-key C-i if-shell "tmux select-window -t IDEAS" "" \
-  "new-window -n NOTES 'e \"${HOME}/Dropbox/Notes/Ideas.md\"'"
-
 # -------------------------------------------------------------------
 # Decoration (256-color)
 # -------------------------------------------------------------------
 
-# status
-set -g status-justify "left"
-set -g status "on"
-set -g status-attr "none"
-set -g status-bg "#3e3e40"
+set-option -g status-justify left
+set-option -g status-left '#[bg=colour72] #[bg=colour237] #[bg=colour236] #[bg=colour235]#[fg=colour185] #h #[bg=colour236] '
+set-option -g status-left-length 16
+set-option -g status-bg colour237
+set-option -g status-right '#[bg=colour236] #[bg=colour235]#[fg=colour185] #(date "+%a %b %d %H:%M") #[bg=colour236] #[bg=colour237] #[bg=colour72] '
+set-option -g status-interval 60
 
-# messages
-set -g message-fg "#d4d4d9"
-set -g message-bg "#3e3e40"
-set -g message-command-fg "#a89984"
-set -g message-command-bg "#646466"
+set-option -g pane-active-border-fg colour240
+set-option -g pane-border-fg colour238
 
-# panes
-set -g pane-active-border-fg "yellow"
-set -g pane-border-fg "#646466"
-
-# window status
-setw -g window-status-fg "#d4d4d9"
-setw -g window-status-attr "none"
-setw -g window-status-activity-bg "#3e3e40"
-setw -g window-status-activity-attr "none"
-setw -g window-status-activity-fg "colour208"
-setw -g window-status-separator ""
-setw -g window-status-bg "#3e3e40"
-setw -g window-status-format "#[fg=#afafb2,bg=#3e3e40] #I:#W "
-setw -g window-status-current-format "#[fg=black,bg=magenta] #I:#W "
-
-set -g status-left-attr "none"
-set -g status-left-length "100"
-set -g status-right-attr "none"
-set -g status-right-length "100"
-set -g status-left "#[fg=#3e3e40,bg=white] #S "
-set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40]│ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
+set-window-option -g window-status-format '#[bg=colour238]#[fg=colour107] #I #[bg=colour239]#[fg=colour110] #[bg=colour240]#W#[bg=colour239]#[fg=colour195]#F#[bg=colour238] '
+set-window-option -g window-status-current-format '#[bg=colour236]#[fg=colour215] #I #[bg=colour235]#[fg=colour167] #[bg=colour234]#W#[bg=colour235]#[fg=colour195]#F#[bg=colour236] '
 
 # -------------------------------------------------------------------
 # fzf integration
@@ -164,16 +137,3 @@ bind-key -n 'M-`' run "tmux split-window -p 40 'tmux send-keys -t #{pane_id} \"$
 
 # select-pane (@george-b)
 bind-key 0 run "tmux split-window -l 12 'bash -ci ftpane'"
-
-# -------------------------------------------------------------------
-# Here be dragons!
-# -------------------------------------------------------------------
-# Bind-key switch
-bind-key F9  set-option -g prefix C-b   \;\
-             bind-key b send-prefix     \;\
-             bind-key p previous-window \;\
-             bind-key C-b last-window
-bind-key F10 set-option -g prefix "\\"  \;\
-             bind-key ] send-prefix     \;\
-             bind-key p paste-buffer    \;\
-             bind-key "\\" last-window
