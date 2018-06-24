@@ -66,15 +66,15 @@ Plug 'haya14busa/vim-asterisk'
 Plug 'kassio/neoterm'
 
 " Filetype
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
 Plug 'vim-scripts/PKGBUILD', {'for': 'pkgbuild'}
 Plug 'PProvost/vim-ps1', {'for': 'ps1'}
-Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
-Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
-Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
+Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
+Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
+Plug 'hashivim/vim-vagrant', {'for': 'Vagantfile'}
 Plug 'OrangeT/vim-csharp', {'for': 'cs'}
 Plug 'Valloric/MatchTagAlways', {'for': 'html'}
 
