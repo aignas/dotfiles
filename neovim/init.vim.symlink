@@ -33,8 +33,12 @@ silent execute s:create_backup_dir_cmd
 
 call plug#begin(s:data_dir . '/plugged')
 
-Plug 'tpope/vim-abolish'
+" git
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'airblade/vim-gitgutter'
+
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
