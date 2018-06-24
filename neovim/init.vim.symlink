@@ -42,7 +42,7 @@ Plug 'tpope/vim-tbone'
 
 Plug 'janko-m/vim-test'
 Plug 'mhinz/vim-startify'
-Plug 'fenetikm/falcon'
+Plug 'junegunn/seoul256.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'tyru/eskk.vim'
 
@@ -99,8 +99,9 @@ set guioptions=ag                       " remove toolbar, menubar and
 " The study, which says that white colour scheme is better for your
 " productivity:
 "   http://ux.stackexchange.com/a/53268/74384
-set termguicolors
-colorscheme falcon
+set background=dark
+let g:seoul256_background = 235
+colorscheme seoul256
 
 " Some statusline and Airline settings
 set laststatus=2
@@ -108,14 +109,13 @@ set showtabline=2
 set noshowmode
 " Hack has support for this OOTB (NOTE: on ITerm you need to uncheck the
 " option which let's you use a different font for non-ASCII characters)
-let g:falcon_lightline = 1
 let g:lightline = {
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
         \ },
         \ 'component_function': {'gitbranch': 'fugitive#head'},
-        \ 'colorscheme': 'falcon',
+        \ 'colorscheme': 'seoul256',
         \ }
 
 "Favorite filetypes
