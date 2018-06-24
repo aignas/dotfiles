@@ -55,10 +55,6 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vader.vim'
 Plug 'kana/vim-vspec'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': './install.sh'
-    \ }
 Plug 'haya14busa/vim-asterisk'
 Plug 'kassio/neoterm'
 
@@ -72,10 +68,6 @@ Plug 'ekalinin/Dockerfile.vim', {'for': 'Dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'ansible'}
 Plug 'hashivim/vim-vagrant', {'for': 'Vagrantfile'}
 Plug 'OrangeT/vim-csharp', {'for': 'cs'}
-Plug 'fsharp/vim-fsharp', {
-      \ 'for': 'fsharp',
-      \ 'do':  'make fsautocomplete',
-      \}
 Plug 'Valloric/MatchTagAlways', {'for': 'html'}
 
 call plug#end()
@@ -225,7 +217,7 @@ nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 let g:test#strategy = 'neoterm'
-let g:neoterm_position = 'vertical'
+let g:neoterm_default_mod = 'vertical'
 
 " haya14busa/vim-asterisk
 map *   <Plug>(asterisk-*)
