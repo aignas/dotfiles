@@ -51,7 +51,10 @@ Plug 'itchyny/lightline.vim'
 Plug 'tyru/eskk.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'andreyorst/SimpleSnippets.vim'
+"Plug 'andreyorst/SimpleSnippets-snippets'
+"Plug '~/src/github/SimpleSnippets-snippets/'
+Plug 'aignas/SimpleSnippets-snippets'
 Plug 'w0rp/ale'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
 Plug 'junegunn/fzf.vim'
@@ -233,27 +236,15 @@ map *   <Plug>(asterisk-*)
 " Shougo/deoplete
 let g:deoplete#enable_at_startup = 1
 
-" SirVer/ultisnips
-let g:UltiSnipsExpandTrigger = '<tab>'
-let g:UltiSnipsJumpForwardTrigger = '<c-j>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit = 'vertical'
-
-let g:ultisnips_python_style = 'google'
-let g:ultisnips_python_triple_quoting_style = 'single'
-let g:ultisnips_python_quoting_style = 'single'
-
-let g:UltiSnipsSnippetsDir = has('unix')
-    \ ? $HOME . '/.config/nvim/UltiSnips/'
-    \ : $HOME . '/AppData/Local/nvim/UltiSnips/'
+" snippets
+let g:SimpleSnippetsExpandOrJumpTrigger = "<Tab>"
+let g:SimpleSnippetsJumpBackwardTrigger = "<S-Tab>"
+let g:SimpleSnippetsJumpToLastTrigger = "<C-j>"
 
 " junegunn/fzf.vim
 nmap <silent> <leader><leader> :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
-nmap <silent> <leader>sn :Snippets<CR>
 nmap <silent> <leader>gc :Commits<CR>
 nmap <silent> <leader>gs :GFiles?<CR>
 
