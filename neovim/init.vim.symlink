@@ -211,6 +211,9 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 
+" w0rp/ale
+let g:ale_haskell_ghc_options='-fno-code -v0 -dynamic'
+
 " janko-m/vim-test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
