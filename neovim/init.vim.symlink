@@ -59,6 +59,7 @@ Plug 'haya14busa/vim-asterisk'
 Plug 'kassio/neoterm'
 
 " Filetype
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
