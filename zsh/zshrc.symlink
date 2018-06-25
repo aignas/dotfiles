@@ -4,7 +4,9 @@
 # My plugins
 source ~/.zplug/init.zsh
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
+
+zplug mafredri/zsh-async, from:github
+zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
 
 zplug "plugins/sudo", from:oh-my-zsh
 zplug "zsh-users/zsh-completions"
