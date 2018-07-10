@@ -7,7 +7,7 @@ function _debug(){}
 
 # shortcut to this dotfiles path is $ZSH
 export ZSH_DOTFILES=$HOME/.dotfiles
-if [ $VERBOSITY -ge 1 ]; then source ${ZSH_DOTFILES}/zsh/debug.sh fi
+if [ $VERBOSITY -ge 1 ]; then source ${ZSH_DOTFILES}/zsh/debug.sh; fi
 source ${ZSH_DOTFILES}/bin/dot
 source ${ZSH_DOTFILES}/zsh/plugins.sh
 
