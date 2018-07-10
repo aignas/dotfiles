@@ -6,10 +6,13 @@
 # to make sure you're on the latest and greatest.
 export ZSH_DOTFILES=$HOME/.dotfiles
 export ZSH_DOTFILES_OS="Unknown"
-if [[ `uname -s` == "Darwin" ]]; then
+_OS=`uname -s`
+if [[ ${_OS} == "Darwin" ]]; then
     ZSH_DOTFILES_OS="Mac"
-elif [[ `uname -s` == "Linux" && -f /etc/arch-release ]]; then
+elif [[ ${_OS} == "Linux" && -f /etc/arch-release ]]; then
     ZSH_DOTFILES_OS="ArchLinux"
-elif [[ `uname -s` == "Linux" ]]; then
+elif [[ ${_OS} == "Linux" && -f /etc/ubuntu-release ]]; then
+    ZSH_DOTFILES_OS="Debian"
+elif [[ ${_OS} == "Linux" ]]; then
     ZSH_DOTFILES_OS="GenericLinux"
 fi
