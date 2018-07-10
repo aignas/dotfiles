@@ -1,10 +1,6 @@
 #!/bin/sh
 
-VERBOSITY=0
-if [ $VERBOSITY -ge 1 ]; then 
-  start_time="$(date -u +%s.%N)"
-fi
-
+start_time="$(date -u +%s.%N)"
 function _info() {
   _log 1 INFO $@
 }

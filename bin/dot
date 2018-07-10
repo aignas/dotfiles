@@ -5,9 +5,7 @@
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
 export ZSH_DOTFILES=$HOME/.dotfiles
-
 export ZSH_DOTFILES_OS="Unknown"
-
 if [[ `uname -s` == "Darwin" ]]; then
     ZSH_DOTFILES_OS="Mac"
 elif [[ `uname -s` == "Linux" && -f /etc/arch-release ]]; then

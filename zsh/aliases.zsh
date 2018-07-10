@@ -1,3 +1,9 @@
+function profile() {
+    echo "PROFILE: $@"
+}
+function rebundle!() {
+    antibody bundle < ${ZSH_DOTFILES}/zsh/zsh_plugins.txt > ${ZSH_DOTFILES}/zsh/plugins.sh
+}
 alias reload!='. ~/.zshrc'
 alias g="git"
 alias ls='ls --color=auto'

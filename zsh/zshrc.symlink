@@ -1,17 +1,13 @@
 # My zshrc configuration. Use or reuse however you like.
 #       by gns-ank
 
-function profile() {
-    echo "PROFILE: $@"
-}
-
-function rebundle!() {
-    antibody bundle < ${ZSH_DOTFILES}/zsh/zsh_plugins.txt > ${ZSH_DOTFILES}/zsh/plugins.sh
-}
+VERBOSITY=0
+function _info(){}
+function _debug(){}
 
 # shortcut to this dotfiles path is $ZSH
 export ZSH_DOTFILES=$HOME/.dotfiles
-source ${ZSH_DOTFILES}/zsh/debug.sh
+if [ $VERBOSITY -ge 1 ]; then source ${ZSH_DOTFILES}/zsh/debug.sh fi
 source ${ZSH_DOTFILES}/bin/dot
 source ${ZSH_DOTFILES}/zsh/plugins.sh
 
@@ -78,7 +74,7 @@ zstyle \
     'git'
 
 # Load the fuzzy finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ${HOME}/.fzf.zsh ] && source ${HOME}/.fzf.zsh
 
 _info DONE
 
