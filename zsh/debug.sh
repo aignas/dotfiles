@@ -1,21 +1,23 @@
 #!/bin/sh
 
-VERBOSITY=1
+VERBOSITY=0
 if [ $VERBOSITY -ge 1 ]; then 
   start_time="$(date -u +%s.%N)"
 fi
 
 function _info() {
-  if [ $VERBOSITY -ge 1 ]; then 
-    end_time="$(date -u +%s.%N)"
-    elapsed="$(bc <<<"$end_time-$start_time")"
-    echo "$elapsed [INFO] $@"
-  fi
+  _log 1 INFO $@
 }
 function _debug() {
-  if [ $VERBOSITY -eq 2 ]; then 
+  _log 2 DEBUG $@
+}
+
+function _log() {
+  LEVEL=$1; shift
+  LEVELSTR=$1; shift
+  if [ $VERBOSITY -ge $LEVEL ]; then 
     end_time="$(date -u +%s.%N)"
     elapsed="$(bc <<<"$end_time-$start_time")"
-    echo "$elapsed [DEBUG] $@"
+    echo "$elapsed [$LEVELSTR] $@"
   fi
 }
