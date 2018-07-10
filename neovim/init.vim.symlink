@@ -51,8 +51,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'tyru/eskk.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'andreyorst/SimpleSnippets.vim'
-Plug 'andreyorst/SimpleSnippets-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
 Plug 'junegunn/fzf.vim'
@@ -62,6 +61,7 @@ Plug 'junegunn/vader.vim'
 Plug 'kana/vim-vspec'
 Plug 'haya14busa/vim-asterisk'
 Plug 'kassio/neoterm'
+
 
 " Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -171,6 +171,9 @@ inoremap <right> <nop>
 " Make backspace to go to the previous buffer
 nnoremap <Backspace> <C-^>
 
+" CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+inoremap <c-c> <ESC>
+
 " Do useful things with arrows
 " Fugitive git status
 nnoremap <Up> :Gstatus<cr>
@@ -220,9 +223,14 @@ set joinspaces
 " w0rp/ale
 let g:ale_haskell_ghc_options='-fno-code -v0 -dynamic'
 
+" Enable completion where available.
+let g:ale_completion_enabled = 1
+let g:deoplete#enable_at_startup = 1
+
 " janko-m/vim-test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>s :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 let g:test#strategy = 'neoterm'
@@ -231,13 +239,8 @@ let g:neoterm_default_mod = 'vertical'
 " haya14busa/vim-asterisk
 map *   <Plug>(asterisk-*)
 
-" Shougo/deoplete
-let g:deoplete#enable_at_startup = 1
-
-" snippets
-let g:SimpleSnippetsExpandOrJumpTrigger = "<Tab>"
-let g:SimpleSnippetsJumpBackwardTrigger = "<S-Tab>"
-let g:SimpleSnippetsJumpToLastTrigger = "<C-j>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 " junegunn/fzf.vim
 nmap <silent> <leader><leader> :Files<CR>
