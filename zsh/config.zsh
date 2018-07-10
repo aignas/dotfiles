@@ -1,19 +1,11 @@
-# This is included in my dot files
-OS_DOTFILES=`uname -s`
-
-if [[ ${OS_DOTFILES} != "Darwin" ]]; then
+if [[ ${ZSH_DOTFILES_OS} != "Darwin" ]]; then
     eval `dircolors ${HOME}/.dir_colors`
 fi
 export CLICOLOR=true
 
 # Add Ports stuff into path:
-if [[ ${OS_DOTFILES} == "Darwin" ]]; then
+if [[ ${ZSH_DOTFILES_OS} == "Darwin" ]]; then
     export PATH="/opt/local/bin:${PATH}"
-fi
-
-# Add fzf-fs
-if [[ -d ${ZSH_DOTFILES}/fzf/fzf-fs ]]; then
-    export PATH="${ZSH_DOTFILES}/fzf/fzf-fs:${PATH}"
 fi
 
 # Add local bin folder
