@@ -43,13 +43,22 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-eunuch'
 
 Plug 'janko-m/vim-test'
 Plug 'mhinz/vim-startify'
 Plug 'junegunn/seoul256.vim'
+Plug 'benmills/vimux'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'itchyny/lightline.vim'
 Plug 'tyru/eskk.vim'
 
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
@@ -61,7 +70,7 @@ Plug 'junegunn/vader.vim'
 Plug 'kana/vim-vspec'
 Plug 'haya14busa/vim-asterisk'
 Plug 'kassio/neoterm'
-
+Plug 'majutsushi/tagbar'
 
 " Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -303,29 +312,26 @@ augroup git_settings
     autocmd FileType gitcommit set tw=72
 augroup END
 
+" Tags
+nmap <F8> :TagbarToggle<CR>
+
 let g:LanguageClient_rootMarkers = {
         \ 'javascript': ['project.json'],
         \ 'rust': ['Cargo.toml'],
-        \ 'cs': ['*.sln', '*.csproj'],
         \ }
 
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'cs': [
-        \ '/opt/omnisharp-roslyn/OmniSharp.exe',
-        \ '--languageserver',
-        \ '--stdio',
-        \ '--encoding', 'UTF-8',
-        \ ],
     \ }
 
-let g:LanguageClient_loggingLevel = 'DEBUG'
+set hidden
 
-nnoremap <silent> <leader>K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> <leader>gd :call LanguageClient_textDocument_definition()<CR>
-
-set completefunc=LanguageClient#complete
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " eskk
 
