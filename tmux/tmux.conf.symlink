@@ -38,12 +38,7 @@ set -g bell-action any
 set-option -g status-keys vi
 
 # Mouse
-set-option -g mouse on
-
-# Disable it as I am not using Mac anymore
-# # Mac OS X Sierra workaround (Linux safe)
-# set -g default-shell $SHELL
-# set -g default-command "safe-reattach-to-user-namespace -l ${SHELL}"
+set-option -g mouse off
 
 # -------------------------------------------------------------------
 # Window options
@@ -92,17 +87,21 @@ bind-key * set-window-option synchronize-pane
 # Reload ~/.tmux.conf
 bind-key R source-file ~/.tmux.conf \; display-message "Reloaded!"
 
+# Set focus events to on
+set -g focus-events on
+
 # copy-mode
-bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null"
-bind-key y send-keys C-l C-a \; run-shell 'sleep 0.25' \;\
-  copy-mode \; send-keys -X begin-selection \;\
-  send-keys -X -N 102 'cursor-down' \;\
-  send-keys -X 'end-of-line' \;\
-  send-keys -X 'previous-word' \;\
-  send-keys -X 'next-word-end' \;\
-  send-keys -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null" \;\
-  send-keys C-e \;\
-  display-message "Line copied"
+# bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null"
+# bind-key y send-keys C-l C-a \; run-shell 'sleep 1.25' \;\
+#   copy-mode \; send-keys -X begin-selection \;\
+#   send-keys -X -N 103 'cursor-down' \;\
+#   send-keys -X 'end-of-line' \;\
+#   send-keys -X 'previous-word' \;\
+#   send-keys -X 'next-word-end' \;\
+#   send-keys -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null" \;\
+#   send-keys C-e \;\
+#   display-message "Line copied"
+
 bind-key p run "xclip -o -sel clip | tmux load-buffer - ; tmux paste-buffer"
 
 # Capture pane and open in Vim
@@ -145,7 +144,7 @@ set -g status-left-length "100"
 set -g status-right-attr "none"
 set -g status-right-length "100"
 set -g status-left "#[fg=#3e3e40,bg=white] #S "
-set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40]│ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
+set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #{cpu_icon}#{cpu_percentage} │ #{battery_icon}#{battery_percentage} #{battery_remain} │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
 
 # -------------------------------------------------------------------
 # fzf integration
@@ -158,3 +157,12 @@ bind-key -n 'M-`' run "tmux split-window -p 40 'tmux send-keys -t #{pane_id} \"$
 
 # select-pane (@george-b)
 bind-key 0 run "tmux split-window -l 12 'bash -ci ftpane'"
+
+# Plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-battery'
+set -g @plugin 'tmux-plugins/tmux-cpu'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+
+run '~/.tmux/plugins/tpm/tpm'
