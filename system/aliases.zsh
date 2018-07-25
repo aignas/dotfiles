@@ -32,3 +32,5 @@ if [[ ${ZSH_DOTFILES_OS} == "ArchLinux" ]]; then
     }
 fi
 
+alias x=exa
+
