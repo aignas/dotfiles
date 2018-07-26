@@ -33,28 +33,33 @@ silent execute s:create_backup_dir_cmd
 
 call plug#begin(s:data_dir . '/plugged')
 
-" git
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'airblade/vim-gitgutter'
+" Appearance
+Plug 'junegunn/seoul256.vim'
+Plug 'itchyny/lightline.vim'
 
+" useful extensions
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
+Plug 'haya14busa/vim-asterisk'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-eunuch'
 
-Plug 'janko-m/vim-test'
-Plug 'mhinz/vim-startify'
-Plug 'junegunn/seoul256.vim'
+" git integration
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'airblade/vim-gitgutter'
+
+" TMUX integration
 Plug 'benmills/vimux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'itchyny/lightline.vim'
-Plug 'tyru/eskk.vim'
 
+" other integrations
+Plug 'majutsushi/tagbar'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -62,24 +67,21 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
-"Plug 'junegunn/fzf.vim'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
+
+" test related
 Plug 'junegunn/vader.vim'
 Plug 'kana/vim-vspec'
-Plug 'haya14busa/vim-asterisk'
-Plug 'majutsushi/tagbar'
+Plug 'janko-m/vim-test'
 
 " Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
+Plug 'tyru/eskk.vim', {'for': 'markdown'}
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
 Plug 'vim-scripts/PKGBUILD', {'for': 'pkgbuild'}
-Plug 'PProvost/vim-ps1', {'for': 'ps1'}
 Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
 Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
 Plug 'hashivim/vim-vagrant', {'for': 'Vagantfile'}
@@ -186,6 +188,7 @@ inoremap <c-c> <ESC>
 " Do useful things with arrows
 " Fugitive git status
 nnoremap <Up> :Gstatus<cr>
+
 " Neomake errors
 nnoremap <Down> :copen<cr>
 nnoremap <S-Down> :lopen<cr>
@@ -243,12 +246,14 @@ nmap <silent> <leader>s :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 let g:test#strategy = 'vimux'
+let g:VimuxOrientation = 'h'
+let g:VimuxHeight = '30'
 
 " haya14busa/vim-asterisk
 map *   <Plug>(asterisk-*)
 
 " If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsEditSplit = 'vertical'
 
 " junegunn/fzf.vim
 nmap <silent> <leader><leader> :Files<CR>
