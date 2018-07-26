@@ -62,14 +62,15 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
-Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'sh ./install --all' }
+"Plug 'junegunn/fzf.vim'
+Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
+Plug 'lotabout/skim.vim'
 Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
 Plug 'junegunn/vader.vim'
 Plug 'kana/vim-vspec'
 Plug 'haya14busa/vim-asterisk'
-Plug 'kassio/neoterm'
 Plug 'majutsushi/tagbar'
 
 " Filetype
@@ -158,7 +159,6 @@ set autoindent                  " Set auto-indent
 set whichwrap+=<,>              " Backspace and cursor keys wrap to
 set ignorecase smartcase        " Ignore case when searching
 set incsearch hlsearch showmatch "Highlight search results
-nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
 set magic                       " Set magic on
 set list
 set listchars=tab:»-,trail:-,
@@ -242,8 +242,7 @@ nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>s :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
-let g:test#strategy = 'neoterm'
-let g:neoterm_default_mod = 'vertical'
+let g:test#strategy = 'vimux'
 
 " haya14busa/vim-asterisk
 map *   <Plug>(asterisk-*)
