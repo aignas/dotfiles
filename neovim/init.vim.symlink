@@ -46,6 +46,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-commentary'
 
 " git integration
 Plug 'tpope/vim-fugitive'
@@ -60,6 +61,7 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " other integrations
 Plug 'majutsushi/tagbar'
+Plug 'jremmen/vim-ripgrep'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -261,6 +263,7 @@ nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
 nmap <silent> <leader>gc :Commits<CR>
 nmap <silent> <leader>gs :GFiles?<CR>
+nmap <leader>r :Rg 
 
 " file type handling
 " vim

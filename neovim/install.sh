@@ -10,7 +10,9 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 echo "Setting up python venv in ${NEOVIM_VENV}"
-python3.6 -m venv ${NEOVIM_VENV}
+rm -rf ${NEOVIM_VENV}
+
+python3 -m venv ${NEOVIM_VENV}
 ${NEOVIM_VENV}/bin/pip install --upgrade \
     pip \
     setuptools \
