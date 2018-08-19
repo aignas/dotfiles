@@ -71,6 +71,7 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
+Plug 'vimwiki/vimwiki'
 
 " test related
 Plug 'junegunn/vader.vim'
