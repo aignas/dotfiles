@@ -235,6 +235,12 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 
+" vim-go configuration
+" Automagically run goimports on save
+let g:go_fmt_command = "goimports"
+" Run lint and vet on save
+let g:go_metalinter_autosave = 1
+
 " w0rp/ale
 let g:ale_haskell_ghc_options='-fno-code -v0 -dynamic'
 
