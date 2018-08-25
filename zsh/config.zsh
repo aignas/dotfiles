@@ -1,10 +1,10 @@
-if [[ ${ZSH_DOTFILES_OS} != "Darwin" ]]; then
+if [[ ${ZSH_DOTFILES_OS} != "Mac" ]]; then
     eval `dircolors ${HOME}/.dir_colors`
 fi
 export CLICOLOR=true
 
 # Add Ports stuff into path:
-if [[ ${ZSH_DOTFILES_OS} == "Darwin" ]]; then
+if [[ ${ZSH_DOTFILES_OS} == "Mac" ]]; then
     export PATH="/opt/local/bin:${PATH}"
 fi
 

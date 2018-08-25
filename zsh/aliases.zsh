@@ -6,8 +6,12 @@ function rebundle!() {
 }
 alias reload!='. ~/.zshrc'
 alias g="git"
-alias ls='ls --color=auto'
-alias ll='ls -l --color=auto'
+if $(x &>/dev/null)
+then
+  alias ls='x'
+  alias ll='x -l'
+  alias la='x -A'
+fi
 alias grep='grep --color=auto'
 alias less='less -R'
 alias ranger='if [ -z "$RANGER_LEVEL" ]; then ranger; else exit; fi'
