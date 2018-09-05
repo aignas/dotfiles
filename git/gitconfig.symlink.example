@@ -5,60 +5,7 @@
 [credential]
     helper = GIT_CREDENTIAL_HELPER
 
-[color]
-    status = auto
-    branch = auto
-    interactive = auto
-    diff = auto
-    ui = true
-
-[push]
-    default = matching
-
-[core]
-    editor = nvim
-    whitespace = fix,-indent-with-non-tab,trailing-space
-
-[diff]
-    tool = nvimdiff
-
-[difftool]
-    prompt = false
-
-[alias]
-    ci = commit -v
-    cam = commit --amend --no-edit
-    st = status
-    stu = status -uno
-    br = branch
-    co = checkout
-    chp = cherry-pick
-    chpx = cherry-pick -x
-    pl = pull
-    pb = pull --rebase
-    p = push
-    psom = push --prune
-    brs = branch --set-upstream
-    ri = rebase -i
-    r = rebase
-    aa = add -A
-    au = add -u
-    a = add
-
-    promote = !$ZSH/bin/git-promote
-    wtf     = !$ZSH/bin/git-wtf
-    rank-contributors = !$ZSH/bin/git-rank-contributors
-    count   = !git shortlog -sn
-
-[push]
-    # See `git help config` (search for push.default)
-    # for more information on different options of the below setting.
-    #
-    # Setting to git 2.0 default to suppress warning message
-    default = simple
-[filter "lfs"]
-    clean = git-lfs clean %f
-    smudge = git-lfs smudge %f
-    required = true
+[include]
+    path = GITCONFIG_MAIN
 
 # vim: ft=gitconfig
