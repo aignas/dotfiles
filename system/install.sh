@@ -1,5 +1,6 @@
 if [[ ${ZSH_DOTFILES_OS} == "Mac" ]]; then
     brew install python3 httpie fd exa ripgrep htop ranger task timewarrior
+    brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 elif [[ ${ZSH_DOTFILES_OS} == "ArchLinux" ]]; then
     sudo pacman -Sy --needed httpie python neovim ranger fd exa ripgrep htop task timew dep
 elif [[ ${ZSH_DOTFILES_OS} == "Debian" ]]; then
