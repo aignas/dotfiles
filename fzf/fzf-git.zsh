@@ -1,7 +1,5 @@
 #!/bin/zsh
 
-alias fzf=sk
-
 # fbr - checkout git branch
 fbr() {
     local branches branch
