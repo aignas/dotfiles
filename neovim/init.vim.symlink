@@ -18,18 +18,11 @@ scriptencoding utf-8
 " vint: -ProhibitSetNoCompatible
 set nocompatible
 
-let s:data_dir = has('unix')
-    \ ? $HOME . '/.local/share/nvim'
-    \ : $HOME . '/AppData/Local/nvim-data'
+let s:data_dir = $HOME . '/.local/share/nvim'
 " TODO: use venv on Windows
-let g:python3_host_prog = has('unix')
-    \ ? s:data_dir . '/venv/bin/python'
-    \ : $HOME . '/AppData/Local/Programs/Python/Python36-32/python.exe'
+let g:python3_host_prog = s:data_dir . '/venv/bin/python'
 let s:backup_dir = expand(s:data_dir . '/backups/')
-let s:create_backup_dir_cmd = has('unix')
-    \ ? '!mkdir -p ' . s:backup_dir
-    \ : '!if not exist "' . s:backup_dir . '" mkdir "' . s:backup_dir . '"'
-silent execute s:create_backup_dir_cmd
+silent execute '!mkdir -p ' . s:backup_dir
 
 call plug#begin(s:data_dir . '/plugged')
 
@@ -38,8 +31,6 @@ Plug 'junegunn/seoul256.vim'
 Plug 'itchyny/lightline.vim'
 
 " useful extensions
-Plug 'junegunn/vim-peekaboo'
-Plug 'junegunn/limelight.vim' | Plug 'junegunn/goyo.vim'
 Plug 'haya14busa/vim-asterisk'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
@@ -48,48 +39,38 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 
-" git integration
+" " git integration
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
 Plug 'airblade/vim-gitgutter'
 
-" TMUX integration
+" " TMUX integration
 Plug 'benmills/vimux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'christoomey/vim-tmux-navigator'
 
-" other integrations
+" " other integrations
 Plug 'majutsushi/tagbar'
 Plug 'jremmen/vim-ripgrep'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+" "Plug 'autozimu/LanguageClient-neovim', {
+" "    \ 'branch': 'next',
+" "    \ 'do': 'bash install.sh',
+" "    \ }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
-Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
+Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install --all' }
 Plug 'lotabout/skim.vim'
 Plug 'vimwiki/vimwiki'
 
 " test related
-Plug 'junegunn/vader.vim'
-Plug 'kana/vim-vspec'
 Plug 'janko-m/vim-test'
 
-" Filetype
+" " Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
-Plug 'tyru/eskk.vim', {'for': 'markdown'}
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
-Plug 'vim-scripts/PKGBUILD', {'for': 'pkgbuild'}
-Plug 'ekalinin/Dockerfile.vim', {'for': 'dockerfile'}
-Plug 'pearofducks/ansible-vim', {'for': 'yaml'}
-Plug 'hashivim/vim-vagrant', {'for': 'Vagantfile'}
-Plug 'OrangeT/vim-csharp', {'for': 'cs'}
-Plug 'Valloric/MatchTagAlways', {'for': 'html'}
 
 call plug#end()
 
@@ -167,7 +148,7 @@ set incsearch hlsearch showmatch "Highlight search results
 set magic                       " Set magic on
 set list
 set listchars=tab:»-,trail:-,
-nnoremap <leader>w :wa<cr>
+nnoremap <leader><leader> :wa<cr>
 
 " Retain indentation when we are word wrapping (needs >= Vim-7.388)
 set breakindent
@@ -235,20 +216,12 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 
-" vim-go configuration
-" Automagically run goimports on save
-let g:go_fmt_command = "goimports"
-" Run lint and vet on save
-let g:go_metalinter_autosave = 1
-
-" w0rp/ale
 let g:ale_haskell_ghc_options='-fno-code -v0 -dynamic'
-
-" Enable completion where available.
 let g:ale_completion_enabled = 1
 let g:deoplete#enable_at_startup = 1
+let g:UltiSnipsEditSplit = 'vertical'
 
-" janko-m/vim-test
+" test
 nmap <silent> <leader>t :TestNearest<CR>
 nmap <silent> <leader>T :TestFile<CR>
 nmap <silent> <leader>s :TestSuite<CR>
@@ -258,14 +231,9 @@ let g:test#strategy = 'vimux'
 let g:VimuxOrientation = 'h'
 let g:VimuxHeight = '30'
 
-" haya14busa/vim-asterisk
+" navigation
 map *   <Plug>(asterisk-*)
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit = 'vertical'
-
-" junegunn/fzf.vim
-nmap <silent> <leader><leader> :Files<CR>
+nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
 nmap <silent> <leader>gc :Commits<CR>
@@ -280,6 +248,23 @@ augroup reload_vimrc
     autocmd FileType vim set nofen
     autocmd FileType vim set foldmethod=marker
 augroup END
+
+" go
+augroup go_settings
+    autocmd!
+    " run goimports on save
+    autocmd FileType go let g:go_fmt_command = "goimports"
+    autocmd FileType go let g:go_metalinter_autosave = 1
+    autocmd FileType go nnoremap <silent> <leader>god :GoDef<CR>
+    autocmd FileType go nnoremap <silent> <leader>goc :GoDocBrowser<CR>
+    autocmd FileType go nnoremap <silent> <leader>got :GoCoverageToggle<CR>
+    autocmd FileType go let g:go_auto_type_info = 1
+    autocmd FileType go let g:go_fmt_fail_silently = 1
+    autocmd FileType go let g:ale_linters = {
+\   'go': ['gometalinter'],
+\}
+augroup END
+
 
 " Python
 augroup python_settings
