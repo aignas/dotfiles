@@ -9,6 +9,9 @@ mkdir -p ${NEOVIM_LOCAL}/plugged
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+echo "Setting up python backup directory"
+mkdir -p "${NEOVIM_LOCAL}/backups"
+
 echo "Setting up python venv in ${NEOVIM_VENV}"
 rm -rf ${NEOVIM_VENV}
 

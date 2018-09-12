@@ -19,10 +19,8 @@ scriptencoding utf-8
 set nocompatible
 
 let s:data_dir = $HOME . '/.local/share/nvim'
-" TODO: use venv on Windows
 let g:python3_host_prog = s:data_dir . '/venv/bin/python'
 let s:backup_dir = expand(s:data_dir . '/backups/')
-silent execute '!mkdir -p ' . s:backup_dir
 
 call plug#begin(s:data_dir . '/plugged')
 
@@ -39,24 +37,19 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-commentary'
 
-" " git integration
+" git integration
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-" " TMUX integration
+" TMUX integration
 Plug 'benmills/vimux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'christoomey/vim-tmux-navigator'
 
-" " other integrations
+" other integrations
 Plug 'majutsushi/tagbar'
 Plug 'jremmen/vim-ripgrep'
-" "Plug 'autozimu/LanguageClient-neovim', {
-" "    \ 'branch': 'next',
-" "    \ 'do': 'bash install.sh',
-" "    \ }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install --all' }
@@ -66,43 +59,28 @@ Plug 'vimwiki/vimwiki'
 " test related
 Plug 'janko-m/vim-test'
 
-" " Filetype
+" Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
-Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'rust-lang/rust.vim', {'for': 'rust'}
 Plug 'cespare/vim-toml', {'for': 'toml'}
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 
 call plug#end()
 
 " Generic vim {{{
-
 " Required:
 filetype plugin indent on
+syntax enable               " Enable syntax hl
+set autoread                " Automatically read when the file is changed from outside
+set history=10000           " History size
+let g:mapleader=','         " Change the def leader
+let g:maplocalleader='-'    " Change the def leader
 
-syntax enable                           " Enable syntax hl
-
-set autoread                            " Automatically read when the file is changed from outside
-set history=10000                       " History size
-
-let g:mapleader=','                       " Change the def leader
-let g:maplocalleader='-'                  " Change the def leader
-
-set guioptions=ag                       " remove toolbar, menubar and
-                                        " graphical tabs
-
-" The study, which says that white colour scheme is better for your
-" productivity:
-"   http://ux.stackexchange.com/a/53268/74384
-set background=dark
-let g:seoul256_background = 235
+" Theming
+set guioptions=ag           " remove toolbar, menubar and graphical tabs
 colorscheme seoul256
-
-" Some statusline and Airline settings
-set laststatus=2
-set showtabline=2
-set noshowmode
-" Hack has support for this OOTB (NOTE: on ITerm you need to uncheck the
-" option which let's you use a different font for non-ASCII characters)
+let g:seoul256_background = 235
+set background=dark
+set laststatus=2 showtabline=2 noshowmode
 let g:lightline = {
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
@@ -112,12 +90,9 @@ let g:lightline = {
         \ 'colorscheme': 'seoul256',
         \ }
 
-"Favorite filetypes
 set fileformats=unix,dos
-
 set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
 set sidescroll=1
-
 augroup general_settings
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
@@ -132,53 +107,24 @@ augroup END
 "Turn on Wild menu
 set wildmenu
 set wildmode=list:longest
-
-set noerrorbells
-
-set laststatus=2                " Always show the status line
-set cmdheight=2                 " The command bar is 2 high
-set number relativenumber       " Show relative line numbers, with the current absolute
-set lazyredraw                  " Do not redraw, when running macros: lazy redraw
-set hidden                      " Change buffer - without saving
-set backspace=eol,start,indent  " Set backspace
-set autoindent                  " Set auto-indent
-set whichwrap+=<,>              " Backspace and cursor keys wrap to
-set ignorecase smartcase        " Ignore case when searching
-set incsearch hlsearch showmatch "Highlight search results
-set magic                       " Set magic on
+set laststatus=2                 " Always show the status line
+set cmdheight=2                  " The command bar is 2 high
+set number relativenumber        " Show relative line numbers, with the current absolute
+set lazyredraw                   " Do not redraw, when running macros: lazy redraw
+set hidden                       " Change buffer - without saving
+set backspace=eol,start,indent   " Set backspace
+set autoindent                   " Set auto-indent
+set whichwrap+=<,>               " Backspace and cursor keys wrap to
+set ignorecase smartcase         " Ignore case when searching
+set incsearch hlsearch showmatch " Highlight search results
+set magic                        " Set magic on
 set list
 set listchars=tab:»-,trail:-,
-nnoremap <leader><leader> :wa<cr>
-
-" Retain indentation when we are word wrapping (needs >= Vim-7.388)
 set breakindent
-" Set the show break to something useful and make sure that it is not something
-" that can easily occur in the code/text
 set showbreak=»»
 
-" Disable arrow keys
-nnoremap <up> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-
-" Make backspace to go to the previous buffer
-nnoremap <Backspace> <C-^>
-
-" CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-inoremap <c-c> <ESC>
-
-" Do useful things with arrows
-" Fugitive git status
-nnoremap <Up> :Gstatus<cr>
-
-" Neomake errors
-nnoremap <Down> :copen<cr>
-nnoremap <S-Down> :lopen<cr>
-
-" Switch to current directory
-map <leader>cd :cd %:p:h<cr>
+nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
+map <silent> <leader>cd :cd %:p:h<cr>
 
 " Files and backups
 "
@@ -199,7 +145,6 @@ set tabstop=4
 set smarttab
 set linebreak
 set pastetoggle=<F2>
-map <leader>di :%s/\s*$//g<cr>:noh<cr>''
 
 " Wrap lines
 set wrap
@@ -215,10 +160,6 @@ set cpoptions+=J
 set joinspaces
 "}}}
 "{{{ Plugin configuration
-
-let g:ale_haskell_ghc_options='-fno-code -v0 -dynamic'
-let g:ale_completion_enabled = 1
-let g:deoplete#enable_at_startup = 1
 let g:UltiSnipsEditSplit = 'vertical'
 
 " test
@@ -238,7 +179,8 @@ nmap <silent> <leader>b :Buffers<CR>
 nmap <leader>h :History
 nmap <silent> <leader>gc :Commits<CR>
 nmap <silent> <leader>gs :GFiles?<CR>
-nmap <leader>r :Rg 
+nmap <leader>r :Rg
+nmap <silent> <leader>a :TagbarToggle<CR>
 
 " file type handling
 " vim
@@ -277,33 +219,12 @@ augroup python_settings
     autocmd FileType python setlocal lbr
     autocmd FileType python setlocal textwidth=79
 
-    autocmd FileType python setlocal expandtab          " PEP8 friendly
-    autocmd FileType python setlocal shiftwidth=4       "
-    autocmd FileType python setlocal tabstop=4          "
-    autocmd FileType python setlocal textwidth=79       "
-    autocmd FileType python setlocal colorcolumn=80     " It's much easier visually
+    autocmd FileType python setlocal expandtab
+    autocmd FileType python setlocal shiftwidth=4
+    autocmd FileType python setlocal tabstop=4
+    autocmd FileType python setlocal textwidth=79
+    autocmd FileType python setlocal colorcolumn=80
     autocmd FileType python setlocal foldmethod=indent
-
-    "Run in the Python interpreter
-    function! Python_eval_vsplit(interpreter) range
-        let l:src = tempname()
-        let l:dst = tempname()
-        execute ': ' . a:firstline . ',' . a:lastline . 'w ' . l:src
-        execute ':!' . a:interpreter ' ' . l:src . ' > ' . l:dst
-        execute ':pedit! ' . l:dst
-    endfunction
-    autocmd FileType python vmap <F7>2 :call Python_eval_vsplit("ipython2")<cr>
-    autocmd FileType python vmap <F7>3 :call Python_eval_vsplit("ipython")<cr>
-augroup END
-
-" LUA section
-augroup lua_settings
-    autocmd FileType lua set expandtab
-    autocmd FileType lua set shiftwidth=4
-    autocmd FileType lua set tabstop=4
-    autocmd FileType lua set softtabstop=4
-    autocmd FileType lua set textwidth=79
-    autocmd FileType lua set foldmethod=marker
 augroup END
 
 " Git
@@ -311,34 +232,10 @@ augroup git_settings
     autocmd FileType gitcommit set tw=72
 augroup END
 
-" Tags
-nmap <F8> :TagbarToggle<CR>
-
-let g:LanguageClient_rootMarkers = {
-        \ 'javascript': ['project.json'],
-        \ 'rust': ['Cargo.toml'],
-        \ }
-
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ }
-
-set hidden
-
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-
-" eskk
-
-set thesaurus=~/.dotfiles/neovim/skk/skk-jisyo-utf-8.l
-
-augroup essk_settings
-    autocmd VimEnter * imap <C-j> <Plug>(eskk:toggle)
-    autocmd VimEnter * cmap <C-j> <Plug>(eskk:toggle)
+" YAML
+augroup yaml_settings
+    autocmd FileType yaml set shiftwidth=2
+    autocmd FileType yaml set tabstop=2
 augroup END
 
 "}}}
