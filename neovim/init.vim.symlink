@@ -161,6 +161,7 @@ set joinspaces
 "}}}
 "{{{ Plugin configuration
 let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsUsePythonVersion = 3
 
 " test
 nmap <silent> <leader>t :TestNearest<CR>
