@@ -30,17 +30,13 @@ Plug 'itchyny/lightline.vim'
 
 " useful extensions
 Plug 'haya14busa/vim-asterisk'
-Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-commentary'
-
-" git integration
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-
+"
 " TMUX integration
 Plug 'benmills/vimux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -48,9 +44,7 @@ Plug 'tmux-plugins/vim-tmux'
 Plug 'christoomey/vim-tmux-navigator'
 
 " other integrations
-Plug 'majutsushi/tagbar'
 Plug 'jremmen/vim-ripgrep'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install --all' }
 Plug 'lotabout/skim.vim'
@@ -61,7 +55,6 @@ Plug 'janko-m/vim-test'
 
 " Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
-Plug 'cespare/vim-toml', {'for': 'toml'}
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 
 call plug#end()
@@ -70,7 +63,6 @@ call plug#end()
 " Required:
 filetype plugin indent on
 syntax enable               " Enable syntax hl
-set autoread                " Automatically read when the file is changed from outside
 set history=10000           " History size
 let g:mapleader=','         " Change the def leader
 let g:maplocalleader='-'    " Change the def leader
@@ -91,8 +83,6 @@ let g:lightline = {
         \ }
 
 set fileformats=unix,dos
-set scrolloff=5             "Set 3 lines to the curors - when moving vertical..
-set sidescroll=1
 augroup general_settings
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
@@ -105,9 +95,7 @@ augroup general_settings
 augroup END
 
 "Turn on Wild menu
-set wildmenu
 set wildmode=list:longest
-set laststatus=2                 " Always show the status line
 set cmdheight=2                  " The command bar is 2 high
 set number relativenumber        " Show relative line numbers, with the current absolute
 set lazyredraw                   " Do not redraw, when running macros: lazy redraw
@@ -119,7 +107,6 @@ set ignorecase smartcase         " Ignore case when searching
 set incsearch hlsearch showmatch " Highlight search results
 set magic                        " Set magic on
 set list
-set listchars=tab:»-,trail:-,
 set breakindent
 set showbreak=»»
 
@@ -174,13 +161,13 @@ let g:VimuxOrientation = 'h'
 let g:VimuxHeight = '30'
 
 " navigation
-map *   <Plug>(asterisk-*)
+map * <Plug>(asterisk-*)
 nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>b :Buffers<CR>
-nmap <leader>h :History
+nmap <leader>h :History 
 nmap <silent> <leader>gc :Commits<CR>
 nmap <silent> <leader>gs :GFiles?<CR>
-nmap <leader>r :Rg
+nmap <leader>r :Rg 
 nmap <silent> <leader>a :TagbarToggle<CR>
 
 " file type handling
