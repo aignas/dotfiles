@@ -1,0 +1,16 @@
+fn PROMPT
+    let path="${c::blue}${PWD}${c::default}"
+    let symbol="${c::magenta}❯${c::default}"
+    let git=$(git rev-parse --abbrev-ref HEAD)
+    echo -en "${path} ${c::242}${git}${c::default} \n${symbol} "
+end
+
+export EDITOR=nvim
+
+alias g=git
+alias x=exa
+alias xx="exa -l"
+alias e="nvim"
+alias r="ranger"
+
+// vim: filetype=rust
