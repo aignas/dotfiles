@@ -9,6 +9,7 @@ export EDITOR=nvim
 
 alias g=git
 alias x=exa
+alias vc=nvim ~/.config/nvim/init.vim
 alias xx="exa -l"
 alias e="nvim"
 alias r="ranger"

@@ -24,38 +24,21 @@ let s:backup_dir = expand(s:data_dir . '/backups/')
 
 call plug#begin(s:data_dir . '/plugged')
 
-" Appearance
-Plug 'junegunn/seoul256.vim'
-Plug 'itchyny/lightline.vim'
-
-" useful extensions
 Plug 'haya14busa/vim-asterisk'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-"
-" TMUX integration
-Plug 'benmills/vimux'
-Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'tmux-plugins/vim-tmux'
-Plug 'christoomey/vim-tmux-navigator'
-
-" other integrations
-Plug 'jremmen/vim-ripgrep'
-Plug 'w0rp/ale'
-Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install --all' }
-Plug 'lotabout/skim.vim'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'vimwiki/vimwiki'
+Plug 'w0rp/ale'
 
-" test related
-Plug 'janko-m/vim-test'
-
-" Filetype
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+Plug 'rust-lang/rust.vim', {'for': 'rust'}
 
 call plug#end()
 
@@ -145,30 +128,9 @@ map <leader>sl :setlocal spell spelllang=lt<CR>
 " Double spacing between sentences
 set cpoptions+=J
 set joinspaces
-"}}}
-"{{{ Plugin configuration
-let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsUsePythonVersion = 3
-
-" test
-nmap <silent> <leader>t :TestNearest<CR>
-nmap <silent> <leader>T :TestFile<CR>
-nmap <silent> <leader>s :TestSuite<CR>
-nmap <silent> <leader>l :TestLast<CR>
-nmap <silent> <leader>g :TestVisit<CR>
-let g:test#strategy = 'vimux'
-let g:VimuxOrientation = 'h'
-let g:VimuxHeight = '30'
-
-" navigation
 map * <Plug>(asterisk-*)
-nmap <silent> <leader>f :Files<CR>
-nmap <silent> <leader>b :Buffers<CR>
-nmap <leader>h :History 
-nmap <silent> <leader>gc :Commits<CR>
-nmap <silent> <leader>gs :GFiles?<CR>
-nmap <leader>r :Rg 
-nmap <silent> <leader>a :TagbarToggle<CR>
+nmap <leader>rg :grep 
+set grepprg=rg\ -e 
 
 " file type handling
 " vim
@@ -195,6 +157,11 @@ augroup go_settings
 \}
 augroup END
 
+" rust
+augroup rust_settings
+    autocmd!
+    autocmd FileType rust let g:rustfmt_autosave = 1
+augroup END
 
 " Python
 augroup python_settings
