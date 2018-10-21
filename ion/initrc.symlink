@@ -1,17 +1,29 @@
 fn PROMPT
     let path="${c::blue}${PWD}${c::default}"
     let symbol="${c::magenta}❯${c::default}"
-    let git=$(git rev-parse --abbrev-ref HEAD)
-    echo -en "${path} ${c::242}${git}${c::default} \n${symbol} "
+    # Use https://github.com/mmstick/ion-plugins/blob/master/namespaces/strings/git/src/lib.rs
+    let git_branch = $(git rev-parse --abbrev-ref HEAD ^> /dev/null)
+    let git_info="${c::242}${git_branch}${c::default}"
+    echo -en "${path} ${git_info} \n${symbol} "
 end
 
 export EDITOR=nvim
 
+alias e=${EDITOR}
 alias g=git
-alias x=exa
+alias k=kubectl
+alias b=bat --theme=zenburn
 alias vc=nvim ~/.config/nvim/init.vim
+alias x=exa
 alias xx="exa -l"
-alias e="nvim"
-alias r="ranger"
+alias se="sudo -E nvim"
 
-// vim: filetype=rust
+fn r
+    if test -z "${RANGER_LEVEL}"
+        ranger
+    else
+        exit
+    end
+end
+
+// vim: filetype=ion
