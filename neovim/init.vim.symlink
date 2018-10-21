@@ -36,9 +36,10 @@ Plug 'tpope/vim-unimpaired'
 Plug 'vimwiki/vimwiki'
 Plug 'w0rp/ale'
 
-Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
-Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'rust-lang/rust.vim', {'for': 'rust'}
+Plug 'fatih/vim-go', { 'for': ['go', 'vimwiki'], 'do': ':GoInstallBinaries' }
+Plug 'plasticboy/vim-markdown', {'for': ['markdown', 'vimwiki']}
+Plug 'rust-lang/rust.vim', {'for': ['rust', 'vimwiki']}
+Plug 'vmchale/ion-vim', {'for': ['ion', 'vimwiki']}
 
 call plug#end()
 
@@ -92,6 +93,7 @@ set magic                        " Set magic on
 set list
 set breakindent
 set showbreak=»»
+set path+=**
 
 nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
 map <silent> <leader>cd :cd %:p:h<cr>
@@ -133,6 +135,9 @@ nmap <leader>rg :grep
 set grepprg=rg\ -e 
 
 " file type handling
+" vimwiki
+let g:vimwiki_folding='expr'
+
 " vim
 augroup reload_vimrc
     autocmd!
