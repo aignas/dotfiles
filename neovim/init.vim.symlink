@@ -188,6 +188,7 @@ augroup python_settings
 augroup END
 
 " Git
+nnoremap <silent> <leader>gs :Gstatus<cr>
 augroup git_settings
     autocmd FileType gitcommit set tw=72
 augroup END
