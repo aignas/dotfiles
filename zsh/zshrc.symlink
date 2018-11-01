@@ -1,81 +1,40 @@
 # My zshrc configuration. Use or reuse however you like.
 #       by gns-ank
 
-VERBOSITY=0
-function _info(){}
-function _debug(){}
-
 # shortcut to this dotfiles path is $ZSH
 export ZSH_DOTFILES=$HOME/.dotfiles
-if [ $VERBOSITY -ge 1 ]; then source ${ZSH_DOTFILES}/zsh/debug.sh; fi
-source ${ZSH_DOTFILES}/bin/dot
 source ${ZSH_DOTFILES}/zsh/plugins.sh
 
-# your project folder that we can `c [tab]` to
-export PROJECTS=~/src
+# {{{ config
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
 
-# use .localrc for SUPER SECRET CRAP that you don't
-# want in your public, versioned repo.
-if [[ -a ~/.localrc ]]; then source ~/.localrc; fi
+setopt APPEND_HISTORY           # adds history
+# adds history incrementally and share it across sessions
+setopt INC_APPEND_HISTORY SHARE_HISTORY
+setopt EXTENDED_HISTORY         # add timestamps to history
 
-# all of our zsh files
-typeset -U config_files
-config_files=($ZSH_DOTFILES/**/*.zsh)
-
-# {{{ Configuring PATH
-# load the path files
-_info "Configuring path..."
-for file in ${(M)config_files:#*/path.zsh}
-do
-  _debug "Loading $file"
-  source $file
-done
-_info "Configuring path... DONE"
+# don't record dupes in history
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
 # }}}
-
-# {{{ Config
-# load everything but the path and completion files
-_info "Loading configuration files..."
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  _debug "Loading $file"
-  source $file
-done
-_info "Loading configuration files... DONE"
-# }}}
-
-# {{{ Completion
-_info "Configuring completion"
-# Normal completion behaviour
-zstyle ':completion:*' completer _complete
-# Case insensitive matching and matching can occur on both sides of the current
-# word.
-zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|=* r:|=*'
-# See: http://stackoverflow.com/a/22627273/1105870
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
 compinit
-
-# load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}
-do
-  _debug "Loading $file"
-  source $file
-done
-
-unset config_files
-_info "Configuring completion... DONE"
-# }}}
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' insert-tab pending
+compdef g=git
 
 zstyle \
     'history' \
     'completion' \
     'git'
 
-# Load the fuzzy finder
 [ -f ${HOME}/.fzf.zsh ] && source ${HOME}/.fzf.zsh
-
-_info DONE
+#
+# Things that should be machine specific and not in git:
+if [[ -a ~/.localrc ]]; then source ~/.localrc; fi
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
