@@ -3,14 +3,35 @@ fn trysource file
     if test -e $file; source $file; end
 end
 
+fn GIT_PROMPT
+    let git_branch = $(git rev-parse --abbrev-ref HEAD ^> /dev/null)
+    if test git_branch == ""
+        return
+    end
+
+    if test $git_branch = "HEAD"
+        echo $(git rev-parse --short=8 HEAD ^> /dev/null)
+        return
+    end
+
+    let git_ahead = ""
+    let ahead = $(git rev-list --count origin/${git_branch}..${git_branch})
+    let behind = $(git rev-list --count ${git_branch}..origin/${git_branch})
+    if test ${ahead} != 0
+        let git_ahead = "|↑$ahead"
+    end
+    if test ${behind} != 0
+        let git_ahead = "|↓$behind"
+    end
+
+    echo ${git_branch}${git_ahead}${git_behind}
+end
+
 fn PROMPT
     let path="${c::blue}${PWD}${c::default}"
     let symbol="${c::magenta}❯${c::default}"
-    let git_branch = $(git rev-parse --abbrev-ref HEAD ^> /dev/null)
-    if test $git_branch = "test"
-        git_branch = $(git rev-parse --short=8 HEAD ^> /dev/null)
-    end
-    let git_info="${c::242}${git_branch}${c::default}"
+    let git_prompt=$(GIT_PROMPT)
+    let git_info="${c::242}(${git_prompt})${c::default}"
     echo -en "${path} ${git_info} \n${symbol} "
 end
 
