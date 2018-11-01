@@ -79,8 +79,6 @@ augroup general_settings
     autocmd FocusLost * :wa          " Save when loosing focus
 augroup END
 
-"Turn on Wild menu
-set wildmode=list:longest
 set cmdheight=2                  " The command bar is 2 high
 set number relativenumber        " Show relative line numbers, with the current absolute
 set lazyredraw                   " Do not redraw, when running macros: lazy redraw
@@ -88,13 +86,11 @@ set hidden                       " Change buffer - without saving
 set backspace=eol,start,indent   " Set backspace
 set autoindent                   " Set auto-indent
 set whichwrap+=<,>               " Backspace and cursor keys wrap to
-set ignorecase smartcase         " Ignore case when searching
-set incsearch hlsearch showmatch " Highlight search results
+set incsearch hlsearch           " Highlight search results
 set magic                        " Set magic on
 set list
-set breakindent
-set showbreak=»»
-set path+=**
+set breakindent showbreak=»»
+set path+=** wildmode=full
 
 nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
 map <silent> <leader>cd :cd %:p:h<cr>
@@ -112,15 +108,10 @@ execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
 set foldenable
 set foldlevel=1
 
-set expandtab
-set shiftwidth=4
-set tabstop=4
-set smarttab
+set expandtab shiftwidth=4 tabstop=4
 set linebreak
-set pastetoggle=<F2>
-
-" Wrap lines
 set wrap
+set pastetoggle=<F2>
 
 " Spelling
 " Vim unimpaired provides [os and ]os mappings to toggle spelling
@@ -132,8 +123,25 @@ map <leader>sl :setlocal spell spelllang=lt<CR>
 set cpoptions+=J
 set joinspaces
 map * <Plug>(asterisk-*)
-nmap <leader>rg :grep 
-set grepprg=rg\ -e 
+nmap <leader>a :grep
+nmap <leader>f :find
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+"ale
+let g:ale_fix_on_save = 1
+let g:ale_lint_on_insert_leave = 1
+let g:ale_linters = {
+    \   'go': ['gometalinter'],
+    \   'javascript': ['eslint'],
+    \}
+let g:ale_fixers = {
+    \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
+    \}
+
 
 " file type handling
 " vimwiki
@@ -147,6 +155,12 @@ augroup reload_vimrc
     autocmd FileType vim set foldmethod=marker
 augroup END
 
+augroup js_settings
+    autocmd!
+    autocmd FileType javascript set shiftwidth=2
+    autocmd FileType javascript set tabstop=2
+augroup END
+
 " go
 augroup go_settings
     autocmd!
@@ -158,9 +172,6 @@ augroup go_settings
     autocmd FileType go nnoremap <silent> <leader>got :GoCoverageToggle<CR>
     autocmd FileType go let g:go_auto_type_info = 1
     autocmd FileType go let g:go_fmt_fail_silently = 1
-    autocmd FileType go let g:ale_linters = {
-\   'go': ['gometalinter'],
-\}
 augroup END
 
 " rust
