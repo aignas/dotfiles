@@ -1,29 +1,48 @@
+# {{{ functions
+fn trysource file
+    if test -e $file; source $file; end
+end
+
 fn PROMPT
     let path="${c::blue}${PWD}${c::default}"
     let symbol="${c::magenta}❯${c::default}"
-    # Use https://github.com/mmstick/ion-plugins/blob/master/namespaces/strings/git/src/lib.rs
     let git_branch = $(git rev-parse --abbrev-ref HEAD ^> /dev/null)
+    if test $git_branch = "test"
+        git_branch = $(git rev-parse --short=8 HEAD ^> /dev/null)
+    end
     let git_info="${c::242}${git_branch}${c::default}"
     echo -en "${path} ${git_info} \n${symbol} "
 end
 
-export EDITOR=nvim
+fn pubkey
+    let path="${HOME}/.ssh/id_rsa.pub"
 
-alias e=${EDITOR}
-alias g=git
-alias k=kubectl
-alias b=bat --theme=zenburn
-alias vc=nvim ~/.config/nvim/init.vim
-alias x=exa
-alias xx="exa -l"
-alias se="sudo -E nvim"
-
-fn r
-    if test -z "${RANGER_LEVEL}"
-        ranger
-    else
-        exit
+    if test $(uname -s) = "Darwin"
+        cat ${path} | pbcopy
     end
-end
+    xclip -sel clip < ${path}
 
-// vim: filetype=ion
+    echo "${path} copied to clipboard"
+end
+# }}}
+# {{{ env
+export EDITOR="nvim"
+export GOPATH="${HOME}/gocode"
+export PATH="${GOPATH}/bin:${PATH}"
+export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || rg --files || fd ."
+# }}}
+# {{{ aliases
+alias b="bat --theme=zenburn"
+alias e="${EDITOR}"
+alias g="git"
+alias k="kubectl"
+alias se="sudo -E nvim"
+alias vc="e ~/.config/nvim/init.vim"
+alias x="exa"
+alias xx="exa -l"
+# }}}
+
+# Load optional files, which may not be present
+trysource "${HOME}/.localrc.ion"
+
+# vim: filetype=ion foldmethod=marker
