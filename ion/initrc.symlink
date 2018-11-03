@@ -3,35 +3,30 @@ fn trysource file
     if test -e $file; source $file; end
 end
 
-fn GIT_PROMPT
-    let git_branch = $(git rev-parse --abbrev-ref HEAD ^> /dev/null)
-    if test git_branch == ""
-        return
-    end
+fn plugin_path name
+    echo "${ION_PLUGIN}/${name}/target/release/${name}"
+end
 
-    if test $git_branch = "HEAD"
-        echo $(git rev-parse --short=8 HEAD ^> /dev/null)
-        return
-    end
+fn ensure_built name
+    let exe=$(plugin_path ${name})
 
-    let git_ahead = ""
-    let ahead = $(git rev-list --count origin/${git_branch}..${git_branch})
-    let behind = $(git rev-list --count ${git_branch}..origin/${git_branch})
-    if test ${ahead} != 0
-        let git_ahead = "|↑$ahead"
+    if not exists $exe
+        echo "PLUGIN NOT FOUND: $exe"
+        echo "Building..."
+        pushd "${ION_PLUGIN}/${name}"
+        cargo build --release
+        popd
     end
-    if test ${behind} != 0
-        let git_ahead = "|↓$behind"
-    end
+end
 
-    echo ${git_branch}${git_ahead}${git_behind}
+fn run_plugin name
+    echo $($(plugin_path ${name}))
 end
 
 fn PROMPT
     let path="${c::blue}${PWD}${c::default}"
     let symbol="${c::magenta}❯${c::default}"
-    let git_prompt=$(GIT_PROMPT)
-    let git_info="${c::242}(${git_prompt})${c::default}"
+    let git_info=$(run_plugin git_prompt)
     echo -en "${path} ${git_info} \n${symbol} "
 end
 
@@ -47,6 +42,8 @@ fn pubkey
 end
 # }}}
 # {{{ env
+export DOTFILES="${HOME}/.dotfiles"
+export ION_PLUGIN="${DOTFILES}/ion/plugins"
 export EDITOR="nvim"
 export GOPATH="${HOME}/gocode"
 export PATH="${GOPATH}/bin:${PATH}"
@@ -65,5 +62,8 @@ alias xx="exa -l"
 
 # Load optional files, which may not be present
 trysource "${HOME}/.localrc.ion"
+
+# Ensure plugins are built
+ensure_built git_prompt
 
 # vim: filetype=ion foldmethod=marker
