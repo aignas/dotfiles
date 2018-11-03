@@ -1,3 +1,14 @@
+#!/usr/bin/env ion
+#
+# Copyright: aignas
+#
+# Minimal ion shell inspired by:
+# https://github.com/sindresorhus/pure
+#
+# This uses rust CLI applications in order to have nice features, such as the
+# git prompt, which is inspired by:
+# https://github.com/olivierverdier/zsh-git-prompt
+
 # {{{ functions
 fn trysource file
     if test -e $file; source $file; end
@@ -24,10 +35,9 @@ fn run_plugin name
 end
 
 fn PROMPT
-    let path="${c::blue}${PWD}${c::default}"
-    let symbol="${c::magenta}❯${c::default}"
     let git_info=$(run_plugin git_prompt)
-    echo -en "${path} ${git_info} \n${symbol} "
+    echo "${c::blue}${PWD}${c::default} ${git_info}"
+    echo -en "${c::magenta}❯${c::default} "
 end
 
 fn pubkey
@@ -60,10 +70,7 @@ alias x="exa"
 alias xx="exa -l"
 # }}}
 
-# Load optional files, which may not be present
 trysource "${HOME}/.localrc.ion"
-
-# Ensure plugins are built
 ensure_built git_prompt
 
 # vim: filetype=ion foldmethod=marker
