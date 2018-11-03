@@ -2,8 +2,7 @@
 #       by gns-ank
 
 # shortcut to this dotfiles path is $ZSH
-export ZSH_DOTFILES=$HOME/.dotfiles
-source ${ZSH_DOTFILES}/zsh/plugins.sh
+export DOTFILES=$HOME/.dotfiles
 
 # {{{ config
 HISTFILE=~/.zsh_history
@@ -28,13 +27,42 @@ zstyle ':completion:*' insert-tab pending
 compdef g=git
 
 zstyle \
-    'history' \
-    'completion' \
-    'git'
+  'history' \
+  'completion' \
+  'git'
+
+plugin_path() {
+  local name=$1
+  echo "${ION_PLUGIN}/${name}/target/release/${name}"
+}
+
+ensure_built() {
+  local name=$1
+  local exe=$(plugin_path ${name})
+
+  if [[ ! -f $exe ]]; then
+    echo "PLUGIN NOT FOUND: $exe"
+    echo "Building..."
+    pushd "${ION_PLUGIN}/${name}"
+    cargo build --release
+    popd
+  fi
+}
+
+run_plugin() {
+  local name=$1
+  echo $($(plugin_path ${name}))
+}
+
+# PROMPT in ion
+precmd() {
+  local git_info=$(run_plugin git_prompt)
+  export PS1="%F{blue}%~%f ${git_info}
+%F{magenta}❯%f "
+}
 
 [ -f ${HOME}/.fzf.zsh ] && source ${HOME}/.fzf.zsh
-#
-# Things that should be machine specific and not in git:
-if [[ -a ~/.localrc ]]; then source ~/.localrc; fi
+[ -f ${HOME}/.localrc ] && source ${HOME}/.localrc
+ensure_built git_prompt
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
