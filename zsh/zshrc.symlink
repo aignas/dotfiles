@@ -59,6 +59,7 @@ run_plugin() {
 # PROMPT in ion
 precmd() {
   local git_info=$(run_plugin git_prompt)
+  # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
   export PS1="%F{blue}%~%f ${git_info}
 %F{magenta}❯%f "
 }
