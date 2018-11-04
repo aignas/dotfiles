@@ -14,10 +14,9 @@ fn main() {
 /// Returns the prompt with the git repository information at the given path
 fn get_prompt(path: &str) -> Prompt {
     if let Some(i) = get_maybe_prompt(path) {
-        format!("{} {}{}{} {}",
+        format!("{}|{}{} {}",
                 i.revision.white(),
-                i.behind.white(),
-                i.ahead.white(),
+                i.diff.white(),
                 i.status,
                 i.state)
     } else {
@@ -62,8 +61,7 @@ fn get_maybe_prompt(path: &str) -> Option<PromptInfo> {
     Some(PromptInfo{
         revision: get_branch(&repo)
             .unwrap_or(get_sha(&repo)[..8].to_string()),
-        behind: behind_count(&repo)?,
-        ahead: ahead_count(&repo)?,
+        diff: diff_count(&repo)?,
         status: status(&repo).unwrap_or(String::new()),
         state: state(&repo),
     })
@@ -71,8 +69,7 @@ fn get_maybe_prompt(path: &str) -> Option<PromptInfo> {
 
 struct PromptInfo {
     revision: String,
-    behind: String,
-    ahead: String,
+    diff: String,
     status: String,
     state: String,
 }
@@ -98,14 +95,11 @@ fn get_sha(repo: &git2::Repository) -> Prompt {
         .unwrap_or(String::new())
 }
 
-fn ahead_count(repo: &git2::Repository) -> MaybePrompt {
+fn diff_count(repo: &git2::Repository) -> MaybePrompt {
     let rev = format!("origin/{}", get_branch(repo)?);
-    Some(non_zero("↑", count_between(repo, &rev, "HEAD")))
-}
-
-fn behind_count(repo: &git2::Repository) -> MaybePrompt {
-    let rev = format!("origin/{}", get_branch(repo)?);
-    Some(non_zero("↓", count_between(repo, "HEAD", &rev)))
+    Some(format!("{}{}",
+        non_zero("↑", count_between(repo, &rev, "HEAD")),
+        non_zero("↓", count_between(repo, "HEAD", &rev))))
 }
 
 fn count_between(repo: &git2::Repository, from: &str, to: &str) -> usize {
