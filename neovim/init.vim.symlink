@@ -33,14 +33,14 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'vimwiki/vimwiki'
 Plug 'w0rp/ale'
-Plug 'tyru/eskk.vim', { 'for': ['vimwiki'] }
+Plug 'tyru/eskk.vim'
 
-Plug 'fatih/vim-go', { 'for': ['go', 'vimwiki'], 'do': ':GoInstallBinaries' }
-Plug 'plasticboy/vim-markdown', {'for': ['markdown', 'vimwiki']}
-Plug 'rust-lang/rust.vim', {'for': ['rust', 'vimwiki']}
-Plug 'vmchale/ion-vim', {'for': ['ion', 'vimwiki']}
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'rust-lang/rust.vim'
+Plug 'vmchale/ion-vim'
+Plug 'vimwiki/vimwiki'
+Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
 call plug#end()
 
@@ -146,6 +146,14 @@ let g:ale_fixers = {
 " file type handling
 " vimwiki
 let g:vimwiki_folding='expr'
+let g:vimwiki_list = [{'path': '~/vimwiki',
+            \ 'syntax': 'markdown',
+            \ 'ext': '.md',
+            \ 'custom_wiki2html': '$GOPATH/bin/vimwiki-godown',
+            \ }]
+
+let g:markdown_composer_browser="qutebrowser"
+autocmd FileType markdown set syntax=markdown
 
 " vim
 augroup reload_vimrc
@@ -202,13 +210,21 @@ augroup END
 " Git
 nnoremap <silent> <leader>gs :Gstatus<cr>
 augroup git_settings
+    autocmd!
     autocmd FileType gitcommit set tw=72
 augroup END
 
 " YAML
 augroup yaml_settings
+    autocmd!
     autocmd FileType yaml set shiftwidth=2
     autocmd FileType yaml set tabstop=2
+augroup END
+
+" Markdown
+augroup markdown_settings
+    autocmd!
+    autocmd FileType markdown let g:eskk#kakutei_when_unique_candidate=1
 augroup END
 
 "}}}
