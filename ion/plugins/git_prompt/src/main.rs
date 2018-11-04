@@ -61,7 +61,7 @@ fn get_maybe_prompt(path: &str) -> Option<PromptInfo> {
     Some(PromptInfo{
         revision: get_branch(&repo)
             .unwrap_or(get_sha(&repo)[..8].to_string()),
-        diff: diff_count(&repo)?,
+        diff: diff_count(&repo).unwrap_or(String::new()),
         status: status(&repo).unwrap_or(String::new()),
         state: state(&repo),
     })
