@@ -120,23 +120,10 @@ fn status(repo: &git2::Repository) -> MaybePrompt {
     let mut conflicts: usize = 0;
     for entry in statuses.iter().filter(|e| e.status() != git2::Status::CURRENT) {
         let s = entry.status();
-
-        if s.is_index_deleted() ||
-             s.is_index_modified() ||
-             s.is_index_new() ||
-             s.is_index_renamed() ||
-             s.is_index_typechange() {
-                staged += 1
-         }
-        if s.is_wt_deleted() ||
-             s.is_wt_modified() ||
-             s.is_wt_new() ||
-             s.is_wt_renamed() ||
-             s.is_wt_typechange() {
-                 changes += 1
-             }
-
-        if s.is_conflicted() {conflicts += 1}
+        // NOTE: a single entry might belong to multiple categories
+        if is_index_change(&s)    {staged += 1}
+        if is_worktree_change(&s) {changes += 1}
+        if s.is_conflicted()      {conflicts += 1}
     }
 
     if changes == 0 && staged == 0 && conflicts == 0 {
@@ -149,12 +136,26 @@ fn status(repo: &git2::Repository) -> MaybePrompt {
     }
 }
 
+fn is_index_change(s: &git2::Status) -> bool {
+    s.is_index_deleted() ||
+        s.is_index_modified() ||
+        s.is_index_new() ||
+        s.is_index_renamed() ||
+        s.is_index_typechange()
+}
+
+fn is_worktree_change(s: &git2::Status) -> bool {
+    s.is_wt_deleted() ||
+        s.is_wt_modified() ||
+        s.is_wt_new() ||
+        s.is_wt_renamed() ||
+        s.is_wt_typechange()
+}
+
 fn non_zero(prefix: &str, number: usize) -> String {
     if number == 0 {
         String::new()
-    } else if number == 1 {
-        prefix.to_string()
-    }else {
+    } else {
         format!("{}{}", prefix, number)
     }
 }
