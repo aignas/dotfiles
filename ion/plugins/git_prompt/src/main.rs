@@ -6,51 +6,90 @@ type MaybePrompt = Option<String>;
 type Prompt = String;
 
 fn main() {
-    if let Ok(dir) = env::var("PWD") {
-      print!("{} ", get_prompt(&dir).unwrap_or(String::new()))
+    let path = env::var("PWD")
+        .unwrap_or(String::new());
+    print!("{} ", get_prompt(&path))
+}
+
+/// Returns the prompt with the git repository information at the given path
+fn get_prompt(path: &str) -> Prompt {
+    if let Some(i) = get_maybe_prompt(path) {
+        format!("{} {}{}{} {}",
+                i.revision.white(),
+                i.behind.white(),
+                i.ahead.white(),
+                i.status,
+                i.state)
     } else {
-      print!(" ")
+        String::new()
     }
 }
 
-fn get_prompt(path: &str) -> MaybePrompt {
+#[cfg(test)]
+mod get_prompt_tests {
+    use super::get_prompt;
+    use std::env;
+
+    macro_rules! invalid_input_tests {
+        ($($name:ident: $value:expr,)*) => {
+        $(
+            #[test]
+            fn $name() {
+                let (input, expected) = $value;
+                assert_eq!(expected, get_prompt(input));
+            }
+        ) *
+        }
+    }
+
+    invalid_input_tests! {
+        empty_for_root: ("/", ""),
+        empty_for_usr_local_bin: ("/usr/local/bin", ""),
+        empty_for_non_existant_path: ("/tmp/i/do/not/exist", ""),
+    }
+
+    #[test]
+    fn non_empty_for_pwd() {
+        let path = env::var("PWD")
+            .unwrap_or(String::new());
+        assert_ne!(get_prompt(&path), "");
+    }
+}
+
+fn get_maybe_prompt(path: &str) -> Option<PromptInfo> {
     let repo = Repository::discover(path).ok()?;
 
-    let rev = get_branch(&repo)?.white();
-    let behind = behind_count(&repo).white();
-    let ahead = ahead_count(&repo).white();
-    let status = status(&repo).unwrap_or(String::new());
-    let state = state(&repo);
-
-    Some(format!("{} {}{}{} {}", rev, behind, ahead, status, state))
+    Some(PromptInfo{
+        revision: get_branch(&repo)?,
+        behind: behind_count(&repo),
+        ahead: ahead_count(&repo),
+        status: status(&repo).unwrap_or(String::new()),
+        state: state(&repo),
+    })
 }
+
+struct PromptInfo {
+    revision: String,
+    behind: String,
+    ahead: String,
+    status: String,
+    state: String,
+}
+
 fn get_branch(repo: &git2::Repository) -> MaybePrompt {
-    let head = match repo.head() {
-        Ok(head) => Some(head),
-        Err(ref e) if e.code() == git2::ErrorCode::UnbornBranch ||
-                      e.code() == git2::ErrorCode::NotFound => None,
-        Err(e) => {
-            println!("{}", e);
-            return None
-        }
-    };
-    head.as_ref()
+    repo.head().ok()
+        .as_ref()
         .and_then(|h| h.shorthand())
-        .map(|rev| if rev == "HEAD" {
-             get_sha(repo)
-        }else {
-            String::from(rev)
-        })
+        .map(|rev| if rev == "HEAD" { get_sha(repo)[..8].to_string() }
+             else { rev.to_string() })
 }
 
 fn get_sha(repo: &git2::Repository) -> Prompt {
-    let string = repo.head()
+    repo.head()
         .ok()
         .map(|h| h.target().map(|t| t.to_string()))
         .unwrap_or(None)
-        .unwrap_or(String::new());
-
-    String::from(&string[..8])
+        .unwrap_or(String::new())
 }
 
 fn ahead_count(repo: &git2::Repository) -> Prompt {
@@ -76,32 +115,45 @@ fn status(repo: &git2::Repository) -> MaybePrompt {
     opts.exclude_submodules(true);
 
     let statuses = repo.statuses(Some(&mut opts)).ok()?;
+    let mut changes: usize = 0;
     let mut staged: usize = 0;
-    let mut untracked: usize = 0;
-    let mut merge: usize = 0;
+    let mut conflicts: usize = 0;
     for entry in statuses.iter().filter(|e| e.status() != git2::Status::CURRENT) {
-        match entry.status() {
-            // TODO: finish the status
-            s if s.is_wt_new() => untracked += 1,
-            s if s.is_index_modified() => staged+=1,
-            s if s.is_conflicted() => merge+=1,
-            _ => (),
-        };
+        let s = entry.status();
+
+        if s.is_index_deleted() ||
+             s.is_index_modified() ||
+             s.is_index_new() ||
+             s.is_index_renamed() ||
+             s.is_index_typechange() {
+                staged += 1
+         }
+        if s.is_wt_deleted() ||
+             s.is_wt_modified() ||
+             s.is_wt_new() ||
+             s.is_wt_renamed() ||
+             s.is_wt_typechange() {
+                 changes += 1
+             }
+
+        if s.is_conflicted() {conflicts += 1}
     }
 
-    if staged == 0 && untracked == 0 && merge == 0 {
+    if changes == 0 && staged == 0 && conflicts == 0 {
          Some(format!("{}", "✔".green()))
     } else {
         Some(format!("{}{}{}",
-             non_zero("●", staged).green(),
-             non_zero("✖", merge).red(),
-             non_zero("✚", untracked).white()))
+             non_zero("•", staged).green(),
+             non_zero("✖", conflicts).red(),
+             non_zero("+", changes).yellow()))
     }
 }
 
 fn non_zero(prefix: &str, number: usize) -> String {
     if number == 0 {
         String::new()
+    } else if number == 1 {
+        prefix.to_string()
     }else {
         format!("{}{}", prefix, number)
     }

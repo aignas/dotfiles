@@ -15,7 +15,7 @@ fn trysource file
 end
 
 fn plugin_path name
-    echo "${ION_PLUGIN}/${name}/target/release/${name}"
+    echo ${ION_PLUGIN}/${name}/target/release/${name}
 end
 
 fn ensure_built name
@@ -30,13 +30,9 @@ fn ensure_built name
     end
 end
 
-fn run_plugin name
-    echo $($(plugin_path ${name}))
-end
-
 fn PROMPT
-    let git_info=$(run_plugin git_prompt)
-    echo "${c::blue}${PWD}${c::default} ${git_info}"
+    let git_info="$($(plugin_path git_prompt))"
+    echo "${c::blue}${PWD}${c::default} ${git_info} "
     echo -en "${c::magenta}❯${c::default} "
 end
 
@@ -64,8 +60,8 @@ alias b="bat --theme=zenburn"
 alias e="${EDITOR}"
 alias g="git"
 alias k="kubectl"
-alias se="sudo -E nvim"
-alias vc="e ~/.config/nvim/init.vim"
+alias se="sudo -E ${EDITOR}"
+alias vc="${EDITOR} ~/.config/nvim/init.vim"
 alias x="exa"
 alias xx="exa -l"
 # }}}
