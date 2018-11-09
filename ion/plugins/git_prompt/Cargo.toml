@@ -1,9 +1,0 @@
-[package]
-name = "git_prompt"
-version = "0.1.0"
-authors = ["Ignas Anikevicius <anikevicius@gmail.com>"]
-edition = "2018"
-
-[dependencies]
-git2 = "0.7"
-colored = "1.6"
