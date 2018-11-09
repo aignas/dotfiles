@@ -1,0 +1,7 @@
+[package]
+name = "git_prompt"
+version = "0.1.0"
+authors = ["Ignas Anikevicius <anikevicius@gmail.com>"]
+edition = "2018"
+
+[dependencies]
