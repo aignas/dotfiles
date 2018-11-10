@@ -1,3 +1,4 @@
+#[derive(Default, Clone)]
 pub struct LocalStatus {
     pub staged: usize,
     pub unstaged: usize,
@@ -15,7 +16,7 @@ impl LocalStatus {
         }
     }
 
-    pub fn is_empty(&self) -> bool {
+    pub fn is_ok(&self) -> bool {
         self.staged == 0 && self.unstaged == 0 && self.untracked == 0 && self.unmerged == 0
     }
 
@@ -50,7 +51,7 @@ impl LocalStatus {
     }
 }
 
-pub struct Config {
+pub struct Config<'a> {
     pub ok: char,
     pub staged: char,
     pub unstaged: char,
@@ -60,4 +61,53 @@ pub struct Config {
     pub behind: char,
 
     pub default_branch: String,
+    pub colors: &'a ColorScheme<'a>,
+}
+
+pub struct ColorScheme<'a> {
+    pub branch: &'a str,
+    pub branch_state: &'a str,
+
+    pub ok: &'a str,
+    pub staged: &'a str,
+    pub unstaged: &'a str,
+    pub merge: &'a str,
+    pub untracked: &'a str,
+    pub ahead: &'a str,
+    pub behind: &'a str,
+
+    pub rebase: &'a str,
+    pub revert: &'a str,
+    pub cherry_pick: &'a str,
+}
+
+#[derive(Copy, Clone)]
+pub enum BranchState {
+    OK,
+    Merge,
+    Rebase,
+    Revert,
+    CherryPick,
+}
+
+#[derive(Default)]
+pub struct BranchStatus {
+    pub state: BranchState,
+    pub ahead: usize,
+    pub behind: usize,
+}
+
+impl Default for BranchState {
+    fn default() -> BranchState {
+        BranchState::OK
+    }
+}
+
+impl BranchStatus {
+    pub fn clean(&self) -> bool {
+        match self.state {
+            BranchState::OK => self.ahead == 0 && self.behind == 0,
+            _ => false,
+        }
+    }
 }

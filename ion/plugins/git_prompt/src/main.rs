@@ -3,6 +3,8 @@ use clap::App;
 use clap::Arg;
 use git2::Repository;
 
+mod fmt;
+use self::fmt::*;
 mod types;
 use self::types::*;
 
@@ -18,6 +20,11 @@ fn main() {
         .version("v0.1")
         .author("aignas@github")
         .about("Prints your git prompt info fast!")
+        .arg(
+            Arg::with_name("test")
+                .long("test")
+                .help("print various combinations of the prompt"),
+        )
         .arg(
             Arg::with_name("default_branch")
                 .short("d")
@@ -45,10 +52,29 @@ fn main() {
         ahead: '↑',
         behind: '↓',
         default_branch: matches.value_of("default_branch").unwrap().to_owned(),
+        colors: &ColorScheme {
+            branch: "yellow",
+            branch_state: "red",
+            ok: "bright green",
+            staged: "bright green",
+            unstaged: "yellow",
+            merge: "bright red",
+            untracked: "bright white",
+            ahead: "green",
+            behind: "red",
+
+            rebase: "yellow",
+            revert: "red",
+            cherry_pick: "cyan",
+        },
     };
 
-    let path = matches.value_of("PATH").unwrap();
+    if matches.is_present("test") {
+        print_all(&cfg);
+        return;
+    }
 
+    let path = matches.value_of("PATH").unwrap();
     let output = get_output(path, &cfg);
     debug!("Result: {:?}", output);
     print!("{} ", output.unwrap_or(String::new()))
@@ -57,19 +83,10 @@ fn main() {
 fn get_output(path: &str, cfg: &Config) -> R<String> {
     let repo = Repository::discover(path).or(Err("no repo found"))?;
     let branch = branch_name(&repo)?;
-    let br_status = branch_status(&repo, &branch, cfg)?;
-    let br_padding = if br_status.len() == 0 { "" } else { " " };
-    let status = local_status(&repo, cfg)?;
-    let st_padding = if status.len() == 0 { "" } else { " " };
+    let br_status = branch_status(&repo, &branch)?;
+    let status = local_status(&repo)?;
 
-    Ok(format!(
-        "{branch}{br_padding}{br_status}{st_padding}{status}",
-        branch = branch,
-        br_padding = br_padding,
-        br_status = br_status,
-        st_padding = st_padding,
-        status = status
-    ))
+    Ok(fmt_output(&branch, &br_status, &status, cfg))
 }
 
 fn branch_name(repo: &Repository) -> R<String> {
@@ -77,27 +94,35 @@ fn branch_name(repo: &Repository) -> R<String> {
     Ok(head.shorthand().unwrap_or("unknown").to_owned())
 }
 
-fn branch_status(repo: &Repository, name: &str, cfg: &Config) -> R<String> {
-    let state = match repo.state() {
-        git2::RepositoryState::Merge => Some("merge"),
+fn branch_status(repo: &Repository, name: &str) -> R<BranchStatus> {
+    let s = match repo.state() {
+        git2::RepositoryState::Merge => BranchState::OK,
         git2::RepositoryState::Rebase
         | git2::RepositoryState::RebaseInteractive
-        | git2::RepositoryState::RebaseMerge => Some("rebase"),
-        git2::RepositoryState::RevertSequence => Some("revert"),
-        git2::RepositoryState::CherryPick | git2::RepositoryState::CherryPickSequence => {
-            Some("cherry-pick")
+        | git2::RepositoryState::RebaseMerge => BranchState::Rebase,
+        git2::RepositoryState::Revert | git2::RepositoryState::RevertSequence => {
+            BranchState::Revert
         }
-        _ => None,
+        git2::RepositoryState::CherryPick | git2::RepositoryState::CherryPickSequence => {
+            BranchState::CherryPick
+        }
+        _ => BranchState::OK,
     };
 
-    if let Some(s) = state {
-        return Ok(s.to_owned());
+    match s {
+        BranchState::OK => Ok(BranchStatus {
+            state: s,
+            ..Default::default()
+        }),
+        _ => {
+            let name = get_remote_ref(repo, name).or_else(|_| get_remote_ref(repo, "master"))?;
+            Ok(BranchStatus {
+                ahead: diff(repo, &name, "HEAD")?,
+                behind: diff(repo, "HEAD", &name)?,
+                ..Default::default()
+            })
+        }
     }
-
-    let name = get_remote_ref(repo, name).or_else(|_| get_remote_ref(repo, "master"))?;
-    let ahead = non_zero(cfg.ahead, diff(repo, &name, "HEAD")?);
-    let behind = non_zero(cfg.behind, diff(repo, "HEAD", &name)?);
-    Ok(format!("{}{}", ahead, behind))
 }
 
 fn get_remote_ref(repo: &Repository, name: &str) -> R<String> {
@@ -125,7 +150,7 @@ fn diff(repo: &Repository, from: &str, to: &str) -> R<usize> {
     Ok(c)
 }
 
-fn local_status(repo: &Repository, cfg: &Config) -> R<String> {
+fn local_status(repo: &Repository) -> R<LocalStatus> {
     let mut opts = git2::StatusOptions::new();
     opts.include_untracked(true)
         .recurse_untracked_dirs(false)
@@ -137,24 +162,5 @@ fn local_status(repo: &Repository, cfg: &Config) -> R<String> {
     for s in statuses.iter().map(|e| e.status()) {
         status.increment(s)
     }
-
-    if status.is_empty() {
-        Ok(cfg.ok.to_string())
-    } else {
-        Ok(format!(
-            "{}{}{}{}",
-            non_zero(cfg.staged, status.staged),
-            non_zero(cfg.unstaged, status.unstaged),
-            non_zero(cfg.unmerged, status.unmerged),
-            non_zero(cfg.untracked, status.untracked)
-        ))
-    }
-}
-
-fn non_zero(prefix: char, i: usize) -> String {
-    if i == 0 {
-        String::new()
-    } else {
-        format!("{}{}", prefix, i)
-    }
+    Ok(status)
 }
