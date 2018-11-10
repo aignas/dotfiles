@@ -8,16 +8,20 @@ type R<T> = Result<T, String>;
 fn main() {
     let matches = App::new("git_prompt")
         .version("v0.1")
-        .author("Ignas A. <anikevicius@gmail.com>")
+        .author("aignas@github")
         .about("Prints your git prompt info fast!")
-        .arg(Arg::with_name("diagnostic")
-             .short("d")
-             .long("debug")
-             .help("print all errors and the result"))
-        .arg(Arg::with_name("PATH")
-             .help("Optional path to use for getting git info")
-             .index(1)
-             .default_value("."))
+        .arg(
+            Arg::with_name("diagnostic")
+                .short("d")
+                .long("debug")
+                .help("print all errors and the result"),
+        )
+        .arg(
+            Arg::with_name("PATH")
+                .help("Optional path to use for getting git info")
+                .index(1)
+                .default_value("."),
+        )
         .get_matches();
 
     let path = matches.value_of("PATH").unwrap();
@@ -39,19 +43,13 @@ fn get_branch_name_d(path: &str, debug: bool) -> String {
                 println!("ERROR: {}", msg);
             }
             String::new()
-        },
+        }
     }
 }
 
 fn get_branch_name(path: &str) -> R<String> {
-    let repo = Repository::discover(path)
-        .or(Err("failed to find a repo for the given path"))?;
-    let head = repo
-        .head()
-        .or(Err("failed to get HEAD"))?;
+    let repo = Repository::discover(path).or(Err("failed to find a repo for the given path"))?;
+    let head = repo.head().or(Err("failed to get HEAD"))?;
 
-    Ok(head
-        .shorthand()
-        .unwrap_or("unknown")
-        .to_owned())
+    Ok(head.shorthand().unwrap_or("unknown").to_owned())
 }
