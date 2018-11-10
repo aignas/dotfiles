@@ -3,6 +3,9 @@ use clap::App;
 use clap::Arg;
 use git2::Repository;
 
+mod types;
+use self::types::*;
+
 #[macro_use]
 extern crate log;
 extern crate env_logger;
@@ -23,16 +26,30 @@ fn main() {
         )
         .get_matches();
 
+    // Setting of this would clutter the CLI interface too much
+    // TODO think of a way how to configure it nicely
+    let status_chars = StatusChars {
+        ok: '✔',
+        staged: '●',
+        unstaged: '○',
+        unmerged: '✗',
+        untracked: '+',
+    };
+
     let path = matches.value_of("PATH").unwrap();
 
-    let output = get_output(path);
+    let output = get_output(path, &status_chars);
     debug!("Result: {:?}", output);
     print!("{} ", output.unwrap_or(String::new()))
 }
 
-fn get_output(path: &str) -> R<String> {
+fn get_output(path: &str, status_chars: &StatusChars) -> R<String> {
     let repo = Repository::discover(path).or(Err("no repo found"))?;
-    Ok(format!("{} {}", branch_name(&repo)?, local_status(&repo)?))
+    Ok(format!(
+        "{} {}",
+        branch_name(&repo)?,
+        local_status(&repo, status_chars)?
+    ))
 }
 
 fn branch_name(repo: &Repository) -> R<String> {
@@ -40,59 +57,15 @@ fn branch_name(repo: &Repository) -> R<String> {
     Ok(head.shorthand().unwrap_or("unknown").to_owned())
 }
 
-struct LocalStatus {
-    staged: usize,
-    unstaged: usize,
-    untracked: usize,
-    unmerged: usize,
+struct StatusChars {
+    ok: char,
+    staged: char,
+    unstaged: char,
+    unmerged: char,
+    untracked: char,
 }
 
-impl LocalStatus {
-    fn new() -> LocalStatus {
-        LocalStatus {
-            staged: 0,
-            unstaged: 0,
-            untracked: 0,
-            unmerged: 0,
-        }
-    }
-
-    fn is_empty(&self) -> bool {
-        self.staged == 0 && self.unstaged == 0 && self.untracked == 0 && self.unmerged == 0
-    }
-
-    fn increment(&mut self, s: git2::Status) {
-        if s.is_index_new()
-            || s.is_index_modified()
-            || s.is_index_deleted()
-            || s.is_index_renamed()
-            || s.is_index_typechange()
-        {
-            self.staged += 1
-        }
-
-        if s.is_wt_new() {
-            self.untracked += 1
-        }
-
-        if s.is_wt_modified()
-            || s.is_wt_deleted()
-            || s.is_wt_typechange()
-            || s.is_wt_renamed()
-            || false
-        {
-            self.unstaged += 1
-        }
-
-        // if s.is_ignored(){ staged += 1 }
-
-        if s.is_conflicted() {
-            self.unmerged += 1
-        }
-    }
-}
-
-fn local_status(repo: &Repository) -> R<String> {
+fn local_status(repo: &Repository, chars: &StatusChars) -> R<String> {
     let mut opts = git2::StatusOptions::new();
     opts.include_untracked(true)
         .recurse_untracked_dirs(false)
@@ -106,19 +79,19 @@ fn local_status(repo: &Repository) -> R<String> {
     }
 
     if status.is_empty() {
-        Ok(String::from("✔"))
+        Ok(chars.ok.to_string())
     } else {
         Ok(format!(
             "{}{}{}{}",
-            non_zero("●", status.staged),
-            non_zero("○", status.unstaged),
-            non_zero("✗", status.unmerged),
-            non_zero("+", status.untracked)
+            non_zero(chars.staged, status.staged),
+            non_zero(chars.unstaged, status.unstaged),
+            non_zero(chars.unmerged, status.unmerged),
+            non_zero(chars.untracked, status.untracked)
         ))
     }
 }
 
-fn non_zero(prefix: &str, i: usize) -> String {
+fn non_zero(prefix: char, i: usize) -> String {
     if i == 0 {
         String::new()
     } else {
