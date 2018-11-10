@@ -49,3 +49,15 @@ impl LocalStatus {
         }
     }
 }
+
+pub struct Config {
+    pub ok: char,
+    pub staged: char,
+    pub unstaged: char,
+    pub unmerged: char,
+    pub untracked: char,
+    pub ahead: char,
+    pub behind: char,
+
+    pub default_branch: String,
+}
