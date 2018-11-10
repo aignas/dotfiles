@@ -1,21 +1,20 @@
-use git2::Repository;
 extern crate clap;
 use clap::App;
 use clap::Arg;
+use git2::Repository;
+
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 
 type R<T> = Result<T, String>;
 
 fn main() {
+    env_logger::init();
     let matches = App::new("git_prompt")
         .version("v0.1")
         .author("aignas@github")
         .about("Prints your git prompt info fast!")
-        .arg(
-            Arg::with_name("diagnostic")
-                .short("d")
-                .long("debug")
-                .help("print all errors and the result"),
-        )
         .arg(
             Arg::with_name("PATH")
                 .help("Optional path to use for getting git info")
@@ -25,31 +24,18 @@ fn main() {
         .get_matches();
 
     let path = matches.value_of("PATH").unwrap();
-    let debug = matches.is_present("diagnostic");
 
-    let result = get_branch_name_d(path, debug);
-    if debug {
-        println!("Result: {:?}", result)
-    } else {
-        print!("{} ", result)
-    }
+    let output = get_output(path);
+    debug!("Result: {:?}", output);
+    print!("{} ", output.unwrap_or(String::new()))
 }
 
-fn get_branch_name_d(path: &str, debug: bool) -> String {
-    match get_branch_name(path) {
-        Ok(b) => b,
-        Err(msg) => {
-            if debug {
-                println!("ERROR: {}", msg);
-            }
-            String::new()
-        }
-    }
+fn get_output(path: &str) -> R<String> {
+    let repo = Repository::discover(path).or(Err("no repo found"))?;
+    Ok(format!("{}", get_branch_name(&repo)?))
 }
 
-fn get_branch_name(path: &str) -> R<String> {
-    let repo = Repository::discover(path).or(Err("failed to find a repo for the given path"))?;
+fn get_branch_name(repo: &Repository) -> R<String> {
     let head = repo.head().or(Err("failed to get HEAD"))?;
-
     Ok(head.shorthand().unwrap_or("unknown").to_owned())
 }
