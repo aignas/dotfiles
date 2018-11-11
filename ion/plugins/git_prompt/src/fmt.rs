@@ -69,28 +69,50 @@ pub fn print_all(cfg: &Config) {
         BranchState::Revert,
         BranchState::CherryPick,
     ];
-    let ahead_values: Vec<usize> = (0..40).collect();
-    let behind_values: Vec<usize> = (0..40).collect();
-    let staged: Vec<usize> = (0..40).collect();
-    let unstaged: Vec<usize> = (0..40).collect();
-    let unmerged: Vec<usize> = (0..40).collect();
-    let untracked: Vec<usize> = (0..40).collect();
+    let values: Vec<usize> = (1..11).collect();
 
     let mut rng = rand::thread_rng();
 
     for _ in 0..15 {
         let branch = *rng.choose(&branches).unwrap();
-        let br_status = BranchStatus {
-            state: *rng.choose(&states).unwrap(),
-            ahead: *rng.choose(&ahead_values).unwrap(),
-            behind: *rng.choose(&behind_values).unwrap(),
-        };
-        let status = LocalStatus {
-            staged: *rng.choose(&staged).unwrap(),
-            unstaged: *rng.choose(&unstaged).unwrap(),
-            unmerged: *rng.choose(&unmerged).unwrap(),
-            untracked: *rng.choose(&untracked).unwrap(),
-        };
+        let br_status = gen_br_status(&mut rng, &states, &values);
+        let status = gen_status(&mut rng, &values);
         println!("{}", fmt_output(branch, &br_status, &status, cfg))
+    }
+}
+
+fn gen_status<T: rand::Rng>(rng: &mut T, collection: &Vec<usize>) -> LocalStatus {
+    LocalStatus {
+        staged: choose(rng, collection, 0.25),
+        unstaged: choose(rng, collection, 0.25),
+        unmerged: choose(rng, collection, 0.25),
+        untracked: choose(rng, collection, 0.25),
+    }
+}
+
+fn gen_br_status<T: rand::Rng>(
+    rng: &mut T,
+    states: &Vec<BranchState>,
+    collection: &Vec<usize>,
+) -> BranchStatus {
+    if rng.gen_bool(0.5) {
+        BranchStatus {
+            state: *rng.choose(&states).unwrap(),
+            ..Default::default()
+        }
+    } else {
+        BranchStatus {
+            ahead: choose(rng, collection, 0.5),
+            behind: choose(rng, collection, 0.5),
+            ..Default::default()
+        }
+    }
+}
+
+fn choose<T: rand::Rng>(rng: &mut T, collection: &Vec<usize>, prob: f64) -> usize {
+    if rng.gen_bool(prob) {
+        *rng.choose(&collection).unwrap()
+    } else {
+        0
     }
 }

@@ -53,8 +53,7 @@ fn main() {
         behind: '↓',
         default_branch: matches.value_of("default_branch").unwrap().to_owned(),
         colors: &ColorScheme {
-            branch: "yellow",
-            branch_state: "red",
+            branch: "white",
             ok: "bright green",
             staged: "bright green",
             unstaged: "yellow",
@@ -110,11 +109,7 @@ fn branch_status(repo: &Repository, name: &str) -> R<BranchStatus> {
     };
 
     match s {
-        BranchState::OK => Ok(BranchStatus {
-            state: s,
-            ..Default::default()
-        }),
-        _ => {
+        BranchState::OK => {
             let name = get_remote_ref(repo, name).or_else(|_| get_remote_ref(repo, "master"))?;
             Ok(BranchStatus {
                 ahead: diff(repo, &name, "HEAD")?,
@@ -122,6 +117,10 @@ fn branch_status(repo: &Repository, name: &str) -> R<BranchStatus> {
                 ..Default::default()
             })
         }
+        s => Ok(BranchStatus {
+            state: s,
+            ..Default::default()
+        }),
     }
 }
 

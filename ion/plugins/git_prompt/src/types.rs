@@ -66,8 +66,6 @@ pub struct Config<'a> {
 
 pub struct ColorScheme<'a> {
     pub branch: &'a str,
-    pub branch_state: &'a str,
-
     pub ok: &'a str,
     pub staged: &'a str,
     pub unstaged: &'a str,
@@ -75,7 +73,6 @@ pub struct ColorScheme<'a> {
     pub untracked: &'a str,
     pub ahead: &'a str,
     pub behind: &'a str,
-
     pub rebase: &'a str,
     pub revert: &'a str,
     pub cherry_pick: &'a str,
