@@ -1,4 +1,4 @@
-.PHONY: bin
+.PHONY: bin clean
 
 bin: git_prompt
 	mkdir -p bin
@@ -8,3 +8,6 @@ bin: git_prompt
 		cargo -Z unstable-options build --release --out-dir ../bin; \
 		popd; \
 	done
+
+clean:
+	rm -rf bin
