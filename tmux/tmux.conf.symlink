@@ -1,5 +1,5 @@
 # TMUX configuration by Ignas Anikevicius (aignas)
-# Heavily inspired and copied from junegun
+# Heavily inspired and copied from junnegunn
 #
 # Hierarchy:
 #  Server
@@ -13,9 +13,7 @@
 
 set-option -sg escape-time 10
 
-# -------------------------------------------------------------------
-# Session options
-# -------------------------------------------------------------------
+# {{{ Session options
 # Index starts from 1
 set-option -g base-index 1
 
@@ -40,15 +38,12 @@ set-option -g status-keys vi
 # Mouse
 set-option -g mouse off
 
-# -------------------------------------------------------------------
 # Window options
-# -------------------------------------------------------------------
 # Copy-mode
 set-window-option -g mode-keys vi
+# }}}
+# {{{ Key bindings
 
-# -------------------------------------------------------------------
-# Key bindings
-# -------------------------------------------------------------------
 # prefix c
 bind-key c new-window -c "#{pane_current_path}"
 
@@ -90,27 +85,13 @@ bind-key R source-file ~/.tmux.conf \; display-message "Reloaded!"
 # Set focus events to on
 set -g focus-events on
 
-# copy-mode
-# bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null"
-# bind-key y send-keys C-l C-a \; run-shell 'sleep 1.25' \;\
-#   copy-mode \; send-keys -X begin-selection \;\
-#   send-keys -X -N 103 'cursor-down' \;\
-#   send-keys -X 'end-of-line' \;\
-#   send-keys -X 'previous-word' \;\
-#   send-keys -X 'next-word-end' \;\
-#   send-keys -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null" \;\
-#   send-keys C-e \;\
-#   display-message "Line copied"
-
 bind-key p run "xclip -o -sel clip | tmux load-buffer - ; tmux paste-buffer"
 
 # Capture pane and open in Vim
 bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
              new-window "nvim /tmp/tmux-capture.txt"
-
-# -------------------------------------------------------------------
-# Decoration (256-color)
-# -------------------------------------------------------------------
+# }}}
+# {{{ Decoration (256-color)
 
 # status
 set -g status-justify "left"
@@ -144,24 +125,14 @@ set -g status-left-length "100"
 set -g status-right-attr "none"
 set -g status-right-length "100"
 set -g status-left "#[fg=#3e3e40,bg=white] #S "
-set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #{cpu_icon}#{cpu_percentage} │ #{battery_icon}#{battery_percentage} #{battery_remain} │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
+set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
 
-# -------------------------------------------------------------------
-# fzf integration
-# -------------------------------------------------------------------
-# Tmux completion
-bind-key -n 'M-t' run "tmux split-window -p 40 'tmux send-keys -t #{pane_id} \"$(tmuxwords.rb --all --scroll 1000 --min 5 | fzf --multi | paste -sd\\  -)\"'"
-
-# fzf-locate (all)
-bind-key -n 'M-`' run "tmux split-window -p 40 'tmux send-keys -t #{pane_id} \"$(locate / | fzf -m | paste -sd\\  -)\"'"
-
-# select-pane (@george-b)
-bind-key 0 run "tmux split-window -l 12 'bash -ci ftpane'"
+# }}}
 
 # Plugins
 set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-battery'
-set -g @plugin 'tmux-plugins/tmux-cpu'
 set -g @plugin 'tmux-plugins/tmux-yank'
 
 run '~/.tmux/plugins/tpm/tpm'
+
+# vim: fdm=marker

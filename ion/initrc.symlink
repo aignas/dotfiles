@@ -9,25 +9,16 @@
 # git prompt, which is inspired by:
 # https://github.com/olivierverdier/zsh-git-prompt
 
+# {{{ config
+set -o vi
+# }}}
 # {{{ functions
 fn trysource file
     if test -e $file; source $file; end
 end
 
 fn plugin_path name
-    echo ${ION_PLUGIN}/${name}/target/release/${name}
-end
-
-fn ensure_built name
-    let exe=$(plugin_path ${name})
-
-    if not exists $exe
-        echo "PLUGIN NOT FOUND: $exe"
-        echo "Building..."
-        pushd "${ION_PLUGIN}/${name}"
-        cargo build --release
-        popd
-    end
+    echo ${ION_PLUGIN}/${name}
 end
 
 fn PROMPT
@@ -49,16 +40,16 @@ end
 # }}}
 # {{{ env
 export DOTFILES="${HOME}/.dotfiles"
-export ION_PLUGIN="${DOTFILES}/ion/plugins"
+export ION_PLUGIN="${DOTFILES}/sh-plugins/bin/"
 export EDITOR="nvim"
 export GOPATH="${HOME}/gocode"
-export PATH="${GOPATH}/bin:${PATH}"
+export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
 export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || rg --files || fd ."
 # }}}
 # {{{ aliases
 alias b="bat --theme=zenburn"
-alias e="${EDITOR}"
 alias g="git"
+alias gf="git fetch --all"
 alias k="kubectl"
 alias se="sudo -E ${EDITOR}"
 alias vc="${EDITOR} ~/.config/nvim/init.vim"
@@ -67,6 +58,5 @@ alias xx="exa -l"
 # }}}
 
 trysource "${HOME}/.localrc.ion"
-ensure_built git_prompt
 
 # vim: filetype=ion foldmethod=marker

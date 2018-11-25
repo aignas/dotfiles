@@ -35,20 +35,7 @@ trysource() {[ -f ${1} ] && source ${1}}
 
 plugin_path() {
   local name=$1
-  echo "${ION_PLUGIN}/${name}/target/release/${name}"
-}
-
-ensure_built() {
-  local name=$1
-  local exe=$(plugin_path ${name})
-
-  if [[ ! -f $exe ]]; then
-    echo "PLUGIN NOT FOUND: $exe"
-    echo "Building..."
-    pushd "${ION_PLUGIN}/${name}"
-    cargo build --release
-    popd
-  fi
+  echo "${ION_PLUGIN}/${name}"
 }
 
 run_plugin() {
@@ -66,6 +53,5 @@ precmd() {
 
 trysource ${HOME}/.fzf.zsh
 trysource ${HOME}/.localrc
-ensure_built git_prompt
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
