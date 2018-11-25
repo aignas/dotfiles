@@ -33,8 +33,10 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'janko-m/vim-test'
 Plug 'w0rp/ale'
 Plug 'tyru/eskk.vim'
+Plug 'kassio/neoterm'
 
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
@@ -43,6 +45,9 @@ Plug 'vimwiki/vimwiki'
 Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
 call plug#end()
+
+"Generate help tags
+silent! helptags ALL
 
 " Generic vim {{{
 " Required:
@@ -93,7 +98,7 @@ set breakindent showbreak=»»
 set path+=** wildmode=full
 
 nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
-map <silent> <leader>cd :cd %:p:h<cr>
+nnoremap <silent> <leader>cd :cd %:p:h<cr>
 
 " Files and backups
 "
@@ -123,8 +128,8 @@ map <leader>sl :setlocal spell spelllang=lt<CR>
 set cpoptions+=J
 set joinspaces
 map * <Plug>(asterisk-*)
-nmap <leader>a :grep
-nmap <leader>f :find
+nnoremap <leader>a :grep <end>
+nnoremap <leader>f :find <end>
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -135,12 +140,31 @@ let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
     \   'go': ['gometalinter'],
+    \   'rust': ['cargo'],
     \   'javascript': ['eslint'],
     \}
 let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \   'rust': ['rustfmt'],
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
+
+" vim-test
+let test#strategy = 'neoterm'
+nmap <silent> <leader>tn :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ts :TestSuite<CR>
+nmap <silent> <leader>tt :TestLast<CR>
+nmap <silent> <leader>tg :TestVisit<CR>
+
+" terminal
+augroup term_settings
+    autocmd!
+    tnoremap <Esc> <C-\><C-n>
+    autocmd TermOpen * setlocal statusline=%{b:term_title}
+    let g:neoterm_default_mod=':vertical :belowright'
+    let g:neoterm_size='60'
+augroup END
 
 
 " file type handling
@@ -149,13 +173,16 @@ let g:vimwiki_folding='expr'
 let g:vimwiki_list = [{'path': '~/vimwiki',
             \ 'syntax': 'markdown',
             \ 'ext': '.md',
-            \ 'custom_wiki2html': '$GOPATH/bin/vimwiki-godown',
             \ }]
 
 let g:markdown_composer_browser="qutebrowser"
+let g:markdown_composer_autostart=1
+let g:markdown_composer_open_browser=0
+let g:markdown_composer_syntax_theme="gruvbox-dark"
 autocmd FileType markdown set syntax=markdown
 
 " vim
+nnoremap <leader>vc :e $MYVIMRC<cr>
 augroup reload_vimrc
     autocmd!
     autocmd reload_vimrc BufWritePost $MYVIMRC nested source $MYVIMRC
@@ -168,6 +195,13 @@ augroup js_settings
     autocmd FileType javascript set shiftwidth=2
     autocmd FileType javascript set tabstop=2
 augroup END
+
+augroup html_settings
+    autocmd!
+    autocmd FileType html,djangohtml set shiftwidth=2
+    autocmd FileType html,djangohtml set tabstop=2
+augroup END
+
 
 " go
 augroup go_settings
@@ -185,7 +219,12 @@ augroup END
 " rust
 augroup rust_settings
     autocmd!
-    autocmd FileType rust let g:rustfmt_autosave = 1
+    autocmd FileType rust let g:rustfmt_autosave = 0 " ale is used
+    autocmd FileType rust nnoremap <leader>cr :T cargo run -- <end>
+    autocmd FileType rust nnoremap <leader>cb :T cargo build<cr>
+    autocmd FileType rust nnoremap <leader>ct :T cargo test<cr>
+    autocmd FileType rust nnoremap <leader>cp :T cargo bench<cr>
+    autocmd FileType rust nnoremap <leader>cu :T cargo update<cr>
 augroup END
 
 " Python
@@ -224,7 +263,6 @@ augroup END
 " Markdown
 augroup markdown_settings
     autocmd!
-    autocmd FileType markdown let g:eskk#kakutei_when_unique_candidate=1
 augroup END
 
 "}}}
