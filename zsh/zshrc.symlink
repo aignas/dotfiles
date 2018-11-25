@@ -3,6 +3,11 @@
 
 # shortcut to this dotfiles path is $ZSH
 export DOTFILES=$HOME/.dotfiles
+export ION_PLUGIN=${DOTFILES}/sh-plugins/bin
+export EDITOR="nvim"
+export GOPATH="${HOME}/gocode"
+export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
+export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || rg --files || fd ."
 
 # {{{ config
 HISTFILE=~/.zsh_history
@@ -17,6 +22,16 @@ setopt EXTENDED_HISTORY         # add timestamps to history
 # don't record dupes in history
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
+# }}}
+# {{{ aliases
+alias b="bat --theme=zenburn"
+alias g="git"
+alias gf="git fetch --all"
+alias k="kubectl"
+alias se="sudo -E ${EDITOR}"
+alias vc="${EDITOR} ~/.config/nvim/init.vim"
+alias x="exa"
+alias xx="exa -l"
 # }}}
 
 # initialize autocomplete here, otherwise functions won't be loaded
