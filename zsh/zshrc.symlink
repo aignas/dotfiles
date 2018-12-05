@@ -3,7 +3,6 @@
 
 # shortcut to this dotfiles path is $ZSH
 export DOTFILES=$HOME/.dotfiles
-export DOTFILES_OS=$(get_os)
 export ION_PLUGIN=${DOTFILES}/sh-plugins/bin
 export EDITOR="nvim"
 export GOPATH="${HOME}/gocode"
@@ -49,11 +48,6 @@ zstyle \
 
 trysource() {[ -f ${1} ] && source ${1}}
 
-plugin_path() {
-  local name=$1
-  echo "${ION_PLUGIN}/${name}"
-}
-
 get_os() {
   case $(uname -s) in
     "Darwin")
@@ -66,6 +60,12 @@ get_os() {
       echo "Linux"
       ;;
   esac
+}
+export DOTFILES_OS=$(get_os)
+
+plugin_path() {
+  local name=$1
+  echo "${ION_PLUGIN}/${name}"
 }
 
 run_plugin() {
