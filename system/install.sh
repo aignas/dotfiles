@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "The detected OS is ${DOTFILES_OS}"
 if [[ ${DOTFILES_OS} == "Mac" ]]; then
-    bottles="python3 httpie fd exa ripgrep htop ranger bat zola"
+    bottles="python3 httpie fd exa ripgrep htop ranger bat zola zsh"
     casks="alacritty"
     brew install "${bottles}"
     brew upgrade "${bottles}"
@@ -18,6 +18,7 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
         alacritty \
         htop \
         dep \
+        zsh \
         zola \
         skk-jisyo
 fi

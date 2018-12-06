@@ -1,0 +1,13 @@
+#!/bin/sh
+
+case $(uname -s) in
+  "Darwin")
+    echo "Mac"
+    ;;
+  "Arch")
+    echo "ArchLinux"
+    ;;
+  *)
+    echo "Linux"
+    ;;
+esac
