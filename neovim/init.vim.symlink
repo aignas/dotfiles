@@ -62,7 +62,7 @@ let g:maplocalleader='-'    " Change the def leader
 " Theming
 set guioptions=ag           " remove toolbar, menubar and graphical tabs
 colorscheme seoul256
-let g:seoul256_background = 235
+"let g:seoul256_background = 235
 set background=dark
 set laststatus=2 showtabline=2 noshowmode
 let g:lightline = {
