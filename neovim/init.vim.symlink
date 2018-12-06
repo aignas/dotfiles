@@ -195,6 +195,12 @@ augroup html_settings
     autocmd FileType html,djangohtml set tabstop=2
 augroup END
 
+augroup sh_settings
+    autocmd!
+    autocmd FileType sh,bash set shiftwidth=2
+    autocmd FileType sh,bash set tabstop=2
+augroup END
+
 
 " go
 augroup go_settings
