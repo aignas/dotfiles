@@ -1,13 +1,13 @@
 #!/bin/sh
 
-case $(uname -s) in
-  "Darwin")
-    echo "Mac"
-    ;;
-  "Arch")
-    echo "ArchLinux"
-    ;;
-  *)
-    echo "Linux"
-    ;;
-esac
+if [[ $(uname -s) == "Darwin" ]]; then
+  echo "Mac"
+  exit 0
+fi
+
+if [[ -f /etc/arch-release ]]; then
+  echo "ArchLinux"
+  exit 0
+fi
+
+echo "Linux"

@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 #
 # dot
 #
@@ -11,39 +11,45 @@ parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
 
 displayUsageAndExit() {
-	echo "dot -- dotfiles management"
-	echo ""
-	echo "Usage: dot [options]"
-	echo ""
-	echo "Options:"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
-	exit
+  echo "dot -- dotfiles management"
+  echo ""
+  echo "Usage: dot [options]"
+  echo ""
+  echo "Options:"
+  echo "  -e, --edit    Open dotfiles directory for editing"
+  echo "  -h, --help    Show this help message and exit"
+  exit
 }
 
 while test $# -gt 0; do
-	case "$1" in
-		"-h"|"--help")
-			displayUsageAndExit
-			;;
-		"-e"|"--edit")
-			exec "$EDITOR" "$dotfilesDirectory"
-			exit
-			;;
-		*)
-			echo "Invalid option: $1"
-			displayUsageAndExit
-			;;
-	esac
-	shift
+  case "$1" in
+    "-h"|"--help")
+      displayUsageAndExit
+      ;;
+    "-e"|"--edit")
+      exec "$EDITOR" "$dotfilesDirectory"
+      exit
+      ;;
+    *)
+      echo "Invalid option: $1"
+      displayUsageAndExit
+      ;;
+  esac
+  shift
 done
 
-export DOTFILES=$HOME/.dotfiles
-
-# Upgrade homebrew
-echo "› brew update"
-brew update
+case get_os in
+  "Mac")
+    echo "› brew update"
+    brew update
+    ;;
+  "ArchLinux")
+    echo "› pacman update"
+    sudo pacman -Syu
+    ;;
+esac
 
 # Install software
+export DOTFILES=$HOME/.dotfiles
 echo "› $DOTFILES/script/install"
 "$DOTFILES/script/install"
