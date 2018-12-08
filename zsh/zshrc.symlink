@@ -49,22 +49,16 @@ zstyle \
   'git'
 
 trysource() {[ -f ${1} ] && source ${1}}
-
-plugin_path() {
-  local name=$1
-  echo "${SH_PLUGIN}/${name}"
-}
-
-run_plugin() {
-  local name=$1
-  echo $($(plugin_path ${name}))
-}
+plug() {echo $(${SH_PLUGIN}/$1)}
+print_log() {echo $1 | head -n -1}
+result() {echo $1 | tail -1}
 
 # PROMPT in ion
 precmd() {
-  local git_info=$(run_plugin git_prompt)
+  local git_info=$(plug git_prompt)
+  print_log "$git_info"
   # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-  export PS1="%F{blue}%~%f ${git_info}
+  export PS1="%F{blue}%~%f $(result ${git_info})
 %F{magenta}❯%f "
 }
 
