@@ -1,4 +1,15 @@
-# holman does dotfiles
+# Dotfiles
+
+[![Build Status](https://travis-ci.org/aignas/dotfiles.svg?branch=master)](https://travis-ci.org/aignas/dotfiles)
+
+This is initially based on wonderful [dotfiles
+framework](https://github.com/holman/dotfiles) by Zach Holman.  However, in tim this has been simplified and adjusted to suit my need better.
+
+Highlights:
+- `XDG_DIR` support
+- `make lint` to lint the shell scripts
+
+The original instructions (which are still mostly applicable) are below.
 
 ## dotfiles
 
