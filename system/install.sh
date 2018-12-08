@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 readonly common="httpie fd exa ripgrep bat htop neovim ranger zola zsh"
 
@@ -14,6 +14,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
     sudo pacman -Sy --needed \
         python $common \
+        shellcheck \
         alacritty \
         dep \
         ttf-hack \
