@@ -13,7 +13,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
     brew cask upgrade "${casks}"
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
     sudo pacman -Sy --needed \
-        python $common
+        python $common \
         alacritty \
         dep \
         ttf-hack \
