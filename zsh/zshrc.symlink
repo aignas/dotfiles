@@ -28,6 +28,7 @@ setopt HIST_REDUCE_BLANKS
 # {{{ aliases
 alias b="bat --theme=zenburn"
 alias g="git"
+alias h="hub"
 alias gf="git fetch --all"
 alias k="kubectl"
 alias se="sudo -E ${EDITOR}"

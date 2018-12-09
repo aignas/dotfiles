@@ -38,17 +38,6 @@ while test $# -gt 0; do
   shift
 done
 
-case get_os in
-  "Mac")
-    echo "› brew update"
-    brew update
-    ;;
-  "ArchLinux")
-    echo "› pacman update"
-    sudo pacman -Syu
-    ;;
-esac
-
 # Install software
 export DOTFILES=$HOME/.dotfiles
 echo "› $DOTFILES/script/install"
