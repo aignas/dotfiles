@@ -110,7 +110,7 @@ execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
 set foldenable foldlevel=1
 set expandtab shiftwidth=4 tabstop=4
 set linebreak
-set wrap
+set nowrap
 set pastetoggle=<F2>
 set spell               " vim-unimpaired: use [os and ]os
 set cpoptions+=J        " Double spacing between sentences
