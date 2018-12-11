@@ -8,7 +8,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   brew update
   echo "› Installing packages"
   bottles=("${common[@]}" python3)
-  casks=(alacritty font-hack)
+  casks=(alacritty font-hack signal)
   brew install "${bottles[@]}"
   brew upgrade "${bottles[@]}"
   brew tap homebrew/cask-fonts

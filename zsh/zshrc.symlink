@@ -9,7 +9,7 @@ export GOPATH="${HOME}/gocode"
 export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
 
 export EDITOR="nvim"
-export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || rg --files || fd ."
+export SKIM_DEFAULT_COMMAND="fd ."
 
 # {{{ config
 HISTFILE=~/.zsh_history
