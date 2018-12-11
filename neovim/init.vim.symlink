@@ -117,14 +117,13 @@ set cpoptions+=J        " Double spacing between sentences
 set joinspaces
 map * <Plug>(asterisk-*)
 nnoremap <leader>a :grep <end>
-nnoremap <leader>f :find <end>
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
 "skim
-nmap <silent> <leader>sf :Files<CR>
+nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>sg :GFiles<CR>
 nmap <silent> <leader>sb :Buffers<CR>
 
