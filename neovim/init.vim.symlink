@@ -36,7 +36,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'janko-m/vim-test'
 Plug 'w0rp/ale'
 Plug 'tyru/eskk.vim'
-Plug 'kassio/neoterm'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
 
@@ -44,7 +43,17 @@ Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
 Plug 'vmchale/ion-vim'
 Plug 'vimwiki/vimwiki'
-Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
+
+function! BuildComposer(info)
+    if a:info.status != 'unchanged' || a:info.force
+        if has('nvim')
+            !cargo build --release
+        else
+            !cargo build --release --no-default-features --features json-rpc
+        endif
+    endif
+endfunction
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
 call plug#end()
 
@@ -142,7 +151,6 @@ let g:ale_fixers = {
     \}
 
 " vim-test
-let test#strategy = 'neoterm'
 nmap <silent> <leader>tn :TestNearest<CR>
 nmap <silent> <leader>tf :TestFile<CR>
 nmap <silent> <leader>ts :TestSuite<CR>
@@ -150,13 +158,15 @@ nmap <silent> <leader>tt :TestLast<CR>
 nmap <silent> <leader>tg :TestVisit<CR>
 
 " terminal
-augroup term_settings
-    autocmd!
-    tnoremap <Esc> <C-\><C-n>
-    autocmd TermOpen * setlocal statusline=%{b:term_title}
-    let g:neoterm_default_mod=':vertical :belowright'
-    let g:neoterm_size='60'
-augroup END
+if has('nvim')
+    augroup term_settings
+        autocmd!
+        tnoremap <Esc> <C-\><C-n>
+        autocmd TermOpen * setlocal statusline=%{b:term_title}
+        let g:neoterm_default_mod=':vertical :belowright'
+        let g:neoterm_size='60'
+    augroup END
+endif
 
 
 " file type handling
@@ -262,12 +272,13 @@ augroup END
 augroup markdown_settings
     autocmd!
     "let g:eskk#dictionary = {'path': "~/.local/share/nvim/skk-jisyo"}
+    "let g:eskk#large_dictionary = {'path': "/usr/share/skk/SKK-JISYO.L"}
     " " Use skkserv-google
     " " (https://github.com/uyorum/go-skkserv-google)
-    " let g:eskk#server = {
-    " \   'host': '127.0.0.1',
-    " \   'port': 1178,
-    " \}
+    "let g:eskk#server = {
+    "\   'host': '127.0.0.1',
+    "\   'port': 1178,
+    "\}
 augroup END
 
 "}}}
