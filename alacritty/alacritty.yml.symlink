@@ -204,15 +204,15 @@ background_opacity: 1.0
 # Mouse bindings
 #
 # Available fields:
-# - mouse
-# - action
-# - mods (optional)
+#   - mouse
+#   - action
+#   - mods (optional)
 #
 # Values for `mouse`:
-# - Middle
-# - Left
-# - Right
-# - Numeric identifier such as `5`
+#   - Middle
+#   - Left
+#   - Right
+#   - Numeric identifier such as `5`
 #
 # All available `mods` and `action` values are documented in the key binding
 # section.
@@ -236,7 +236,7 @@ mouse:
     #
     # This program is executed when clicking on a text which is recognized as a URL.
     # The URL is always added to the command as the last parameter.
-    launcher: open
+    launcher: dot-open
 
     # URL modifiers
     #
@@ -251,6 +251,8 @@ selection:
   # the selection clipboard. Otherwise, it will only be copied to the selection
   # clipboard.
   save_to_clipboard: false
+
+dynamic_title: true
 
 cursor:
   # Cursor style
@@ -273,7 +275,7 @@ live_config_reload: true
 # You can set `shell.program` to the path of your favorite shell, e.g. `/bin/fish`.
 # Entries in `shell.args` are passed unmodified as arguments to the shell.
 shell:
-  program: /usr/local/bin/zsh
+  program: zsh
   args:
     - --login
 
@@ -362,15 +364,15 @@ key_bindings:
   - { key: H,        mods: Command, action: Hide                         }
   - { key: Q,        mods: Command, action: Quit                         }
   - { key: W,        mods: Command, action: Quit                         }
-  - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
-  - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
-  - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
-  - { key: End,                     chars: "\x1b[F",   mode: ~AppCursor  }
   - { key: Key0,     mods: Command, action: ResetFontSize                }
   - { key: Equals,   mods: Command, action: IncreaseFontSize             }
   - { key: Minus,    mods: Command, action: DecreaseFontSize             }
   - { key: K,        mods: Command, action: ClearHistory                 }
   - { key: K,        mods: Command, chars: "\x0c"                        }
+  - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
+  - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
+  - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
+  - { key: End,                     chars: "\x1b[F",   mode: ~AppCursor  }
   - { key: PageUp,   mods: Shift,   chars: "\x1b[5;2~"                   }
   - { key: PageUp,   mods: Control, chars: "\x1b[5;5~"                   }
   - { key: PageUp,                  chars: "\x1b[5~"                     }
