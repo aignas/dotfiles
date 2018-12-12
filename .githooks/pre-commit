@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/bash
 
+echo "== Validating commit =="
 make lint
+echo
