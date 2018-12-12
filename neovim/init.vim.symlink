@@ -177,10 +177,10 @@ let g:vimwiki_list = [{'path': '~/vimwiki',
             \ 'ext': '.md',
             \ }]
 
-let g:markdown_composer_browser="qutebrowser"
+let g:markdown_composer_browser="dot-open"
 let g:markdown_composer_autostart=1
 let g:markdown_composer_open_browser=0
-let g:markdown_composer_syntax_theme="gruvbox-dark"
+let g:markdown_composer_syntax_theme="zenburn"
 autocmd FileType markdown set syntax=markdown
 
 " vim
