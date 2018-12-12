@@ -16,8 +16,9 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   brew cask upgrade "${casks[@]}"
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   echo "› pacman update"
-  sudo pacman -Syu
+  sudo pacman -Syu --noconfirm
+
   echo "› Installing packages"
   pkgs=(python "${common[@]}" shellcheck alacritty dep ttf-hack skk-jisyo)
-  sudo pacman -S --needed "${pkgs[@]}"
+  sudo pacman -S --needed --noconfirm "${pkgs[@]}"
 fi
