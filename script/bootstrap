@@ -38,17 +38,17 @@ setup_gitconfig () {
       git_credential='osxkeychain'
     fi
 
-    gitconfig_main=${HOME}/.dotfiles/git/gitconfig.main
+    gitconfig_main="${HOME}/.dotfiles/git/gitconfig.main"
 
     user ' - What is your author name?'
-    read -e git_authorname
+    read -re git_authorname
     user ' - What is your author email?'
-    read -e git_authoremail
+    read -re git_authoremail
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" \
-        -e "s/AUTHOREMAIL/$git_authoremail/g" \
-        -e "s/GITCONFIG_MAIN/$gitconfig_main/g" \
-        -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" \
+    sed -e "s|AUTHORNAME|$git_authorname|g" \
+        -e "s|AUTHOREMAIL|$git_authoremail|g" \
+        -e "s|GIT_CREDENTIAL_HELPER|$git_credential|g" \
+        -e "s|GITCONFIG_MAIN|$gitconfig_main|g" \
         git/gitconfig.symlink.example > git/gitconfig.symlink
 
     success 'gitconfig'
@@ -139,18 +139,13 @@ install_dotfiles () {
   do
     # Check if we have a destination config file, which tells us where the
     # symlink will endup:
-    postfix="$HOME"
-    if [ -f "$(dirname $src)/destination" ]; then
-      postfix="$postfix/$(cat $(dirname $src)/destination)"
-    else
-      postfix="$postfix/."
+    postfix="$HOME/."
+    topic_folder=$(dirname "$src")
+    if [ -f "${topic_folder}/destination" ]; then
+      postfix="$HOME/$(cat "${topic_folder}/destination")"
+      mkdir -p "$postfix"
     fi
 
-    # Check that the postfix directory exists, if not, create it:
-    if [ ! -d "$postfix" ]; then
-      mkdir -p $postfix
-    fi
-      
     dst="$postfix$(basename "${src%.*}")"
     link_file "$src" "$dst"
   done
