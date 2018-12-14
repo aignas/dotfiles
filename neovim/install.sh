@@ -2,8 +2,10 @@
 
 NEOVIM_LOCAL="${HOME}/.local/share/nvim"
 VIMPLUG_DIR="${NEOVIM_LOCAL}/plugged"
-
-rm -rf "${NEOVIM_LOCAL}/venv*"
+NEOVIM_VENV="${NEOVIM_LOCAL}/venv"
+rm -rf "NEOVIM_VENV*"
+python3 -m venv "${NEOVIM_VENV}"
+"${NEOVIM_VENV}/bin/pip" install neovim
 
 if [ ! -d "${VIMPLUG_DIR}" ]; then
   echo "Installing vim-plug from scratch"
