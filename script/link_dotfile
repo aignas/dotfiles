@@ -1,0 +1,155 @@
+#!/bin/bash
+
+user () {
+  printf "\r  [ \033[0;33m?\033[0m ] %s " "$1"
+}
+
+success () {
+  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" "$1"
+}
+
+
+link_file () {
+  local src=$1 dst=$2
+
+  local overwrite='' backup='' skip=''
+  local action=
+
+  if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
+  then
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
+    then
+
+      local currentSrc=''
+      currentSrc="$(readlink "$dst")"
+
+      if [ "$currentSrc" == "$src" ]
+      then
+
+        skip=true;
+
+      else
+
+        user "File already exists: $(basename "$src"), what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+        read -rn 1 action
+
+        case "$action" in
+          O )
+            overwrite_all=true;;
+          B )
+            backup_all=true;;
+          S )
+            skip_all=true;;
+          * )
+            ;;
+        esac
+
+      fi
+
+    fi
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]
+    then
+      rm -rf "$dst"
+      success "removed $dst"
+    fi
+
+    if [ "$backup" == "true" ]
+    then
+      mv "$dst" "${dst}.backup"
+      success "moved $dst to ${dst}.backup"
+    fi
+
+    if [ "$skip" == "true" ]
+    then
+      success "skipped $src"
+    fi
+  fi
+
+  if [ "$skip" != "true" ]  # "false" or empty
+  then
+    ln -s "$1" "$2"
+    success "linked $1 to $2"
+  fi
+}
+
+print_help() {
+  cat <<EOF
+link_dotfile -- dotfiles management
+
+Usage: link_dotfile [options]
+
+Options:
+  -o, --overwrite Replace the existing dotfiles with dotfile symlinks
+  -b, --backup    Backup the existing dotfiles before creating dotfile symlinks
+  -s, --skip      Skip the existing dotfiles
+  -h, --help      Show this help message and exit
+EOF
+}
+
+OVERWRITE=''
+BACKUP=''
+SKIP=''
+
+while test $# -gt 1; do
+  case "$1" in
+    "-h"|"--help") print_help; exit ;;
+    "-o"|"--overwrite" ) OVERWRITE=true;;
+    "-b"|"--backup") BACKUP=true;;
+    "-s"|"--skip") SKIP=true;;
+    *)
+      echo "Invalid option: $1"
+      print_help
+      exit
+      ;;
+  esac
+  shift
+done
+
+src="$1"
+
+# Check if we have a destination config file, which tells us where the
+# symlink will endup:
+postfix="$HOME/."
+topic_folder=$(dirname "$src")
+if [ -f "${topic_folder}/destination" ]
+then
+  postfix="$HOME/$(cat "${topic_folder}/destination")"
+  mkdir -p "$postfix"
+fi
+
+dst="$postfix$(basename "${src%.*}")"
+
+actions=()
+if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
+then
+  if [ "$OVERWRITE" == "true" ]
+  then
+    rm -rf "$dst"
+    actions=("${actions[@]}" removed)
+  fi
+
+  if [ "$BACKUP" == "true" ]
+  then
+    mv "$dst" "${dst}.bak"
+    actions=("${actions[@]}" "${dst}->${dst}.bak")
+  fi
+
+  if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
+  then
+    actions=("${actions[@]}" skipped)
+    SKIP=true
+  fi
+fi
+
+if [[ "$SKIP" != "true" ]]
+then
+  ln -s "$src" "$dst" && actions=("${actions[@]}" created)
+fi
+
+function join_by { local IFS="$1"; shift; echo "$*"; }
+success "$dst: $(join_by ', ' "${actions[@]}")"

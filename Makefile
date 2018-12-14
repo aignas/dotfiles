@@ -1,8 +1,10 @@
 .PHONY: lint
 
 lint:
-	@echo "› linting *.sh files"
+	@echo "› linting shell files"
 	@shellcheck **/*.sh
+	@shellcheck script/*
+	@shellcheck bin/*
 
 init:
 	git config core.hooksPath .githooks

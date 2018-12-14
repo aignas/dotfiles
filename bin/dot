@@ -7,38 +7,35 @@
 
 set -e
 
-parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
-dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
+parent_dir="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+dotfiles_dir="$(cd "$( dirname "$parent_dir" )" && pwd -P)"
 
-displayUsageAndExit() {
-  echo "dot -- dotfiles management"
-  echo ""
-  echo "Usage: dot [options]"
-  echo ""
-  echo "Options:"
-  echo "  -e, --edit    Open dotfiles directory for editing"
-  echo "  -h, --help    Show this help message and exit"
-  exit
+print_help() {
+  cat <<EOF
+dot -- dotfiles management
+
+Usage: dot [options]
+
+Options:
+  -e, --edit    Open dotfiles directory for editing
+  -h, --help    Show this help message and exit
+EOF
 }
 
 while test $# -gt 0; do
   case "$1" in
-    "-h"|"--help")
-      displayUsageAndExit
-      ;;
-    "-e"|"--edit")
-      exec "$EDITOR" "$dotfilesDirectory"
-      exit
-      ;;
+    "-h"|"--help") print_help;;
+    "-e"|"--edit") exec "$EDITOR" "$dotfiles_dir";;
     *)
       echo "Invalid option: $1"
-      displayUsageAndExit
+      print_help
       ;;
   esac
+  exit
   shift
 done
 
 # Install software
-export DOTFILES=$HOME/.dotfiles
-echo "› $DOTFILES/script/install"
-"$DOTFILES/script/install"
+export DOTFILES=$dotfiles_dir
+echo "› $dotfiles_dir/script/install"
+"$dotfiles_dir/script/install"
