@@ -18,7 +18,11 @@ scriptencoding utf-8
 " vint: -ProhibitSetNoCompatible
 set nocompatible
 
-let s:data_dir = $HOME . '/.local/share/nvim'
+if has('nvim')
+    let s:data_dir = $HOME . '/.local/share/nvim'
+else
+    let s:data_dir = $HOME . '/.local/share/vim'
+endif
 let g:python3_host_prog = s:data_dir . '/venv/bin/python'
 let s:backup_dir = expand(s:data_dir . '/backups/')
 
