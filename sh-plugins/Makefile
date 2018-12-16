@@ -1,8 +1,10 @@
 .PHONY: bin clean
 
-bin: git_prompt
+plugins:=git_prompt
+
+bin:
 	mkdir -p bin
-	for i in $^; do \
+	for i in $(plugins); do \
 		echo "=== Building $$i ==="; \
 		pushd $$i; \
 		cargo -Z unstable-options build --release --out-dir ../bin; \
