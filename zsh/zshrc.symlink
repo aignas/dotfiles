@@ -7,6 +7,7 @@ export DOTFILES_OS=$(${DOTFILES}/bin/get_os)
 export SH_PLUGIN=${DOTFILES}/sh-plugins/bin
 export GOPATH="${HOME}/gocode"
 export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
+[[ -d ${HOME}/.skim/bin ]] && export PATH="${HOME}/.skim/bin:${PATH}"
 
 export EDITOR="nvim"
 export SKIM_DEFAULT_COMMAND="fd ."
@@ -61,8 +62,10 @@ precmd() {
 %F{magenta}❯%f "
 }
 
-trysource ${HOME}/.fzf.zsh
+# trysource ${HOME}/.fzf.zsh
 trysource ${HOME}/.localrc
+trysource ${HOME}/.skim/shell/completion.zsh
+trysource ${HOME}/.skim/shell/key-bindings.zsh
 
 # fco - checkout git branch/tag
 fco() {
@@ -77,6 +80,28 @@ fco() {
     (echo "$tags"; echo "$branches") |
     sk --no-hscroll --ansi -d "\t" -n 2) || return
   git checkout $(echo "$target" | awk '{print $2}')
+}
+
+c() {
+  target=$(
+    fd --type=d --follow --max-depth 2 $@ |
+      sort |
+      sk --ansi) || return
+  cd "$target"
+}
+
+cr() {
+  local repoDir repos
+  repoDir=${REPO_ROOTS:-"${HOME}/src"}
+
+  target=$(
+    fd --hidden --type=d --max-depth 5 \
+      "^\.git$" $repoDir \
+      -x dirname {} |
+      awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
+      sort |
+      sk --no-hscroll --ansi -d "\t" -n 2) || return
+  cd $(echo "$target" | awk '{print $2}')
 }
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
