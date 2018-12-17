@@ -88,11 +88,14 @@ fco() {
 }
 
 c() {
-  target=$(
-    fd --type=d --follow --max-depth 2 "$@" |
-      sort |
-      sk --ansi) || return
-  cd "$target" || return
+  while true
+  do
+    target=$(
+      fd --type=d --follow --max-depth 1 "$@" |
+        sort |
+        sk --ansi) || return
+    cd "$target" || return
+  done
 }
 
 cr() {
