@@ -1,13 +1,9 @@
 #!/bin/bash
 
-user () {
-  printf "\r  [ \033[0;33m?\033[0m ] %s " "$1"
-}
+[[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" "$1"
-}
-
+# shellcheck source=/dev/null
+source "${DOTFILES_ROOT}/script/logging.sh"
 
 link_file () {
   local src=$1 dst=$2
@@ -102,7 +98,7 @@ while test $# -gt 1; do
     "-b"|"--backup") BACKUP=true;;
     "-s"|"--skip") SKIP=true;;
     *)
-      echo "Invalid option: $1"
+      fail "Invalid option: $1"
       print_help
       exit
       ;;

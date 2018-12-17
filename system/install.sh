@@ -1,12 +1,18 @@
 #!/bin/bash
 
+set -e
+
 readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub)
+cd "$(dirname "$0")/.."
+# shellcheck source=/dev/null
+source script/logging.sh
 
 echo "The detected OS is ${DOTFILES_OS}"
 if [[ ${DOTFILES_OS} == "Mac" ]]; then
-  echo "› brew update"
+  info "brew update"
   brew update
-  echo "› Installing packages"
+
+  info "Installing packages"
   bottles=("${common[@]}" python3)
   casks=(alacritty font-hack signal)
   brew install "${bottles[@]}"
@@ -15,10 +21,10 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   brew cask install "${casks[@]}"
   brew cask upgrade "${casks[@]}"
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
-  echo "› pacman update"
+  info "pacman update"
   sudo pacman -Syu --noconfirm
 
-  echo "› Installing packages"
-  pkgs=(python "${common[@]}" shellcheck alacritty dep ttf-hack skk-jisyo)
+  info "Installing packages"
+  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo)
   sudo pacman -S --needed --noconfirm "${pkgs[@]}"
 fi

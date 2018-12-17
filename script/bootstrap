@@ -2,10 +2,9 @@
 #
 # bootstrap installs things.
 
-set -oe pipefail
-
+[[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export DOTFILES_ROOT
 cd "$(dirname "$0")/.."
-DOTFILES_ROOT="$(pwd)"
 
 print_help() {
   cat <<EOF
@@ -35,27 +34,12 @@ while test $# -gt 0; do
   shift
 done
 
-set -e
+set -oe pipefail
+
+# shellcheck source=/dev/null
+source script/logging.sh
 
 echo ''
-
-info () {
-  printf "  [ \033[00;34m..\033[0m ] %s\n" "$1"
-}
-
-user () {
-  printf "\r  [ \033[0;33m?\033[0m ] %s " "$1"
-}
-
-success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" "$1"
-}
-
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n" "$1"
-  echo ''
-  exit
-}
 
 setup_gitconfig () {
   if ! [ -f git/gitconfig.symlink ]
@@ -68,7 +52,7 @@ setup_gitconfig () {
       git_credential='osxkeychain'
     fi
 
-    gitconfig_main="${HOME}/.dotfiles/git/gitconfig.main"
+    gitconfig_main=git/gitconfig.main
 
     user ' - What is your author name?'
     read -re git_authorname
@@ -90,7 +74,7 @@ install_dotfiles () {
   cmd=(script/link_dotfile)
   [[ ${OVERWRITE_ALL} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
   [[ ${BACKUP_ALL} == "true" ]] && cmd=("${cmd[@]}" --backup)
-  find "$DOTFILES_ROOT/" -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
+  find . -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
 }
 
 setup_gitconfig
@@ -104,5 +88,4 @@ else
   fail "error installing dependencies"
 fi
 
-echo ''
-echo '  All setup!'
+info 'All setup!'
