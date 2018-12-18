@@ -32,7 +32,7 @@ Plug 'haya14busa/vim-asterisk'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive', { 'tag': 'v2.4' }
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
@@ -58,6 +58,18 @@ function! BuildComposer(info)
     endif
 endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 
 call plug#end()
 
@@ -135,6 +147,8 @@ if executable("rg")
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
+
+
 "skim
 nmap <silent> <leader>f :Files<CR>
 nmap <silent> <leader>sg :GFiles<CR>
@@ -154,12 +168,18 @@ let g:ale_fixers = {
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
 
+"neosnippet
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+
 " vim-test
-nmap <silent> <leader>tn :TestNearest<CR>
-nmap <silent> <leader>tf :TestFile<CR>
-nmap <silent> <leader>ts :TestSuite<CR>
-nmap <silent> <leader>tt :TestLast<CR>
-nmap <silent> <leader>tg :TestVisit<CR>
+nnoremap <silent> <leader>tn :TestNearest<CR>
+nnoremap <silent> <leader>tf :TestFile<CR>
+nnoremap <silent> <leader>ts :TestSuite<CR>
+nnoremap <silent> <leader>tt :TestLast<CR>
+nnoremap <silent> <leader>tg :TestVisit<CR>
 
 " terminal
 if has('nvim')
@@ -234,7 +254,6 @@ augroup rust_settings
     autocmd FileType rust let g:rustfmt_autosave = 0 " ale is used
     autocmd FileType rust nnoremap <leader>cr :T cargo run -- <end>
     autocmd FileType rust nnoremap <leader>cb :T cargo build<cr>
-    autocmd FileType rust nnoremap <leader>ct :T cargo test<cr>
     autocmd FileType rust nnoremap <leader>cp :T cargo bench<cr>
     autocmd FileType rust nnoremap <leader>cu :T cargo update<cr>
 augroup END

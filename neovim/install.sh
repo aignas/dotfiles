@@ -26,6 +26,7 @@ nvim --headless \
   +PlugUpgrade \
   +PlugInstall \
   +PlugUpdate \
+  +PlugClean \
   +qa!
 success "Plugins installed"
 
