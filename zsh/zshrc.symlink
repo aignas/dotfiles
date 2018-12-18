@@ -99,13 +99,19 @@ c() {
 }
 
 cr() {
-  local repoDir
-  repoDir=${REPO_ROOTS:-"${HOME}/src"}
+  local repoDirs selection
+  repoDirs=${}
+
+  for dir in $(echo ${REPO_ROOTS:-"${HOME}/src"})
+  do
+    echo $dir
+    selection="$selection $(fd --hidden --type=d --max-depth 5 \
+      "^\.git$" "$dir" \
+      -x dirname {})"
+  done
 
   target=$(
-    fd --hidden --type=d --max-depth 5 \
-      "^\.git$" "$repoDir" \
-      -x dirname {} |
+    echo $selection |
       awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
       sort |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
