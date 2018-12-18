@@ -6,6 +6,5 @@ set -e
 
 cd "$(dirname "$0")/.."
 find . -name install.sh \
-  -exec printf "  [ \033[00;34m..\033[0m ] Running %s\n" {} \; \
   -exec "$SHELL" -c {} \; \
   -exec printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" {} \;

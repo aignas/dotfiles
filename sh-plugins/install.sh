@@ -11,13 +11,11 @@ readonly local bin_dir="${DOTFILES}/sh-plugins/bin"
 
 mkdir -p "${bin_dir}"
 
-info "Building shell plugins..."
 for i in ${plugins}
 do
-  info "Building $i..."
+  info "sh-plugins: $i"
   pushd "${DOTFILES}/sh-plugins/$i" || fail "plug-in not found"
   cargo -Z unstable-options build --release --out-dir "${bin_dir}"
   popd || fail "failed to popd"
+  success "sh-plugins: $i"
 done
-
-success "Done building shell plugins"

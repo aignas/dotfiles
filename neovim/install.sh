@@ -9,9 +9,13 @@ source script/logging.sh
 NEOVIM_LOCAL="${HOME}/.local/share/nvim"
 VIMPLUG_DIR="${NEOVIM_LOCAL}/plugged"
 NEOVIM_VENV="${NEOVIM_LOCAL}/venv"
+
 rm -rf "NEOVIM_VENV*"
 python3 -m venv "${NEOVIM_VENV}"
-"${NEOVIM_VENV}/bin/pip" install neovim
+"${NEOVIM_VENV}/bin/pip" -q \
+  install --upgrade \
+  neovim pip setuptools
+success "python venv: ${NEOVIM_VENV}"
 
 if [ ! -d "${VIMPLUG_DIR}" ]; then
   info "Installing vim-plug from scratch"
@@ -19,16 +23,16 @@ if [ ! -d "${VIMPLUG_DIR}" ]; then
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
-success "${VIMPLUG_DIR} is setup"
+success "vim-plug: ${VIMPLUG_DIR}"
 
-success "Installing plugins"
 nvim --headless \
   +PlugUpgrade \
   +PlugInstall \
   +PlugUpdate \
   +PlugClean \
   +qa!
-success "Plugins installed"
+success "vim-plug plugins installed"
 
-info "Setting up backup directory"
-mkdir -p "${NEOVIM_LOCAL}/backups"
+readonly backup_dir="${NEOVIM_LOCAL}/backups"
+mkdir -p "${backup_dir}"
+success "backup-dir: ${backup_dir}"
