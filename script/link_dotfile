@@ -4,7 +4,6 @@
 
 # shellcheck source=/dev/null
 source "${DOTFILES_ROOT}/script/logging.sh"
-info "dotfiles root: ${DOTFILES_ROOT}"
 
 link_file () {
   local src=$1 dst=$2
