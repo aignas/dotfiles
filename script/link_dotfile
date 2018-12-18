@@ -4,6 +4,7 @@
 
 # shellcheck source=/dev/null
 source "${DOTFILES_ROOT}/script/logging.sh"
+info "dotfiles root: ${DOTFILES_ROOT}"
 
 link_file () {
   local src=$1 dst=$2
@@ -142,8 +143,13 @@ then
   fi
 fi
 
+
 if [[ "$SKIP" != "true" ]]
 then
+  if [[ -f "$DOTFILES_ROOT/$src" ]]
+  then
+    src="${DOTFILES_ROOT}/$src"
+  fi
   ln -s "$src" "$dst" && actions=("${actions[@]}" created)
 fi
 
