@@ -120,24 +120,24 @@ fi
 
 dst="$postfix$(basename "${src%.*}")"
 
-actions=()
+status=
 if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
 then
   if [ "$OVERWRITE" == "true" ]
   then
     rm -rf "$dst"
-    actions=("${actions[@]}" removed)
+    status="replace"
   fi
 
   if [ "$BACKUP" == "true" ]
   then
     mv "$dst" "${dst}.bak"
-    actions=("${actions[@]}" "${dst}->${dst}.bak")
+    status="backup at ${dst}.bak"
   fi
 
   if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
   then
-    actions=("${actions[@]}" skipped)
+    status="skip"
     SKIP=true
   fi
 fi
@@ -149,8 +149,8 @@ then
   then
     src="${DOTFILES_ROOT}/$src"
   fi
-  ln -s "$src" "$dst" && actions=("${actions[@]}" created)
+  ln -s "$src" "$dst"
+  [[ -z $status ]] && status=create
 fi
 
-function join_by { local IFS="$1"; shift; echo "$*"; }
-success "$dst: $(join_by ', ' "${actions[@]}")"
+success "$dst: $status"
