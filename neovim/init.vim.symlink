@@ -84,6 +84,12 @@ set history=10000           " History size
 let g:mapleader=','         " Change the def leader
 let g:maplocalleader='-'    " Change the def leader
 
+" deoplete
+call deoplete#custom#option({
+\ 'auto_complete_delay': 300,
+\ 'smart_case': v:true,
+\ })
+
 " Theming
 set guioptions=ag           " remove toolbar, menubar and graphical tabs
 colorscheme seoul256
