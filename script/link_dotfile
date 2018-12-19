@@ -132,12 +132,12 @@ then
   if [ "$BACKUP" == "true" ]
   then
     mv "$dst" "${dst}.bak"
-    status="backup at ${dst}.bak"
+    status="backup "
   fi
 
   if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
   then
-    status="skip"
+    status="skip  "
     SKIP=true
   fi
 fi
@@ -150,7 +150,7 @@ then
     src="${DOTFILES_ROOT}/$src"
   fi
   ln -s "$src" "$dst"
-  [[ -z $status ]] && status=create
+  [[ -z $status ]] && status="create "
 fi
 
-success "$dst: $status"
+success "$status $dst"
