@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+git -C "${DOTFILES}" pull --rebase
+git -C "${DOTFILES}" push
+"${DOTFILES}/script/bootstrap" -o
