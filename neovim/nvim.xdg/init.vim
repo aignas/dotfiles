@@ -39,13 +39,13 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'janko-m/vim-test'
 Plug 'w0rp/ale'
-Plug 'tyru/eskk.vim'
+Plug 'tyru/eskk.vim', { 'for': 'markdown' }
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
 
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'rust-lang/rust.vim'
-Plug 'vmchale/ion-vim'
+Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
+Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'],}
+Plug 'vmchale/ion-vim', { 'for': ['markdown', 'ion'],}
 Plug 'vimwiki/vimwiki'
 
 function! BuildComposer(info)
