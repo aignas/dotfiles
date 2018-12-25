@@ -222,16 +222,10 @@ augroup reload_vimrc
     autocmd FileType vim set foldmethod=marker
 augroup END
 
-augroup js_settings
+augroup web_settings
     autocmd!
-    autocmd FileType javascript set shiftwidth=2
-    autocmd FileType javascript set tabstop=2
-augroup END
-
-augroup html_settings
-    autocmd!
-    autocmd FileType html,djangohtml set shiftwidth=2
-    autocmd FileType html,djangohtml set tabstop=2
+    autocmd FileType html,djangohtml,javascript set shiftwidth=2
+    autocmd FileType html,djangohtml,javascript set tabstop=2
 augroup END
 
 augroup sh_settings
@@ -240,74 +234,7 @@ augroup sh_settings
     autocmd FileType sh,bash set tabstop=2
 augroup END
 
-
-" go
-augroup go_settings
-    autocmd!
-    " run goimports on save
-    autocmd FileType go let g:go_fmt_command = "goimports"
-    autocmd FileType go let g:go_metalinter_autosave = 1
-    autocmd FileType go nnoremap <silent> <leader>god :GoDef<CR>
-    autocmd FileType go nnoremap <silent> <leader>goc :GoDocBrowser<CR>
-    autocmd FileType go nnoremap <silent> <leader>got :GoCoverageToggle<CR>
-    autocmd FileType go let g:go_auto_type_info = 1
-    autocmd FileType go let g:go_fmt_fail_silently = 1
-augroup END
-
-" rust
-augroup rust_settings
-    autocmd!
-    autocmd FileType rust let g:rustfmt_autosave = 0 " ale is used
-    autocmd FileType rust nnoremap <leader>cr :T cargo run -- <end>
-    autocmd FileType rust nnoremap <leader>cb :T cargo build<cr>
-    autocmd FileType rust nnoremap <leader>cp :T cargo bench<cr>
-    autocmd FileType rust nnoremap <leader>cu :T cargo update<cr>
-augroup END
-
-" Python
-augroup python_settings
-    autocmd!
-    autocmd FileType python setlocal foldenable
-    autocmd FileType python setlocal foldlevel=1
-    autocmd FileType python setlocal foldmethod=syntax
-
-    autocmd FileType python setlocal smarttab
-    autocmd FileType python setlocal lbr
-    autocmd FileType python setlocal textwidth=79
-
-    autocmd FileType python setlocal expandtab
-    autocmd FileType python setlocal shiftwidth=4
-    autocmd FileType python setlocal tabstop=4
-    autocmd FileType python setlocal textwidth=79
-    autocmd FileType python setlocal colorcolumn=80
-    autocmd FileType python setlocal foldmethod=indent
-augroup END
-
 " Git
 nnoremap <silent> <leader>gs :Gstatus<cr>
-augroup git_settings
-    autocmd!
-    autocmd FileType gitcommit set tw=72
-augroup END
-
-" YAML
-augroup yaml_settings
-    autocmd!
-    autocmd FileType yaml set shiftwidth=2
-    autocmd FileType yaml set tabstop=2
-augroup END
-
-" Markdown
-augroup markdown_settings
-    autocmd!
-    "let g:eskk#dictionary = {'path': "~/.local/share/nvim/skk-jisyo"}
-    let g:eskk#large_dictionary = {'path': "/usr/share/skk/SKK-JISYO.L"}
-    " " Use skkserv-google
-    " " (https://github.com/uyorum/go-skkserv-google)
-    "let g:eskk#server = {
-    "\   'host': '127.0.0.1',
-    "\   'port': 1178,
-    "\}
-augroup END
 
 "}}}
