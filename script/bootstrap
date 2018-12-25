@@ -75,6 +75,7 @@ install_dotfiles () {
   [[ ${OVERWRITE_ALL} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
   [[ ${BACKUP_ALL} == "true" ]] && cmd=("${cmd[@]}" --backup)
   find . -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
+  find . -maxdepth 2 -name '*.xdg' -exec "${cmd[@]}" {} \;
 }
 
 setup_gitconfig

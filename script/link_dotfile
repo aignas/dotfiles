@@ -116,6 +116,10 @@ if [ -f "${topic_folder}/destination" ]
 then
   postfix="$HOME/$(cat "${topic_folder}/destination")"
   mkdir -p "$postfix"
+elif echo "${src}" | grep -E -q "\.xdg$"
+then
+  postfix="${XDG_CONFIG_HOME:-${HOME}/.config/}"
+  mkdir -p "$postfix"
 fi
 
 dst="$postfix$(basename "${src%.*}")"
@@ -145,7 +149,7 @@ fi
 
 if [[ "$SKIP" != "true" ]]
 then
-  if [[ -f "$DOTFILES_ROOT/$src" ]]
+  if [[ -r "$DOTFILES_ROOT/$src" ]]
   then
     src="${DOTFILES_ROOT}/$src"
   fi
