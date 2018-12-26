@@ -67,6 +67,19 @@ precmd() {
   export PS1
 }
 
+if [[ "${DOTFILES_OS}" == "ArchLinux" ]]
+then
+  aurd() {
+    r="https://aur.archlinux.org/$1.git"
+    p="${HOME}/src/aur/$1"
+    if [[ ! -d $p ]]
+    then
+      git clone $r $p
+    fi
+    pushd $p
+  }
+fi
+
 # trysource ${HOME}/.fzf.zsh
 trysource .localrc
 trysource .skim/shell/completion.zsh
