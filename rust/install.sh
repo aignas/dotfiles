@@ -2,5 +2,6 @@
 
 if [[ -f "$(command -v rustup)" ]]
 then
-  rustup update stable
+  rustup update
+  rustup component add clippy rustfmt rls
 fi

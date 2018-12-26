@@ -160,15 +160,21 @@ nmap <silent> <leader>sb :Buffers<CR>
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
-    \   'go': ['gometalinter'],
+    \   'go': ['gometalinter', 'golangserver'],
     \   'rust': ['cargo'],
     \   'javascript': ['eslint'],
     \}
+let g:ale_rust_cargo_check_examples = 1
+let g:ale_rust_cargo_use_clippy = 1
+let g:ale_rust_cargo_check_tests = 1
 let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
     \   'rust': ['rustfmt'],
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
+
+nnoremap <silent> gd :ALEGoToDefinition<CR>
+nnoremap <silent> <leader>h :ALEHover<CR>
 
 "neosnippet
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
