@@ -161,7 +161,7 @@ let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
     \   'go': ['gometalinter', 'golangserver'],
-    \   'rust': ['cargo'],
+    \   'rust': ['rls', 'cargo'],
     \   'javascript': ['eslint'],
     \}
 let g:ale_rust_cargo_check_examples = 1
@@ -169,7 +169,7 @@ let g:ale_rust_cargo_use_clippy = 1
 let g:ale_rust_cargo_check_tests = 1
 let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-    \   'rust': ['rustfmt'],
+    \   'rust': ['rls', 'rustfmt'],
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
 
