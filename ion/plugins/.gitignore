@@ -1,5 +1,0 @@
-# ignore build files
-target/
-
-# only store the definitions
-Cargo.lock
