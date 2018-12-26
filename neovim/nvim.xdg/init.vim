@@ -67,6 +67,8 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#disable_auto_complete = 1
+inoremap <expr> <C-n>  deoplete#mappings#manual_complete()
 
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
@@ -83,12 +85,6 @@ syntax enable               " Enable syntax hl
 set history=10000           " History size
 let g:mapleader=','         " Change the def leader
 let g:maplocalleader='-'    " Change the def leader
-
-" deoplete
-call deoplete#custom#option({
-\ 'auto_complete_delay': 300,
-\ 'smart_case': v:true,
-\ })
 
 " Theming
 set guioptions=ag           " remove toolbar, menubar and graphical tabs
