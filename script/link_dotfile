@@ -111,12 +111,7 @@ src="$1"
 # Check if we have a destination config file, which tells us where the
 # symlink will endup:
 postfix="$HOME/."
-topic_folder=$(dirname "$src")
-if [ -f "${topic_folder}/destination" ]
-then
-  postfix="$HOME/$(cat "${topic_folder}/destination")"
-  mkdir -p "$postfix"
-elif echo "${src}" | grep -E -q "\.xdg$"
+if echo "${src}" | grep -E -q "\.xdg$"
 then
   postfix="${XDG_CONFIG_HOME:-${HOME}/.config/}"
   mkdir -p "$postfix"
