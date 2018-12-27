@@ -113,11 +113,11 @@ src="$1"
 postfix="$HOME/."
 if echo "${src}" | grep -E -q "\.xdg$"
 then
-  postfix="${XDG_CONFIG_HOME:-${HOME}/.config/}"
+  postfix="${XDG_CONFIG_HOME:-${HOME}/.config}"
   mkdir -p "$postfix"
 fi
 
-dst="$postfix$(basename "${src%.*}")"
+dst="$postfix/$(basename "${src%.*}")"
 
 status=
 if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
