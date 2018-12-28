@@ -149,12 +149,10 @@ if executable("rg")
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-
-
 "skim
 nmap <silent> <leader>f :Files<CR>
-nmap <silent> <leader>sg :GFiles<CR>
-nmap <silent> <leader>sb :Buffers<CR>
+nmap <silent> <leader>gf :GFiles<CR>
+nmap <silent> <leader>b :Buffers<CR>
 
 "ale
 let g:ale_fix_on_save = 1
@@ -181,6 +179,8 @@ nnoremap <silent> <leader>h :ALEHover<CR>
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
 xmap <C-k> <Plug>(neosnippet_expand_target)
+
+let g:neosnippet#snippets_directory = $HOME . '/.dotfiles/neovim/snippets'
 
 " vim-test
 nnoremap <silent> <leader>tn :TestNearest<CR>
