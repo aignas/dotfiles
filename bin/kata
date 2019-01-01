@@ -1,0 +1,174 @@
+#!/usr/bin/env bash
+
+readonly repo_dir=${HOME}/src/learning/katas
+readonly date="$(date +%Y-%m-%d)"
+
+print_help() {
+  cat <<EOF
+Usage:
+  kata LANG NAME
+
+For LANG select one of the following parameters:
+  "python"|"py"|"p"  : Python env
+  "rust"|"rs"|"r"    : Rust env
+  "dotnet"|"cs"      : .NET Core env
+  "go"|"g"           : Go env
+  "haskell"|"hs"|"h" : Haskell env
+EOF
+}
+
+bootstrap_py() {
+  local venv="$1/venv"
+  local main="$1/main.py"
+  local test="$1/test_main.py"
+  local gitignore="$1/.gitignore"
+
+  echo "Bootstrapping Python kata env: ${venv}"
+  python3 -m venv "$venv"
+  "${venv}/bin/pip" -q \
+    install --upgrade \
+    pip setuptools pytest
+
+  cat <<EOF > "$main"
+#!/usr/bin/env python3
+
+def result():
+    return 'foo'
+
+def main():
+    print('Result is: %s', result())
+
+if __name__ == '__main__':
+    main()
+EOF
+
+  cat <<EOF > "$test"
+#!/usr/bin/env python3
+
+from main import *
+
+def test_result():
+    assert result() == 'foo'
+EOF
+
+  cat <<EOF > "$gitignore"
+__pycache__/
+venv/
+*.pyc
+EOF
+
+  echo "Running template"
+  "$venv/bin/python" "$1/main.py"
+
+  echo "Running tests"
+  "$venv/bin/pytest" "$1"
+}
+bootstrap_rs() {
+  echo "Bootstrapping Rust kata env"
+  local src="$1"
+  local name="$2"
+
+  cargo init \
+    --vcs none \
+    --edition 2018 \
+    --name "$name" \
+    --lib
+
+  cargo test
+}
+
+bootstrap_cs() {
+  echo "Bootstrapping C# kata env"
+  local src="$1"
+  local name="$2"
+
+  dotnet new sln --name "$name"
+  dotnet new classlib --name "$name"
+  dotnet new xunit --name "$name.Tests"
+  dotnet sln add "$src/*/*.csproj"
+  dotnet test
+}
+
+bootstrap_go() {
+  echo "Bootstrapping Go kata env"
+
+  local src="$1"
+  local name="$2"
+
+  currdir=$(basename "$src")
+  echo "Symlinking . to '${GOPATH}/src/github.com/aignas/katas/$currdir'"
+  pushd "${GOPATH}/src/github.com/aignas/katas/" || return 1
+  rm "${currdir}" || return 1
+  ln -s "$src" .
+  popd || return 1
+
+  local main="$1/main.go"
+  local test="$1/main_test.go"
+
+  cat <<EOF > "$main"
+package $name
+
+import "fmt"
+
+func result() string {
+  return "foo"
+}
+
+func main() {
+  fmt.Printf("Result is: %s", result())
+}
+EOF
+  go fmt "$main"
+
+  cat <<EOF > "$test"
+package $name
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestResult(t *testing.T) {
+	assert.False(t, true)
+}
+EOF
+  go fmt "$test"
+
+  go test ./...
+}
+bootstrap_hs() {
+  echo "Bootstrapping Haskell kata env"
+  echo "TODO"
+}
+
+parse_args() {
+  local lang=
+  case $1 in
+    "python"|"py"|"p")
+      lang=py
+      ;;
+    "rust"|"rs"|"r")
+      lang=rs
+      ;;
+    "dotnet"|"cs")
+      lang=cs
+      ;;
+    "go")
+      lang=go
+      ;;
+    "haskell"|"hs"|"h")
+      lang=hs
+      ;;
+  esac
+  [[ -n $lang ]] && echo "${lang}"
+}
+
+readonly lang=$(parse_args "$1")
+readonly name=$2
+[[ -z $lang || -z $name ]] && print_help && exit 0
+
+readonly kata_dir="${repo_dir}/${date}-$lang-$name"
+echo "Creating $kata_dir" && mkdir -p "$kata_dir"
+pushd "$kata_dir" || exit 1
+eval "bootstrap_$lang" "$kata_dir" "$name"
