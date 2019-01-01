@@ -25,7 +25,7 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   sudo pacman -Syu --noconfirm
 
   info "Installing packages"
-  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo)
+  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer)
   sudo pacman -S \
     --quiet \
     --needed \

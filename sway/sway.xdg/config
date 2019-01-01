@@ -174,6 +174,15 @@ exec swayidle \
 
     # move focus to the parent container
     bindsym $mod+a focus parent
+
+#
+# Media keys:
+#
+    bindsym XF86AudioMute exec pamixer --toggle-mute
+    bindsym XF86AudioLowerVolume exec pamixer --decrease 5
+    bindsym XF86AudioRaiseVolume exec pamixer --increase 5
+    bindsym XF86AudioMicMute exec pamixer --increase 5
+
 #
 # Scratchpad:
 #
