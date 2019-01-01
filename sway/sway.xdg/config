@@ -37,10 +37,10 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 # Example configuration:
 #
 exec swayidle \
-    timeout 300 'swaylock -c 000000' \
+    timeout 300 'swaylock -c 3a3a3a' \
     timeout 600 'swaymsg "output * dpms off"' \
        resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -c 000000'
+    before-sleep 'swaylock -c 3a3a3a'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -59,10 +59,11 @@ exec swayidle \
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
+# Also read `man xkeyboard-config`
     input "1:1:AT_Translated_Set_2_keyboard" {
         xkb_layout us,lt
         xkb_variant dvorak,std
-        xkb_options grp:shifts_toggle
+        xkb_options grp:ctrls_toggle,caps:escape
     }
     input "65261:0:Falbatech_The_Redox_Keyboard" {
         xkb_layout us,lt
@@ -95,6 +96,8 @@ exec swayidle \
 
     # exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+    bindsym $mod+Escape exec swaylock -c 3a3a3a
 #
 # Moving around:
 #
