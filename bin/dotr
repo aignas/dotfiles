@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+if [[ -n "$(git -C "${DOTFILES}" diff)" ]]
+then
+  echo "Commit the changes and try again.  Changing PWD to ${DOTFILES}..."
+  cd "${DOTFILES}" || echo "Failed to cd into '${DOTFILES}'"
+  exit 1
+fi
+
 git -C "${DOTFILES}" pull --rebase
 git -C "${DOTFILES}" submodule update --recursive
 git -C "${DOTFILES}" push
