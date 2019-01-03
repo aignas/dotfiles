@@ -125,12 +125,23 @@ set -g status-left-length "100"
 set -g status-right-attr "none"
 set -g status-right-length "100"
 set -g status-left "#[fg=#3e3e40,bg=white] #S "
-set -g @batt_remain_short true
-set -g status-right "#[fg=white,bg=#3e3e40] #{battery_percentage} #{battery_remain} │ #[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
+set -g status-right "#[fg=white,bg=#3e3e40] #{battery_icon}#{battery_percentage}#{battery_remain} │ #[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
 
 # }}}
 
+set -g @batt_charged_icon "😎"
+set -g @batt_charging_icon "👍"
+set -g @batt_attached_icon "😐"
+set -g @batt_full_charge_icon "🌕 "
+set -g @batt_high_charge_icon "🌖 "
+set -g @batt_medium_charge_icon "🌗 "
+set -g @batt_low_charge_icon "🌘 "
+
+set -g @continuum-restore 'on'
+set -g @batt_remain_short true
+
 # Plugins
+
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
