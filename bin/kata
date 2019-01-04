@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 readonly repo_dir=${HOME}/src/learning/katas
 readonly date="$(date +%Y-%m-%d)"
 
@@ -93,20 +95,20 @@ bootstrap_go() {
   echo "Bootstrapping Go kata env"
 
   local src="$1"
-  local name="$2"
+  local n="$2"
 
   currdir=$(basename "$src")
   echo "Symlinking . to '${GOPATH}/src/github.com/aignas/katas/$currdir'"
-  pushd "${GOPATH}/src/github.com/aignas/katas/" || return 1
-  rm "${currdir}" || return 1
+  pushd "${GOPATH}/src/github.com/aignas/katas/"
+  rm -rf "${currdir}"
   ln -s "$src" .
-  popd || return 1
+  popd
 
   local main="$1/main.go"
   local test="$1/main_test.go"
 
   cat <<EOF > "$main"
-package $name
+package $n
 
 import "fmt"
 
@@ -121,7 +123,7 @@ EOF
   go fmt "$main"
 
   cat <<EOF > "$test"
-package $name
+package $n
 
 import (
 	"testing"
@@ -170,5 +172,5 @@ readonly name=$2
 
 readonly kata_dir="${repo_dir}/${date}-$lang-$name"
 echo "Creating $kata_dir" && mkdir -p "$kata_dir"
-pushd "$kata_dir" || exit 1
+pushd "$kata_dir"
 eval "bootstrap_$lang" "$kata_dir" "$name"
