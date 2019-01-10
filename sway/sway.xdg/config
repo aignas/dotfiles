@@ -41,6 +41,10 @@ exec swayidle \
     timeout 600 'swaymsg "output * dpms off"' \
        resume 'swaymsg "output * dpms on"' \
     before-sleep 'swaylock -c 3a3a3a'
+
+### Redshift configuration
+exec redshift -m wayland
+
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
