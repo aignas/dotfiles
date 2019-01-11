@@ -68,7 +68,6 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#disable_auto_complete = 1
-inoremap <expr> <C-n>  deoplete#mappings#manual_complete()
 
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
