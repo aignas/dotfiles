@@ -131,4 +131,33 @@ cr() {
   cd "$(echo "$target" | awk '{print $2}')" || return
 }
 
+st() {
+  local target="$1"
+  if [[ -z $target ]]
+  then
+    target=$(fd --type=d --follow --max-depth 3 . |
+      sort |
+      sk --ansi) || return
+  elif [[ ! -d $target ]]
+  then
+    echo "Please provide a path that is a directory and exists"
+    return 1
+  fi
+  sh -c "scantest -command 'go test -covermode=count -coverprofile=./$target/coverage.out ./$target/...'"
+}
+
+ct() {
+  if [[ "$1" == "rm" ]]
+  then
+    echo "cleaning coverage files up"
+    rm $(fd --type=f -I coverage.out)
+    return
+  fi
+  target=$(
+    fd --type=f -I coverage.out |
+    sort |
+    sk --ansi) || return
+  go tool cover -html="$target"
+}
+
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
