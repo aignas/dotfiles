@@ -11,6 +11,8 @@ echo "The detected OS is ${DOTFILES_OS}"
 if [[ ${DOTFILES_OS} == "Mac" ]]; then
   info "brew update"
   brew update
+  info "brew cleanup"
+  brew cleanup
 
   info "Installing packages"
   bottles=("${common[@]}" python3)
