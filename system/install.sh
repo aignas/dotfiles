@@ -16,7 +16,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
 
   info "Installing packages"
   bottles=("${common[@]}" python3)
-  casks=(alacritty font-hack signal)
+  casks=(alacritty font-hack signal font-fira-code)
   brew install "${bottles[@]}"
   brew upgrade "${bottles[@]}"
   brew tap homebrew/cask-fonts
@@ -27,7 +27,7 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   sudo pacman -Syu --noconfirm
 
   info "Installing packages"
-  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer)
+  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code)
   sudo pacman -S \
     --quiet \
     --needed \
