@@ -242,4 +242,9 @@ bar {
     }
 }
 
+#
+# Decorations
+#
+default_border pixel
+
 include /etc/sway/config.d/*
