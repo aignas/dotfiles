@@ -83,24 +83,33 @@ trysource .skim/shell/key-bindings.zsh
 
 # fco - checkout git branch/tag
 fco() {
-  local targets=
-  local prefix=
+  local targets prefix
   case $1 in
-    -t|--tag)
+    t|tag)
       prefix=tag
       targets=$(git tag || return)
       ;;
-    *)
+    ''|b|branch)
       prefix=branch
       targets=$(git branch --all |
         grep -v HEAD |
         sed "s/.* //" |
         sed "s#remotes/[^/]*/##" || return)
       ;;
+    *)
+      cat <<EOF
+Interactive checkout a branch or a tag.
+
+Subcommands:
+ [|b|branch]: branch checkout
+ [t|tag]: tag checkout
+EOF
+      return
+      ;;
   esac
   [[ -z ${targets} ]] && return
   target=$(echo "$targets" |
-    sort -u |
+    sort |
     awk -v prefix="$prefix" '{print "\x1b[31;1m" prefix "\x1b[m\t" $1}' |
     sk --no-hscroll --ansi -d "\t" -n 2) || return
   git checkout "$(echo "$target" | awk '{print $2}')"
@@ -111,7 +120,7 @@ c() {
   do
     target=$(
       fd --type=d -H --follow --max-depth 1 "$@" |
-        sort -u |
+        sort |
         sk --ansi) || return
     cd "$target" || return
   done
@@ -132,7 +141,7 @@ cr() {
   target=$(
     echo $selection |
       awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
-      sort -u |
+      sort |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
   cd "$(echo "$target" | awk '{print $2}')" || return
 }
@@ -142,7 +151,7 @@ st() {
   if [[ -z $target ]]
   then
     target=$(fd --type=d --follow --max-depth 3 . |
-      sort -u |
+      sort |
       sk --ansi) || return
   elif [[ ! -d $target ]]
   then
@@ -153,30 +162,27 @@ st() {
 }
 
 ct() {
-  local help=
   case $1 in
     rm)
       echo "cleaning coverage files up"
       fd --type=f -I coverage.out -x rm {}
       ;;
-    h|help|-h|--help)
-      help=1
+    '')
+      file=$(fd --type=f -I coverage.out |
+        sort |
+        sk --ansi) || return
+      go tool cover -html="$file"
       ;;
     *)
-      ([[ -n $1 ]] && help=1) || \
-        go tool cover -html="$(
-          fd --type=f -I coverage.out |
-          sort -u |
-          sk --ansi)"
-      ;;
-  esac
-  [[ -n $help ]] && cat <<EOF
+      cat <<EOF
 Search for coverage files and open them in a browser window using 'go tool
 cover'.
 
 Subcommands:
   rm: cleanup all coverage files
 EOF
+      ;;
+  esac
 }
 
 cdd() {
