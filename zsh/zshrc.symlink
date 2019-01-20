@@ -126,22 +126,20 @@ c() {
   done
 }
 
-cr() {
-  local repoDirs selection
-  repoDirs=${}
-
-  for dir in $(echo ${REPO_ROOTS:-"${HOME}/src"})
+# Run the search with multiple fd instances in parallel
+crget() {
+  for dir in "${@:-${HOME}/src}"
   do
-    echo "Searching in $dir..."
-    selection="$selection $(fd --hidden --type=d --max-depth 5 \
-      "^\.git$" "$dir" \
-      -x dirname {})"
+    fd --hidden --type=d --max-depth 5 "^\.git$" "$dir" -x dirname {}\; &
   done
+  wait
+}
 
-  target=$(
-    echo $selection |
-      awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
+cr() {
+  target=$(crget $@ |
+      sed "s|${HOME}|~|" |
       sort |
+      awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
   cd "$(echo "$target" | awk '{print $2}')" || return
 }
