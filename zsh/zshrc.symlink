@@ -70,13 +70,9 @@ precmd() {
 if [[ "${DOTFILES_OS}" == "ArchLinux" ]]
 then
   aurd() {
-    r="https://aur.archlinux.org/$1.git"
-    p="${HOME}/src/aur/$1"
-    if [[ ! -d $p ]]
-    then
-      git clone $r $p
-    fi
-    pushd $p
+    p="${HOME}/aur/$1"
+    [[ ! -d "$p" ]] && git clone "https://aur.archlinux.org/$1.git" "$p"
+    pushd "$p" && git pull --rebase origin master
   }
 fi
 
@@ -87,15 +83,25 @@ trysource .skim/shell/key-bindings.zsh
 
 # fco - checkout git branch/tag
 fco() {
-  local tags branches target
-  tags=$(
-    git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
-  branches=$(
-    git branch --all | grep -v HEAD             |
-    sed "s/.* //"    | sed "s#remotes/[^/]*/##" |
-    sort -u          | awk '{print "\x1b[34;1mbranch\x1b[m\t" $1}') || return
-  target=$(
-    (echo "$tags"; echo "$branches") |
+  local targets=
+  local prefix=
+  case $1 in
+    -t|--tag)
+      prefix=tag
+      targets=$(git tag || return)
+      ;;
+    *)
+      prefix=branch
+      targets=$(git branch --all |
+        grep -v HEAD |
+        sed "s/.* //" |
+        sed "s#remotes/[^/]*/##" || return)
+      ;;
+  esac
+  [[ -z ${targets} ]] && return
+  target=$(echo "$targets" |
+    sort -u |
+    awk -v prefix="$prefix" '{print "\x1b[31;1m" prefix "\x1b[m\t" $1}' |
     sk --no-hscroll --ansi -d "\t" -n 2) || return
   git checkout "$(echo "$target" | awk '{print $2}')"
 }
@@ -104,8 +110,8 @@ c() {
   while true
   do
     target=$(
-      fd --type=d --follow --max-depth 1 "$@" |
-        sort |
+      fd --type=d -H --follow --max-depth 1 "$@" |
+        sort -u |
         sk --ansi) || return
     cd "$target" || return
   done
@@ -117,7 +123,7 @@ cr() {
 
   for dir in $(echo ${REPO_ROOTS:-"${HOME}/src"})
   do
-    echo $dir
+    echo "Searching in $dir..."
     selection="$selection $(fd --hidden --type=d --max-depth 5 \
       "^\.git$" "$dir" \
       -x dirname {})"
@@ -126,7 +132,7 @@ cr() {
   target=$(
     echo $selection |
       awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
-      sort |
+      sort -u |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
   cd "$(echo "$target" | awk '{print $2}')" || return
 }
@@ -136,7 +142,7 @@ st() {
   if [[ -z $target ]]
   then
     target=$(fd --type=d --follow --max-depth 3 . |
-      sort |
+      sort -u |
       sk --ansi) || return
   elif [[ ! -d $target ]]
   then
@@ -147,17 +153,34 @@ st() {
 }
 
 ct() {
-  if [[ "$1" == "rm" ]]
-  then
-    echo "cleaning coverage files up"
-    rm $(fd --type=f -I coverage.out)
-    return
-  fi
-  target=$(
-    fd --type=f -I coverage.out |
-    sort |
-    sk --ansi) || return
-  go tool cover -html="$target"
+  local help=
+  case $1 in
+    rm)
+      echo "cleaning coverage files up"
+      fd --type=f -I coverage.out -x rm {}
+      ;;
+    h|help|-h|--help)
+      help=1
+      ;;
+    *)
+      ([[ -n $1 ]] && help=1) || \
+        go tool cover -html="$(
+          fd --type=f -I coverage.out |
+          sort -u |
+          sk --ansi)"
+      ;;
+  esac
+  [[ -n $help ]] && cat <<EOF
+Search for coverage files and open them in a browser window using 'go tool
+cover'.
+
+Subcommands:
+  rm: cleanup all coverage files
+EOF
+}
+
+cdd() {
+  pushd ${DOTFILES}
 }
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
