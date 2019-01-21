@@ -188,6 +188,11 @@ exec redshift -m wayland
     bindsym XF86AudioMicMute exec pamixer --increase 5
 
 #
+# Power keys:
+#
+    bindsym XF86Sleep exec systemctl suspend
+
+#
 # Scratchpad:
 #
     # Sway has a "scratchpad", which is a bag of holding for windows.
