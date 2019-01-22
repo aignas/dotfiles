@@ -137,7 +137,6 @@ crget() {
 
 cr() {
   target=$(crget $@ |
-      sed "s|${HOME}|~|" |
       sort |
       awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
