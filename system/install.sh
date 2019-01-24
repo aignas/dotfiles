@@ -2,7 +2,7 @@
 
 set -e
 
-readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn)
+readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh
