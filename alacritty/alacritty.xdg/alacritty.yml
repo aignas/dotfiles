@@ -73,22 +73,6 @@ scrolling:
 tabspaces: 4
 
 # Font configuration (changes require restart)
-#
-# Important font attributes like antialiasing, subpixel aa, and hinting can be
-# controlled through fontconfig. Specifically, the following attributes should
-# have an effect:
-#   - hintstyle
-#   - antialias
-#   - lcdfilter
-#   - rgba
-#
-# For instance, if you wish to disable subpixel antialiasing, you might set the
-# rgba property to `none`. If you wish to completely disable antialiasing, you
-# can set antialias to `false`.
-#
-# Please see these resources for more information on how to use fontconfig:
-#   - https://wiki.archlinux.org/index.php/font_configuration#Fontconfig_configuration
-#   - file:///usr/share/doc/fontconfig/fontconfig-user.html
 font:
   # Normal (roman) font face
   normal:
@@ -123,6 +107,22 @@ font:
   glyph_offset:
     x: 0
     y: 0
+
+  # Thin stroke font rendering (OS X only)
+  #
+  # Thin strokes are suitable for retina displays, but for non-retina screens
+  # it is recommended to set `use_thin_strokes` to `false`
+  #
+  # macOS >= 10.14.x:
+  #
+  # If the font quality on non-retina display looks bad then set
+  # `use_thin_strokes` to `true` and enable font smoothing by running the
+  # following command:
+  #   `defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO`
+  #
+  # This is a global setting and will require a log out or restart to take
+  # effect.
+  use_thin_strokes: true
 
 # Display the time it takes to redraw each frame.
 render_timer: false
@@ -186,7 +186,6 @@ colors:
 visual_bell:
   animation: EaseOutExpo
   duration: 0
-  color: '0xffffff'
 
 # Background opacity
 #
@@ -197,15 +196,15 @@ background_opacity: 1.0
 # Mouse bindings
 #
 # Available fields:
-#   - mouse
-#   - action
-#   - mods (optional)
+# - mouse
+# - action
+# - mods (optional)
 #
 # Values for `mouse`:
-#   - Middle
-#   - Left
-#   - Right
-#   - Numeric identifier such as `5`
+# - Middle
+# - Left
+# - Right
+# - Numeric identifier such as `5`
 #
 # All available `mods` and `action` values are documented in the key binding
 # section.
@@ -244,8 +243,6 @@ selection:
   # the selection clipboard. Otherwise, it will only be copied to the selection
   # clipboard.
   save_to_clipboard: false
-
-dynamic_title: true
 
 cursor:
   # Cursor style
@@ -357,15 +354,17 @@ key_bindings:
   - { key: H,        mods: Command, action: Hide                         }
   - { key: Q,        mods: Command, action: Quit                         }
   - { key: W,        mods: Command, action: Quit                         }
+  - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
+  - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
+  - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
+  - { key: End,                     chars: "\x1b[F",   mode: ~AppCursor  }
   - { key: Key0,     mods: Command, action: ResetFontSize                }
   - { key: Equals,   mods: Command, action: IncreaseFontSize             }
   - { key: Minus,    mods: Command, action: DecreaseFontSize             }
   - { key: K,        mods: Command, action: ClearHistory                 }
   - { key: K,        mods: Command, chars: "\x0c"                        }
-  - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
-  - { key: Home,                    chars: "\x1b[H",   mode: ~AppCursor  }
-  - { key: End,                     chars: "\x1bOF",   mode: AppCursor   }
-  - { key: End,                     chars: "\x1b[F",   mode: ~AppCursor  }
+  - { key: L,        mods: Control, action: ClearLogNotice               }
+  - { key: L,        mods: Control, chars: "\x0c"                        }
   - { key: PageUp,   mods: Shift,   chars: "\x1b[5;2~"                   }
   - { key: PageUp,   mods: Control, chars: "\x1b[5;5~"                   }
   - { key: PageUp,                  chars: "\x1b[5~"                     }
@@ -459,7 +458,7 @@ key_bindings:
   - { key: F12,      mods: Command, chars: "\x1b[24;3~"                  }
   - { key: NumpadEnter,             chars: "\n"                          }
 
-  # https://github.com/jwilm/alacritty/issues/1108
+  # https://github.com/jwilm/alacritty/issues/458
   - { key: Key6,     mods: Control, chars: "\x1e"                        }
   - { key: Return,   mods: Shift,   chars: "\x1b[13;2u"                  }
   - { key: Return,   mods: Control, chars: "\x1b[13;5u"                  }
