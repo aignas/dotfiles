@@ -109,7 +109,7 @@ EOF
   esac
   [[ -z ${targets} ]] && return
   target=$(echo "$targets" |
-    sort |
+    sort -u |
     awk -v prefix="$prefix" '{print "\x1b[31;1m" prefix "\x1b[m\t" $1}' |
     sk --no-hscroll --ansi -d "\t" -n 2) || return
   git checkout "$(echo "$target" | awk '{print $2}')"
@@ -120,7 +120,7 @@ c() {
   do
     target=$(
       fd --type=d -H --follow --max-depth 1 "$@" |
-        sort |
+        sort -u |
         sk --ansi) || return
     cd "$target" || return
   done
@@ -137,7 +137,7 @@ crget() {
 
 cr() {
   target=$(crget $@ |
-      sort |
+      sort -u |
       awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
   cd "$(echo "$target" | awk '{print $2}')" || return
@@ -148,7 +148,7 @@ st() {
   if [[ -z $target ]]
   then
     target=$(fd --type=d --follow --max-depth 3 . |
-      sort |
+      sort -u |
       sk --ansi) || return
   elif [[ ! -d $target ]]
   then
@@ -166,7 +166,7 @@ ct() {
       ;;
     '')
       file=$(fd --type=f -I coverage.out |
-        sort |
+        sort -u |
         sk --ansi) || return
       go tool cover -html="$file"
       ;;
