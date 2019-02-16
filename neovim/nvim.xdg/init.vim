@@ -157,7 +157,7 @@ nmap <silent> <leader>b :Buffers<CR>
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
-    \   'go': ['gometalinter', 'golangserver'],
+    \   'go': ['gometalinter', 'bingo'],
     \   'rust': ['rls', 'cargo'],
     \   'javascript': ['eslint'],
     \}
@@ -167,6 +167,7 @@ let g:ale_rust_cargo_check_tests = 1
 let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
     \   'rust': ['rls', 'rustfmt'],
+    \   'go': ['gofmt', 'goimports'],
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
 
