@@ -43,7 +43,9 @@ exec swayidle \
     before-sleep 'swaylock -c 3a3a3a'
 
 ### Redshift configuration
-exec redshift -m wayland
+exec swaymsg exec redshift -m wayland
+
+exec swaymsg exec blueman-applet
 
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
