@@ -49,7 +49,7 @@ Plug 'vmchale/ion-vim', { 'for': ['markdown', 'ion'],}
 Plug 'vimwiki/vimwiki'
 
 function! BuildComposer(info)
-    if a:info.status != 'unchanged' || a:info.force
+    if a:info.status !=# 'unchanged' || a:info.force
         if has('nvim')
             !cargo build --release
         else
@@ -143,7 +143,7 @@ set cpoptions+=J        " Double spacing between sentences
 set joinspaces
 map * <Plug>(asterisk-*)
 nnoremap <leader>a :grep <end>
-if executable("rg")
+if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
@@ -209,11 +209,10 @@ let g:vimwiki_list = [{'path': '~/vimwiki',
             \ 'ext': '.md',
             \ }]
 
-let g:markdown_composer_browser="dot-open"
+let g:markdown_composer_browser='dot-open'
 let g:markdown_composer_autostart=1
 let g:markdown_composer_open_browser=0
-let g:markdown_composer_syntax_theme="zenburn"
-autocmd FileType markdown set syntax=markdown
+let g:markdown_composer_syntax_theme='zenburn'
 
 " vim
 nnoremap <leader>vc :e $MYVIMRC<cr>

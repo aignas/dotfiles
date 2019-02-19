@@ -5,6 +5,7 @@ lint:
 	@shellcheck **/*.sh
 	@shellcheck script/*
 	@shellcheck bin/*
+	@fd -e vim | xargs vint
 
 init:
 	git config core.hooksPath .githooks
