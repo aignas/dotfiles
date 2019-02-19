@@ -1,10 +1,14 @@
 .PHONY: lint
 
-lint:
+lint: lint-sh lint-vim
+
+lint-sh:
 	@echo "linting shell files"
-	@shellcheck **/*.sh
-	@shellcheck script/*
-	@shellcheck bin/*
+	@rg -l "^#!.*bash" | xargs shellcheck
+	@rg -l "^#!.*sh" | xargs shellcheck
+
+lint-vim:
+	@echo "linting vim files"
 	@fd -e vim | xargs vint
 
 init:
