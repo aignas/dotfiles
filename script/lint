@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -oe pipefail
+
+lintsh() {
+  echo -e "\nlinting $1 files:"
+  files=$(rg -l --no-ignore-global --color never "^#!.*/$1")
+  echo "${files}"
+  echo "${files}" | xargs shellcheck
+}
+
+lintvim() {
+  echo -e "\nlinting vim files:"
+  files=$(fd --no-ignore --color never --extension vim)
+  echo "${files}"
+  echo "${files}" | xargs vint
+}
+
+lintsh sh
+lintsh bash
+lintvim
