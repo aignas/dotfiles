@@ -4,14 +4,18 @@ set -oe pipefail
 
 lintsh() {
   echo -e "\nlinting $1 files:"
-  files=$(rg -l --no-ignore-global --color never "^#!.*/$1")
+  files=$(rg -l --no-ignore "^#!.*/$1" ||
+    grep -rl --exclude-dir=.git "^#\!.*/$1" . || (
+      echo "failed to get files" && exit 1))
   echo "${files}"
   echo "${files}" | xargs shellcheck
 }
 
 lintvim() {
   echo -e "\nlinting vim files:"
-  files=$(fd --no-ignore --color never --extension vim)
+  files=$(fd -e vim ||
+    find . -name "*\.vim" || (
+      echo "failed to get files" && exit 1))
   echo "${files}"
   echo "${files}" | xargs vint
 }
