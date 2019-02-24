@@ -15,8 +15,9 @@ matrix:
 
 install:
   - |
-    if [ "${LINT#vint}" != "$LINT" ]; then
-      virtualenv /tmp/vint && source /tmp/vint/bin/activate && pip install vim-vint
-    fi
+    [ "${LINT#vint}" != "$LINT" ] && \
+      virtualenv /tmp/vint && \
+      source /tmp/vint/bin/activate && \
+      pip install vim-vint enum34 pathlib typing
 script:
   - make lint
