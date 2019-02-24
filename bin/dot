@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+[[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export DOTFILES_ROOT
+
 print_help(){
   cat <<EOF
 dot -- dotfiles management
@@ -18,8 +21,8 @@ EOF
 while test $# -gt 0; do
   case "$1" in
     "-h"|"--help") print_help;;
-    "-e"|"--edit") exec e "${DOTFILES}";;
-    "-l"|"--lint") exec "${DOTFILES}/script/lint";;
+    "-e"|"--edit") exec e "${DOTFILES_ROOT}";;
+    "-l"|"--lint") exec "${DOTFILES_ROOT}/script/lint";;
     *) echo "Invalid option: $1"; print_help; exit 1;;
   esac
   exit 0
@@ -27,13 +30,13 @@ while test $# -gt 0; do
 done
 
 # Update
-if [[ -n "$(git -C "${DOTFILES}" diff)" ]]
+if [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]]
 then
   echo "Commit the changes and try again."
   exit 1
 fi
 
-git -C "${DOTFILES}" pull --rebase
-git -C "${DOTFILES}" submodule update --recursive
-git -C "${DOTFILES}" push
-"${DOTFILES}/script/bootstrap" --overwrite
+git -C "${DOTFILES_ROOT}" pull --rebase
+git -C "${DOTFILES_ROOT}" submodule update --recursive
+git -C "${DOTFILES_ROOT}" push
+"${DOTFILES_ROOT}/script/bootstrap" --overwrite
