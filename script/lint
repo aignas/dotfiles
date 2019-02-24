@@ -12,16 +12,12 @@ lintsh() {
 }
 
 lintvim() {
-  [[ -f "$(command -v vint)" ]] || \
-    python3 -m venv /tmp/vint && \
-    /tmp/vint/bin/pip install --upgrade setuptools pip vim-vint pathlib typing
-
   echo -e "\nlinting vim files:"
   files=$(fd -e vim ||
     find . -name "*\.vim" || (
       echo "failed to get files" && exit 1))
   echo "${files}"
-  echo "${files}" | xargs /tmp/vint/bin/vint "$@"
+  echo "${files}" | xargs vint "$@"
 }
 
 case "${LINT:-all}" in

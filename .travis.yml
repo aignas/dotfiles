@@ -1,4 +1,6 @@
+dist: xenial
 language: python
+python: 3.7
 
 cache:
   pip: true
@@ -15,9 +17,9 @@ matrix:
 
 install:
   - |
-    [ "${LINT#vint}" != "$LINT" ] && \
-      virtualenv /tmp/vint && \
-      source /tmp/vint/bin/activate && \
-      pip install vim-vint enum34 pathlib typing
+    if [ "${LINT#vint}" != "$LINT" ]; then
+      pip install vim-vint
+    fi
+
 script:
   - make lint
