@@ -82,7 +82,8 @@ setup_gitconfig
 install_dotfiles
 
 info "installing dependencies"
-if bin/dot 2>&1 | tee /tmp/dotfiles-dot
+export DOTFILES="$DOTFILES_ROOT"
+if "$DOTFILES_ROOT/script/install" 2>&1 | tee /tmp/dotfiles-dot
 then
   success "dependencies installed"
 else
