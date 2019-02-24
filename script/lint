@@ -2,22 +2,40 @@
 
 set -oe pipefail
 
+grepbang() {
+  rg -l --no-ignore "^#!$1" ||
+    grep -rl --exclude-dir=.git "^#\!$1" . || (
+      echo "failed to get files" && exit 1)
+}
+
 lintsh() {
-  echo -e "\nlinting $1 files:"
-  files=$(rg -l --no-ignore "^#!.*/$1" ||
-    grep -rl --exclude-dir=.git "^#\!.*/$1" . || (
-      echo "failed to get files" && exit 1))
-  echo "${files}"
-  echo "${files}" | xargs shellcheck
+  files=$({
+    grepbang ".*/sh"
+    grepbang ".*/bash"
+    grepbang "/usr/bin/env bash"
+    grepbang "/usr/bin/env sh"
+  })
+  print_run "shell" "$files"
+  run "$files" shellcheck
 }
 
 lintvim() {
-  echo -e "\nlinting vim files:"
   files=$(fd -e vim ||
     find . -name "*\.vim" || (
       echo "failed to get files" && exit 1))
-  echo "${files}"
-  echo "${files}" | xargs vint "$@"
+  print_run "vim" "$files"
+  run "$files" vint "$@"
+}
+
+print_run() {
+  echo -e "linting $1 files:"
+  echo -e "$2" | sort -u | sed "s|^| » |"
+  echo
+}
+
+run() {
+  files=$1; shift
+  echo "$files" | sort -u | xargs "$@"
 }
 
 case "${LINT:-all}" in
@@ -28,12 +46,10 @@ case "${LINT:-all}" in
       lintvim --error
       ;;
   "shellcheck")
-      lintsh sh
-      lintsh bash
+      lintsh
     ;;
   *)
-      lintsh sh
-      lintsh bash
+      lintsh
       lintvim --error
     ;;
 esac
