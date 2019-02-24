@@ -1,3 +1,22 @@
-language: shell
+language: python
+
+cache:
+  pip: true
+
+env:
+  matrix:
+    - LINT=vint-errors
+    - LINT=vint
+    - LINT=shellcheck
+
+matrix:
+  allow_failures:
+    - env: LINT=vint
+
+install:
+  - |
+    if [ "${LINT#vint}" != "$LINT" ]; then
+      virtualenv /tmp/vint && source /tmp/vint/bin/activate && pip install vim-vint
+    fi
 script:
   - make lint

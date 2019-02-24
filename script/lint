@@ -17,9 +17,23 @@ lintvim() {
     find . -name "*\.vim" || (
       echo "failed to get files" && exit 1))
   echo "${files}"
-  echo "${files}" | xargs vint
+  echo "${files}" | xargs vint "$@"
 }
 
-lintsh sh
-lintsh bash
-lintvim
+case "${LINT:-all}" in
+  "vint")
+      lintvim
+      ;;
+  "vint-errors")
+      lintvim --error
+      ;;
+  "shellcheck")
+      lintsh sh
+      lintsh bash
+    ;;
+  *)
+      lintsh sh
+      lintsh bash
+      lintvim --error
+    ;;
+esac
