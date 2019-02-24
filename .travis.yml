@@ -22,4 +22,4 @@ install:
     fi
 
 script:
-  - make lint
+  - bin/dot --lint
