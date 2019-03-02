@@ -2,7 +2,7 @@
 
 set -e
 
-readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig entr)
+readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig entr vint)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh
@@ -27,7 +27,7 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   sudo pacman -Syu --noconfirm
 
   info "Installing packages"
-  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code)
+  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go)
   sudo pacman -S \
     --quiet \
     --needed \
