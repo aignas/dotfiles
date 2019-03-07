@@ -50,6 +50,6 @@ case "${LINT:-all}" in
     ;;
   *)
       lintsh
-      #lintvim --error # disable until the installation of vint is fixed on MacOS
+      lintvim --error
     ;;
 esac

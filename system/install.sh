@@ -2,7 +2,7 @@
 
 set -e
 
-readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig entr vint)
+readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig entr)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh
@@ -22,12 +22,15 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   brew tap homebrew/cask-fonts
   brew cask install "${casks[@]}"
   brew cask upgrade "${casks[@]}"
+
+  info "Installing packages via pip"
+  pip3 install --upgrade -U vim-vint
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   info "pacman update"
   sudo pacman -Syu --noconfirm
 
   info "Installing packages"
-  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go)
+  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go vint)
   sudo pacman -S \
     --quiet \
     --needed \
