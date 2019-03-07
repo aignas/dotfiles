@@ -32,7 +32,7 @@ Plug 'haya14busa/vim-asterisk'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive', { 'tag': 'v2.4' }
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
