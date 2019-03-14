@@ -75,6 +75,14 @@ then
   }
 fi
 
+rsw () {
+  echo "Running local CI [ hit CTRL+C to stop ]"
+  {
+    fd Cargo
+    fd -e rs
+  } | entr -cd cargo "$@"
+}
+
 # trysource ${HOME}/.fzf.zsh
 trysource .localrc
 trysource .skim/shell/completion.zsh
@@ -135,7 +143,7 @@ crget() {
 }
 
 cr() {
-  target=$(crget $@ |
+  target=$(crget "$@" |
       sort -u |
       awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
       sk --no-hscroll --ansi -d "\t" -n 2) || return
@@ -179,10 +187,6 @@ Subcommands:
 EOF
       ;;
   esac
-}
-
-cdd() {
-  pushd ${DOTFILES}
 }
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker

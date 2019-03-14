@@ -145,32 +145,31 @@ bootstrap_hs() {
 }
 
 parse_args() {
-  local lang=
   case $1 in
     "python"|"py"|"p")
-      lang=py
+      echo py
       ;;
     "rust"|"rs"|"r")
-      lang=rs
+      echo rs
       ;;
     "dotnet"|"cs")
-      lang=cs
+      echo cs
       ;;
     "go")
-      lang=go
+      echo go
       ;;
     "haskell"|"hs"|"h")
-      lang=hs
+      echo hs
       ;;
   esac
-  [[ -n $lang ]] && echo "${lang}"
 }
 
 readonly lang=$(parse_args "$1")
-readonly name=$2
-[[ -z $lang || -z $name ]] && print_help && exit 0
+readonly n=$2
+[[ -z $lang || -z $n ]] && print_help && exit 0
 
-readonly kata_dir="${repo_dir}/${date}-$lang-$name"
-echo "Creating $kata_dir" && mkdir -p "$kata_dir"
+readonly kata_dir="${repo_dir}/${date}-$lang-$n"
+echo "Creating $kata_dir"
+mkdir -p "$kata_dir"
 pushd "$kata_dir"
-eval "bootstrap_$lang" "$kata_dir" "$name"
+eval "bootstrap_$lang" "$kata_dir" "$n"

@@ -2,12 +2,10 @@
 
 if [[ $(uname -s) == "Darwin" ]]; then
   echo "Mac"
-  exit 0
-fi
-
-if [[ -f /etc/arch-release ]]; then
+elif [[ -f /etc/arch-release ]]; then
   echo "ArchLinux"
-  exit 0
+else
+  echo "Linux"
 fi
 
-echo "Linux"
+exit 0
