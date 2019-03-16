@@ -80,7 +80,18 @@ rsw () {
   {
     fd Cargo
     fd -e rs
-  } | entr -cd cargo "$@"
+  } | entr -d cargo "$@"
+}
+
+rsd () {
+  # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
+  # however it would be great to have a 'cargo doc' to include the stdlib docs
+  # instead of linking to the online ones.
+  readonly local docpath="$(dirname "$(rustup doc --path)")/"
+  echo "Syncing $docpath to ./target/doc..."
+  rsync -r "$docpath" ./target/doc/
+  echo "Done"
+  rsw doc --all --document-private-items $@
 }
 
 # trysource ${HOME}/.fzf.zsh
