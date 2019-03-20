@@ -99,8 +99,8 @@ trysource .localrc
 trysource .skim/shell/completion.zsh
 trysource .skim/shell/key-bindings.zsh
 
-# fco - checkout git branch/tag
-fco() {
+# gco - checkout git branch/tag
+gco() {
   local targets prefix
   case $1 in
     t|tag)
@@ -114,7 +114,7 @@ fco() {
         sed "s/.* //" |
         sed "s#remotes/[^/]*/##" || return)
       ;;
-    *)
+    h|help)
       cat <<EOF
 Interactive checkout a branch or a tag.
 
@@ -124,6 +124,9 @@ Subcommands:
 EOF
       return
       ;;
+    *)
+      git checkout $1
+      return
   esac
   [[ -z ${targets} ]] && return
   target=$(echo "$targets" |
