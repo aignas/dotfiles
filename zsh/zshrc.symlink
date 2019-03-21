@@ -125,7 +125,7 @@ EOF
       return
       ;;
     *)
-      git checkout $1
+      git checkout $@
       return
   esac
   [[ -z ${targets} ]] && return
