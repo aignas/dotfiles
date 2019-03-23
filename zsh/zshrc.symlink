@@ -56,18 +56,44 @@ trysource() {
 }
 
 plug() {
-  exec "${SH_PLUGIN}/$1"
+  "${SH_PLUGIN}/$1"
 }
+
+# The following are stolen form @agkozak's wonderful prompt:
+# https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
+# was specifically added by @psprint in
+# https://github.com/agkozak/agkozak-zsh-prompt/pull/11
+#
+# This contains just the bare minimum in order to get everything working on my
+# machine.
 
 precmd() {
-  # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-  PS1="%F{blue}%~%f $(plug git_prompt)
-%F{magenta}❯%f "
-  export PS1
+  psvar=()
+  setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+  typeset -g VCS_INFO_FD=13371
+  exec {VCS_INFO_FD}< <(plug git_prompt)
+  zle -F "$VCS_INFO_FD" _vcs_info_callback
+}
+function _vcs_info_callback() {
+  setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+
+  local FD="$1" response
+  IFS='' builtin read -rs -d $'\0' -u "$FD" response
+
+  # Withdraw callback and close the file descriptor
+  zle -F ${FD}; exec {FD}<&-
+
+  # Make the changes visible
+  psvar[1]="$response"
+  zle && zle reset-prompt
 }
 
-if [[ "${DOTFILES_OS}" == "ArchLinux" ]]
-then
+setopt promptsubst
+# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+PROMPT='%F{blue}%~%f %{$psvar[1]%}
+%F{magenta}❯%f '
+
+if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
   aurd() {
     p="${HOME}/aur/$1"
     [[ ! -d "$p" ]] && git clone "https://aur.archlinux.org/$1.git" "$p"
@@ -75,29 +101,12 @@ then
   }
 fi
 
-rsw () {
-  echo "Running local CI [ hit CTRL+C to stop ]"
-  {
-    fd Cargo
-    fd -e rs
-  } | entr -d cargo "$@"
-}
-
-rsd () {
-  # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
-  # however it would be great to have a 'cargo doc' to include the stdlib docs
-  # instead of linking to the online ones.
-  readonly local docpath="$(dirname "$(rustup doc --path)")/"
-  echo "Syncing $docpath to ./target/doc..."
-  rsync -r "$docpath" ./target/doc/
-  echo "Done"
-  rsw doc --all --document-private-items $@
-}
-
 # trysource ${HOME}/.fzf.zsh
 trysource .localrc
 trysource .skim/shell/completion.zsh
 trysource .skim/shell/key-bindings.zsh
+
+#{{{ Functions
 
 # gco - checkout git branch/tag
 gco() {
@@ -136,71 +145,24 @@ EOF
   git checkout "$(echo "$target" | awk '{print $2}')"
 }
 
-c() {
-  while true
-  do
-    target=$(
-      fd --type=d -H --follow --max-depth 1 "$@" |
-        sort -u |
-        sk --ansi) || return
-    cd "$target" || return
-  done
+rsw () {
+  echo "Running local CI [ hit CTRL+C to stop ]"
+  {
+    fd Cargo
+    fd -e rs
+  } | entr -d cargo "$@"
 }
 
-# Run the search with multiple fd instances in parallel
-crget() {
-  for dir in "${@:-${HOME}/src}"
-  do
-    fd --hidden --type=d --max-depth 5 "^\.git$" "$dir" -x dirname {}\; &
-  done
-  wait
+rsd () {
+  # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
+  # however it would be great to have a 'cargo doc' to include the stdlib docs
+  # instead of linking to the online ones.
+  readonly local docpath="$(dirname "$(rustup doc --path)")/"
+  echo "Syncing $docpath to ./target/doc..."
+  rsync -r "$docpath" ./target/doc/
+  echo "Done"
+  rsw doc --all --document-private-items $@
 }
-
-cr() {
-  target=$(crget "$@" |
-      sort -u |
-      awk '{print "\x1b[31;1mrepo\x1b[m\t" $1}' |
-      sk --no-hscroll --ansi -d "\t" -n 2) || return
-  cd "$(echo "$target" | awk '{print $2}')" || return
-}
-
-st() {
-  local target="$1"
-  if [[ -z $target ]]
-  then
-    target=$(fd --type=d --follow --max-depth 3 . |
-      sort -u |
-      sk --ansi) || return
-  elif [[ ! -d $target ]]
-  then
-    echo "Please provide a path that is a directory and exists"
-    return 1
-  fi
-  sh -c "scantest -command 'go test -covermode=count -coverprofile=./$target/coverage.out ./$target/...'"
-}
-
-ct() {
-  case $1 in
-    rm)
-      echo "cleaning coverage files up"
-      fd --type=f -I coverage.out -x rm {}
-      ;;
-    '')
-      file=$(fd --type=f -I coverage.out |
-        sort -u |
-        sk --ansi) || return
-      go tool cover -html="$file"
-      ;;
-    *)
-      cat <<EOF
-Search for coverage files and open them in a browser window using 'go tool
-cover'.
-
-Subcommands:
-  rm: cleanup all coverage files
-EOF
-      ;;
-  esac
-}
+#}}}
 
 # vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
