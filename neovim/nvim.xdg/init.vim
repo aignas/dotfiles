@@ -167,7 +167,7 @@ let g:ale_rust_cargo_use_clippy = 1
 let g:ale_rust_cargo_check_tests = 1
 let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-    \   'rust': ['rls', 'rustfmt'],
+    \   'rust': ['rustfmt'],
     \   'go': ['gofmt', 'goimports'],
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
