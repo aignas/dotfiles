@@ -48,10 +48,10 @@ set-window-option -g mode-keys vi
 bind-key c new-window -c "#{pane_current_path}"
 
 # prefix ctrl-l
-bind-key c-l last-window
+bind-key c-b last-window
 
 # prefix b
-bind-key c-b send-prefix
+bind-key b send-prefix
 
 # prefix |
 bind-key | split-window -h -c "#{pane_current_path}"
