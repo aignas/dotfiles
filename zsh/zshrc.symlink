@@ -56,7 +56,8 @@ trysource() {
 }
 
 plug() {
-  "${SH_PLUGIN}/$1"
+  name=$1; shift
+  "${SH_PLUGIN}/$name" $@
 }
 
 # The following are stolen form @agkozak's wonderful prompt:
@@ -70,27 +71,36 @@ plug() {
 precmd() {
   psvar=()
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-  typeset -g VCS_INFO_FD=13371
-  exec {VCS_INFO_FD}< <(plug git_prompt)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback
+
+  typeset -g VCS_INFO_FD=${RANDOM}
+  exec {VCS_INFO_FD}< <(plug git_prompt --no-status)
+  zle -F "$VCS_INFO_FD" _vcs_info_callback_branch
+
+  typeset -g VCS_INFO_FD=${RANDOM}
+  exec {VCS_INFO_FD}< <(plug git_prompt --no-branch --no-diff)
+  zle -F "$VCS_INFO_FD" _vcs_info_callback_status
 }
+function _vcs_info_callback_branch() { _vcs_info_callback $1 1 }
+function _vcs_info_callback_status() { _vcs_info_callback $1 2 }
 function _vcs_info_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   local FD="$1" response
   IFS='' builtin read -rs -d $'\0' -u "$FD" response
 
-  # Withdraw callback and close the file descriptor
-  zle -F ${FD}; exec {FD}<&-
+  zle -F ${FD}; exec {FD}<&- # Withdraw callback and close the file descriptor
 
-  # Make the changes visible
-  psvar[1]="$response"
+  # Make the changes visible and redraw only if there is something to draw
+  if [[ -z $response ]]; then
+    return
+  fi
+  psvar[$2]="$response"
   zle && zle reset-prompt
 }
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$psvar[1]%}
+PROMPT='%F{blue}%~%f %{$psvar[1]%}%{$psvar[2]%}
 %F{magenta}❯%f '
 
 if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
