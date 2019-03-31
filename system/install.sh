@@ -1,6 +1,4 @@
-#!/bin/bash
-
-set -e
+#!/bin/bash -e
 
 readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig entr)
 cd "$(dirname "$0")/.."
@@ -15,7 +13,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   brew cleanup
 
   info "Installing packages"
-  bottles=("${common[@]}" python3)
+  bottles=("${common[@]}" python3 gnu-sed)
   casks=(alacritty font-hack signal font-fira-code)
   brew install "${bottles[@]}"
   brew upgrade "${bottles[@]}"
