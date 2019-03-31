@@ -95,7 +95,7 @@ set laststatus=2 showtabline=2 noshowmode
 let g:lightline = {
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+        \             [ 'gitbranch', 'readonly', 'relativepath', 'modified' ] ]
         \ },
         \ 'component_function': {'gitbranch': 'fugitive#head'},
         \ 'colorscheme': 'seoul256',
