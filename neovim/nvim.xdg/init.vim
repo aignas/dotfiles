@@ -1,4 +1,4 @@
-" vim: filetype=vim
+" vim: filetype=vim foldmethod=marker
 "
 " Neovim/Vim configuration by Ignas Anikevičius
 "
@@ -30,6 +30,7 @@ call plug#begin(s:data_dir . '/plugged')
 
 Plug 'haya14busa/vim-asterisk'
 Plug 'itchyny/lightline.vim'
+Plug 'maximbaz/lightline-ale'
 Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -37,48 +38,21 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'wellle/targets.vim'
-Plug 'janko-m/vim-test'
 Plug 'w0rp/ale'
-Plug 'tyru/eskk.vim', { 'for': 'markdown' }
+
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
-
+Plug 'tyru/eskk.vim', { 'branch': 'neovim', 'for': 'markdown' }
 Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'],}
 Plug 'vmchale/ion-vim', { 'for': ['markdown', 'ion'],}
 Plug 'vimwiki/vimwiki'
-
-function! BuildComposer(info)
-    if a:info.status !=# 'unchanged' || a:info.force
-        if has('nvim')
-            !cargo build --release
-        else
-            !cargo build --release --no-default-features --features json-rpc
-        endif
-    endif
-endfunction
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
-
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#disable_auto_complete = 1
-
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
+Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
 call plug#end()
 
-"Generate help tags
-silent! helptags ALL
+silent! helptags ALL            "Generate help tags
 
-" Generic vim {{{
 " Required:
 filetype plugin indent on
 syntax enable               " Enable syntax hl
@@ -89,17 +63,39 @@ let g:maplocalleader='-'    " Change the def leader
 " Theming
 set guioptions=ag           " remove toolbar, menubar and graphical tabs
 colorscheme seoul256
-"let g:seoul256_background = 235
 set background=dark
 set laststatus=2 showtabline=2 noshowmode
 let g:lightline = {
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'relativepath', 'modified' ] ]
-        \ },
-        \ 'component_function': {'gitbranch': 'fugitive#head'},
-        \ 'colorscheme': 'seoul256',
-        \ }
+      \ 'active': {
+      \     'left': [
+      \         [ 'mode', 'eskk', 'paste' ],
+      \         [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
+      \     ],
+      \     'right': [
+      \         [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+      \         [ 'lineinfo' ],
+      \         [ 'percent' ],
+      \         [ 'fileformat', 'fileencoding', 'filetype' ],
+      \     ],
+      \ },
+      \ 'component_expand': {
+      \     'linter_checking': 'lightline#ale#checking',
+      \     'linter_warnings': 'lightline#ale#warnings',
+      \     'linter_errors': 'lightline#ale#errors',
+      \     'linter_ok': 'lightline#ale#ok',
+      \ },
+      \ 'component_function': {
+      \     'gitbranch': 'fugitive#head',
+      \     'eskk': 'eskk#statusline',
+      \ },
+      \ 'component_type': {
+      \     'linter_checking': 'left',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ },
+      \ 'colorscheme': 'seoul256',
+      \ }
 
 set fileformats=unix,dos
 augroup general_settings
@@ -113,48 +109,51 @@ augroup general_settings
     autocmd FocusLost * :wa          " Save when loosing focus
 augroup END
 
-set cmdheight=2                  " The command bar is 2 high
-set number relativenumber        " Show relative line numbers, with the current absolute
-set lazyredraw                   " Do not redraw, when running macros: lazy redraw
-set hidden                       " Change buffer - without saving
-set backspace=eol,start,indent   " Set backspace
-set autoindent                   " Set auto-indent
-set whichwrap+=<,>               " Backspace and cursor keys wrap to
-set incsearch hlsearch           " Highlight search results
-set magic                        " Set magic on
-set list
-set breakindent showbreak=»»
-set path+=** wildmode=full
-
-nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
-nnoremap <silent> <leader>cd :cd %:p:h<cr>
-
-set backup
-set backupcopy=yes
-set undofile
 execute 'set backupdir=' . s:backup_dir . ',./.backup,.,/tmp'
 execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
-set foldenable foldlevel=1
+set autoindent
+set backspace=eol,start,indent
+set backup
+set backupcopy=yes
+set breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
+set foldenable foldlevel=1
+set hidden
+set incsearch hlsearch
+set joinspaces cpoptions+=J     " Double spacing between sentences
+set lazyredraw
 set linebreak
-set nowrap
+set list
+set magic
+set number relativenumber
 set pastetoggle=<F2>
-set spell               " vim-unimpaired: use [os and ]os
-set cpoptions+=J        " Double spacing between sentences
-set joinspaces
-map * <Plug>(asterisk-*)
-nnoremap <leader>a :grep <end>
+set path+=** wildmode=full
+set spell                       " vim-unimpaired: use [os and ]os
+set undofile
+set whichwrap+=<,>
+set wrap
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-"skim
-nmap <silent> <leader>f :Files<CR>
-nmap <silent> <leader>gf :GFiles<CR>
-nmap <silent> <leader>b :Buffers<CR>
+iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>):
+iabbrev xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>:
+iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
 
-"ale
+map * <Plug>(asterisk-*)
+nnoremap <leader>a :grep <end>
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>gf :GFiles<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>d :ALEGoToDefinition<CR>
+nnoremap <silent> <leader>h :ALEHover<CR>
+nnoremap <silent> <leader>vc :e $MYVIMRC<cr>
+nnoremap <silent> <leader>vv :source $MYVIMRC<cr>:echo "init.vim reloaded"<cr>
+nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
+nnoremap <silent> <leader>cd :cd %:p:h<cr>
+
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
@@ -162,9 +161,6 @@ let g:ale_linters = {
     \   'rust': ['rls', 'cargo'],
     \   'javascript': ['eslint'],
     \}
-let g:ale_rust_cargo_check_examples = 1
-let g:ale_rust_cargo_use_clippy = 1
-let g:ale_rust_cargo_check_tests = 1
 let g:ale_fixers = {
     \   '*': ['remove_trailing_lines', 'trim_whitespace'],
     \   'rust': ['rustfmt'],
@@ -172,71 +168,19 @@ let g:ale_fixers = {
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
     \}
 
-nnoremap <silent> gd :ALEGoToDefinition<CR>
-nnoremap <silent> <leader>h :ALEHover<CR>
-
-"neosnippet
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-
-let g:neosnippet#snippets_directory = $HOME . '/.dotfiles/neovim/snippets'
-
-" vim-test
-nnoremap <silent> <leader>tn :TestNearest<CR>
-nnoremap <silent> <leader>tf :TestFile<CR>
-nnoremap <silent> <leader>ts :TestSuite<CR>
-nnoremap <silent> <leader>tt :TestLast<CR>
-nnoremap <silent> <leader>tg :TestVisit<CR>
-
-" terminal
-if has('nvim')
-    augroup term_settings
-        autocmd!
-        tnoremap <Esc> <C-\><C-n>
-        autocmd TermOpen * setlocal statusline=%{b:term_title}
-        let g:neoterm_default_mod=':vertical :belowright'
-        let g:neoterm_size='60'
-    augroup END
-endif
-
-
-" file type handling
-" vimwiki
 let g:vimwiki_folding='expr'
 let g:vimwiki_list = [{'path': '~/vimwiki',
             \ 'syntax': 'markdown',
             \ 'ext': '.md',
             \ }]
 
-let g:markdown_composer_browser='dot-open'
 let g:markdown_composer_autostart=1
+let g:markdown_composer_browser='dot-open'
 let g:markdown_composer_open_browser=0
 let g:markdown_composer_syntax_theme='zenburn'
 
-" vim
-nnoremap <leader>vc :e $MYVIMRC<cr>
-augroup reload_vimrc
-    autocmd!
-    autocmd reload_vimrc BufWritePost $MYVIMRC nested source $MYVIMRC
-    autocmd FileType vim set nofen
-    autocmd FileType vim set foldmethod=marker
-augroup END
-
-augroup web_settings
-    autocmd!
-    autocmd FileType html,djangohtml,javascript set shiftwidth=2
-    autocmd FileType html,djangohtml,javascript set tabstop=2
-augroup END
-
-augroup sh_settings
-    autocmd!
-    autocmd FileType sh,bash set shiftwidth=2
-    autocmd FileType sh,bash set tabstop=2
-augroup END
-
-" Git
-nnoremap <silent> <leader>gs :Gstatus<cr>
-
-"}}}
+let g:eskk#large_dictionary = {
+    \    'path': '/usr/share/skk/SKK-JISYO.L',
+    \    'sorted': 1,
+    \    'encoding': 'euc-jp',
+    \}
