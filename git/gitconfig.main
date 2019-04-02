@@ -19,8 +19,10 @@
     prompt = false
 
 [alias]
-    ci = commit -v
-    cam = commit --amend --no-edit
+    ci = commit --verbose
+    ca = commit --amend --no-edit
+    cam = commit --amend --no-edit --all --verbose
+    cim = commit --all --verbose
     st = status
     stu = status -uno
     br = branch
