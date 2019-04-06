@@ -1,48 +1,27 @@
-" vim: filetype=vim foldmethod=marker
-"
-" Neovim/Vim configuration by Ignas Anikevičius
-"
-" There are numerous people, whose configuration files were copied and adapted
-" and it's hard to list everybody, but the main ones are:
-"
-"   * Amir Salihefendic <amix3k at gmail.com>
-"       http://amix.dk/blog/post/19486#The-ultimative-Vim-configuration-vimrc
-"
-"   * Steve Losh
-"       http://stevelosh.com/blog/2010/09/coming-home-to-vim/#
-"
-"   * Neovim project defaults
+" vim: filetype=vim
 
-scriptencoding utf-8
-" Set no compatible on purpose
 " vint: -ProhibitSetNoCompatible
 set nocompatible
+scriptencoding utf-8
 
-if has('nvim')
-    let s:data_dir = $HOME . '/.local/share/nvim'
-else
-    let s:data_dir = $HOME . '/.local/share/vim'
-endif
+let s:data_dir = $HOME . '/.local/share/nvim'
 let g:python3_host_prog = s:data_dir . '/venv/bin/python'
 let s:backup_dir = expand(s:data_dir . '/backups/')
 
 call plug#begin(s:data_dir . '/plugged')
 
-Plug 'haya14busa/vim-asterisk'
 Plug 'itchyny/lightline.vim'
 Plug 'maximbaz/lightline-ale'
 Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
-Plug 'tyru/eskk.vim', { 'branch': 'neovim', 'for': 'markdown' }
+Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki'] }
 Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'],}
 Plug 'vmchale/ion-vim', { 'for': ['markdown', 'ion'],}
@@ -51,21 +30,18 @@ Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
 call plug#end()
 
-silent! helptags ALL            "Generate help tags
-
 " Required:
 filetype plugin indent on
-syntax enable               " Enable syntax hl
-set history=10000           " History size
-let g:mapleader=','         " Change the def leader
-let g:maplocalleader='-'    " Change the def leader
+syntax enable
+set history=10000
 
 " Theming
-set guioptions=ag           " remove toolbar, menubar and graphical tabs
+set guioptions=ag laststatus=2 showtabline=2 noshowmode
+set termguicolors background=dark
+let g:seoul256_background = 235
 colorscheme seoul256
-set background=dark
-set laststatus=2 showtabline=2 noshowmode
 let g:lightline = {
+      \ 'colorscheme': 'seoul256',
       \ 'active': {
       \     'left': [
       \         [ 'mode', 'eskk', 'paste' ],
@@ -94,29 +70,16 @@ let g:lightline = {
       \     'linter_errors': 'error',
       \     'linter_ok': 'left',
       \ },
-      \ 'colorscheme': 'seoul256',
       \ }
-
-set fileformats=unix,dos
-augroup general_settings
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it when the position is invalid or when inside an event handler
-    " (happens when dropping a file on gvim).
-    autocmd BufReadPost *
-      \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-      \   exe "normal! g`\"" |
-      \ endif
-    autocmd FocusLost * :wa          " Save when loosing focus
-augroup END
 
 execute 'set backupdir=' . s:backup_dir . ',./.backup,.,/tmp'
 execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
 set autoindent
 set backspace=eol,start,indent
-set backup
-set backupcopy=yes
+set backup backupcopy=yes
 set breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
+set fileformats=unix,dos
 set foldenable foldlevel=1
 set hidden
 set incsearch hlsearch
@@ -127,7 +90,6 @@ set list
 set magic
 set number relativenumber
 set pastetoggle=<F2>
-set path+=** wildmode=full
 set spell                       " vim-unimpaired: use [os and ]os
 set undofile
 set whichwrap+=<,>
@@ -141,12 +103,14 @@ iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>):
 iabbrev xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>:
 iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
 
-map * <Plug>(asterisk-*)
+let g:mapleader=','
+let g:maplocalleader='-'
 nnoremap <leader>a :grep <end>
 nnoremap <silent> <leader>f :Files<CR>
 nnoremap <silent> <leader>gf :GFiles<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>d :ALEGoToDefinition<CR>
+nnoremap <silent> <leader>dd :ALEGoToDefinition<CR>
+nnoremap <silent> <leader>ds :ALEGoToDefinitionInSplit<CR>
 nnoremap <silent> <leader>h :ALEHover<CR>
 nnoremap <silent> <leader>vc :e $MYVIMRC<cr>
 nnoremap <silent> <leader>vv :source $MYVIMRC<cr>:echo "init.vim reloaded"<cr>
@@ -175,12 +139,19 @@ let g:vimwiki_list = [{'path': '~/vimwiki',
             \ }]
 
 let g:markdown_composer_autostart=1
-let g:markdown_composer_browser='dot-open'
+let g:markdown_composer_browser='open -a "Firefox"'
 let g:markdown_composer_open_browser=0
 let g:markdown_composer_syntax_theme='zenburn'
 
+let g:eskk#start_completion_length=2
+let g:eskk#directory = s:data_dir . '/skk'
+let g:eskk#dictionary = {
+    \   'path': s:data_dir . '/skk/skk-jisyo.s',
+    \   'sorted': 0,
+    \   'encoding': 'utf-8',
+    \}
 let g:eskk#large_dictionary = {
-    \    'path': '/usr/share/skk/SKK-JISYO.L',
-    \    'sorted': 1,
-    \    'encoding': 'euc-jp',
+    \   'path': s:data_dir . '/skk/SKK-JISYO.L',
+    \   'sorted': 1,
+    \   'encoding': 'euc-jp',
     \}
