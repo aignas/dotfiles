@@ -139,9 +139,8 @@ let g:vimwiki_list = [{'path': '~/vimwiki',
             \ }]
 
 let g:markdown_composer_autostart=1
-let g:markdown_composer_browser='open -a "Firefox"'
+let g:markdown_composer_browser='dot-open'
 let g:markdown_composer_open_browser=0
-let g:markdown_composer_syntax_theme='zenburn'
 
 let g:eskk#start_completion_length=2
 let g:eskk#directory = s:data_dir . '/skk'
