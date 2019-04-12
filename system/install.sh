@@ -11,6 +11,8 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   brew update
   info "brew cleanup"
   brew cleanup
+  info "brew upgrade"
+  brew upgrade
 
   info "Installing packages"
   bottles=("${common[@]}" python3 gnu-sed skktools)
