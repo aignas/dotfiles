@@ -60,7 +60,7 @@ plug() {
   "${SH_PLUGIN}/$name" $@
 }
 
-# The following are stolen form @agkozak's wonderful prompt:
+# The following are stolen adaptet form @agkozak's wonderful prompt:
 # https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
 # was specifically added by @psprint in
 # https://github.com/agkozak/agkozak-zsh-prompt/pull/11
@@ -75,33 +75,41 @@ precmd() {
   typeset -g VCS_INFO_FD=${RANDOM}
   exec {VCS_INFO_FD}< <(plug git_prompt --no-status)
   zle -F "$VCS_INFO_FD" _vcs_info_callback_branch
-
-  typeset -g VCS_INFO_FD=${RANDOM}
-  exec {VCS_INFO_FD}< <(plug git_prompt --no-branch --no-diff)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback_status
 }
-function _vcs_info_callback_branch() { _vcs_info_callback $1 1 }
-function _vcs_info_callback_status() { _vcs_info_callback $1 2 }
+
+function _vcs_info_callback_branch() {
+  _vcs_info_callback $1 || return
+
+  typeset -g VCS_INFO_FD=$1
+  exec {VCS_INFO_FD}< <(plug git_prompt --no-branch --no-diff)
+  zle -F "$VCS_INFO_FD" _vcs_info_callback
+}
+
 function _vcs_info_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   local FD="$1" response
   IFS='' builtin read -rs -d $'\0' -u "$FD" response
-
   zle -F ${FD}; exec {FD}<&- # Withdraw callback and close the file descriptor
 
   # Make the changes visible and redraw only if there is something to draw
-  if [[ -z $response ]]; then
+  [[ -z $response ]] && return 1
+  psvar[1]="${psvar[1]}$response"
+  zle && zle reset-prompt
+}
+
+function prompt_char() {
+  if [[ $? -ne 0 ]]; then
+    echo "%F{red}❯%f"
     return
   fi
-  psvar[$2]="$response"
-  zle && zle reset-prompt
+  echo "%F{magenta}❯%f"
 }
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$psvar[1]%}%{$psvar[2]%}
-%F{magenta}❯%f '
+PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}
+$(prompt_char) '
 
 if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
   aurd() {
@@ -111,13 +119,11 @@ if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
   }
 fi
 
-# trysource ${HOME}/.fzf.zsh
 trysource .localrc
 trysource .skim/shell/completion.zsh
 trysource .skim/shell/key-bindings.zsh
 
 #{{{ Functions
-
 rsw () {
   echo "Running local CI [ hit CTRL+C to stop ]"
   {
