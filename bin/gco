@@ -1,0 +1,11 @@
+#!/bin/bash
+
+main() {
+  if [[ -z $1 ]]; then
+    git checkout "$(frev)"
+    return
+  fi
+  git checkout "$@"
+}
+
+main "$@"
