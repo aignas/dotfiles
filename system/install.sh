@@ -7,12 +7,13 @@ source script/logging.sh
 
 echo "The detected OS is ${DOTFILES_OS}"
 if [[ ${DOTFILES_OS} == "Mac" ]]; then
-  info "brew update"
+  info "brew"
   brew update
-  info "brew cleanup"
+  success "brew update"
   brew cleanup
-  info "brew upgrade"
+  success "brew cleanup"
   brew upgrade
+  success "brew upgrade"
 
   info "Installing packages"
   bottles=("${common[@]}" python3 gnu-sed skktools)
@@ -27,15 +28,15 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   pip3 install --upgrade -U vim-vint
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   info "pacman"
-  info "pacman: cleanup"
-  sudo pacman -Sc
+  debug "pacman: cleanup"
+  sudo pacman -Sc --noconfirm
   success "pacman: cleanup"
 
-  info "pacman: update"
+  debug "pacman: update"
   sudo pacman -Syu --noconfirm
   sucess "pacman: update"
 
-  info "pacman: install"
+  debug "pacman: install"
   pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go vint)
   sudo pacman -S \
     --quiet \
