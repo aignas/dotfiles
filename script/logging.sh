@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-now() {
-  date +%s%N
-}
+set -euo pipefail
 
-time_zero=$(now)
+now() { date +%s%N; }
+export DOTFILES_START=${DOTFILES_START:-$(now)}
 
 log () {
-  timestamp=$(( ( $(now) - time_zero ) / 1000 ))
+  timestamp=$(( ( $(now) - DOTFILES_START ) / 1000 ))
   timestamp="$(( timestamp / 1000 )).$(( timestamp % 1000))"
   local level=$1; shift
   case "$level" in
@@ -27,7 +26,7 @@ log () {
   printf "%10.3f [%s] %s\n" "$timestamp" "$level" "$*"
 }
 
-debug  (){ [[ -z ${VERBOSE} ]] || log DBG "$*"; }
+debug  (){ [[ -z ${VERBOSE:-} ]] || log DBG "$*"; }
 info   (){ log INF "$*"; }
 user   (){ log "???" "$*"; }
 success(){ log OK "$*"; }
