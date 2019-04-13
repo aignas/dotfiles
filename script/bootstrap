@@ -2,6 +2,8 @@
 #
 # bootstrap installs things.
 
+set -euo pipefail
+
 [[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 export DOTFILES_ROOT
 cd "$(dirname "$0")/.."
@@ -72,8 +74,8 @@ setup_gitconfig () {
 install_dotfiles () {
   info 'installing dotfiles'
   cmd=(script/link_dotfile)
-  [[ ${OVERWRITE_ALL} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
-  [[ ${BACKUP_ALL} == "true" ]] && cmd=("${cmd[@]}" --backup)
+  [[ ${OVERWRITE_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
+  [[ ${BACKUP_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --backup)
   find . -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
   find . -maxdepth 2 -name '*.xdg' -exec "${cmd[@]}" {} \;
 }

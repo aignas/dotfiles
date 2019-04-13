@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 now() { date +%s%N; }
 export DOTFILES_START=${DOTFILES_START:-$(now)}
 
