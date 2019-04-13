@@ -26,15 +26,21 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   info "Installing packages via pip"
   pip3 install --upgrade -U vim-vint
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
-  info "pacman update"
-  sudo pacman -Syu --noconfirm
+  info "pacman"
+  info "pacman: cleanup"
+  sudo pacman -Sc
+  success "pacman: cleanup"
 
-  info "Installing packages"
+  info "pacman: update"
+  sudo pacman -Syu --noconfirm
+  sucess "pacman: update"
+
+  info "pacman: install"
   pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go vint)
   sudo pacman -S \
     --quiet \
     --needed \
     --noconfirm \
     "${pkgs[@]}"
-  success "pacman update"
+  sucess "pacman: install"
 fi
