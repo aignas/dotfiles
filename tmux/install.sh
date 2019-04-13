@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 DIR=$HOME/.tmux/plugins/tpm
-if [[ -d "$DIR" ]]
-then
-  git -C "${DIR}" fetch origin/master
+if [[ -d "$DIR" ]]; then
+  git -C "${DIR}" fetch origin
   git -C "${DIR}" reset --hard origin/master
 else
   git clone \

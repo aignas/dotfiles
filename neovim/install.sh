@@ -27,12 +27,11 @@ vimplug() {
   success "vim-plug: ${VIMPLUG_DIR}"
 }
 
-vimplug-update() {
+vimplug_update() {
   nvim --headless \
     +PlugUpgrade \
     +PlugInstall \
     +PlugUpdate \
-    +PlugClean \
     +qa!
   success "vim-plug plugins installed"
 }
@@ -56,6 +55,6 @@ skk() {
 
 pyenv
 vimplug
-vimplug-update
+vimplug_update
 backupdir
 skk

@@ -18,9 +18,11 @@
 
 set -oe pipefail
 
-p="${HOME}/src/github/saibing/bingo.git/"
-git clone https://github.com/saibing/bingo.git "$p" ||
-  git -C "$p" pull
-pushd "$p"
-GO111MODULE=on go install
-popd
+DIR="${HOME}/src/github/saibing/bingo.git/"
+if [[ -d "$DIR" ]]; then
+  git -C "$DIR" fetch origin
+  git -C "$DIR" reset --hard origin/master
+else
+  git clone https://github.com/saibing/bingo.git "$DIR"
+fi
+cd "$DIR" && GO111MODULE=on go install

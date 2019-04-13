@@ -27,5 +27,7 @@ log () {
 debug  (){ [[ -z ${VERBOSE:-} ]] || log DBG "$*"; }
 info   (){ log INF "$*"; }
 user   (){ log "???" "$*"; }
-success(){ log OK "$*"; }
+ok     (){ log OK "$*"; }
 fail   (){ log ERR "$*" && exit 1; }
+
+success(){ ok "$@"; }

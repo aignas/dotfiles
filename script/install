@@ -10,6 +10,7 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 for f in $(git ls-files | grep -E "install.sh$"); do
-  "$SHELL" -c "$f"
+  info "$f"
+  "$SHELL" -ceuo pipefail "$f"
   success "$f"
 done

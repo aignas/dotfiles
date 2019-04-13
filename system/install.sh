@@ -9,11 +9,11 @@ echo "The detected OS is ${DOTFILES_OS}"
 if [[ ${DOTFILES_OS} == "Mac" ]]; then
   info "brew"
   brew update
-  success "brew update"
+  ok "brew update"
   brew cleanup
-  success "brew cleanup"
+  ok "brew cleanup"
   brew upgrade
-  success "brew upgrade"
+  ok "brew upgrade"
 
   info "Installing packages"
   bottles=("${common[@]}" python3 gnu-sed skktools)
@@ -30,11 +30,11 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   info "pacman"
   debug "pacman: cleanup"
   sudo pacman -Sc --noconfirm
-  success "pacman: cleanup"
+  ok "pacman: cleanup"
 
   debug "pacman: update"
   sudo pacman -Syu --noconfirm
-  sucess "pacman: update"
+  ok "pacman: update"
 
   debug "pacman: install"
   pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go vint)
@@ -43,5 +43,5 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
     --needed \
     --noconfirm \
     "${pkgs[@]}"
-  sucess "pacman: install"
+  ok "pacman: install"
 fi
