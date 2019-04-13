@@ -1,8 +1,5 @@
-#
-# My zshrc configuration. Use or reuse however you like.
-#       by gns-ank
+#!/usr/bin/env zsh
 
-# shortcut to this dotfiles path is $ZSH
 export DOTFILES="$HOME/.dotfiles"
 export DOTFILES_OS="$(${DOTFILES}/bin/get_os)"
 export SH_PLUGIN="${DOTFILES}/sh-plugins/bin"
@@ -30,7 +27,6 @@ setopt HIST_REDUCE_BLANKS
 # {{{ aliases
 alias b='bat'
 alias g='git'
-alias se='sudo -E e'
 alias vc='e ~/.config/nvim/init.vim'
 alias l='exa'
 alias ll='exa -l'
@@ -51,7 +47,7 @@ zstyle \
   'git'
 
 #{{{ VCS info
-_git_prompt() { "${SH_PLUGIN}/git_prompt" $@; }
+_git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 
 # The following are stolen adaptet form @agkozak's wonderful prompt:
 # https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
@@ -62,47 +58,47 @@ _git_prompt() { "${SH_PLUGIN}/git_prompt" $@; }
 # machine.
 
 precmd() {
-  psvar=()
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   typeset -g VCS_INFO_FD=${RANDOM}
   exec {VCS_INFO_FD}< <(_git_prompt --no-status)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback_branch
-}
+  zle -F "$VCS_INFO_FD" _vcs_info_callback_1
 
-function _vcs_info_callback_branch() {
-  _vcs_info_callback $1 || return
-
-  typeset -g VCS_INFO_FD=$1
+  typeset -g VCS_INFO_FD=${RANDOM}
   exec {VCS_INFO_FD}< <(_git_prompt --no-branch --no-diff)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback
+  zle -F "$VCS_INFO_FD" _vcs_info_callback_2
 }
+
+function _vcs_info_callback_1() { _vcs_info_callback "$1" 1; }
+function _vcs_info_callback_2() { _vcs_info_callback "$1" 2; }
 
 function _vcs_info_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   local FD="$1" response
   IFS='' builtin read -rs -d $'\0' -u "$FD" response
-  zle -F ${FD}; exec {FD}<&- # Withdraw callback and close the file descriptor
+  zle -F "${FD}" exec {FD}<&- # Withdraw callback and close the file descriptor
 
-  # Make the changes visible and redraw only if there is something to draw
-  [[ -z $response ]] && return 1
-  psvar[1]="${psvar[1]}$response"
+  [[ "${psvar[${2}]}" == "${response:-empty}" ]] && return
+
+  # Redraw on change
+  psvar[${2}]="$response"
   zle && zle reset-prompt
 }
 
 function prompt_char() {
   if [[ $? -ne 0 ]]; then
-    echo "%F{red bold}❯%f"
+    echo "%F{red}❯%f"
     return
   fi
   echo "%F{magenta}❯%f"
 }
 #}}}
 
+psvar=()
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}
+PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%{$psvar[2]%}
 $(prompt_char) '
 
 if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
@@ -114,9 +110,9 @@ if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
 fi
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
-trysource ${HOME}/.localrc
-trysource ${HOME}/.skim/shell/completion.zsh
-trysource ${HOME}/.skim/shell/key-bindings.zsh
+trysource "${HOME}/.localrc"
+trysource "${HOME}/.skim/shell/completion.zsh"
+trysource "${HOME}/.skim/shell/key-bindings.zsh"
 
 #{{{ Functions
 rsw () {
@@ -135,7 +131,7 @@ rsd () {
   echo "Syncing $docpath to ./target/doc..."
   rsync -r "$docpath" ./target/doc/
   echo "Done"
-  rsw doc --all --document-private-items $@
+  rsw doc --all --document-private-items "$@"
 }
 #}}}
 
