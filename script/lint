@@ -2,10 +2,13 @@
 
 set -oe pipefail
 
+export DOTFILES_ROOT="${DOTFILES_ROOT:-$(command -v "$0" | xargs dirname)}"
+cd "${DOTFILES_ROOT}"
+# shellcheck source=./script/logging.sh
+source "./script/logging.sh"
+
 grepbang() {
-  rg -l --no-ignore "^#!$1" ||
-    grep -rl --exclude-dir=.git "^#\!$1" . || (
-      echo "failed to get files" && exit 1)
+  git -C "${DOTFILES_ROOT}" grep -El "^#!$1" || :
 }
 
 lintsh() {
@@ -20,36 +23,32 @@ lintsh() {
 }
 
 lintvim() {
-  files=$(fd -e vim ||
-    find . -name "*\.vim" || (
-      echo "failed to get files" && exit 1))
+  files=$(git -C "${DOTFILES_ROOT}" ls-files | grep -E "\.vim$" ||
+    fail "failed to get vim files")
   print_run "vim" "$files"
   run "$files" vint "$@"
 }
 
 print_run() {
-  echo -e "linting $1 files:"
-  echo -e "$2" | sort -u | sed "s|^| » |"
-  echo
+  info "linting $1 files ...."
+  for i in $(echo -e "$2" | sort -u); do
+    debug "linting $i"
+  done
 }
 
 run() {
   files=$1; shift
   echo "$files" | sort -u | xargs "$@"
+  success "linting $1 files"
 }
 
-case "${LINT:-all}" in
-  "vint")
-      lintvim
-      ;;
-  "vint-errors")
-      lintvim --error
-      ;;
-  "shellcheck")
-      lintsh
-    ;;
-  *)
-      lintsh
-      lintvim --error
-    ;;
-esac
+main() {
+  case "${LINT:-all}" in
+    "vint")         lintvim ;;
+    "vint-errors")  lintvim --error ;;
+    "shellcheck")   lintsh ;;
+    *)              lintsh; lintvim --error ;;
+  esac
+}
+
+main || fail "lint failed"

@@ -1,19 +1,34 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-info () {
-  printf "  [ \033[00;34m..\033[0m ] %s\n" "$@"
+now() {
+  date +%s%N
 }
 
-user () {
-  printf "\r  [ \033[0;33m??\033[0m ] %s " "$@"
+time_zero=$(now)
+
+log () {
+  timestamp=$(( ( $(now) - time_zero ) / 1000 ))
+  timestamp="$(( timestamp / 1000 )).$(( timestamp % 1000))"
+  local level=$1; shift
+  case "$level" in
+    INF|"???")
+      level=$(printf "\033[0;33m%3s\033[0m" "$level")
+      ;;
+    OK)
+      level=$(printf "\033[0;32m%3s\033[0m" "$level")
+      ;;
+    ERR)
+      level=$(printf "\033[0;31m%3s\033[0m" "$level")
+      ;;
+    *)
+      level=$(printf "%3s" "$level")
+      ;;
+  esac
+  printf "%10.3f [%s] %s\n" "$timestamp" "$level" "$*"
 }
 
-success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n" "$@"
-}
-
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n" "$@"
-  echo ''
-  exit
-}
+debug  (){ [[ -z ${VERBOSE} ]] || log DBG "$*"; }
+info   (){ log INF "$*"; }
+user   (){ log "???" "$*"; }
+success(){ log OK "$*"; }
+fail   (){ log ERR "$*" && exit 1; }

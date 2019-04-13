@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-[[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-export DOTFILES_ROOT
+set -oe pipefail
+
+# depends on having this script in the path
+export DOTFILES_ROOT="${DOTFILES_ROOT:-$(command -v "$0" | xargs dirname)/..}"
+cd "${DOTFILES_ROOT}"
+# shellcheck source=./script/logging.sh
+source "./script/logging.sh"
 
 print_help(){
   cat <<EOF
@@ -30,13 +35,14 @@ while test $# -gt 0; do
 done
 
 # Update
-if [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]]
-then
-  echo "Commit the changes and try again."
-  exit 1
-fi
+[[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] && \
+  fail "Commit the changes and try again."
 
+info "Rebasing on master"
 git -C "${DOTFILES_ROOT}" pull --rebase
+info "Updating submodules"
 git -C "${DOTFILES_ROOT}" submodule update --recursive
+info "Pushing"
 git -C "${DOTFILES_ROOT}" push
+info "Bootstrapping..."
 "${DOTFILES_ROOT}/script/bootstrap" --overwrite
