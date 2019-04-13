@@ -46,7 +46,7 @@ zstyle \
   'completion' \
   'git'
 
-#{{{ VCS info
+#{{{ Prompt
 _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 
 # The following are stolen adaptet form @agkozak's wonderful prompt:
@@ -93,21 +93,13 @@ function prompt_char() {
   fi
   echo "%F{magenta}❯%f"
 }
-#}}}
 
 psvar=()
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
 PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%{$psvar[2]%}
 $(prompt_char) '
-
-if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
-  aurd() {
-    p="${HOME}/aur/$1"
-    [[ ! -d "$p" ]] && git clone "https://aur.archlinux.org/$1.git" "$p"
-    pushd "$p" && git pull --rebase origin master
-  }
-fi
+#}}}
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
 trysource "${HOME}/.localrc"
@@ -115,6 +107,47 @@ trysource "${HOME}/.skim/shell/completion.zsh"
 trysource "${HOME}/.skim/shell/key-bindings.zsh"
 
 #{{{ Functions
+[[ "${DOTFILES_OS}" == "ArchLinux" ]] && aur() {
+  case "$1" in
+    "--help"|"-h")
+      cat <<EOF
+AUR downloading function.
+
+Usage:
+  aurd [-s|--search] [PACKAGE_NAME]
+EOF
+      return
+      ;;
+    ''|'-s'|'--search')
+      local input
+      if [[ -z $2 ]]; then
+        echo -n "enter AUR search term: "
+        read input
+      else
+        input="$2"
+      fi
+      selection=$(
+        curl --silent "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$input" |
+          jq -r '.results[] | "\(.NumVotes)\t\(.Name)\t\(.Description)"' |
+          awk '{pop=$1;name=$2; $1="";$2=""; printf "%5d \x1b[34;1m%s\x1b[m\t%s\n", pop, name, $0}' |
+          sort -n -r |
+          column -t -s $'\t' |
+          sk --ansi |
+          awk '{print $2}')
+      aurd "$selection"
+      return
+      ;;
+    *)
+      local dir="${HOME}/aur/$1"
+      [[ ! -d "$dir" ]] && git clone "https://aur.archlinux.org/$1.git" "$dir"
+
+      pushd "$dir"
+      git checkout .
+      git pull --rebase origin master
+      ;;
+  esac
+}
+
 rsw () {
   echo "Running local CI [ hit CTRL+C to stop ]"
   {
