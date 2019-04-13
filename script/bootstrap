@@ -67,7 +67,7 @@ setup_gitconfig () {
         -e "s|GITCONFIG_MAIN|$gitconfig_main|g" \
         git/gitconfig.symlink.example > git/gitconfig.symlink
 
-    success 'gitconfig'
+    ok 'gitconfig'
   fi
 }
 
@@ -87,7 +87,7 @@ info "installing dependencies"
 export DOTFILES="$DOTFILES_ROOT"
 if "$DOTFILES_ROOT/script/install" 2>&1 | tee /tmp/dotfiles-dot
 then
-  success "dependencies installed"
+  ok "dependencies installed"
 else
   fail "error installing dependencies"
 fi

@@ -17,5 +17,5 @@ do
   pushd "${DOTFILES}/sh-plugins/$i" || fail "plug-in not found"
   cargo -Z unstable-options build --release --out-dir "${bin_dir}"
   popd || fail "failed to popd"
-  success "sh-plugins: $i"
+  ok "sh-plugins: $i"
 done

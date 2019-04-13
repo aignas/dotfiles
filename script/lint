@@ -39,7 +39,7 @@ print_run() {
 run() {
   files=$1; shift
   echo "$files" | sort -u | xargs "$@"
-  success "linting $1 files"
+  ok "linting $1 files"
 }
 
 main() {

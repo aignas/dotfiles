@@ -14,7 +14,7 @@ pyenv() {
   "${NEOVIM_VENV}/bin/pip" -q \
     install --upgrade \
     neovim pip setuptools
-  success "python venv: ${NEOVIM_VENV}"
+  ok "python venv: ${NEOVIM_VENV}"
 }
 
 vimplug() {
@@ -24,7 +24,7 @@ vimplug() {
     curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
-  success "vim-plug: ${VIMPLUG_DIR}"
+  ok "vim-plug: ${VIMPLUG_DIR}"
 }
 
 vimplug_update() {
@@ -33,13 +33,13 @@ vimplug_update() {
     +PlugInstall \
     +PlugUpdate \
     +qa!
-  success "vim-plug plugins installed"
+  ok "vim-plug plugins installed"
 }
 
 backupdir() {
   readonly backup_dir="${NEOVIM_LOCAL}/backups"
   mkdir -p "${backup_dir}"
-  success "backup-dir: ${backup_dir}"
+  ok "backup-dir: ${backup_dir}"
 }
 
 skk() {
@@ -50,7 +50,7 @@ skk() {
     --output "${target}.gz" \
     https://skk-dev.github.io/dict/SKK-JISYO.L.gz
   gunzip "${target}.gz"
-  success "downloading SKK-JISYO.L"
+  ok "downloading SKK-JISYO.L"
 }
 
 pyenv

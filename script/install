@@ -38,5 +38,5 @@ installs=(
 for f in "${installs[@]}"; do
   info "Setting up $f"
   "$SHELL" -ceuo pipefail "$f/install.sh"
-  success "Setting up $f"
+  ok "Setting up $f"
 done

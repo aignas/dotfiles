@@ -84,4 +84,4 @@ then
   [[ -z $status ]] && status="create "
 fi
 
-success "$status $dst"
+ok "$status $dst"

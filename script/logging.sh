@@ -29,5 +29,3 @@ info   (){ log INF "$*"; }
 user   (){ log "???" "$*"; }
 ok     (){ log OK "$*"; }
 fail   (){ log ERR "$*" && exit 1; }
-
-success(){ ok "$@"; }
