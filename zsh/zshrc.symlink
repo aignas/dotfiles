@@ -28,15 +28,12 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 # }}}
 # {{{ aliases
-alias b='bat --theme=zenburn'
+alias b='bat'
 alias g='git'
-alias h='hub'
-alias gf='git fetch --all'
-alias k='kubectl'
 alias se='sudo -E e'
 alias vc='e ~/.config/nvim/init.vim'
-alias x='exa'
-alias xx='exa -l'
+alias l='exa'
+alias ll='exa -l'
 # }}}
 
 # initialize autocomplete here, otherwise functions won't be loaded
@@ -45,6 +42,8 @@ compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
+compdef l=exa
+compdef ll=exa
 
 zstyle \
   'history' \
@@ -100,7 +99,7 @@ function _vcs_info_callback() {
 
 function prompt_char() {
   if [[ $? -ne 0 ]]; then
-    echo "%F{red}❯%f"
+    echo "%F{red bold}❯%f"
     return
   fi
   echo "%F{magenta}❯%f"
