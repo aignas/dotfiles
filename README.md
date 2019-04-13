@@ -5,19 +5,23 @@ Status](https://travis-ci.org/aignas/dotfiles.svg?branch=master)](https://travis
 
 Highlights:
 - `XDG_DIR` support.
-- `make lint` to lint files in the repo.
-- `make init` to create pre-commit lint hook.
+- `dot --lint` to lint files in the repo.
+- logging for timing the installations.
+- dependency framework to run the install.sh files are run in a particular order.
+- some consistency checks of the configuration.
 - travis CI setup.
-- `dotr` script, which is used to update system and sync with the github repo.
+- `dot` script, which is used to update system and sync with the github repo.
   Run this every time every day at the start of your working routine.
+- Async information about the current git repository in the ZSH prompt without
+  any plugins.
 
 ## Install
 
 ```sh
-git clone https://github.com/aignas/dotfiles ~/src/github/aignas/dotfiles
-ln -s ~/src/github/aignas/dotfiles ~/.dotfiles
-cd ~/.dotfiles
-script/bootstrap
+$ git clone https://github.com/aignas/dotfiles ~/src/github/aignas/dotfiles
+$ ln -s ~/src/github/aignas/dotfiles ~/.dotfiles
+$ cd ~/.dotfiles
+$ dot
 ```
 
 This will symlink the appropriate files in `.dotfiles` to your home directory.

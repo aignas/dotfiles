@@ -50,14 +50,8 @@ zstyle \
   'completion' \
   'git'
 
-trysource() {
-  [ -f "${HOME}/${1}" ] && source "${HOME}/${1}"
-}
-
-plug() {
-  name=$1; shift
-  "${SH_PLUGIN}/$name" $@
-}
+#{{{ VCS info
+_git_prompt() { "${SH_PLUGIN}/git_prompt" $@; }
 
 # The following are stolen adaptet form @agkozak's wonderful prompt:
 # https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
@@ -72,7 +66,7 @@ precmd() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   typeset -g VCS_INFO_FD=${RANDOM}
-  exec {VCS_INFO_FD}< <(plug git_prompt --no-status)
+  exec {VCS_INFO_FD}< <(_git_prompt --no-status)
   zle -F "$VCS_INFO_FD" _vcs_info_callback_branch
 }
 
@@ -80,7 +74,7 @@ function _vcs_info_callback_branch() {
   _vcs_info_callback $1 || return
 
   typeset -g VCS_INFO_FD=$1
-  exec {VCS_INFO_FD}< <(plug git_prompt --no-branch --no-diff)
+  exec {VCS_INFO_FD}< <(_git_prompt --no-branch --no-diff)
   zle -F "$VCS_INFO_FD" _vcs_info_callback
 }
 
@@ -104,6 +98,7 @@ function prompt_char() {
   fi
   echo "%F{magenta}❯%f"
 }
+#}}}
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
@@ -118,9 +113,10 @@ if [[ "${DOTFILES_OS}" == "ArchLinux" ]]; then
   }
 fi
 
-trysource .localrc
-trysource .skim/shell/completion.zsh
-trysource .skim/shell/key-bindings.zsh
+trysource() { [ -f "${1}" ] && source "${1}"; }
+trysource ${HOME}/.localrc
+trysource ${HOME}/.skim/shell/completion.zsh
+trysource ${HOME}/.skim/shell/key-bindings.zsh
 
 #{{{ Functions
 rsw () {
