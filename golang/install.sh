@@ -19,7 +19,8 @@
 set -oe pipefail
 
 p="${HOME}/src/github/saibing/bingo.git/"
-git clone https://github.com/saibing/bingo.git "$p"
+git clone https://github.com/saibing/bingo.git "$p" ||
+  git -C "$p" pull
 pushd "$p"
 GO111MODULE=on go install
 popd
