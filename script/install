@@ -2,15 +2,41 @@
 #
 # Run all dotfiles installers.
 
-set -e
+set -eu
 
 export DOTFILES_ROOT="${DOTFILES_ROOT:-$(command -v "$0" | xargs dirname)/..}"
 cd "${DOTFILES_ROOT}"
 # shellcheck source=./script/logging.sh
 source "./script/logging.sh"
 
-for f in $(git ls-files | grep -E "install.sh$"); do
-  info "$f"
-  "$SHELL" -ceuo pipefail "$f"
-  success "$f"
+installs=(
+  system
+  git
+  keyboard
+  golang
+  rust
+  neovim
+  sh-plugins
+  tmux
+)
+
+{
+  info "Ensuring that all install.sh files are included"
+  diff=$({
+    git ls-files | grep -E "install.sh$" | xargs dirname
+    echo "${installs[*]}" | xargs -n 1
+  } | sort | uniq -u | xargs)
+  [[ -n ${diff} ]] && fail "Missing dependencies in the list: $diff"
+}
+{
+  info "Ensuring that all install.sh files are included only once"
+  r=$(echo "${installs[*]}" | xargs -n 1 | uniq -d)
+  [[ -z $r ]] || fail "Found duplicate dependencies in the list: $r"
+}
+
+
+for f in "${installs[@]}"; do
+  info "Setting up $f"
+  "$SHELL" -ceuo pipefail "$f/install.sh"
+  success "Setting up $f"
 done
