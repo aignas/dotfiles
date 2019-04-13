@@ -59,6 +59,13 @@ _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 
 precmd() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+  old="${psvar[4]}"
+  new=$(date +%s)
+  psvar[4]="$new"
+  diff=$(( new - old ))
+  if [[ -n $old && $diff -gt 5 ]]; then
+    psvar[3]="${diff}s"
+  fi
 
   typeset -g VCS_INFO_FD=${RANDOM}
   exec {VCS_INFO_FD}< <(_git_prompt --no-status)
@@ -86,7 +93,7 @@ function _vcs_info_callback() {
   zle && zle reset-prompt
 }
 
-function prompt_char() {
+function _prompt_char() {
   if [[ $? -ne 0 ]]; then
     echo "%F{red}❯%f"
     return
@@ -97,8 +104,8 @@ function prompt_char() {
 psvar=()
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%{$psvar[2]%}
-$(prompt_char) '
+PROMPT='%F{blue}%30<…<%~%<<%f%{$psvar[1]%}%{$psvar[2]%}%F{yellow}%{$psvar[3]%}%f
+$(_prompt_char) '
 #}}}
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
