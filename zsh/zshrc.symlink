@@ -59,11 +59,13 @@ _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 
 precmd() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-  old="${psvar[4]}"
-  new=$(date +%s)
-  psvar[4]="$new"
+  psvar[3]=""
+
+  old="${psvar[4]:-0}"
+  psvar[4]=$(date +%s)
+  new="${psvar[4]:-0}"
   diff=$(( new - old ))
-  if [[ -n $old && $diff -gt 5 ]]; then
+  if [[ $old != 0 && $diff -gt 5 && $diff ]]; then
     psvar[3]="${diff}s"
   fi
 
@@ -86,7 +88,8 @@ function _vcs_info_callback() {
   IFS='' builtin read -rs -d $'\0' -u "$FD" response
   zle -F "${FD}" exec {FD}<&- # Withdraw callback and close the file descriptor
 
-  [[ "${psvar[${2}]}" == "${response:-empty}" ]] && return
+  [[ " " == "${response:-empty}" ]] && response=""
+  [[ "${psvar[${2}]}" == "${response}" ]] && return
 
   # Redraw on change
   psvar[${2}]="$response"
@@ -104,7 +107,7 @@ function _prompt_char() {
 psvar=()
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%30<…<%~%<<%f%{$psvar[1]%}%{$psvar[2]%}%F{yellow}%{$psvar[3]%}%f
+PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%{$psvar[2]%}%F{yellow}%{$psvar[3]%}%f
 $(_prompt_char) '
 #}}}
 
