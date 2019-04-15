@@ -14,15 +14,15 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   ok "brew cleanup"
   brew upgrade
   ok "brew upgrade"
+  brew cask upgrade
+  ok "brew cask upgrade"
 
   info "Installing packages"
   bottles=("${common[@]}" python3 coreutils gnu-sed skktools)
   casks=(alacritty font-hack signal font-fira-code)
-  brew install "${bottles[@]}"
-  brew upgrade "${bottles[@]}"
   brew tap homebrew/cask-fonts
-  brew cask install "${casks[@]}"
-  brew cask upgrade "${casks[@]}"
+  brew install "${bottles[@]}" || :
+  brew cask install "${casks[@]}" || :
 
   info "Installing packages via pip"
   pip3 install --upgrade -U vim-vint
