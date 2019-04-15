@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
-now() { date +%s; }
+if [[ ${DOTFILES_OS} == "Mac" ]]; then
+  if [[ -n $(command -v gdate) ]]; then
+    now() { gdate +%s%N; }
+  else
+    now() { date +%s; }
+  fi
+else
+  now() { date +%s%N; }
+fi
 export DOTFILES_START=${DOTFILES_START:-$(now)}
 
 log () {

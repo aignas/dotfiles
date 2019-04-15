@@ -16,7 +16,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   ok "brew upgrade"
 
   info "Installing packages"
-  bottles=("${common[@]}" python3 gnu-sed skktools)
+  bottles=("${common[@]}" python3 coreutils gnu-sed skktools)
   casks=(alacritty font-hack signal font-fira-code)
   brew install "${bottles[@]}"
   brew upgrade "${bottles[@]}"
