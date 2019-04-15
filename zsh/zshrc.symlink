@@ -1,4 +1,6 @@
 #!/usr/bin/env zsh
+# NOTE: uncomment for profiling
+#zmodload zsh/zprof
 
 export DOTFILES="$HOME/.dotfiles"
 export DOTFILES_OS="$(${DOTFILES}/bin/get_os)"
@@ -34,7 +36,7 @@ alias ll='exa -l'
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
-compinit
+compinit -d
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
@@ -57,43 +59,48 @@ _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 # This contains just the bare minimum in order to get everything working on my
 # machine.
 
+psvar=()
 precmd() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-  psvar[3]=""
-
-  old="${psvar[4]:-0}"
-  psvar[4]=$(date +%s)
-  new="${psvar[4]:-0}"
-  diff=$(( new - old ))
-  if [[ $old != 0 && $diff -gt 5 && $diff ]]; then
-    psvar[3]="${diff}s"
-  fi
-
-  typeset -g VCS_INFO_FD=${RANDOM}
-  exec {VCS_INFO_FD}< <(_git_prompt --no-status)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback_1
-
-  typeset -g VCS_INFO_FD=${RANDOM}
-  exec {VCS_INFO_FD}< <(_git_prompt --no-branch --no-diff)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback_2
+  _vcs_info
+  old="${psvar[3]:-$(date +%s)}"
+  psvar[3]=$(date +%s)
+  psvar[2]=$(_time_it $old "${psvar[3]}")
 }
 
-function _vcs_info_callback_1() { _vcs_info_callback "$1" 1; }
-function _vcs_info_callback_2() { _vcs_info_callback "$1" 2; }
+function _time_it() {
+  diff=$(( $2 - $1 ))
+  min=$(( diff / 60 ))
+  sec=$(( diff % 60 ))
+  if (( min > 60 )); then
+    echo ">1h"
+  elif (( min != 0 && sec != 0 )); then
+    echo "${min}m ${sec}s"
+  elif (( min != 0 )); then
+    echo "${min}m"
+  elif (( sec > 5 )); then
+    echo "${sec}s"
+  fi
+}
 
+function _vcs_info() {
+  typeset -g VCS_INFO_FD=${RANDOM}
+  exec {VCS_INFO_FD}< <(_git_prompt --no-status)
+  zle -F "$VCS_INFO_FD" _vcs_info_callback
+}
 function _vcs_info_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
-  local FD="$1" response
+  local FD="$1" response extra
   IFS='' builtin read -rs -d $'\0' -u "$FD" response
   zle -F "${FD}" exec {FD}<&- # Withdraw callback and close the file descriptor
 
-  [[ " " == "${response:-empty}" ]] && response=""
-  [[ "${psvar[${2}]}" == "${response}" ]] && return
-
-  # Redraw on change
-  psvar[${2}]="$response"
-  zle && zle reset-prompt
+  old="${psvar[1]}"
+  psvar[1]="$response"
+  [[ ${old} != ${psvar[1]}* ]] && { zle reset-prompt; zle -R }
+  [[ $response == " " ]] && return
+  psvar[1]="$response$(_git_prompt --no-branch --no-diff)"
+  [[ ${old} != ${psvar[1]}* ]] && { zle reset-prompt; zle -R }
 }
 
 function _prompt_char() {
@@ -103,11 +110,9 @@ function _prompt_char() {
   fi
   echo "%F{magenta}❯%f"
 }
-
-psvar=()
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%{$psvar[2]%}%F{yellow}%{$psvar[3]%}%f
+PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%F{yellow}%{$psvar[2]%}%f
 $(_prompt_char) '
 #}}}
 
