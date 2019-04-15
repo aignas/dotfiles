@@ -60,16 +60,17 @@ _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 # machine.
 
 psvar=()
+preexec() { psvar[3]=$(_now); }
 precmd() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
   _vcs_info
-  old="${psvar[3]:-$(date +%s)}"
-  psvar[3]=$(date +%s)
-  psvar[2]=$(_time_it $old "${psvar[3]}")
+  psvar[2]=$(_time_it "${psvar[3]:-$(_now)}")
 }
 
+function _now() { date +%s; }
 function _time_it() {
-  diff=$(( $2 - $1 ))
+  now=$(_now)
+  diff=$(( now - $1 ))
   min=$(( diff / 60 ))
   sec=$(( diff % 60 ))
   if (( min > 60 )); then
@@ -78,7 +79,7 @@ function _time_it() {
     echo "${min}m ${sec}s"
   elif (( min != 0 )); then
     echo "${min}m"
-  elif (( sec > 5 )); then
+  elif (( sec > 2 )); then
     echo "${sec}s"
   fi
 }
