@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-now() { date +%s%N; }
+now() { date +%s; }
 export DOTFILES_START=${DOTFILES_START:-$(now)}
 
 log () {
