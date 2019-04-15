@@ -124,7 +124,7 @@ trysource "${HOME}/.skim/shell/key-bindings.zsh"
 AUR downloading function.
 
 Usage:
-  aurd [-s|--search] [PACKAGE_NAME]
+  aur [-s|--search] [PACKAGE_NAME]
 EOF
       return
       ;;
@@ -144,7 +144,7 @@ EOF
           column -t -s $'\t' |
           sk --ansi |
           awk '{print $2}')
-      aurd "$selection"
+      aur "$selection"
       return
       ;;
     *)
