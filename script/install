@@ -23,7 +23,7 @@ installs=(
 {
   info "Ensuring that all install.sh files are included"
   diff=$({
-    git ls-files | grep -E "install.sh$" | xargs dirname
+    git ls-files | grep -E "install.sh$" | xargs -L1 dirname
     echo "${installs[*]}" | xargs -n 1
   } | sort | uniq -u | xargs)
   [[ -n ${diff} ]] && fail "Missing dependencies in the list: $diff"
