@@ -63,12 +63,14 @@ psvar=()
 preexec() { psvar[3]=$(_now); }
 precmd() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-  _vcs_info
-  psvar[2]=$(_time_it "${psvar[3]:-$(_now)}")
+  async_vcs_info
+  psvar[2]=$(_time_it "${psvar[3]:-}")
+  psvar[3]=
 }
 
 function _now() { date +%s; }
 function _time_it() {
+  [[ -z $1 ]] && return
   now=$(_now)
   diff=$(( now - $1 ))
   min=$(( diff / 60 ))
@@ -83,37 +85,63 @@ function _time_it() {
     echo "${sec}s"
   fi
 }
+function async_vcs_info() {
+  if [[ ${PWD} != ${psvar[6]} ]]; then
+    psvar[4]=''
+    psvar[5]=''
+    psvar[1]=''
+  fi
+  psvar[6]="${PWD}"
 
-function _vcs_info() {
   typeset -g VCS_INFO_FD=${RANDOM}
   exec {VCS_INFO_FD}< <(_git_prompt --no-status)
-  zle -F "$VCS_INFO_FD" _vcs_info_callback
+  zle -F "$VCS_INFO_FD" async_vcs_branch_callback
 }
-function _vcs_info_callback() {
+function async_vcs_branch_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   local FD="$1" response extra
   IFS='' builtin read -rs -d $'\0' -u "$FD" response
-  zle -F "${FD}" exec {FD}<&- # Withdraw callback and close the file descriptor
+  zle -F "${FD}"; exec {FD}<&- # Withdraw callback and close the file descriptor
 
-  old="${psvar[1]}"
-  psvar[1]="$response"
-  [[ ${old} != ${psvar[1]}* ]] && { zle reset-prompt; zle -R }
-  [[ $response == " " ]] && return
-  psvar[1]="$response$(_git_prompt --no-branch --no-diff)"
-  [[ ${old} != ${psvar[1]}* ]] && { zle reset-prompt; zle -R }
+  [[ $response == ' ' ]] && response=''
+  if [[ "${psvar[4]}" != "$response" ]]; then
+    psvar[4]="$response"
+    psvar[5]=''
+    psvar[1]="$response"
+    zle && { zle reset-prompt; zle -R }
+  fi
+  [[ "$response" == '' ]] && return
+
+  typeset -g VCS_INFO_FD=${RANDOM}
+  exec {VCS_INFO_FD}< <(_git_prompt --no-branch --no-diff)
+  zle -F "$VCS_INFO_FD" async_vcs_status_callback
+}
+function async_vcs_status_callback() {
+  setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+
+  local FD="$1" response extra
+  IFS='' builtin read -rs -d $'\0' -u "$FD" response
+  zle -F "${FD}"; exec {FD}<&- # Withdraw callback and close the file descriptor
+
+  [[ $response == ' ' ]] && response=''
+  if [[ "${psvar[5]}" != "$response" ]]; then
+    psvar[5]="$response"
+    psvar[1]="${psvar[4]}${psvar[5]}"
+    zle && { zle reset-prompt; zle -R }
+  fi
 }
 
 function _prompt_char() {
   if [[ $? -ne 0 ]]; then
-    echo "%F{red}❯%f"
+    echo "%F{red}$%f"
     return
   fi
-  echo "%F{magenta}❯%f"
+  echo "%F{magenta}$%f"
 }
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%30<…<%~%<<%f %{$psvar[1]%}%F{yellow}%{$psvar[2]%}%f
+PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow}%{$psvar[2]%}%f
 $(_prompt_char) '
 #}}}
 
