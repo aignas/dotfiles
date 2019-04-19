@@ -59,33 +59,36 @@ _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
 # This contains just the bare minimum in order to get everything working on my
 # machine.
 
-psvar=()
-preexec() { psvar[3]=$(_now); }
-precmd() {
-  setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-  async_vcs_info
-  psvar[2]=$(_time_it "${psvar[3]:-}")
-  psvar[3]=
-}
+setopt promptsubst
+# `man zshmisc`
+PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow}$(_timeit)%f
+%(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
-function _now() { date +%s; }
-function _time_it() {
-  [[ -z $1 ]] && return
-  now=$(_now)
-  diff=$(( now - $1 ))
+psvar=()
+preexec() { psvar[2]=$(_now); }
+_timeit() {
+  last=${psvar[2]:-}
+  psvar[2]=
+
+  [[ -z $last ]] && return
+  diff=$(( $(_now) - last ))
+  (( diff < 3 )) && return
+
   min=$(( diff / 60 ))
   sec=$(( diff % 60 ))
   if (( min > 60 )); then
     echo ">1h"
-  elif (( min != 0 && sec != 0 )); then
-    echo "${min}m ${sec}s"
-  elif (( min != 0 )); then
+  elif (( sec == 0 )); then
     echo "${min}m"
-  elif (( sec > 2 )); then
+  elif (( min == 0 )); then
     echo "${sec}s"
+  else
+    echo "${min}m ${sec}s"
   fi
 }
-function async_vcs_info() {
+_now() { date +%s; }
+
+precmd() {
   if [[ ${PWD} != ${psvar[6]} ]]; then
     psvar[4]=''
     psvar[5]=''
@@ -97,7 +100,7 @@ function async_vcs_info() {
   exec {VCS_INFO_FD}< <(_git_prompt --no-status)
   zle -F "$VCS_INFO_FD" async_vcs_branch_callback
 }
-function async_vcs_branch_callback() {
+async_vcs_branch_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   local FD="$1" response extra
@@ -117,7 +120,7 @@ function async_vcs_branch_callback() {
   exec {VCS_INFO_FD}< <(_git_prompt --no-branch --no-diff)
   zle -F "$VCS_INFO_FD" async_vcs_status_callback
 }
-function async_vcs_status_callback() {
+async_vcs_status_callback() {
   setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
   local FD="$1" response extra
@@ -131,18 +134,6 @@ function async_vcs_status_callback() {
     zle && { zle reset-prompt; zle -R }
   fi
 }
-
-function _prompt_char() {
-  if [[ $? -ne 0 ]]; then
-    echo "%F{red}$%f"
-    return
-  fi
-  echo "%F{magenta}$%f"
-}
-setopt promptsubst
-# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow}%{$psvar[2]%}%f
-$(_prompt_char) '
 #}}}
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
