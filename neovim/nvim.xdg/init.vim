@@ -11,7 +11,6 @@ let s:backup_dir = expand(s:data_dir . '/backups/')
 call plug#begin(s:data_dir . '/plugged')
 
 Plug 'itchyny/lightline.vim'
-Plug 'maximbaz/lightline-ale'
 Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -24,7 +23,6 @@ Plug 'lotabout/skim.vim'
 Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki'] }
 Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'],}
-Plug 'vmchale/ion-vim', { 'for': ['markdown', 'ion'],}
 Plug 'vimwiki/vimwiki'
 Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
