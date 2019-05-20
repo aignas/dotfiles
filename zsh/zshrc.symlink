@@ -186,10 +186,14 @@ return
 
 rsw () {
     echo "Running local CI [ hit CTRL+C to stop ]"
-    {
-        fd Cargo
-        fd -e rs
-    } | entr -d cargo "$@"
+    fswatch \
+        --recursive \
+        --one-per-batch \
+        --exclude="^.*$" \
+        --include="^.*Cargo\..*$" \
+        --include="^.*\.rs$" \
+        --extended \
+        . | xargs -n1 -I{} wrap cargo "$@"
 }
 
 rsd () {

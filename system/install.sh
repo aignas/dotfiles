@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig entr)
+readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig fswatch)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh
