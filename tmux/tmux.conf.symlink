@@ -1,72 +1,31 @@
 # TMUX configuration by Ignas Anikevicius (aignas)
 # Heavily inspired and copied from junnegunn
-#
-# Hierarchy:
-#  Server
-#  ㄴSession
-#    ㄴWindow
-#      ㄴPane
 
-# Options:
-# - Session options (set-option [-g])
-# - Window options (set-window-option [-g])
+set -sg escape-time 10
 
-set-option -sg escape-time 10
-
-# {{{ Session options
-# Index starts from 1
-set-option -g base-index 1
-
-# Renumber windows when a window is closed
-set-option -g renumber-windows on
-
-# History
-set-option -g history-limit 102400
-
-# Repeat time limit (ms)
-set-option -g repeat-time 500
-
-# # 256-color terminal
-set-option -g default-terminal "screen-256color"
-
-# set the bell action properly
+set -g base-index 1
+set -g renumber-windows on
+set -g history-limit 102400
+set -g repeat-time 500
+set -g default-terminal "screen-256color"
 set -g bell-action any
+set -g status-keys vi
+set -g mouse off
 
-# Key binding in the status line (bind-key :)
-set-option -g status-keys vi
+setw -g mode-keys vi
 
-# Mouse
-set-option -g mouse off
-
-# Window options
-# Copy-mode
-set-window-option -g mode-keys vi
-# }}}
-# {{{ Key bindings
-
-# prefix c
-bind-key c new-window -c "#{pane_current_path}"
-
-# prefix ctrl-l
-bind-key c-b last-window
-
-# prefix b
-bind-key b send-prefix
-
-# prefix |
-bind-key | split-window -h -c "#{pane_current_path}"
-
-# prefix -
-bind-key - split-window -c "#{pane_current_path}"
-
-# Moving windows
-bind-key -r > swap-window -t :+
-bind-key -r < swap-window -t :-
+bind-key c new-window -c "#{pane_current_path}"         # prefix c
+bind-key c-b last-window                                # prefix ctrl-l
+bind-key b send-prefix                                  # prefix b
+bind-key | split-window -h -c "#{pane_current_path}"    # prefix |
+bind-key - split-window -c "#{pane_current_path}"       # prefix -
+bind-key -r > swap-window -t :+                         # prefix >
+bind-key -r < swap-window -t :-                         # prefix <
 
 # Back and forth
-bind-key bspace previous-window
-bind-key space next-window
-bind-key / next-layout # Overridden
+bind-key bspace previous-window                         # prefix bspace
+bind-key space next-window                              # prefix space
+bind-key / next-layout                                  # prefix /, overriden
 
 # Pane-movement
 bind-key h select-pane -L
@@ -76,22 +35,13 @@ bind-key k select-pane -U
 bind-key tab select-pane -t :.+
 bind-key btab select-pane -t :.-
 
-# Synchronize panes
-bind-key * set-window-option synchronize-pane
-
-# Reload ~/.tmux.conf
-bind-key R source-file ~/.tmux.conf \; display-message "Reloaded!"
-
-# Set focus events to on
+bind-key * setw synchronize-pane
+bind-key R source-file ~/.tmux.conf \; display-message "tmux.conf reloaded!"
 set -g focus-events on
-
-bind-key p run "xclip -o -sel clip | tmux load-buffer - ; tmux paste-buffer"
 
 # Capture pane and open in Vim
 bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
              new-window "nvim /tmp/tmux-capture.txt"
-# }}}
-# {{{ Decoration (256-color)
 
 # status
 set -g status-justify "left"
@@ -125,25 +75,9 @@ set -g status-left-length "100"
 set -g status-right-style none
 set -g status-right-length "100"
 set -g status-left "#[fg=#3e3e40,bg=white] #S "
-set -g status-right "#[fg=white,bg=#3e3e40] #{battery_icon}#{battery_percentage}#{battery_remain} │ #[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
-
-# }}}
-
-set -g @batt_charged_icon "😎"
-set -g @batt_charging_icon "👍"
-set -g @batt_attached_icon "😐"
-set -g @batt_full_charge_icon "🌕 "
-set -g @batt_high_charge_icon "🌖 "
-set -g @batt_medium_charge_icon "🌗 "
-set -g @batt_low_charge_icon "🌘 "
-set -g @batt_remain_short true
+set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
 
 # Plugins
-
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-yank'
-set -g @plugin 'tmux-plugins/tmux-battery'
-
 run '~/.tmux/plugins/tpm/tpm'
-
-# vim: fdm=marker
