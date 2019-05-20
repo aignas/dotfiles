@@ -10,7 +10,6 @@ let s:backup_dir = expand(s:data_dir . '/backups/')
 
 call plug#begin(s:data_dir . '/plugged')
 
-Plug 'itchyny/lightline.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -34,48 +33,15 @@ syntax enable
 set history=10000
 
 " Theming
-set guioptions=ag laststatus=2 showtabline=2 noshowmode
-set termguicolors background=dark
+set guioptions=ag termguicolors background=dark
 let g:seoul256_background = 235
 colorscheme seoul256
-let g:lightline = {
-      \ 'colorscheme': 'seoul256',
-      \ 'active': {
-      \     'left': [
-      \         [ 'mode', 'eskk', 'paste' ],
-      \         [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
-      \     ],
-      \     'right': [
-      \         [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
-      \         [ 'lineinfo' ],
-      \         [ 'percent' ],
-      \         [ 'fileformat', 'fileencoding', 'filetype' ],
-      \     ],
-      \ },
-      \ 'component_expand': {
-      \     'linter_checking': 'lightline#ale#checking',
-      \     'linter_warnings': 'lightline#ale#warnings',
-      \     'linter_errors': 'lightline#ale#errors',
-      \     'linter_ok': 'lightline#ale#ok',
-      \ },
-      \ 'component_function': {
-      \     'gitbranch': 'fugitive#head',
-      \     'eskk': 'eskk#statusline',
-      \ },
-      \ 'component_type': {
-      \     'linter_checking': 'left',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'left',
-      \ },
-      \ }
 
 execute 'set backupdir=' . s:backup_dir . ',./.backup,.,/tmp'
 execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
-set autoindent
+set undofile backup backupcopy=yes
 set backspace=eol,start,indent
-set backup backupcopy=yes
-set breakindent showbreak=»»
+set autoindent breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
 set fileformats=unix,dos
 set foldenable foldlevel=1
@@ -87,9 +53,7 @@ set linebreak
 set list
 set magic
 set number relativenumber
-set pastetoggle=<F2>
 set spell                       " vim-unimpaired: use [os and ]os
-set undofile
 set whichwrap+=<,>
 set wrap
 if executable('rg')
@@ -104,22 +68,20 @@ iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
 let g:mapleader=','
 let g:maplocalleader='-'
 nnoremap <leader>a :grep <end>
-nnoremap <silent> <leader>f :Files<CR>
-nnoremap <silent> <leader>gf :GFiles<CR>
+nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>dd :ALEGoToDefinition<CR>
-nnoremap <silent> <leader>ds :ALEGoToDefinitionInSplit<CR>
-nnoremap <silent> <leader>h :ALEHover<CR>
+nnoremap <silent> <leader>cd :cd %:p:h<cr>
+nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>gd :ALEGoToDefinition<CR>
+nnoremap <silent> <leader>gf :GFiles<CR>
+nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>vc :e $MYVIMRC<cr>
 nnoremap <silent> <leader>vv :source $MYVIMRC<cr>:echo "init.vim reloaded"<cr>
-nnoremap <silent> <leader>gs :Gstatus<cr>
-nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
-nnoremap <silent> <leader>cd :cd %:p:h<cr>
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
-    \   'go': ['gometalinter', 'bingo'],
+    \   'go': ['golangci-lint', 'bingo'],
     \   'rust': ['rls', 'cargo'],
     \   'javascript': ['eslint'],
     \}
