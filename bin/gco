@@ -1,8 +1,9 @@
 #!/bin/bash
+set -ueo pipefail
 
 main() {
-  if [[ -z $1 ]]; then
-    git checkout "$(frev)"
+  if [[ -z ${1:-} ]]; then
+    git checkout "$(frev || exit 1)"
     return
   fi
   git checkout "$@"
