@@ -18,11 +18,5 @@
 
 set -oe pipefail
 
-DIR="${HOME}/src/github/saibing/bingo.git/"
-if [[ -d "$DIR" ]]; then
-  git -C "$DIR" fetch origin
-  git -C "$DIR" reset --hard origin/master
-else
-  git clone https://github.com/saibing/bingo.git "$DIR"
-fi
-cd "$DIR" && GO111MODULE=on go install
+rm -rf "${HOME}/src/github/saibing/bingo.git/"
+go get -u golang.org/x/tools/cmd/gopls

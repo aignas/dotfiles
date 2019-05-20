@@ -81,7 +81,7 @@ nnoremap <silent> <leader>vv :source $MYVIMRC<cr>:echo "init.vim reloaded"<cr>
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_linters = {
-    \   'go': ['golangci-lint', 'bingo'],
+    \   'go': ['golangci-lint', 'gopls'],
     \   'rust': ['rls', 'cargo'],
     \   'javascript': ['eslint'],
     \}
