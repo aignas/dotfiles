@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
-# NOTE: uncomment for profiling
-#zmodload zsh/zprof
+
+#zmodload zsh/zprof         # NOTE: uncomment for profiling
 
 export DOTFILES="$HOME/.dotfiles"
 export DOTFILES_OS="$(${DOTFILES}/bin/get_os)"
@@ -44,9 +44,9 @@ compdef l=exa
 compdef ll=exa
 
 zstyle \
-  'history' \
-  'completion' \
-  'git'
+    'history' \
+    'completion' \
+    'git'
 
 #{{{ Prompt
 _git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
@@ -65,75 +65,76 @@ PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow}$(_timeit)%f
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
 psvar=()
-preexec() { psvar[2]=$(_now); }
-_timeit() {
-  last=${psvar[2]:-}
-  psvar[2]=
-
-  [[ -z $last ]] && return
-  diff=$(( $(_now) - last ))
-  (( diff < 3 )) && return
-
-  min=$(( diff / 60 ))
-  sec=$(( diff % 60 ))
-  if (( min > 60 )); then
-    echo ">1h"
-  elif (( sec == 0 )); then
-    echo "${min}m"
-  elif (( min == 0 )); then
-    echo "${sec}s"
-  else
-    echo "${min}m ${sec}s"
-  fi
-}
-_now() { date +%s; }
-
+preexec() { psvar[3]=$(_now); }
 precmd() {
-  if [[ ${PWD} != ${psvar[6]} ]]; then
-    psvar[4]=''
-    psvar[5]=''
-    psvar[1]=''
-  fi
-  psvar[6]="${PWD}"
-
-  typeset -g VCS_INFO_FD=${RANDOM}
-  exec {VCS_INFO_FD}< <(_git_prompt --no-status)
-  zle -F "$VCS_INFO_FD" async_vcs_branch_callback
+    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+    async_vcs_info
+    psvar[2]=$(_time_it "${psvar[3]:-}")
+    psvar[3]=
 }
-async_vcs_branch_callback() {
-  setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
-  local FD="$1" response extra
-  IFS='' builtin read -rs -d $'\0' -u "$FD" response
-  zle -F "${FD}"; exec {FD}<&- # Withdraw callback and close the file descriptor
-
-  [[ $response == ' ' ]] && response=''
-  if [[ "${psvar[4]}" != "$response" ]]; then
-    psvar[4]="$response"
-    psvar[5]=''
-    psvar[1]="$response"
-    zle && { zle reset-prompt; zle -R }
-  fi
-  [[ "$response" == '' ]] && return
-
-  typeset -g VCS_INFO_FD=${RANDOM}
-  exec {VCS_INFO_FD}< <(_git_prompt --no-branch --no-diff)
-  zle -F "$VCS_INFO_FD" async_vcs_status_callback
+function _now() { date +%s; }
+function _time_it() {
+    [[ -z $1 ]] && return
+    now=$(_now)
+    diff=$(( now - $1 ))
+    min=$(( diff / 60 ))
+    sec=$(( diff % 60 ))
+    if (( min > 60 )); then
+        echo ">1h"
+    elif (( min != 0 && sec != 0 )); then
+        echo "${min}m ${sec}s"
+    elif (( min != 0 )); then
+        echo "${min}m"
+    elif (( sec > 2 )); then
+        echo "${sec}s"
+    fi
 }
-async_vcs_status_callback() {
-  setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+typeset -g VCS_INFO_FD=${RANDOM}
+function async_vcs_info() {
+    [[ ${PWD} != ${psvar[4]} ]] && psvar[1]=''
+    psvar[4]="${PWD}"
 
-  local FD="$1" response extra
-  IFS='' builtin read -rs -d $'\0' -u "$FD" response
-  zle -F "${FD}"; exec {FD}<&- # Withdraw callback and close the file descriptor
-
-  [[ $response == ' ' ]] && response=''
-  if [[ "${psvar[5]}" != "$response" ]]; then
-    psvar[5]="$response"
-    psvar[1]="${psvar[4]}${psvar[5]}"
-    zle && { zle reset-prompt; zle -R }
-  fi
+    exec {VCS_INFO_FD}< <(
+        _git_prompt --print-updates || :   # ensure EOF is sent
+        echo "EOF"
+    )
+    zle -F "$VCS_INFO_FD" async_vcs_info_callback
 }
+function async_vcs_info_callback() {
+    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
+
+    case ${2:-} in                  # process the error, see zshzle -F manpage
+        nval) pkill git_prompt;;    # closed or invalid descrptor
+        hup|err) pkill git_prompt;; # disconnect | any other error
+    esac
+
+    local FD="$1" response
+    builtin read -u "$FD" response
+    if [[ $response == "Err: "* || $response == "EOF" ]]; then
+        exec {FD}<&- # close the file descriptor
+        zle -F "${FD}" # Remove any handler associated with this descriptor
+        return
+    fi
+
+    # Include a space, so that we don't do partial matching we don't want
+    if [[ "${psvar[1]} " != "$response *" ]]; then
+        psvar[1]="$response"
+        zle && { zle reset-prompt; zle -R }
+    fi
+}
+
+function _prompt_char() {
+    if [[ $? -ne 0 ]]; then
+        echo "%F{red}$%f"
+        return
+    fi
+    echo "%F{magenta}$%f"
+}
+setopt promptsubst
+# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow} %{$psvar[2]%}%f
+$(_prompt_char) '
 #}}}
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
@@ -143,64 +144,64 @@ trysource "${HOME}/.skim/shell/key-bindings.zsh"
 
 #{{{ Functions
 [[ "${DOTFILES_OS}" == "ArchLinux" ]] && aur() {
-  case "$1" in
+case "$1" in
     "--help"|"-h")
-      cat <<EOF
+        cat <<EOF
 AUR downloading function.
 
 Usage:
   aur [-s|--search] [PACKAGE_NAME]
 EOF
-      return
-      ;;
-    ''|'-s'|'--search')
-      local input
-      if [[ -z $2 ]]; then
+return
+;;
+''|'-s'|'--search')
+    local input
+    if [[ -z $2 ]]; then
         echo -n "enter AUR search term: "
         read input
-      else
+    else
         input="$2"
-      fi
-      selection=$(
-        curl --silent "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$input" |
-          jq -r '.results[] | "\(.NumVotes)\t\(.Name)\t\(.Description)"' |
-          awk '{pop=$1;name=$2; $1="";$2=""; printf "%5d \x1b[34;1m%s\x1b[m\t%s\n", pop, name, $0}' |
-          sort -n -r |
-          column -t -s $'\t' |
-          sk --ansi |
-          awk '{print $2}')
-      aur "$selection"
-      return
-      ;;
-    *)
-      local dir="${HOME}/aur/$1"
-      [[ ! -d "$dir" ]] && git clone "https://aur.archlinux.org/$1.git" "$dir"
+    fi
+    selection=$(
+    curl --silent "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$input" |
+        jq -r '.results[] | "\(.NumVotes)\t\(.Name)\t\(.Description)"' |
+        awk '{pop=$1;name=$2; $1="";$2=""; printf "%5d \x1b[34;1m%s\x1b[m\t%s\n", pop, name, $0}' |
+        sort -n -r |
+        column -t -s $'\t' |
+        sk --ansi |
+        awk '{print $2}')
+            aur "$selection"
+            return
+            ;;
+        *)
+            local dir="${HOME}/aur/$1"
+            [[ ! -d "$dir" ]] && git clone "https://aur.archlinux.org/$1.git" "$dir"
 
-      pushd "$dir"
-      git checkout .
-      git pull --rebase origin master
-      ;;
-  esac
+            pushd "$dir"
+            git checkout .
+            git pull --rebase origin master
+            ;;
+    esac
 }
 
 rsw () {
-  echo "Running local CI [ hit CTRL+C to stop ]"
-  {
-    fd Cargo
-    fd -e rs
-  } | entr -d cargo "$@"
+    echo "Running local CI [ hit CTRL+C to stop ]"
+    {
+        fd Cargo
+        fd -e rs
+    } | entr -d cargo "$@"
 }
 
 rsd () {
-  # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
-  # however it would be great to have a 'cargo doc' to include the stdlib docs
-  # instead of linking to the online ones.
-  readonly local docpath="$(dirname "$(rustup doc --path)")/"
-  echo "Syncing $docpath to ./target/doc..."
-  rsync -r "$docpath" ./target/doc/
-  echo "Done"
-  rsw doc --all --document-private-items "$@"
+    # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
+    # however it would be great to have a 'cargo doc' to include the stdlib docs
+    # instead of linking to the online ones.
+    readonly local docpath="$(dirname "$(rustup doc --path)")/"
+    echo "Syncing $docpath to ./target/doc..."
+    rsync -r "$docpath" ./target/doc/
+    echo "Done"
+    rsw doc --all --document-private-items "$@"
 }
 #}}}
 
-# vim: tw=80:ft=zsh:sw=2:ts=2:fdm=marker
+# vim: fdm=marker
