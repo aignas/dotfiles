@@ -1,4 +1,28 @@
 #!/bin/bash
 
+while [[ "$1" == "-"* ]]; do
+    case "$1" in
+        -h|--help|help) cat <<EOF
+USAGE:
+  $(basename "$0") [-c|--clear] COMMAND...
+
+PARAMETERS:
+  -c --clear:   Clear the screen before executing the COMMAND
+  COMMAND:      The command to be executed.  Must not start with a '-'.
+
+Multiple options are processed in the order of occurance.
+EOF
+            exit 1
+            ;;
+        -c|--clear)
+            clear; shift
+            ;;
+        *)
+            echo "unknown parameter: '$1'"
+            exit 1
+            ;;
+    esac
+done
+
 echo "$ $*"
 "$@"
