@@ -92,6 +92,7 @@ function _time_it() {
 }
 typeset -g VCS_INFO_FD=${RANDOM}
 function async_vcs_info() {
+    pkill git_prompt
     [[ ${PWD} != ${psvar[4]} ]] && psvar[1]=''
     psvar[4]="${PWD}"
 
