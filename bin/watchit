@@ -1,0 +1,20 @@
+#!/bin/bash
+
+fswatchArgs=()
+while [[ "$1" == "--"* ]]; do
+    fswatchArgs+=("$1")
+    shift
+done
+
+main () {
+    "$@"
+    fswatch \
+        --recursive \
+        --one-per-batch \
+        --exclude="^.*$" \
+        "${fswatchArgs[@]}" \
+        --extended \
+        . | xargs -n1 -I{} "$@"
+}
+
+main wrap -c "$@"
