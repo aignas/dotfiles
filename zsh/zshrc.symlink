@@ -186,15 +186,10 @@ return
 }
 
 rsw () {
-    echo "Running local CI [ hit CTRL+C to stop ]"
-    fswatch \
-        --recursive \
-        --one-per-batch \
-        --exclude="^.*$" \
-        --include="^.*Cargo\..*$" \
-        --include="^.*\.rs$" \
-        --extended \
-        . | xargs -n1 -I{} wrap cargo "$@"
+    watchit \
+        --include="Cargo\.\*"
+        --include="\.rs" \
+        cargo "$@"
 }
 
 rsd () {
@@ -206,6 +201,13 @@ rsd () {
     rsync -r "$docpath" ./target/doc/
     echo "Done"
     rsw doc --all --document-private-items "$@"
+}
+
+bw() {
+    watchit \
+        --include="BUILD\.bazel" \
+        --include="\.go" \
+        bazel "$@"
 }
 #}}}
 
