@@ -33,7 +33,7 @@ syntax enable
 set history=10000
 
 " Theming
-set guioptions=ag termguicolors background=dark
+set guioptions=ag termguicolors lazyredraw background=dark
 let g:seoul256_background = 235
 colorscheme seoul256
 
@@ -44,11 +44,8 @@ set backspace=eol,start,indent
 set autoindent breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
 set fileformats=unix,dos
-set foldenable foldlevel=1
-set hidden
 set incsearch hlsearch
 set joinspaces cpoptions+=J     " Double spacing between sentences
-set lazyredraw
 set linebreak
 set list
 set magic
@@ -56,6 +53,7 @@ set number relativenumber
 set spell                       " vim-unimpaired: use [os and ]os
 set whichwrap+=<,>
 set wrap
+
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
@@ -66,17 +64,16 @@ iabbrev xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>:
 iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
 
 let g:mapleader=','
-let g:maplocalleader='-'
-nnoremap <leader>a :grep <end>
 nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
 nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>cd :cd %:p:h<cr>
 nnoremap <silent> <leader>f :Files<CR>
-nnoremap <silent> <leader>gd :ALEGoToDefinition<CR>
-nnoremap <silent> <leader>gf :GFiles<CR>
 nnoremap <silent> <leader>gs :Gstatus<cr>
-nnoremap <silent> <leader>vc :e $MYVIMRC<cr>
-nnoremap <silent> <leader>vv :source $MYVIMRC<cr>:echo "init.vim reloaded"<cr>
+nnoremap <leader>e :e %:p:h
+
+nnoremap <silent> <leader>gd :ALEGoToDefinition<CR>
+nnoremap <silent> <leader>gt :ALEGoToTypeDefinition<CR>
+nnoremap <silent> <leader>h :ALEHover<CR>
+set omnifunc=ale#completion#OmniFunc
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
