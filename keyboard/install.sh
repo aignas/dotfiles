@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 [[ ${DOTFILES_OS} != "Mac" ]] && exit 0
 

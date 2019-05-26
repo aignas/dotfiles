@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
 readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig fswatch)
 cd "$(dirname "$0")/.."

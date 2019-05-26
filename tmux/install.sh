@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 DIR=$HOME/.tmux/plugins/tpm
 if [[ -d "$DIR" ]]; then

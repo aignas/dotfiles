@@ -1,8 +1,10 @@
+#!/bin/bash
+
 set -e
 
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
-source script/logging.sh
+. script/logging.sh
 
 NEOVIM_LOCAL="${HOME}/.local/share/nvim"
 VIMPLUG_DIR="${NEOVIM_LOCAL}/plugged"
@@ -44,7 +46,7 @@ backupdir() {
 
 skk() {
   target="${NEOVIM_LOCAL}/skk/SKK-JISYO.L"
-  rm -rf "${target}"{,.gz}
+  rm -rf "${target}.gz" "${target}"
   curl \
     --create-dirs \
     --output "${target}.gz" \

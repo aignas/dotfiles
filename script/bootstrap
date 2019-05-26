@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# bootstrap installs things.
-
 set -euo pipefail
 
 [[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"

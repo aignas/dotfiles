@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 if [[ ${DOTFILES_OS} == "Mac" ]]; then
   if [[ -n $(command -v gdate) ]]; then
