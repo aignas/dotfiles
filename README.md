@@ -21,7 +21,7 @@ Highlights:
 $ git clone https://github.com/aignas/dotfiles ~/src/github/aignas/dotfiles
 $ ln -s ~/src/github/aignas/dotfiles ~/.dotfiles
 $ cd ~/.dotfiles
-$ dot-setup
+$ dotr
 ```
 
 This will symlink the appropriate files in `.dotfiles` to your home directory.

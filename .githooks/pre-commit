@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dot-setup --lint
+dotr --lint
