@@ -29,7 +29,8 @@ while test $# -gt 0; do
     "-h"|"--help") print_help;;
     "-e"|"--edit") exec e "${DOTFILES_ROOT}";;
     "-l"|"--lint") exec "${DOTFILES_ROOT}/script/lint";;
-    "--no-push") NO_PUSH=true; break;;
+    "--no-push") NO_PUSH=true; continue;;
+    "--no-gitconfig") [ -f "${DOTFILES_ROOT}/git/gitconfig.symlink" ] || touch "${DOTFILES_ROOT}/git/gitconfig.symlink"; continue;;
     *) echo "Invalid option: $1"; print_help; exit 1;;
   esac
   exit 0
