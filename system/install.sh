@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig fswatch)
+readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh
@@ -19,7 +19,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   ok "brew cask upgrade"
 
   info "Installing packages"
-  bottles=("${common[@]}" python3 coreutils gnu-sed skktools)
+  bottles=("${common[@]}" python3 coreutils gnu-sed skktools fswatch)
   casks=(alacritty font-hack signal font-fira-code)
   brew tap homebrew/cask-fonts
   brew install "${bottles[@]}" || :
