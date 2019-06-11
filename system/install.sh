@@ -30,7 +30,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   info "pacman"
   debug "pacman: cleanup"
-  sudo pacman -Sc --noconfirm
+  sudo pacman -Sc --noconfirm || :
   ok "pacman: cleanup"
 
   debug "pacman: update"
