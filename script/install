@@ -6,7 +6,7 @@ set -eu
 
 export DOTFILES_ROOT="${DOTFILES_ROOT:-$(command -v "$0" | xargs dirname)/..}"
 cd "${DOTFILES_ROOT}"
-# shellcheck source=./script/logging.sh
+# shellcheck source=/dev/null
 source "./script/logging.sh"
 
 installs=(
