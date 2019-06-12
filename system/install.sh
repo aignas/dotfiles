@@ -34,7 +34,7 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   ok "pacman: update"
 
   debug "pacman: install"
-  pkgs=(python "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go vint)
+  pkgs=(python base-devel "${common[@]}" shellcheck alacritty alacritty-terminfo dep ttf-hack skk-jisyo pamixer otf-fira-code rustup go vint)
   sudo pacman -S \
     --quiet \
     --needed \
