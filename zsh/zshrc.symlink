@@ -205,6 +205,10 @@ bw() {
         --include="\.go" \
         bazel "$@"
 }
+
+shed() {
+    docker run --name shed -v ${PWD}:/x -w /x -ti --rm aignas/shed "$@"
+}
 #}}}
 
 # vim: fdm=marker
