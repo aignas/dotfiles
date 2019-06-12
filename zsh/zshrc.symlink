@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 #zmodload zsh/zprof         # NOTE: uncomment for profiling
 
 export DOTFILES="$HOME/.dotfiles"
@@ -49,9 +47,7 @@ zstyle \
     'git'
 
 #{{{ Prompt
-_git_prompt() { "${SH_PLUGIN}/git_prompt" "$@"; }
-
-# The following are stolen adaptet form @agkozak's wonderful prompt:
+# The following are stolen and adapted from @agkozak's wonderful prompt:
 # https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
 # was specifically added by @psprint in
 # https://github.com/agkozak/agkozak-zsh-prompt/pull/11
@@ -92,12 +88,12 @@ function _time_it() {
 }
 typeset -g VCS_INFO_FD=${RANDOM}
 function async_vcs_info() {
-    pkill git_prompt
+    pkill git-prompt
     [[ ${PWD} != ${psvar[4]} ]] && psvar[1]=''
     psvar[4]="${PWD}"
 
     exec {VCS_INFO_FD}< <(
-        _git_prompt --print-updates || :   # ensure EOF is sent
+        git-prompt --print-updates || :   # ensure EOF is sent
         echo "EOF"
     )
     zle -F "$VCS_INFO_FD" async_vcs_info_callback
@@ -105,9 +101,9 @@ function async_vcs_info() {
 function async_vcs_info_callback() {
     setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
-    case ${2:-} in                  # process the error, see zshzle -F manpage
-        nval) pkill git_prompt;;    # closed or invalid descrptor
-        hup|err) pkill git_prompt;; # disconnect | any other error
+    case ${2:-} in        # process the error, see zshzle -F manpage
+        nval) pkill git-prompt && return 0;;    # closed or invalid descrptor
+        hup|err) pkill git-prompt && return 0;; # disconnect | any other error
     esac
 
     local FD="$1" response

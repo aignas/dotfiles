@@ -20,7 +20,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
 
   info "Installing packages"
   bottles=("${common[@]}" python3 coreutils gnu-sed skktools fswatch)
-  casks=(alacritty font-hack signal font-fira-code)
+  casks=(alacritty font-hack signal font-fira-code git-prompt-rs-bin)
   brew tap homebrew/cask-fonts
   brew install "${bottles[@]}" || :
   brew cask install "${casks[@]}" || :
@@ -29,10 +29,6 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   pip3 install --upgrade -U vim-vint
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
   info "pacman"
-  debug "pacman: cleanup"
-  sudo pacman -Sc --noconfirm || :
-  ok "pacman: cleanup"
-
   debug "pacman: update"
   sudo pacman -Syu --noconfirm
   ok "pacman: update"

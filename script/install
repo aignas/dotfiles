@@ -15,8 +15,8 @@ installs=(
   keyboard
   golang
   rust
+  aur
   neovim
-  sh-plugins
   tmux
 )
 

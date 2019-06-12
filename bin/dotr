@@ -18,9 +18,11 @@ Usage: dot [options]
 Default is to update the dotfiles and setup the system for work.
 
 Options:
- -e, --edit   Open dotfiles directory for editing
- -l, --lint   Lint dotfiles
- -h, --help   Show this help message and exti
+ -e, --edit     Open dotfiles directory for editing
+ -l, --lint     Lint dotfiles
+ -h, --help     Show this help message and exti
+ --no-push      Don't push the updated dotfiles repo
+ --no-gitconfig Don't setup gitconfig
 EOF
 }
 
