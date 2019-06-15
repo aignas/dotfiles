@@ -88,6 +88,7 @@ function _time_it() {
 }
 typeset -g VCS_INFO_FD=${RANDOM}
 function async_vcs_info() {
+    [[ ! -f "$(command -v git-prompt)" ]] && return 0
     pkill git-prompt
     [[ ${PWD} != ${psvar[4]} ]] && psvar[1]=''
     psvar[4]="${PWD}"
@@ -183,8 +184,8 @@ return
 
 rsw () {
     watchit \
-        --include="Cargo\.\*"
-        --include="\.rs" \
+        --include="Cargo\.toml" \
+        --include="*\.rs" \
         cargo "$@"
 }
 
@@ -202,7 +203,7 @@ rsd () {
 bw() {
     watchit \
         --include="BUILD\.bazel" \
-        --include="\.go" \
+        --include="*\.go" \
         bazel "$@"
 }
 

@@ -1,6 +1,0 @@
-[submodule "fzf/fzf-fs"]
-	path = fzf/fzf-fs
-	url = https://github.com/D630/fzf-fs
-[submodule "sh-plugins/git_prompt"]
-	path = sh-plugins/git_prompt
-	url = https://github.com/aignas/git_prompt.git

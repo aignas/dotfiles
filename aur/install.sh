@@ -3,6 +3,10 @@ set -e
 
 echo "The detected OS is ${DOTFILES_OS}"
 [[ ${DOTFILES_OS} != "ArchLinux" ]] && return 0
+if [ "$EUID" -eq 0 ]; then
+    echo "Install AUR dependencies as user"
+    exit 0
+fi
 
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null

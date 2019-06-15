@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-readonly common=(httpie fd exa ripgrep bat htop neovim ranger zsh hub nnn tig)
+readonly common=(fd exa ripgrep bat htop neovim ranger zsh nnn tig tmux)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh

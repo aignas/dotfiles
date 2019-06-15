@@ -2,7 +2,8 @@
 
 if [[ -f "$(command -v rustup)" ]]
 then
-  rustup default nightly
-  rustup update
+  rustup toolchain install stable beta
   rustup component add clippy rustfmt rls
+  rustup default stable
+  rustup update
 fi

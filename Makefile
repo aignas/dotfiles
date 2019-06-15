@@ -6,9 +6,9 @@ LABELS = $(addprefix --label org.label-schema.,\
 		 vcs-ref=$(shell git rev-parse --short HEAD) \
 		 schema-version=1.0)
 
-.PHONY: container
-container:
-	docker build -t $(USER)/$(PROJECT) $(LABELS) .
+.PHONY: shed
+shed:
+	docker build -f shed/Dockerfile -t $(USER)/$(PROJECT) $(LABELS) .
 	touch $@
 
 .PHONY: push

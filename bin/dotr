@@ -39,10 +39,9 @@ while test $# -gt 0; do
 done
 
 # Update
-[[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] && \
-  fail "Commit the changes and try again."
-
 [[ -z ${NO_PUSH:-} ]] && {
+  [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] && \
+    fail "Commit the changes and try again."
   info "Rebasing on master"
   git -C "${DOTFILES_ROOT}" pull --rebase
   info "Updating submodules"

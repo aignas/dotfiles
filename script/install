@@ -10,28 +10,28 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 installs=(
-  system
-  git
-  keyboard
-  golang
-  rust
-  aur
-  neovim
-  tmux
+    system
+    git
+    keyboard
+    golang
+    rust
+    aur
+    neovim
+    tmux
 )
 
 {
-  info "Ensuring that all install.sh files are included"
-  diff=$({
-    git ls-files | grep -E "install.sh$" | xargs -L1 dirname
-    echo "${installs[*]}" | xargs -n 1
-  } | sort | uniq -u | xargs)
-  [[ -n ${diff} ]] && fail "Missing dependencies in the list: $diff"
+    info "Ensuring that all install.sh files are included"
+    diff=$({
+        find ./*glob* -name install.sh -exec dirname {} \;
+        echo "${installs[*]}" | xargs -n 1
+    } | sort | uniq -u | xargs)
+    [[ -n ${diff} ]] && fail "Missing dependencies in the list: $diff"
 }
 {
-  info "Ensuring that all install.sh files are included only once"
-  r=$(echo "${installs[*]}" | xargs -n 1 | uniq -d)
-  [[ -z $r ]] || fail "Found duplicate dependencies in the list: $r"
+    info "Ensuring that all install.sh files are included only once"
+    r=$(echo "${installs[*]}" | xargs -n 1 | uniq -d)
+    [[ -z $r ]] || fail "Found duplicate dependencies in the list: $r"
 }
 
 
