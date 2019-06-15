@@ -22,4 +22,4 @@ install:
     fi
 
 script:
-  - bin/dot --lint
+  - bin/dotr --lint
