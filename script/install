@@ -10,20 +10,20 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 installs=(
-    system
-    git
-    keyboard
-    golang
-    rust
-    aur
-    neovim
-    tmux
+    ./system
+    ./git
+    ./keyboard
+    ./golang
+    ./rust
+    ./aur
+    ./neovim
+    ./tmux
 )
 
 {
     info "Ensuring that all install.sh files are included"
     diff=$({
-        find ./*glob* -name install.sh -exec dirname {} \;
+        find ./* -name install.sh -exec dirname {} \;
         echo "${installs[*]}" | xargs -n 1
     } | sort | uniq -u | xargs)
     [[ -n ${diff} ]] && fail "Missing dependencies in the list: $diff"
