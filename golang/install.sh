@@ -18,5 +18,4 @@
 
 set -oe pipefail
 
-rm -rf "${HOME}/src/github/saibing/bingo.git/"
 go get -u golang.org/x/tools/cmd/gopls

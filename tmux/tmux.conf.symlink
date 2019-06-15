@@ -76,8 +76,3 @@ set -g status-right-style none
 set -g status-right-length "100"
 set -g status-left "#[fg=#3e3e40,bg=white] #S "
 set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
-
-# Plugins
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-yank'
-run '~/.tmux/plugins/tpm/tpm'

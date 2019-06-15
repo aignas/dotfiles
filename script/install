@@ -17,7 +17,6 @@ installs=(
     ./rust
     ./aur
     ./neovim
-    ./tmux
 )
 
 {

@@ -59,6 +59,7 @@ setopt promptsubst
 # `man zshmisc`
 PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow}$(_timeit)%f
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
+GIT_PROMPT_ENABLED=$([ -f "$(command -v git-prompt)" ])
 
 psvar=()
 preexec() { psvar[3]=$(_now); }
@@ -88,7 +89,7 @@ function _time_it() {
 }
 typeset -g VCS_INFO_FD=${RANDOM}
 function async_vcs_info() {
-    [[ ! -f "$(command -v git-prompt)" ]] && return 0
+    $GIT_PROMPT_ENABLED || return 0
     pkill git-prompt
     [[ ${PWD} != ${psvar[4]} ]] && psvar[1]=''
     psvar[4]="${PWD}"

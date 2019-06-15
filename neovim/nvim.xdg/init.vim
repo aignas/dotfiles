@@ -17,13 +17,12 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
-Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
+Plug 'lotabout/skim'
 Plug 'lotabout/skim.vim'
 Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki'] }
 Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'],}
 Plug 'vimwiki/vimwiki'
-Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
 call plug#end()
 
