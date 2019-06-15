@@ -14,5 +14,6 @@ WORKDIR "/root"
 COPY . .dotfiles/
 env PATH="/root/.dotfiles/bin:$PATH"
 RUN dotr --no-push --no-gitconfig && \
+    chsh -s $(which zsh) && \
     pacman -S --noconfirm \
         pandoc texlive-most texlive-lang asciidoc
