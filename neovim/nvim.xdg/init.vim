@@ -42,36 +42,34 @@ set undofile backup backupcopy=yes
 set backspace=eol,start,indent
 set autoindent breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
-set fileformats=unix,dos
-set incsearch hlsearch
-set joinspaces cpoptions+=J     " Double spacing between sentences
+set fileformats=unix,mac,dos
+set cpoptions+=J                " Double spacing between sentences
 set linebreak
 set list
-set magic
 set number relativenumber
 set spell                       " vim-unimpaired: use [os and ]os
 set whichwrap+=<,>
-set wrap
 
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>):
+iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
+iabbrev xfix  FIXME @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
 iabbrev xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>:
 iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
 
 let g:mapleader=','
 nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>f :Files<CR>
+nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>cd :cd %:p:h<cr>
+nnoremap <silent> <leader>f :Files<cr>
+nnoremap <silent> <leader>gd :ALEGoToDefinition<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader>gt :ALEGoToTypeDefinition<cr>
+nnoremap <silent> <leader>h :ALEHover<cr>
 nnoremap <leader>e :e %:p:h
-
-nnoremap <silent> <leader>gd :ALEGoToDefinition<CR>
-nnoremap <silent> <leader>gt :ALEGoToTypeDefinition<CR>
-nnoremap <silent> <leader>h :ALEHover<CR>
 set omnifunc=ale#completion#OmniFunc
 
 let g:ale_fix_on_save = 1
@@ -90,13 +88,9 @@ let g:ale_fixers = {
 
 let g:vimwiki_folding='expr'
 let g:vimwiki_list = [{'path': '~/vimwiki',
-            \ 'syntax': 'markdown',
-            \ 'ext': '.md',
-            \ }]
-
-let g:markdown_composer_autostart=1
-let g:markdown_composer_browser='dot-open'
-let g:markdown_composer_open_browser=0
+    \ 'syntax': 'markdown',
+    \ 'ext': '.md',
+    \ }]
 
 let g:eskk#start_completion_length=2
 let g:eskk#directory = s:data_dir . '/skk'
