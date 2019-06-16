@@ -1,7 +1,8 @@
 # Dotfiles
 
-[![Build
-Status](https://travis-ci.org/aignas/dotfiles.svg?branch=master)](https://travis-ci.org/aignas/dotfiles)
+Travis: [![Build Status](https://travis-ci.org/aignas/dotfiles.svg?branch=master)](https://travis-ci.org/aignas/dotfiles)
+
+[aignas/shed](https://hub.docker.com/r/aignas/shed/):
 [![aignas/shed container status](https://images.microbadger.com/badges/image/aignas/shed.svg)](https://microbadger.com/images/aignas/shed "Docker image badger from microbadger.com")
 
 Highlights:
