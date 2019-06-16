@@ -40,7 +40,8 @@ time to keep your environment fresh and up-to-date. You can find this script in
 ## Toolshed
 
 [aignas/shed](https://hub.docker.com/r/aignas/shed/) is a docker
-image with many command-line tools.
+image with many command-line tools.  The idea taken from
+[motiejus/toolshed](https://github.com/motiejus/toolshed/).
 
 ### Usage
 
@@ -63,7 +64,7 @@ $ shed
 
 ## Thanks
 
-This is initially based on wonderful [dotfiles
+This was initially based on wonderful [dotfiles
 framework](https://github.com/holman/dotfiles) by Zach Holman.  However, in
 time this has been simplified and adjusted to suit my needs better.  Initial
 thanks note by Zach:
