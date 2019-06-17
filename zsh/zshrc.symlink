@@ -30,6 +30,7 @@ alias g='git'
 alias vc='e ~/.config/nvim/init.vim'
 alias l='exa'
 alias ll='exa -l'
+alias la='exa -a'
 # }}}
 
 # initialize autocomplete here, otherwise functions won't be loaded
@@ -38,8 +39,6 @@ compinit -d
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
-compdef l=exa
-compdef ll=exa
 
 zstyle \
     'history' \
