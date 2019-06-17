@@ -11,6 +11,7 @@ let s:backup_dir = expand(s:data_dir . '/backups/')
 call plug#begin(s:data_dir . '/plugged')
 
 Plug 'junegunn/seoul256.vim'
+Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
