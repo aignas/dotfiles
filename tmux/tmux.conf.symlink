@@ -47,32 +47,13 @@ bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
 set -g status-justify "left"
 set -g status "on"
 set -g status-style none
-set -g status-style bg="#3e3e40"
-
-# messages
-set -g message-style fg="#d4d4d9"
-set -g message-style bg="#3e3e40"
-set -g message-command-style fg="#a89984"
-set -g message-command-style bg="#646466"
 
 # panes
 set -g pane-active-border-style fg="yellow"
-set -g pane-border-style fg="#646466"
 
 # window status
-setw -g window-status-style none
-setw -g window-status-style fg="#d4d4d9"
-setw -g window-status-activity-style none
-setw -g window-status-activity-style bg="#3e3e40"
-setw -g window-status-activity-style fg="colour208"
-setw -g window-status-separator ""
-setw -g window-status-style bg="#3e3e40"
-setw -g window-status-format "#[fg=#afafb2,bg=#3e3e40] #I:#W "
-setw -g window-status-current-format "#[fg=black,bg=magenta] #I:#W "
-
-set -g status-left-style none
-set -g status-left-length "100"
-set -g status-right-style none
+setw -g window-status-format "#I:#W "
+setw -g window-status-current-format "#I:#W "
+set -g status-left "#S "
 set -g status-right-length "100"
-set -g status-left "#[fg=#3e3e40,bg=white] #S "
-set -g status-right "#[fg=yellow,bg=#3e3e40]$USER@#h #[fg=white,bg=#3e3e40] │ #[fg=white,bg=#3e3e40]%Y-%m-%d %H:%M "
+set -g status-right "$USER@#h │ %Y-%m-%d %H:%M "
