@@ -11,6 +11,7 @@ let s:backup_dir = expand(s:data_dir . '/backups/')
 call plug#begin(s:data_dir . '/plugged')
 
 Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -34,7 +35,7 @@ syntax enable
 set history=10000
 
 " Theming
-set guioptions=ag termguicolors lazyredraw background=dark
+set guioptions=ag termguicolors lazyredraw
 let g:seoul256_background = 235
 colorscheme seoul256
 
@@ -91,8 +92,10 @@ let g:ale_fixers = {
     \}
 
 let g:vimwiki_folding='expr'
-let g:vimwiki_list = [{'path': '~/vimwiki',
+let g:vimwiki_list = [{'path': '~/vimwiki2/content',
     \ 'syntax': 'markdown',
+    \ 'index': '_index',
+    \ 'diary_index': '_index',
     \ 'ext': '.md',
     \ }]
 
