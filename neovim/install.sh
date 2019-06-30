@@ -15,7 +15,7 @@ pyenv() {
   python3 -m venv "${NEOVIM_VENV}"
   "${NEOVIM_VENV}/bin/pip" -q \
     install --upgrade \
-    neovim pip setuptools
+    neovim neovim-remote pip setuptools
   ok "python venv: ${NEOVIM_VENV}"
 }
 

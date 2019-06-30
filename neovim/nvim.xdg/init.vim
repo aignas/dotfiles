@@ -19,9 +19,10 @@ Plug 'tpope/vim-unimpaired'
 Plug 'w0rp/ale'
 Plug 'lotabout/skim'
 Plug 'lotabout/skim.vim'
-Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki'] }
+Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki', 'tex'] }
 Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
-Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'],}
+Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'] }
+Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'vimwiki/vimwiki'
 
 call plug#end()
@@ -61,6 +62,7 @@ iabbrev xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>:
 iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
 
 let g:mapleader=','
+let g:maplocalleader='-'
 nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>cd :cd %:p:h<cr>
@@ -84,6 +86,7 @@ let g:ale_fixers = {
     \   'rust': ['rustfmt'],
     \   'go': ['gofmt', 'goimports'],
     \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
+    \   'tex': ['latexindent', 'textlint'],
     \}
 
 let g:vimwiki_folding='expr'
@@ -94,6 +97,9 @@ let g:vimwiki_list = [{'path': '~/vimwiki',
 
 let g:eskk#start_completion_length=2
 let g:eskk#directory = s:data_dir . '/skk'
+let g:eskk#select_cand_keys = "aoeuhtns"
+let g:eskk#show_annotation = 1
+let g:eskk#kakutei_when_unique_candidate = 1
 let g:eskk#dictionary = {
     \   'path': s:data_dir . '/skk/skk-jisyo.s',
     \   'sorted': 0,
@@ -104,3 +110,10 @@ let g:eskk#large_dictionary = {
     \   'sorted': 1,
     \   'encoding': 'euc-jp',
     \}
+
+" put into PDF viewer 'nvr --remote-silent %f -c %l' for synctex
+let g:vimtex_compiler_progname = 'nvr'
+" Disable custom warnings based on regexp
+let g:vimtex_quickfix_latexlog = {
+      \ 'ignore_filters' : ['Command \\selectfont\s*has changed'],
+      \}
