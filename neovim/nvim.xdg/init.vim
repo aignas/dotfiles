@@ -73,7 +73,8 @@ nnoremap <silent> <leader>gd :ALEGoToDefinition<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gt :ALEGoToTypeDefinition<cr>
 nnoremap <silent> <leader>h :ALEHover<cr>
-nnoremap <leader>e :e %:p:h
+nnoremap <leader>e :e %:h/
+nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 set omnifunc=ale#completion#OmniFunc
 
 let g:ale_fix_on_save = 1
