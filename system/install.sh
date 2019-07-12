@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-readonly common=(fd exa ripgrep bat htop neovim ranger zsh nnn tig tmux)
+readonly common=(fd exa ripgrep bat htop neovim ranger zsh nnn tig tmux watchexec)
 cd "$(dirname "$0")/.."
 # shellcheck source=/dev/null
 source script/logging.sh
@@ -19,7 +19,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
   ok "brew cask upgrade"
 
   info "Installing packages"
-  bottles=("${common[@]}" python3 coreutils gnu-sed skktools fswatch sk)
+  bottles=("${common[@]}" python3 coreutils gnu-sed skktools sk)
   brew install "${bottles[@]}" || :
 
   info "Installing packages via pip"

@@ -183,10 +183,7 @@ return
 }
 
 rsw () {
-    watchit \
-        --include="Cargo\.toml" \
-        --include="*\.rs" \
-        cargo "$@"
+    watchexec -e toml,rs wrap -c cargo "$@"
 }
 
 rsd () {
@@ -201,10 +198,7 @@ rsd () {
 }
 
 bw() {
-    watchit \
-        --include="BUILD\.bazel" \
-        --include="*\.go" \
-        bazel "$@"
+    watchexec -e go,bazel,bzl wrap -c bazel "$@"
 }
 
 shed() {
