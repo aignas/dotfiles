@@ -9,13 +9,14 @@
 #
 # - [bingo](https://github.com/saibing/bingo)
 #
-# > bingo is designed for offline editors such as vscode, vim, it focuses on code editing.
+# > bingo is designed for offline editors such as vscode, vim, it focuses on
+# code editing.
 #
-# - [gopls](https://github.com/golang/tools/blob/master/cmd/gopls/main.go)
+# - [gopls](https://github.com/golang/go/wiki/gopls)
 #
 # > gopls is an official language server,  and it is currently in early development.
 #
 
-set -oe pipefail
-
-go get -u golang.org/x/tools/cmd/gopls
+export GO111MODULE=on
+go get golang.org/x/tools/gopls@latest
+go get github.com/golangci/golangci-lint/cmd/golangci-lint@latest

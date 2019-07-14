@@ -22,7 +22,7 @@ Plug 'w0rp/ale'
 Plug 'lotabout/skim'
 Plug 'lotabout/skim.vim'
 Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki', 'tex'] }
-Plug 'fatih/vim-go', { 'for': ['markdown', 'go'], 'do': ':GoInstallBinaries' }
+Plug 'fatih/vim-go', { 'for': ['markdown', 'go'] }
 Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'] }
 Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'vimwiki/vimwiki'
@@ -69,6 +69,7 @@ nnoremap <silent> <leader><leader> :wa<cr>:echo "Everything saved"<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>cd :cd %:p:h<cr>
 nnoremap <silent> <leader>f :Files<cr>
+
 nnoremap <silent> <leader>gd :ALEGoToDefinition<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gt :ALEGoToTypeDefinition<cr>
@@ -79,18 +80,7 @@ set omnifunc=ale#completion#OmniFunc
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = {
-    \   'go': ['golangci-lint', 'gopls'],
-    \   'rust': ['rls', 'cargo'],
-    \   'javascript': ['eslint'],
-    \}
-let g:ale_fixers = {
-    \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-    \   'rust': ['rustfmt'],
-    \   'go': ['gofmt', 'goimports'],
-    \   'javascript': ['eslint', 'prettier_eslint', 'importjs'],
-    \   'tex': ['latexindent', 'textlint'],
-    \}
+let g:ale_fixers = { '*': ['remove_trailing_lines', 'trim_whitespace'] }
 
 let g:vimwiki_folding='expr'
 let g:vimwiki_list = [{'path': '~/vimwiki2/content',
@@ -102,7 +92,7 @@ let g:vimwiki_list = [{'path': '~/vimwiki2/content',
 
 let g:eskk#start_completion_length=2
 let g:eskk#directory = s:data_dir . '/skk'
-let g:eskk#select_cand_keys = "aoeuhtns"
+let g:eskk#select_cand_keys = 'aoeuhtns'
 let g:eskk#show_annotation = 1
 let g:eskk#kakutei_when_unique_candidate = 1
 

@@ -7,3 +7,6 @@ nnoremap <leader>cr :term cargo run -- <end>
 nnoremap <leader>cb :term cargo build<cr>
 nnoremap <leader>cp :term cargo bench<cr>
 nnoremap <leader>cu :term cargo update<cr>
+
+let b:ale_linters = ['rls', 'cargo']
+let b:ale_fixers = ['rustfmt']

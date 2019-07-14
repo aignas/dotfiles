@@ -3,6 +3,9 @@ let g:go_metalinter_autosave = 1
 let g:go_auto_type_info = 1
 let g:go_fmt_fail_silently = 1
 
+let b:ale_linters = ['golangci-lint', 'gopls']
+let b:ale_fixers = ['gofmt', 'goimports']
+
 nnoremap <silent> <leader>t :e %:h/%:t:r_test.%:e<cr>
 nnoremap <silent> <leader>T :e %:s?_test??<cr>
 
