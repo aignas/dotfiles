@@ -105,20 +105,10 @@ let g:eskk#directory = s:data_dir . '/skk'
 let g:eskk#select_cand_keys = "aoeuhtns"
 let g:eskk#show_annotation = 1
 let g:eskk#kakutei_when_unique_candidate = 1
-let g:eskk#dictionary = {
-    \   'path': s:data_dir . '/skk/skk-jisyo.s',
-    \   'sorted': 0,
-    \   'encoding': 'utf-8',
-    \}
-let g:eskk#large_dictionary = {
-    \   'path': s:data_dir . '/skk/SKK-JISYO.L',
-    \   'sorted': 1,
-    \   'encoding': 'euc-jp',
-    \}
 
-" put into PDF viewer 'nvr --remote-silent %f -c %l' for synctex
-let g:vimtex_compiler_progname = 'nvr'
-" Disable custom warnings based on regexp
-let g:vimtex_quickfix_latexlog = {
-      \ 'ignore_filters' : ['Command \\selectfont\s*has changed'],
-      \}
+let s:skk = s:data_dir . '/skk'
+if finddir('/usr/share/skk')
+    let s:skk = '/usr/share/skk'
+endif
+let g:eskk#dictionary =       {'path': s:skk . '/skk-jisyo.s', }
+let g:eskk#large_dictionary = {'path': s:skk . '/SKK-JISYO.L'}
