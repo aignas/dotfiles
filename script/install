@@ -15,7 +15,6 @@ installs=(
     ./keyboard
     ./golang
     ./rust
-    ./aur
     ./neovim
 )
 
