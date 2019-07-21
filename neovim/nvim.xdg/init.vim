@@ -23,7 +23,6 @@ Plug 'w0rp/ale'
 Plug 'lotabout/skim'
 Plug 'lotabout/skim.vim'
 Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki', 'tex'] }
-Plug 'fatih/vim-go', { 'for': ['markdown', 'go'] }
 Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'] }
 Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'vimwiki/vimwiki'
@@ -80,7 +79,10 @@ nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 set omnifunc=ale#completion#OmniFunc
 
 let g:ale_fix_on_save = 1
-let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_enter = 0
 let g:ale_fixers = { '*': ['remove_trailing_lines', 'trim_whitespace'] }
 
 let g:vimwiki_folding='expr'
