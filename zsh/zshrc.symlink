@@ -19,7 +19,6 @@ setopt HIST_REDUCE_BLANKS
 # aliases
 alias b='bat'
 alias g='git'
-alias gg='git status'
 alias gd='git diff'
 alias vc='e ~/.config/nvim/init.vim'
 alias l='exa'

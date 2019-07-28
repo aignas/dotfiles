@@ -9,16 +9,15 @@
 
 setopt promptsubst
 
-typeset -g VCS_INFO_FD=${RANDOM}
 typeset -g GIT_PROMPT_ENABLED=$([ -f "$(command -v git-prompt)" ])
-
 psvar=()
+
 preexec() { psvar[3]=$(_now); }
 precmd() {
     setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-    async_vcs_info
     psvar[2]=$(_time_it "${psvar[3]:-}")
     psvar[3]=
+    $GIT_PROMPT_ENABLED && async_vcs_info
 }
 
 function _now() { date +%s; }
@@ -39,13 +38,12 @@ function _time_it() {
     fi
 }
 
-function async_vcs_info() {
-    $GIT_PROMPT_ENABLED || return 0
-    pkill git-prompt
-    psvar[1]=''
 
+function async_vcs_info() {
+    typeset VCS_INFO_FD=${RANDOM}
     exec {VCS_INFO_FD}< <(
-        git-prompt --print-updates || echo "" # In case of error, clear the prompt
+        pkill git-prompt
+        git-prompt --print-updates || :
         echo "EOF"
     )
     zle -F "$VCS_INFO_FD" async_vcs_info_callback
