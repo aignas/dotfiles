@@ -1,30 +1,22 @@
 #zmodload zsh/zprof         # NOTE: uncomment for profiling
 
 export DOTFILES="$HOME/.dotfiles"
-export DOTFILES_OS="$(${DOTFILES}/bin/get_os)"
-export SH_PLUGIN="${DOTFILES}/sh-plugins/bin"
 export GOPATH="${HOME}/gocode"
 export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
-[[ -d ${HOME}/.skim/bin ]] && export PATH="${HOME}/.skim/bin:${PATH}"
-
 export EDITOR="nvim"
 export SKIM_DEFAULT_COMMAND="fd ."
-
-# {{{ config
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-setopt APPEND_HISTORY           # adds history
-# adds history incrementally and share it across sessions
-setopt INC_APPEND_HISTORY SHARE_HISTORY
-setopt EXTENDED_HISTORY         # add timestamps to history
-
-# don't record dupes in history
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
-# }}}
-# {{{ aliases
+
+# aliases
 alias b='bat'
 alias g='git'
 alias gg='git status'
@@ -33,7 +25,9 @@ alias vc='e ~/.config/nvim/init.vim'
 alias l='exa'
 alias ll='exa -l'
 alias la='exa -a'
-# }}}
+alias rsw="watchexec -e toml,rs wrap -c cargo"
+alias bw="watchexec -e go,bazel,bzl wrap -c bazel"
+alias shed="docker run --name shed -v ${PWD}:/x -w /x -ti --rm aignas/shed"
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
@@ -42,108 +36,18 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
 
-zstyle \
-    'history' \
-    'completion' \
-    'git'
-
-#{{{ Prompt
-# The following are stolen and adapted from @agkozak's wonderful prompt:
-# https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
-# was specifically added by @psprint in
-# https://github.com/agkozak/agkozak-zsh-prompt/pull/11
-#
-# This contains just the bare minimum in order to get everything working on my
-# machine.
-
-setopt promptsubst
-# `man zshmisc`
-PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow}$(_timeit)%f
-%(?.%F{magenta}.%F{red})%(!.#.$)%f '
-GIT_PROMPT_ENABLED=$([ -f "$(command -v git-prompt)" ])
-
-psvar=()
-preexec() { psvar[3]=$(_now); }
-precmd() {
-    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-    async_vcs_info
-    psvar[2]=$(_time_it "${psvar[3]:-}")
-    psvar[3]=
-}
-
-function _now() { date +%s; }
-function _time_it() {
-    [[ -z $1 ]] && return
-    now=$(_now)
-    diff=$(( now - $1 ))
-    min=$(( diff / 60 ))
-    sec=$(( diff % 60 ))
-    if (( min > 60 )); then
-        echo ">1h"
-    elif (( min != 0 && sec != 0 )); then
-        echo "${min}m ${sec}s"
-    elif (( min != 0 )); then
-        echo "${min}m"
-    elif (( sec > 2 )); then
-        echo "${sec}s"
-    fi
-}
-typeset -g VCS_INFO_FD=${RANDOM}
-function async_vcs_info() {
-    $GIT_PROMPT_ENABLED || return 0
-    pkill git-prompt
-    [[ ${PWD} != ${psvar[4]} ]] && psvar[1]=''
-    psvar[4]="${PWD}"
-
-    exec {VCS_INFO_FD}< <(
-        git-prompt --print-updates || echo "" # In case of error, clear the prompt
-        echo "EOF"
-    )
-    zle -F "$VCS_INFO_FD" async_vcs_info_callback
-}
-function async_vcs_info_callback() {
-    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-
-    case ${2:-} in        # process the error, see zshzle -F manpage
-        nval) pkill git-prompt && return 0;;    # closed or invalid descrptor
-        hup|err) pkill git-prompt && return 0;; # disconnect | any other error
-    esac
-
-    local FD="$1" response
-    builtin read -u "$FD" response
-    if [[ $response == "Err: "* || $response == "EOF" ]]; then
-        exec {FD}<&-   # close the file descriptor
-        zle -F "${FD}" # Remove any handler associated with this descriptor
-        return
-    fi
-
-    # Include a space, so that we don't do partial matching we don't want
-    if [[ "${psvar[1]} " != "$response *" ]]; then
-        psvar[1]="$response"
-        zle && { zle reset-prompt; zle -R }
-    fi
-}
-
-function _prompt_char() {
-    if [[ $? -ne 0 ]]; then
-        echo "%F{red}$%f"
-        return
-    fi
-    echo "%F{magenta}$%f"
-}
-setopt promptsubst
-# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow} %{$psvar[2]%}%f
-$(_prompt_char) '
-#}}}
+zstyle 'history' 'completion' 'git'
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
+trysource "${DOTFILES}/zsh/prompt.zsh"
 trysource "${HOME}/.localrc"
 trysource "${HOME}/.skim/shell/completion.zsh"
 trysource "${HOME}/.skim/shell/key-bindings.zsh"
+trysource /usr/share/skim/completion.zsh
+trysource /usr/share/skim/key-bindings.zsh
 
-#{{{ Functions
-[[ "${DOTFILES_OS}" == "ArchLinux" ]] && aur() {
+# Functions
+[[ "$(get_os)" == "ArchLinux" ]] && aur() {
 case "$1" in
     "--help"|"-h")
         cat <<EOF
@@ -184,10 +88,6 @@ return
     esac
 }
 
-rsw () {
-    watchexec -e toml,rs wrap -c cargo "$@"
-}
-
 rsd () {
     # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
     # however it would be great to have a 'cargo doc' to include the stdlib docs
@@ -198,17 +98,3 @@ rsd () {
     echo "Done"
     rsw doc --all --document-private-items "$@"
 }
-
-bw() {
-    watchexec -e go,bazel,bzl wrap -c bazel "$@"
-}
-
-shed() {
-    docker run --name shed -v ${PWD}:/x -w /x -ti --rm aignas/shed "$@"
-}
-#}}}
-
-# vim: fdm=marker
-
-# added by travis gem
-[ -f /Users/aignas/.travis/travis.sh ] && source /Users/aignas/.travis/travis.sh
