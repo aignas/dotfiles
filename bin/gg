@@ -3,27 +3,32 @@
 prefix_with() {
     prefix="$1"
     shift
-    awk -v prefix="$prefix" '{print "\x1b[31;1m" prefix "\x1b[m\t" $1}' "$@"
+    awk -v prefix="$prefix" '{print "\x1b[31;1m" prefix "\x1b[m\t" $0}' "$@"
 }
 
 main() {
   local targets prefix
-  case $1 in
-    t|tag)
+  case ${1:-} in
+    -t|--tag)
       prefix=tag
       targets=$(git tag |
-          prefix_with "tag" ||
-          return)
+          sort -u |
+          prefix_with "tag" || return)
       ;;
-    ''|b|branch)
+    -b|--branch)
       prefix=branch
       targets=$(git branch |
         grep -v HEAD |
         sed "s/.* //" |
         sed "s#remotes/[^/]*/##" |
+        sort -u |
         prefix_with "branch" || return)
       ;;
-    all)
+    -c|--commit)
+        targets=$(git log --color=always --oneline |
+            prefix_with "commit" || return)
+        ;;
+    --all)
       prefix=branch
       targets=$({
           git branch --all |
@@ -35,22 +40,26 @@ main() {
             prefix_with "tag"
         } || return)
       ;;
-    h|help|*)
+    -h|--help|*)
       cat <<EOF
 Interactive browsing of revisions
 
 Subcommands:
- [|b|branch]: branch
- [t|tag]: tag
- [c|commit]: commit TBD
+ [-b|--branch]: branch (default)
+ [-t|--tag]: tag
+ [-c|--commit]: commit TBD
 EOF
       ;;
   esac
   [[ -z ${targets} ]] && return
   target=$(echo "$targets" |
-    sort -u |
     sk --no-hscroll --ansi -d "\t" -n 2) || return
   echo "$target" | awk '{print $2}'
 }
 
-main "$@"
+param='--commit'
+if [[ "-*" == "$1" ]]; then
+    param="$1"
+    shift
+fi
+git "$@" "$(main "$param")"
