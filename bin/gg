@@ -62,4 +62,6 @@ if [[ "-*" == "$1" ]]; then
     param="$1"
     shift
 fi
-git "$@" "$(main "$param")"
+rev="$(main "$param")"
+[[ -z $rev ]] && exit 0
+git "$@" "$rev"

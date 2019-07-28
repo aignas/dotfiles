@@ -2,6 +2,7 @@
 
 export DOTFILES="$HOME/.dotfiles"
 export GOPATH="${HOME}/gocode"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
 export EDITOR="nvim"
 export SKIM_DEFAULT_COMMAND="fd ."

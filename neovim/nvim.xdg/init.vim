@@ -1,47 +1,14 @@
 " vim: filetype=vim
-
-" vint: -ProhibitSetNoCompatible
-set nocompatible
 scriptencoding utf-8
+let g:python3_host_prog = $XDG_DATA_HOME . '/nvim/venv/bin/python'
 
-let s:data_dir = $HOME . '/.local/share/nvim'
-let g:python3_host_prog = s:data_dir . '/venv/bin/python'
-let s:backup_dir = expand(s:data_dir . '/backups/')
-
-call plug#begin(s:data_dir . '/plugged')
-
-Plug 'junegunn/seoul256.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'w0rp/ale'
-Plug 'lotabout/skim'
-Plug 'lotabout/skim.vim'
-Plug 'tyru/eskk.vim', { 'for': ['markdown', 'vimwiki', 'tex'] }
-Plug 'rust-lang/rust.vim', { 'for': ['markdown', 'rust'] }
-Plug 'lervag/vimtex', { 'for': ['tex'] }
-Plug 'vimwiki/vimwiki'
-
-call plug#end()
-
-" Required:
-filetype plugin indent on
-syntax enable
-set history=10000
-
-" Theming
+colorscheme seoul256
 set guioptions=ag termguicolors lazyredraw
 let g:seoul256_background = 235
-colorscheme seoul256
 
-execute 'set backupdir=' . s:backup_dir . ',./.backup,.,/tmp'
-execute 'set directory=' . s:backup_dir . ',.,./.backup,/tmp'
-set undofile backup backupcopy=yes
+set backupdir-=.
+set directory-=.
+set history=10000 undofile backup backupcopy=yes
 set backspace=eol,start,indent
 set autoindent breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
@@ -70,10 +37,10 @@ nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>cd :cd %:p:h<cr>
 nnoremap <silent> <leader>f :Files<cr>
 
-nnoremap <silent> <leader>gd :ALEGoToDefinition<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
-nnoremap <silent> <leader>gt :ALEGoToTypeDefinition<cr>
-nnoremap <silent> <leader>h :ALEHover<cr>
+nnoremap <silent> <leader>gd :call LanguageClient_textDocument_definition()<cr>
+nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<cr>
+nnoremap <silent> <leader>h :call LanguageClient_textDocument_hover()<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 set omnifunc=ale#completion#OmniFunc
@@ -94,12 +61,12 @@ let g:vimwiki_list = [{'path': '~/vimwiki2/content',
     \ }]
 
 let g:eskk#start_completion_length=2
-let g:eskk#directory = s:data_dir . '/skk'
+let g:eskk#directory = $XDG_DATA_HOME . '/nvim/skk'
 let g:eskk#select_cand_keys = 'aoeuhtns'
 let g:eskk#show_annotation = 1
 let g:eskk#kakutei_when_unique_candidate = 1
 
-let s:skk = s:data_dir . '/skk'
+let s:skk = $XDG_DATA_HOME . '/nvim/skk'
 if finddir('/usr/share/skk')
     let s:skk = '/usr/share/skk'
 endif

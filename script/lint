@@ -23,7 +23,7 @@ lintsh() {
 }
 
 lintvim() {
-  files=$(git -C "${DOTFILES_ROOT}" ls-files | grep -E "\.vim$" ||
+  files=$(git -C "${DOTFILES_ROOT}" ls-files | grep -E "\.vim$" | grep -v "pack" ||
     fail "failed to get vim files")
   print_run "vim" "$files"
   run "$files" vint "$@"

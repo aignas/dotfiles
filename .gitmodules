@@ -1,0 +1,48 @@
+[submodule "neovim/plugins/tpope/vim-repeat"]
+	path = neovim/nvim.xdg/pack/plugins/start/tpope-vim-repeat
+	url = git@github.com:tpope/vim-repeat
+[submodule "neovim/plugins/tpope/vim-eunuch"]
+	path = neovim/nvim.xdg/pack/plugins/start/tpope-vim-eunuch
+	url = git@github.com:tpope/vim-eunuch
+[submodule "neovim/plugins/tpope/vim-abolish"]
+	path = neovim/nvim.xdg/pack/plugins/start/tpope-vim-abolish
+	url = git@github.com:tpope/vim-abolish
+[submodule "neovim/plugins/tpope/vim-surround"]
+	path = neovim/nvim.xdg/pack/plugins/start/tpope-vim-surround
+	url = git@github.com:tpope/vim-surround
+[submodule "neovim/plugins/junegunn/seoul256.vim"]
+	path = neovim/nvim.xdg/pack/plugins/start/junegunn-seoul256.vim
+	url = git@github.com:junegunn/seoul256.vim
+[submodule "neovim/plugins/junegunn/goyo.vim"]
+	path = neovim/nvim.xdg/pack/plugins/start/junegunn-goyo.vim
+	url = git@github.com:junegunn/goyo.vim
+[submodule "neovim/plugins/tpope/vim-unimpaired"]
+	path = neovim/nvim.xdg/pack/plugins/start/tpope-vim-unimpaired
+	url = git@github.com:tpope/vim-unimpaired
+[submodule "neovim/plugins/lotabout/skim.vim"]
+	path = neovim/nvim.xdg/pack/plugins/start/lotabout-skim.vim
+	url = git@github.com:lotabout/skim.vim
+[submodule "neovim/plugins/lotabout/skim"]
+	path = neovim/nvim.xdg/pack/plugins/start/lotabout-skim
+	url = git@github.com:lotabout/skim
+[submodule "neovim/plugins/tpope/vim-fugitive"]
+	path = neovim/nvim.xdg/pack/plugins/start/tpope-vim-fugitive
+	url = git@github.com:tpope/vim-fugitive
+[submodule "neovim/plugins/tyru/eskk.vim"]
+	path = neovim/nvim.xdg/pack/plugins/start/tyru-eskk.vim
+	url = git@github.com:tyru/eskk.vim
+[submodule "neovim/plugins/lervag/vimtex"]
+	path = neovim/nvim.xdg/pack/plugins/start/lervag-vimtex
+	url = git@github.com:lervag/vimtex
+[submodule "neovim/plugins/vimwiki/vimwiki"]
+	path = neovim/nvim.xdg/pack/plugins/start/vimwiki-vimwiki
+	url = git@github.com:vimwiki/vimwiki
+[submodule "neovim/plugins/w0rp/ale"]
+	path = neovim/nvim.xdg/pack/plugins/start/w0rp-ale
+	url = git@github.com:w0rp/ale
+[submodule "neovim/plugins/autozimu/LanguageClient-neovim"]
+	path = neovim/nvim.xdg/pack/plugins/start/autozimu-LanguageClient-neovim
+	url = git@github.com:autozimu/LanguageClient-neovim
+[submodule "neovim/plugins/rust-lang/rust.vim"]
+	path = neovim/nvim.xdg/pack/plugins/start/rust-lang-rust.vim
+	url = git@github.com:rust-lang/rust.vim
