@@ -35,7 +35,7 @@ pyenv() {
     ok "python venv: ${NEOVIM_VENV}"
 }
 
-addAll() {
+reinstall() {
     rm -rf "${DOTFILES}/neovim/nvim.xdg/pack"
     git submodule deinit --all -f
     rm "${DOTFILES}/.gitmodules"
@@ -110,7 +110,7 @@ case ${1:-} in
     update) update "${2:-}" ;;
     helptags) helptags "${2:-}" ;;
     add) shift; add "$@" ;;
-    addAll) addAll ;;
+    reinstall) reinstall ;;
     *)
         pyenv
         update
