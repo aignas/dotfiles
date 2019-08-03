@@ -1,5 +1,4 @@
-# Prompt
-# The following are stolen and adapted from @agkozak's wonderful prompt:
+# The following is adapted from @agkozak's wonderful prompt:
 # https://github.com/agkozak/agkozak-zsh-prompt, which got this functionality
 # was specifically added by @psprint in
 # https://github.com/agkozak/agkozak-zsh-prompt/pull/11
@@ -7,38 +6,8 @@
 # This contains just the bare minimum in order to get everything working on my
 # machine.
 
-setopt promptsubst
-
-typeset -g GIT_PROMPT_ENABLED=$([ -f "$(command -v git-prompt)" ])
-psvar=()
-
-preexec() { psvar[3]=$(_now); }
-precmd() {
-    setopt LOCAL_OPTIONS NO_IGNORE_BRACES
-    psvar[2]=$(_time_it "${psvar[3]:-}")
-    psvar[3]=
-    $GIT_PROMPT_ENABLED && async_vcs_info
-}
-
-function _now() { date +%s; }
-function _time_it() {
-    [[ -z $1 ]] && return
-    now=$(_now)
-    diff=$(( now - $1 ))
-    min=$(( diff / 60 ))
-    sec=$(( diff % 60 ))
-    if (( min > 60 )); then
-        echo ">1h"
-    elif (( min != 0 && sec != 0 )); then
-        echo "${min}m ${sec}s"
-    elif (( min != 0 )); then
-        echo "${min}m"
-    elif (( sec > 2 )); then
-        echo "${sec}s"
-    fi
-}
-
-
+[ -f "$(command -v git-prompt)" ] && precmd_functions=(async_vcs_info)
+typeset -g prompt_git_status
 function async_vcs_info() {
     typeset VCS_INFO_FD=${RANDOM}
     exec {VCS_INFO_FD}< <(
@@ -66,12 +35,8 @@ function async_vcs_info_callback() {
     fi
 
     # Include a space, so that we don't do partial matching we don't want
-    if [[ "${psvar[1]} " != "$response *" ]]; then
-        psvar[1]="$response"
+    if [[ "${prompt_git_status} " != "$response *" ]]; then
+        prompt_git_status="$response"
         zle && { zle reset-prompt; zle -R }
     fi
 }
-
-# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$psvar[1]%}%F{yellow} %{$psvar[2]%}%f
-%(?.%F{magenta}.%F{red})%(!.#.$)%f '

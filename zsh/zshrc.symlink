@@ -1,11 +1,11 @@
-#zmodload zsh/zprof         # NOTE: uncomment for profiling
+#zmodload zsh/zprof # NOTE: uncomment for profiling
 
 export DOTFILES="$HOME/.dotfiles"
 export GOPATH="${HOME}/gocode"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export PATH="${GOPATH}/bin:${DOTFILES}/bin:${PATH}"
 export EDITOR="nvim"
-export SKIM_DEFAULT_COMMAND="fd ."
+export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || fd --type f ."
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
@@ -21,32 +21,54 @@ setopt HIST_REDUCE_BLANKS
 alias b='bat'
 alias g='git'
 alias gd='git diff'
-alias vc='e ~/.config/nvim/init.vim'
 alias l='exa'
 alias ll='exa -l'
 alias la='exa -a'
-alias rsw="watchexec -e toml,rs wrap -c cargo"
-alias bw="watchexec -e go,bazel,bzl wrap -c bazel"
+alias vc='e ~/.config/nvim/init.vim'
+
 alias shed="docker run --name shed -v ${PWD}:/x -w /x -ti --rm aignas/shed"
+
+wexec() {
+    exts="$1";shift
+    watchexec --clear --exts "$exts" --restart "wrap $*"
+}
+alias bazelw="wexec go,bazel,bzl bazel"
+alias cargow="wexec toml,rs cargo"
+# Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
+# however it would be great to have a 'cargo doc' to include the stdlib docs
+# instead of linking to the online ones.
+alias cargodoc-pre="wrap rsync --recursive \"$(dirname "$(rustup doc --path)")/\" ./target/doc/"
+alias cargodoc="cargow doc --all --document-private-items"
+
+# Functions
+rsd () {
+}
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
 compinit -d
+zstyle 'history' 'completion' 'git'
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
+compdef l=exa
 
-zstyle 'history' 'completion' 'git'
+source "${DOTFILES}/zsh/git_prompt.zsh"
+source "${DOTFILES}/zsh/timeit.zsh"
+
+setopt promptsubst
+# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+PROMPT='%F{blue}%~%f %{$prompt_git_status%}%F{yellow}%{$(prompt_report_time)%}%f
+%(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
-trysource "${DOTFILES}/zsh/prompt.zsh"
 trysource "${HOME}/.localrc"
 trysource "${HOME}/.skim/shell/completion.zsh"
 trysource "${HOME}/.skim/shell/key-bindings.zsh"
 trysource /usr/share/skim/completion.zsh
 trysource /usr/share/skim/key-bindings.zsh
 
-# Functions
+# Functions, OS specific, so that they do not appear in the path.
 [[ "$(get_os)" == "ArchLinux" ]] && aur() {
 case "$1" in
     "--help"|"-h")
@@ -86,15 +108,4 @@ return
             git pull --rebase origin master
             ;;
     esac
-}
-
-rsd () {
-    # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
-    # however it would be great to have a 'cargo doc' to include the stdlib docs
-    # instead of linking to the online ones.
-    readonly local docpath="$(dirname "$(rustup doc --path)")/"
-    echo "Syncing $docpath to ./target/doc..."
-    rsync -r "$docpath" ./target/doc/
-    echo "Done"
-    rsw doc --all --document-private-items "$@"
 }
