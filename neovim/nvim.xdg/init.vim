@@ -1,10 +1,35 @@
 " vim: filetype=vim
 scriptencoding utf-8
-let g:python3_host_prog = $XDG_DATA_HOME . '/nvim/venv/bin/python'
 
+let g:plug_url_format='git@github.com:%s.git'
+call plug#begin('$XDG_DATA_HOME/nvim/plugged')
+
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'lotabout/skim'
+Plug 'lotabout/skim.vim'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'w0rp/ale'
+Plug 'lervag/vimtex', {'for': ['tex']}
+Plug 'rust-lang/rust.vim', {'for': ['rust', 'markdown']}
+Plug 'tyru/eskk.vim'
+Plug 'vimwiki/vimwiki'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+call plug#end()
+
+let g:python3_host_prog = $XDG_DATA_HOME . '/nvim/venv/bin/python'
+let g:seoul256_background = 235
 colorscheme seoul256
 set guioptions=ag termguicolors lazyredraw
-let g:seoul256_background = 235
 
 set backupdir-=.
 set directory-=.
@@ -24,6 +49,10 @@ if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+    \ }
 
 iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
 iabbrev xfix  FIXME @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
