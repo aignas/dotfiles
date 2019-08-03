@@ -21,7 +21,7 @@ installs=(
 {
     info "Ensuring that all install.sh files are included"
     diff=$({
-        find ./* -name install.sh -exec dirname {} \;
+        find ./* -maxdepth 1 -name install.sh -exec dirname {} \;
         echo "${installs[*]}" | xargs -n 1
     } | sort | uniq -u | xargs)
     [[ -n ${diff} ]] && fail "Missing dependencies in the list: $diff"
