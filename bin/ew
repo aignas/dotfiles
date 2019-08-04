@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec e "$(command -v "$1")"
