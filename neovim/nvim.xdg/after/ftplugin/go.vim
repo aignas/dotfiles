@@ -1,5 +1,7 @@
-let b:ale_linters = ['golangci-lint', 'gopls']
+let b:ale_linters = ['golangci-lint']
 let b:ale_fixers = ['goimports']
+
+"autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 
 nnoremap <silent> <leader>t :e %:h/%:t:r_test.%:e<cr>
 nnoremap <silent> <leader>T :e %:s?_test??<cr>

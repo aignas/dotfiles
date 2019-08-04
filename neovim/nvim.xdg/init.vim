@@ -3,7 +3,6 @@ scriptencoding utf-8
 
 let g:plug_url_format='git@github.com:%s.git'
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
-
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'lotabout/skim'
@@ -23,7 +22,6 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-
 call plug#end()
 
 let g:python3_host_prog = $XDG_DATA_HOME . '/nvim/venv/bin/python'
@@ -50,8 +48,11 @@ if executable('rg')
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
+"let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LanguageClient.log')
+"let g:LanguageClient_loggingLevel = 'DEBUG'
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+    \ 'go': ['gopls'],
     \ }
 
 iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
