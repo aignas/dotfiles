@@ -38,7 +38,7 @@ while test $# -gt 0; do
   exit 0
 done
 
-# Update
+# Update if successful
 [[ -z ${NO_PUSH:-} ]] && {
   [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] && \
     fail "Commit the changes and try again."
@@ -46,8 +46,13 @@ done
   git -C "${DOTFILES_ROOT}" pull --rebase
   info "Updating submodules"
   git -C "${DOTFILES_ROOT}" submodule update --recursive
+}
+
+info "Bootstrapping..."
+"${DOTFILES_ROOT}/script/bootstrap" --overwrite
+
+# Update if successful
+[[ -z ${NO_PUSH:-} ]] && {
   info "Pushing"
   git -C "${DOTFILES_ROOT}" push
 }
-info "Bootstrapping..."
-"${DOTFILES_ROOT}/script/bootstrap" --overwrite

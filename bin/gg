@@ -49,6 +49,7 @@ Subcommands:
  [-t|--tag]: tag
  [-c|--commit]: commit TBD
 EOF
+      exit 1
       ;;
   esac
   [[ -z ${targets} ]] && return
@@ -57,11 +58,8 @@ EOF
   echo "$target" | awk '{print $2}'
 }
 
-param='--commit'
-if [[ "-*" == "$1" ]]; then
-    param="$1"
-    shift
-fi
+param="$1"
+shift
 rev="$(main "$param")"
 [[ -z $rev ]] && exit 0
 git "$@" "$rev"
