@@ -51,7 +51,7 @@ setup_gitconfig () {
       git_credential='osxkeychain'
     fi
 
-    gitconfig_main=git/gitconfig.main
+    gitconfig_main=${DOTFILES_ROOT}/git/gitconfig.main
 
     user ' - What is your author name?'
     read -re git_authorname
