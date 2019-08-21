@@ -6,13 +6,15 @@
 # This contains just the bare minimum in order to get everything working on my
 # machine.
 
-[ -f "$(command -v git-prompt)" ] && precmd_functions=(async_vcs_info)
+CMD=git-prompt.sh
+#[ -f "$(command -v git-prompt)" ] && CMD=git-prompt
+precmd_functions=(async_vcs_info)
 typeset -g prompt_git_status
 function async_vcs_info() {
     typeset VCS_INFO_FD=${RANDOM}
     exec {VCS_INFO_FD}< <(
-        pkill git-prompt
-        git-prompt --print-updates || :
+        pkill $CMD
+        $CMD --print-updates || :
         echo "EOF"
     )
     zle -F "$VCS_INFO_FD" async_vcs_info_callback
@@ -22,8 +24,8 @@ function async_vcs_info_callback() {
     setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
     case ${2:-} in        # process the error, see zshzle -F manpage
-        nval) pkill git-prompt && return 0;;    # closed or invalid descrptor
-        hup|err) pkill git-prompt && return 0;; # disconnect | any other error
+        nval) pkill $CMD && return 0;;    # closed or invalid descrptor
+        hup|err) pkill $CMD && return 0;; # disconnect | any other error
     esac
 
     local FD="$1" response
