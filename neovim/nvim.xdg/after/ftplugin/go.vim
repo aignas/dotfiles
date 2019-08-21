@@ -1,5 +1,6 @@
 let b:ale_linters = ['golangci-lint']
 let b:ale_fixers = ['goimports']
+setlocal noexpandtab
 
 "autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 
