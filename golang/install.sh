@@ -20,3 +20,4 @@
 export GO111MODULE=on
 go get golang.org/x/tools/gopls@latest
 go get github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+go get mvdan.cc/sh/cmd/shfmt@latest

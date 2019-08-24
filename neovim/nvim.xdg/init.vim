@@ -73,7 +73,6 @@ nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<cr>
 nnoremap <silent> <leader>h :call LanguageClient_textDocument_hover()<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
-set omnifunc=ale#completion#OmniFunc
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_save = 1
