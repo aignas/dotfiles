@@ -14,5 +14,3 @@ A list of ideas, that could make this better:
       - [ ] `alacritty`
       - [ ] hack font
       - [ ] fira code font
-- [ ] Use [whatchexec](https://github.com/watchexec/watchexec) instead of
-      `fswatch`, because it is written in rust.
