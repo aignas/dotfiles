@@ -7,7 +7,6 @@
 # machine.
 
 CMD=git-prompt.sh
-#[ -f "$(command -v git-prompt)" ] && CMD=git-prompt
 precmd_functions=(async_vcs_info)
 typeset -g prompt_git_status
 function async_vcs_info() {
