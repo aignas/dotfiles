@@ -58,7 +58,7 @@ source "${DOTFILES}/zsh/timeit.zsh"
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$prompt_git_status%}%F{yellow}%{$prompt_report_time%}%f
+PROMPT='%F{blue}%~%f %{$prompt_git_status%} %F{yellow}%{$prompt_report_time%}%f
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
