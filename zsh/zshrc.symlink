@@ -37,11 +37,17 @@ alias cargow="wexec toml,rs cargo"
 # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
 # however it would be great to have a 'cargo doc' to include the stdlib docs
 # instead of linking to the online ones.
-alias cargodoc-pre="wrap rsync --recursive \"$(dirname "$(rustup doc --path)")/\" ./target/doc/"
-alias cargodoc="cargow doc --all --document-private-items"
+cargodocw () {
+    # pipe-tar is so fast for lots of small files
+    src="$(dirname "$(rustup doc --path)")"
+    dest="./target/doc"
+    echo "Copying standard rust documentation:"
+    echo "$src -> $dest"
+    rm -rf "$dest"
+    mkdir -p "$dest"
+    (cd "$src" && tar -cf - .) | (cd "$dest" && tar -xpf -)
 
-# Functions
-rsd () {
+    cargow doc --all --document-private-items $@
 }
 
 # initialize autocomplete here, otherwise functions won't be loaded
@@ -58,7 +64,8 @@ source "${DOTFILES}/zsh/timeit.zsh"
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%F{blue}%~%f %{$prompt_git_status%} %F{yellow}%{$prompt_report_time%}%f
+# A nice dir shortening: https://unix.stackexchange.com/questions/273529
+PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f %{$prompt_git_status%} %F{yellow}%{$prompt_report_time%}%f
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
