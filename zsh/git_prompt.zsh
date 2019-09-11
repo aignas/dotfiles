@@ -7,33 +7,45 @@
 # machine.
 
 CMD=git-prompt.sh
+[[ -f "$(command -v git-prompt)" ]] && CMD=git-prompt
+
 precmd_functions=(async_vcs_info)
 typeset -g prompt_git_status
+typeset -g VCS_INFO_FD=${RANDOM}
 function async_vcs_info() {
-    typeset VCS_INFO_FD=${RANDOM}
+    # Cleanup previously running processes and close the descriptors.
+    # Disregard the errors
+    2>/dev/null 1>/dev/null {
+        exec {VCS_INFO_FD}<&-
+        zle -F "${VCS_INFO_FD}"
+    }
+
     exec {VCS_INFO_FD}< <(
-        pkill $CMD
-        $CMD --print-updates || :
+        $CMD --print-updates 2>&1 || :
         echo "EOF"
     )
+
     zle -F "$VCS_INFO_FD" async_vcs_info_callback
 }
 
 function async_vcs_info_callback() {
     setopt LOCAL_OPTIONS NO_IGNORE_BRACES
 
-    case ${2:-} in        # process the error, see zshzle -F manpage
-        nval) pkill $CMD && return 0;;    # closed or invalid descrptor
-        hup|err) pkill $CMD && return 0;; # disconnect | any other error
+    # process the error, see zshzle -F manpage
+    case ${2:-} in
+        nval)    pkill $CMD && return;; # closed or invalid descrptor
+        hup|err) pkill $CMD && return;; # disconnect | any other error
     esac
 
     local FD="$1" response
     builtin read -u "$FD" response
-    if [[ $response == "Err: "* || $response == "EOF" ]]; then
-        exec {FD}<&-   # close the file descriptor
-        zle -F "${FD}" # Remove any handler associated with this descriptor
-        return
-    fi
+    case "$response" in
+        "Err: "* | "EOF")
+            exec {FD}<&-   # close the file descriptor
+            zle -F "${FD}" # Remove any handler associated with this descriptor
+            return
+            ;;
+    esac
 
     # Include a space, so that we don't do partial matching we don't want
     if [[ "${prompt_git_status} " != "$response *" ]]; then

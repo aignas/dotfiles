@@ -2,10 +2,6 @@
 
 set -u
 
-# Fall back to a rust implementation if present, which may be installed via a
-# package manager.
-[[ -f "$(command -v git-prompt)" && "${1:-}" != test ]] && exec git-prompt "$@"
-
 readonly NC="\x1b[0m"
 readonly C_RED="\x1b[31m"
 readonly C_GREEN="\x1b[32m"
