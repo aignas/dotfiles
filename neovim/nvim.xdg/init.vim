@@ -30,6 +30,10 @@ let g:seoul256_background = 235
 colorscheme seoul256
 set guioptions=ag termguicolors lazyredraw
 
+if has('patch-8.1.0360')
+    set diffopt+=internal,algorithm:patience
+endif
+
 set backupdir-=.
 set directory-=.
 set history=10000 undofile backup backupcopy=yes
@@ -55,6 +59,7 @@ let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'stable', 'rls'],
     \ 'go': ['gopls'],
     \ }
+let $USE_SYSTEM_GO=1
 
 iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
 iabbrev xfix  FIXME @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
