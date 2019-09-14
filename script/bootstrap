@@ -6,7 +6,7 @@ export DOTFILES_ROOT
 cd "$(dirname "$0")/.."
 
 print_help() {
-  cat <<EOF
+    cat <<EOF
 bootstrap -- dotfiles management
 
 Usage: script/bootstrap [options]
@@ -20,17 +20,20 @@ EOF
 }
 
 while test $# -gt 0; do
-  case "$1" in
-    "-h"|"--help") print_help; exit ;;
-    "-o"|"--overwrite" ) OVERWRITE_ALL=true;;
-    "-b"|"--backup") BACKUP_ALL=true;;
+    case "$1" in
+    "-h" | "--help")
+        print_help
+        exit
+        ;;
+    "-o" | "--overwrite") OVERWRITE_ALL=true ;;
+    "-b" | "--backup") BACKUP_ALL=true ;;
     *)
-      echo "Invalid option: $1"
-      print_help
-      exit
-      ;;
-  esac
-  shift
+        echo "Invalid option: $1"
+        print_help
+        exit
+        ;;
+    esac
+    shift
 done
 
 set -oe pipefail
@@ -40,15 +43,14 @@ source script/logging.sh
 
 echo ''
 
-setup_gitconfig () {
-  if ! [ -f git/gitconfig.symlink ]
-  then
+setup_gitconfig() {
+    [ -f git/gitconfig.symlink ] && return
+
     info 'setup gitconfig'
 
     git_credential='cache'
-    if [ "$(uname -s)" == "Darwin" ]
-    then
-      git_credential='osxkeychain'
+    if [ "$(uname -s)" == "Darwin" ]; then
+        git_credential='osxkeychain'
     fi
 
     gitconfig_main=${DOTFILES_ROOT}/git/gitconfig.main
@@ -62,19 +64,18 @@ setup_gitconfig () {
         -e "s|AUTHOREMAIL|$git_authoremail|g" \
         -e "s|GIT_CREDENTIAL_HELPER|$git_credential|g" \
         -e "s|GITCONFIG_MAIN|$gitconfig_main|g" \
-        git/gitconfig.symlink.example > git/gitconfig.symlink
+        git/gitconfig.symlink.example >git/gitconfig.symlink
 
     ok 'gitconfig'
-  fi
 }
 
-install_dotfiles () {
-  info 'installing dotfiles'
-  cmd=(script/link_dotfile)
-  [[ ${OVERWRITE_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
-  [[ ${BACKUP_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --backup)
-  find . -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
-  find . -maxdepth 2 -name '*.xdg' -exec "${cmd[@]}" {} \;
+install_dotfiles() {
+    info 'installing dotfiles'
+    cmd=(script/link_dotfile)
+    [[ ${OVERWRITE_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
+    [[ ${BACKUP_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --backup)
+    find . -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
+    find . -maxdepth 2 -name '*.xdg' -exec "${cmd[@]}" {} \;
 }
 
 setup_gitconfig
@@ -82,11 +83,10 @@ install_dotfiles
 
 info "installing dependencies"
 export DOTFILES="$DOTFILES_ROOT"
-if "$DOTFILES_ROOT/script/install" 2>&1 | tee /tmp/dotfiles-dot
-then
-  ok "dependencies installed"
+if "$DOTFILES_ROOT/script/install" 2>&1 | tee /tmp/dotfiles-dot; then
+    ok "dependencies installed"
 else
-  fail "error installing dependencies"
+    fail "error installing dependencies"
 fi
 
 info 'All setup!'

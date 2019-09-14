@@ -6,7 +6,7 @@
 source "${DOTFILES_ROOT}/script/logging.sh"
 
 print_help() {
-  cat <<EOF
+    cat <<EOF
 link_dotfile -- dotfiles management
 
 Usage: link_dotfile [options]
@@ -24,18 +24,21 @@ BACKUP=''
 SKIP=''
 
 while test $# -gt 1; do
-  case "$1" in
-    "-h"|"--help") print_help; exit ;;
-    "-o"|"--overwrite" ) OVERWRITE=true;;
-    "-b"|"--backup") BACKUP=true;;
-    "-s"|"--skip") SKIP=true;;
+    case "$1" in
+    "-h" | "--help")
+        print_help
+        exit
+        ;;
+    "-o" | "--overwrite") OVERWRITE=true ;;
+    "-b" | "--backup") BACKUP=true ;;
+    "-s" | "--skip") SKIP=true ;;
     *)
-      fail "Invalid option: $1"
-      print_help
-      exit
-      ;;
-  esac
-  shift
+        fail "Invalid option: $1"
+        print_help
+        exit
+        ;;
+    esac
+    shift
 done
 
 src="$1"
@@ -43,45 +46,37 @@ src="$1"
 # Check if we have a destination config file, which tells us where the
 # symlink will endup:
 postfix="$HOME/."
-if echo "${src}" | grep -E -q "\.xdg$"
-then
-  postfix="${XDG_CONFIG_HOME:-${HOME}/.config}/"
-  mkdir -p "$postfix"
+if echo "${src}" | grep -E -q "\.xdg$"; then
+    postfix="${XDG_CONFIG_HOME:-${HOME}/.config}/"
+    mkdir -p "$postfix"
 fi
 
 dst="$postfix$(basename "${src%.*}")"
 
 status=
-if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
-then
-  if [ "$OVERWRITE" == "true" ]
-  then
-    rm -rf "$dst"
-    status="replace"
-  fi
+if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]; then
+    if [ "$OVERWRITE" == "true" ]; then
+        rm -rf "$dst"
+        status="replace"
+    fi
 
-  if [ "$BACKUP" == "true" ]
-  then
-    mv "$dst" "${dst}.bak"
-    status="backup "
-  fi
+    if [ "$BACKUP" == "true" ]; then
+        mv "$dst" "${dst}.bak"
+        status="backup "
+    fi
 
-  if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]
-  then
-    status="skip  "
-    SKIP=true
-  fi
+    if [[ -f "$dst" || -d "$dst" || -L "$dst" ]]; then
+        status="skip  "
+        SKIP=true
+    fi
 fi
 
-
-if [[ "$SKIP" != "true" ]]
-then
-  if [[ -r "$DOTFILES_ROOT/$src" ]]
-  then
-    src="${DOTFILES_ROOT}/$src"
-  fi
-  ln -s "$src" "$dst"
-  [[ -z $status ]] && status="create "
+if [[ "$SKIP" != "true" ]]; then
+    if [[ -r "$DOTFILES_ROOT/$src" ]]; then
+        src="${DOTFILES_ROOT}/$src"
+    fi
+    ln -s "$src" "$dst"
+    [[ -z $status ]] && status="create "
 fi
 
 ok "$status $dst"
