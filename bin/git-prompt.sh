@@ -6,6 +6,7 @@ readonly NC="\x1b[0m"
 readonly C_RED="\x1b[31m"
 readonly C_GREEN="\x1b[32m"
 readonly C_YELLOW="\x1b[33m"
+readonly default="${DEFAULT:-origin/master}"
 
 print_help() {
     cat <<EOF
@@ -15,15 +16,16 @@ EOF
 }
 
 g() {
-    git -C "$PWD" "$@"
+    git "$@" || return 1
 }
 
 branch() {
-    g rev-parse --abbrev-ref HEAD 2>/dev/null
+    branch=$(g rev-parse --abbrev-ref HEAD 2>/dev/null) || return 1
+    echo -e "${C_YELLOW}$branch${NC}"
 }
 
 ahead-behind() {
-    g rev-list --left-right --count "$1...HEAD" |
+    g rev-list --left-right --count "${default}...HEAD" |
         awk '$1 {print "\x1b[33m↓\x1b[0m" $1} $2 {print "\x1b[33m↑\x1b[0m" $2}' |
         paste -sd "" -
 }
@@ -93,39 +95,53 @@ local-status() {
     done <<EOF
 $(g status --short)
 EOF
-    last="$C_GREEN✓$NC"
-
+    status=
     if [[ "$unmerged" != 0 ]]; then
-        echo -en "$C_RED✖$NC$unmerged"
-        last=
+        status="$C_RED✖$NC$unmerged"
     fi
     if [[ "$staged" != 0 ]]; then
-        echo -en "$C_GREEN●$NC$staged"
-        last=
+        status="$status$C_GREEN●$NC$staged"
     fi
     if [[ "$unstaged" != 0 ]]; then
-        echo -en "$C_YELLOW✚$NC$unstaged"
-        last=
+        status="$status$C_YELLOW✚$NC$unstaged"
     fi
     if [[ "$untracked" != 0 ]]; then
-        echo -n "…"
-        last=
+        status="$status…"
     fi
-    echo -e $last
+    if [[ -z "$status" ]]; then
+        status="$C_GREEN✓$NC"
+    fi
+
+    echo -e "$status"
+}
+
+output() {
+    terms="$1"
+    out="$({
+        ((terms > 0)) && branch || return 1
+        ((terms > 1)) && state
+        ((terms > 2)) && ahead-behind
+        ((terms > 3)) && local-status
+    } | xargs)"
+    echo "$out"
+    if [[ "$out" == "" ]]; then
+        return 1
+    fi
 }
 
 main() {
-    default=origin/master
     case "${1:-}" in
     h | help | -h | --help)
         print_help
         ;;
-    '' | --print-updates)
-        {
-            branch || return
-            ahead-behind $default
-            local-status
-        } | xargs
+    '')
+        output 4
+        ;;
+    --print-updates)
+        output 1 || return 1
+        output 2
+        output 3
+        output 4
         ;;
     *)
         print_help
@@ -183,13 +199,13 @@ EXPECT=(--help)
 with "foo" assert "foo" g --help
 
 EXPECT=(rev-parse --abbrev-ref HEAD)
-with foo assert "foo" branch
+with foo assert "${C_YELLOW}foo${NC}" branch
 
-EXPECT=(rev-list --left-right --count "foo...HEAD")
-with "1\t1" assert "${C_YELLOW}↓${NC}1${C_YELLOW}↑${NC}1" ahead-behind foo
-with "2\t1" assert "${C_YELLOW}↓${NC}2${C_YELLOW}↑${NC}1" ahead-behind foo
-with "2\t0" assert "${C_YELLOW}↓${NC}2" ahead-behind foo
-with "0\t1" assert "${C_YELLOW}↑${NC}1" ahead-behind foo
+EXPECT=(rev-list --left-right --count "${default}...HEAD")
+with "1\t1" assert "${C_YELLOW}↓${NC}1${C_YELLOW}↑${NC}1" ahead-behind
+with "2\t1" assert "${C_YELLOW}↓${NC}2${C_YELLOW}↑${NC}1" ahead-behind
+with "2\t0" assert "${C_YELLOW}↓${NC}2" ahead-behind
+with "0\t1" assert "${C_YELLOW}↑${NC}1" ahead-behind
 
 EXPECT=(status --short)
 with "\n" assert "$C_GREEN✓$NC" local-status

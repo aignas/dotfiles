@@ -8,6 +8,12 @@
 
 CMD=git-prompt.sh
 [[ -f "$(command -v git-prompt)" ]] && CMD=git-prompt
+DEBUG_GIT_PROMPT="${DEBUG_GIT_PROMPT:-false}"
+readonly _log_file="/tmp/git-prompt-log.txt"
+
+_log() {
+    [[ "${DEBUG_GIT_PROMPT}" != "false" ]] && echo "[$(date +%X.%N)]: $*" >> "$_log_file"
+}
 
 precmd_functions=(async_vcs_info)
 typeset -g prompt_git_status
@@ -16,15 +22,18 @@ function async_vcs_info() {
     # Cleanup previously running processes and close the descriptors.
     # Disregard the errors
     2>/dev/null 1>/dev/null {
+        _log killing old cmd
         exec {VCS_INFO_FD}<&-
         zle -F "${VCS_INFO_FD}"
     }
 
     exec {VCS_INFO_FD}< <(
+        _log spawning bg job
         $CMD --print-updates 2>&1 || :
         echo "EOF"
     )
 
+    _log starting callback
     zle -F "$VCS_INFO_FD" async_vcs_info_callback
 }
 
@@ -33,23 +42,37 @@ function async_vcs_info_callback() {
 
     # process the error, see zshzle -F manpage
     case ${2:-} in
-        nval)    pkill $CMD && return;; # closed or invalid descrptor
-        hup|err) pkill $CMD && return;; # disconnect | any other error
+        nval)
+            _log killing "'$CMD'" due to invalid descriptor
+            pkill $CMD
+            return
+            ;;
+        err)
+            _log killing "'$CMD'" due to disconnect or some error: "$2"
+            pkill $CMD
+            return
+            ;;
     esac
 
     local FD="$1" response
     builtin read -u "$FD" response
     case "$response" in
         "Err: "* | "EOF")
+            _log closing fd and removing handler due to "$response"
             exec {FD}<&-   # close the file descriptor
             zle -F "${FD}" # Remove any handler associated with this descriptor
             return
             ;;
     esac
 
+    _log "current prompt value: '$prompt_git_status'"
+    _log "got update: '$response'"
+
     # Include a space, so that we don't do partial matching we don't want
-    if [[ "${prompt_git_status} " != "$response *" ]]; then
-        prompt_git_status="$response"
-        zle && { zle reset-prompt; zle -R }
-    fi
+    [[ "${prompt_git_status} " == "$response "* ]] && return
+    _log "redrawing..."
+
+    prompt_git_status="$response"
+    zle reset-prompt
+    zle -R
 }
