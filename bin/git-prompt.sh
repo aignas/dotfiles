@@ -2,6 +2,8 @@
 
 set -u
 
+[[ ${1:-} != test && -f "$(command -v git-prompt)" ]] && exec git-prompt "$@"
+
 readonly NC="\x1b[0m"
 readonly C_RED="\x1b[31m"
 readonly C_GREEN="\x1b[32m"
@@ -11,7 +13,7 @@ readonly default="${DEFAULT:-origin/master}"
 print_help() {
 	cat <<EOF
 Usage
-    $0 [--print-updates]
+    $0 [--print-updates|--help|-h]
 EOF
 }
 
@@ -25,9 +27,9 @@ branch() {
 }
 
 ahead-behind() {
-	g rev-list --left-right --count "${default}...HEAD" |
-		awk '$1 {print "\x1b[33m↓\x1b[0m" $1} $2 {print "\x1b[33m↑\x1b[0m" $2}' |
-		paste -sd "" -
+	g rev-list --left-right --count "${default}...HEAD" | awk '
+        $1 {printf '"\"${C_YELLOW}↓${NC}%s\""', $1}
+        $2 {printf '"\"${C_YELLOW}↑${NC}%s\""', $2}'
 }
 
 # Stolen from
@@ -95,28 +97,22 @@ local-status() {
 	done <<EOF
 $(g status --short)
 EOF
-	status=
-	if [[ $unmerged != 0 ]]; then
-		status="$C_RED✖$NC$unmerged"
-	fi
-	if [[ $staged != 0 ]]; then
-		status="$status$C_GREEN●$NC$staged"
-	fi
-	if [[ $unstaged != 0 ]]; then
-		status="$status$C_YELLOW✚$NC$unstaged"
-	fi
-	if [[ $untracked != 0 ]]; then
-		status="$status…"
-	fi
+
+	status="$(echo "$unmerged $staged $unstaged $untracked" | awk '
+        $1 {printf '"\"${C_RED}✖${NC}%s\""', $1}
+        $2 {printf '"\"${C_GREEN}●${NC}%s\""', $2}
+        $3 {printf '"\"${C_YELLOW}✚${NC}%s\""', $3}
+        $4 {print "…"}')"
+
 	if [[ -z $status ]]; then
-		status="$C_GREEN✓$NC"
+		status="${C_GREEN}✓$NC"
 	fi
 
 	echo -e "$status"
 }
 
 output() {
-	terms="$1"
+	terms="${1:-4}"
 	out="$({
 		((terms > 0)) && branch || return 1
 		((terms > 1)) && state
@@ -135,7 +131,7 @@ main() {
 		print_help
 		;;
 	'')
-		output 4
+		output
 		;;
 	--print-updates)
 		output 1 || return 1
@@ -206,13 +202,14 @@ with "1\t1" assert "${C_YELLOW}↓${NC}1${C_YELLOW}↑${NC}1" ahead-behind
 with "2\t1" assert "${C_YELLOW}↓${NC}2${C_YELLOW}↑${NC}1" ahead-behind
 with "2\t0" assert "${C_YELLOW}↓${NC}2" ahead-behind
 with "0\t1" assert "${C_YELLOW}↑${NC}1" ahead-behind
+with "0\t0" assert "" ahead-behind
 
 EXPECT=(status --short)
-with "\n" assert "$C_GREEN✓$NC" local-status
+with "\n" assert "${C_GREEN}✓$NC" local-status
 with "?? myfile\n" assert "…" local-status
 with " M myfile\n" assert "${C_YELLOW}✚${NC}1" local-status
-with " M myfile\n M second-file\n" assert "$C_YELLOW✚${NC}2" local-status
-with "M  myfile\nM  second-file\n" assert "$C_GREEN●${NC}2" local-status
+with " M myfile\n M second-file\n" assert "${C_YELLOW}✚${NC}2" local-status
+with "M  myfile\nM  second-file\n" assert "${C_GREEN}●${NC}2" local-status
 
 EXPECT=(rev-parse --git-dir)
 dir=$(mktemp -d)

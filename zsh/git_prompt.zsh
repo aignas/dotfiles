@@ -7,7 +7,6 @@
 # machine.
 
 CMD=git-prompt.sh
-[[ -f "$(command -v git-prompt)" ]] && CMD=git-prompt
 DEBUG_GIT_PROMPT="${DEBUG_GIT_PROMPT:-false}"
 readonly _log_file="/tmp/git-prompt-log.txt"
 
@@ -22,13 +21,13 @@ function async_vcs_info() {
     # Cleanup previously running processes and close the descriptors.
     # Disregard the errors
     2>/dev/null 1>/dev/null {
-        _log killing old cmd
+        _log attempting to close the old file descriptors
         exec {VCS_INFO_FD}<&-
         zle -F "${VCS_INFO_FD}"
     }
 
     exec {VCS_INFO_FD}< <(
-        _log spawning bg job
+        _log spawning bg job: "$CMD"
         $CMD --print-updates 2>&1 || :
         echo "EOF"
     )
