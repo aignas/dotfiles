@@ -32,9 +32,8 @@ installs=(
     [[ -z $r ]] || fail "Found duplicate dependencies in the list: $r"
 }
 
-
 for f in "${installs[@]}"; do
-  info "Setting up $f"
-  "$SHELL" -ceuo pipefail "$f/install.sh"
-  ok "Setting up $f"
+    info "Setting up $f"
+    "$SHELL" -ceuo pipefail "$f/install.sh"
+    ok "Setting up $f"
 done

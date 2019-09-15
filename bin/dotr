@@ -9,8 +9,8 @@ cd "${DOTFILES_ROOT}"
 # shellcheck source=/dev/null
 source "./script/logging.sh"
 
-print_help(){
-  cat <<EOF
+print_help() {
+    cat <<EOF
 dot -- dotfiles management
 
 Usage: dot [options]
@@ -27,25 +27,37 @@ EOF
 }
 
 while test $# -gt 0; do
-  case "$1" in
-    "-h"|"--help") print_help;;
-    "-e"|"--edit") exec e "${DOTFILES_ROOT}";;
-    "-l"|"--lint") exec "${DOTFILES_ROOT}/script/lint";;
-    "--no-push") NO_PUSH=true; shift; continue;;
-    "--no-gitconfig") [ -f "${DOTFILES_ROOT}/git/gitconfig.symlink" ] || touch "${DOTFILES_ROOT}/git/gitconfig.symlink"; shift; continue;;
-    *) echo "Invalid option: $1"; print_help; exit 1;;
-  esac
-  exit 0
+    case "$1" in
+    "-h" | "--help") print_help ;;
+    "-e" | "--edit") exec e "${DOTFILES_ROOT}" ;;
+    "-l" | "--lint") exec "${DOTFILES_ROOT}/script/lint" ;;
+    "--no-push")
+        NO_PUSH=true
+        shift
+        continue
+        ;;
+    "--no-gitconfig")
+        [ -f "${DOTFILES_ROOT}/git/gitconfig.symlink" ] || touch "${DOTFILES_ROOT}/git/gitconfig.symlink"
+        shift
+        continue
+        ;;
+    *)
+        echo "Invalid option: $1"
+        print_help
+        exit 1
+        ;;
+    esac
+    exit 0
 done
 
 # Update if successful
 [[ -z ${NO_PUSH:-} ]] && {
-  [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] && \
-    fail "Commit the changes and try again."
-  info "Rebasing on master"
-  git -C "${DOTFILES_ROOT}" pull --rebase
-  info "Updating submodules"
-  git -C "${DOTFILES_ROOT}" submodule update --recursive
+    [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] &&
+        fail "Commit the changes and try again."
+    info "Rebasing on master"
+    git -C "${DOTFILES_ROOT}" pull --rebase
+    info "Updating submodules"
+    git -C "${DOTFILES_ROOT}" submodule update --recursive
 }
 
 info "Bootstrapping..."
@@ -53,6 +65,6 @@ info "Bootstrapping..."
 
 # Update if successful
 [[ -z ${NO_PUSH:-} ]] && {
-  info "Pushing"
-  git -C "${DOTFILES_ROOT}" push
+    info "Pushing"
+    git -C "${DOTFILES_ROOT}" push
 }

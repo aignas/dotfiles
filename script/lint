@@ -8,47 +8,51 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 grepbang() {
-  git -C "${DOTFILES_ROOT}" grep -El "^#!$1" || :
+    git -C "${DOTFILES_ROOT}" grep -El "^#!$1" || :
 }
 
 lintsh() {
-  files=$({
-    grepbang ".*/sh"
-    grepbang ".*/bash"
-    grepbang "/usr/bin/env bash"
-    grepbang "/usr/bin/env sh"
-  })
-  print_run "shell" "$files"
-  run "$files" shellcheck
+    files=$({
+        grepbang ".*/sh"
+        grepbang ".*/bash"
+        grepbang "/usr/bin/env bash"
+        grepbang "/usr/bin/env sh"
+    })
+    print_run "shell" "$files"
+    run "$files" shellcheck
 }
 
 lintvim() {
-  files=$(git -C "${DOTFILES_ROOT}" ls-files | grep -E "\.vim$" | grep -v "pack" ||
-    fail "failed to get vim files")
-  print_run "vim" "$files"
-  run "$files" vint "$@"
+    files=$(git -C "${DOTFILES_ROOT}" ls-files | grep -E "\.vim$" | grep -v "pack" ||
+        fail "failed to get vim files")
+    print_run "vim" "$files"
+    run "$files" vint "$@"
 }
 
 print_run() {
-  info "linting $1 files ...."
-  for i in $(echo -e "$2" | sort -u); do
-    debug "linting $i"
-  done
+    info "linting $1 files ...."
+    for i in $(echo -e "$2" | sort -u); do
+        debug "linting $i"
+    done
 }
 
 run() {
-  files=$1; shift
-  echo "$files" | sort -u | xargs "$@"
-  ok "$1"
+    files=$1
+    shift
+    echo "$files" | sort -u | xargs "$@"
+    ok "$1"
 }
 
 main() {
-  case "${LINT:-all}" in
-    "vint")         lintvim ;;
-    "vint-errors")  lintvim --error ;;
-    "shellcheck")   lintsh ;;
-    *)              lintsh; lintvim --error ;;
-  esac
+    case "${LINT:-all}" in
+    "vint") lintvim ;;
+    "vint-errors") lintvim --error ;;
+    "shellcheck") lintsh ;;
+    *)
+        lintsh
+        lintvim --error
+        ;;
+    esac
 }
 
 main || fail "lint failed"

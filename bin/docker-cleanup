@@ -13,8 +13,8 @@ docker images --no-trunc |
 echo removing unused volumes...
 find '/var/lib/docker/volumes/' -mindepth 1 -maxdepth 1 -type d |
     grep -vFf <(
-      docker ps -aq |
-          xargs docker inspect |
-          jq -r '.[] | .Mounts | .[] | .Name | select(.)'
+        docker ps -aq |
+        xargs docker inspect |
+        jq -r '.[] | .Mounts | .[] | .Name | select(.)'
     ) |
-    xargs -r rm -fr
+        xargs -r rm -fr

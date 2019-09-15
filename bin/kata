@@ -6,7 +6,7 @@ readonly repo_dir=${HOME}/src/learning/katas
 readonly date="$(date +%Y-%m-%d)"
 
 print_help() {
-  cat <<EOF
+    cat <<EOF
 Usage:
   kata LANG NAME
 
@@ -20,18 +20,18 @@ EOF
 }
 
 bootstrap_py() {
-  local venv="$1/venv"
-  local main="$1/main.py"
-  local test="$1/test_main.py"
-  local gitignore="$1/.gitignore"
+    local venv="$1/venv"
+    local main="$1/main.py"
+    local test="$1/test_main.py"
+    local gitignore="$1/.gitignore"
 
-  echo "Bootstrapping Python kata env: ${venv}"
-  python3 -m venv "$venv"
-  "${venv}/bin/pip" -q \
-    install --upgrade \
-    pip setuptools pytest
+    echo "Bootstrapping Python kata env: ${venv}"
+    python3 -m venv "$venv"
+    "${venv}/bin/pip" -q \
+        install --upgrade \
+        pip setuptools pytest
 
-  cat <<EOF > "$main"
+    cat <<EOF >"$main"
 #!/usr/bin/env python3
 
 def result():
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     main()
 EOF
 
-  cat <<EOF > "$test"
+    cat <<EOF >"$test"
 #!/usr/bin/env python3
 
 from main import *
@@ -53,61 +53,61 @@ def test_result():
     assert result() == 'foo'
 EOF
 
-  cat <<EOF > "$gitignore"
+    cat <<EOF >"$gitignore"
 __pycache__/
 venv/
 *.pyc
 EOF
 
-  echo "Running template"
-  "$venv/bin/python" "$1/main.py"
+    echo "Running template"
+    "$venv/bin/python" "$1/main.py"
 
-  echo "Running tests"
-  "$venv/bin/pytest" "$1"
+    echo "Running tests"
+    "$venv/bin/pytest" "$1"
 }
 bootstrap_rs() {
-  echo "Bootstrapping Rust kata env"
-  local src="$1"
-  local name="$2"
+    echo "Bootstrapping Rust kata env"
+    local src="$1"
+    local name="$2"
 
-  cargo init \
-    --vcs none \
-    --edition 2018 \
-    --name "$name" \
-    --lib
+    cargo init \
+        --vcs none \
+        --edition 2018 \
+        --name "$name" \
+        --lib
 
-  cargo test
+    cargo test
 }
 
 bootstrap_cs() {
-  echo "Bootstrapping C# kata env"
-  local src="$1"
-  local name="$2"
+    echo "Bootstrapping C# kata env"
+    local src="$1"
+    local name="$2"
 
-  dotnet new sln --name "$name"
-  dotnet new classlib --name "$name"
-  dotnet new xunit --name "$name.Tests"
-  dotnet sln add "$src/*/*.csproj"
-  dotnet test
+    dotnet new sln --name "$name"
+    dotnet new classlib --name "$name"
+    dotnet new xunit --name "$name.Tests"
+    dotnet sln add "$src/*/*.csproj"
+    dotnet test
 }
 
 bootstrap_go() {
-  echo "Bootstrapping Go kata env"
+    echo "Bootstrapping Go kata env"
 
-  local src="$1"
-  local n="$2"
+    local src="$1"
+    local n="$2"
 
-  currdir=$(basename "$src")
-  echo "Symlinking . to '${GOPATH}/src/github.com/aignas/katas/$currdir'"
-  pushd "${GOPATH}/src/github.com/aignas/katas/"
-  rm -rf "${currdir}"
-  ln -s "$src" .
-  popd
+    currdir=$(basename "$src")
+    echo "Symlinking . to '${GOPATH}/src/github.com/aignas/katas/$currdir'"
+    pushd "${GOPATH}/src/github.com/aignas/katas/"
+    rm -rf "${currdir}"
+    ln -s "$src" .
+    popd
 
-  local main="$1/main.go"
-  local test="$1/main_test.go"
+    local main="$1/main.go"
+    local test="$1/main_test.go"
 
-  cat <<EOF > "$main"
+    cat <<EOF >"$main"
 package $n
 
 import "fmt"
@@ -120,9 +120,9 @@ func main() {
   fmt.Printf("Result is: %s", result())
 }
 EOF
-  go fmt "$main"
+    go fmt "$main"
 
-  cat <<EOF > "$test"
+    cat <<EOF >"$test"
 package $n
 
 import (
@@ -135,33 +135,33 @@ func TestResult(t *testing.T) {
 	assert.False(t, true)
 }
 EOF
-  go fmt "$test"
+    go fmt "$test"
 
-  go test ./...
+    go test ./...
 }
 bootstrap_hs() {
-  echo "Bootstrapping Haskell kata env"
-  echo "TODO"
+    echo "Bootstrapping Haskell kata env"
+    echo "TODO"
 }
 
 parse_args() {
-  case $1 in
-    "python"|"py"|"p")
-      echo py
-      ;;
-    "rust"|"rs"|"r")
-      echo rs
-      ;;
-    "dotnet"|"cs")
-      echo cs
-      ;;
+    case $1 in
+    "python" | "py" | "p")
+        echo py
+        ;;
+    "rust" | "rs" | "r")
+        echo rs
+        ;;
+    "dotnet" | "cs")
+        echo cs
+        ;;
     "go")
-      echo go
-      ;;
-    "haskell"|"hs"|"h")
-      echo hs
-      ;;
-  esac
+        echo go
+        ;;
+    "haskell" | "hs" | "h")
+        echo hs
+        ;;
+    esac
 }
 
 readonly lang=$(parse_args "$1")

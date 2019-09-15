@@ -1,11 +1,11 @@
 #!/bin/bash
 
 if [[ $(uname -s) == "Darwin" ]]; then
-  echo "Mac"
+    echo "Mac"
 elif [[ -f /etc/arch-release ]]; then
-  echo "ArchLinux"
+    echo "ArchLinux"
 else
-  echo "Linux"
+    echo "Linux"
 fi
 
 exit 0

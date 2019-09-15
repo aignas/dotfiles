@@ -2,7 +2,8 @@
 
 while [[ "$1" == "-"* ]]; do
     case "$1" in
-        -h|--help|help) cat <<EOF
+    -h | --help | help)
+        cat <<EOF
 USAGE:
   $(basename "$0") [-c|--clear] COMMAND...
 
@@ -12,15 +13,16 @@ PARAMETERS:
 
 Multiple options are processed in the order of occurance.
 EOF
-            exit 1
-            ;;
-        -c|--clear)
-            clear; shift
-            ;;
-        *)
-            echo "unknown parameter: '$1'"
-            exit 1
-            ;;
+        exit 1
+        ;;
+    -c | --clear)
+        clear
+        shift
+        ;;
+    *)
+        echo "unknown parameter: '$1'"
+        exit 1
+        ;;
     esac
 done
 
