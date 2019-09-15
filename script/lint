@@ -20,6 +20,12 @@ lintsh() {
     })
     print_run "shell" "$files"
     run "$files" shellcheck
+
+    fmt="$(echo "$files" | xargs -L 1 shfmt -i 4 -l)"
+    if [[ -n $fmt ]]; then
+        echo -e "Run shfmt on:\n$fmt"
+        return 1
+    fi
 }
 
 lintvim() {
@@ -49,7 +55,7 @@ main() {
     "vint-errors") lintvim --error ;;
     "shellcheck") lintsh ;;
     *)
-        lintsh
+        lintsh || return 1
         lintvim --error
         ;;
     esac
