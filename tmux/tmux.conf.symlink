@@ -8,24 +8,14 @@ set -g renumber-windows on
 set -g history-limit 102400
 set -g repeat-time 500
 set -g default-terminal "screen-256color"
-set -g bell-action any
 set -g status-keys vi
-set -g mouse off
-
 setw -g mode-keys vi
 
-bind-key c new-window -c "#{pane_current_path}"         # prefix c
-bind-key c-b last-window                                # prefix ctrl-l
-bind-key b send-prefix                                  # prefix b
-bind-key | split-window -h -c "#{pane_current_path}"    # prefix |
-bind-key - split-window -c "#{pane_current_path}"       # prefix -
-bind-key -r > swap-window -t :+                         # prefix >
-bind-key -r < swap-window -t :-                         # prefix <
-
-# Back and forth
-bind-key bspace previous-window                         # prefix bspace
-bind-key space next-window                              # prefix space
-bind-key / next-layout                                  # prefix /, overriden
+bind-key c new-window -c "#{pane_current_path}"
+bind-key b send-prefix
+bind-key | split-window -h -c "#{pane_current_path}"
+bind-key - split-window -c "#{pane_current_path}"
+bind-key c-b last-window
 
 # Pane-movement
 bind-key h select-pane -L
@@ -35,25 +25,13 @@ bind-key k select-pane -U
 bind-key tab select-pane -t :.+
 bind-key btab select-pane -t :.-
 
-bind-key * setw synchronize-pane
-bind-key R source-file ~/.tmux.conf \; display-message "tmux.conf reloaded!"
 set -g focus-events on
 
 # Capture pane and open in Vim
 bind-key C-c run 'tmux capture-pane -S -102400 -p > /tmp/tmux-capture.txt'\;\
              new-window "nvim /tmp/tmux-capture.txt"
 
-# status
-set -g status-justify "left"
-set -g status "on"
+# visual
 set -g status-style none
-
-# panes
 set -g pane-active-border-style fg="yellow"
-
-# window status
-setw -g window-status-format "#I:#W "
-setw -g window-status-current-format "#I:#W "
-set -g status-left "#S "
-set -g status-right-length "100"
-set -g status-right "$USER@#h │ %Y-%m-%d %H:%M "
+set -g status-right "#h │ %Y-%m-%d %H:%M"
