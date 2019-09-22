@@ -4,7 +4,6 @@ scriptencoding utf-8
 let g:plug_url_format='git@github.com:%s.git'
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 Plug 'junegunn/seoul256.vim'
-Plug 'junegunn/goyo.vim'
 Plug 'lotabout/skim'
 Plug 'lotabout/skim.vim'
 Plug 'AndrewRadev/splitjoin.vim'
