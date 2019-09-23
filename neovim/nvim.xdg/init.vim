@@ -79,6 +79,8 @@ nnoremap <silent> <leader>h :call LanguageClient_textDocument_hover()<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
+set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
+
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
