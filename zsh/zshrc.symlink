@@ -60,14 +60,12 @@ zstyle ':completion:*' insert-tab pending
 compdef g=git
 compdef l=exa
 
-#source "${DOTFILES}/zsh/git_prompt.zsh"
-#source "${DOTFILES}/zsh/timeit.zsh"
+source "${DOTFILES}/zsh/git_prompt.zsh"
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
 # A nice dir shortening: https://unix.stackexchange.com/questions/273529
-#PROMPT='%{$prompt_git_status%} %F{yellow}%{$prompt_report_time%}%f'
-PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f
+PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f %{$prompt_git_status%}
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
