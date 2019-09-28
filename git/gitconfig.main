@@ -22,8 +22,10 @@
 [alias]
     aa = add -A
     au = add -u
+    br = branch
     ca = commit --amend --no-edit
     cc = commit
+    co = checkout
     st = status
 
 # vim: ft=gitconfig
