@@ -9,6 +9,8 @@ export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || fd --type f ."
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
+#export DEBUG_GIT_PROMPT=true
+export GIT_PROMPT_SHELL=true
 
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY

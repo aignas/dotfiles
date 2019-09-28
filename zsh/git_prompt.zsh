@@ -54,7 +54,7 @@ function async_vcs_info_callback() {
     esac
 
     local FD="$1" response
-    builtin read -u "$FD" response
+    IFS= read -r -u "$FD" response
     case "$response" in
         "Err: "* | "EOF")
             _log closing fd and removing handler due to "$response"

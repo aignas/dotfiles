@@ -2,13 +2,14 @@
 
 set -u
 
-[[ ${1:-} != test && -f "$(command -v git-prompt)" ]] && exec git-prompt "$@"
+[[ ${1:-} != test && ${GIT_PROMPT_SHELL:-false} == false && -f "$(command -v git-prompt)" ]] && exec git-prompt "$@"
 
 readonly NC="\x1b[0m"
 readonly C_RED="\x1b[31m"
 readonly C_GREEN="\x1b[32m"
 readonly C_YELLOW="\x1b[33m"
 readonly default="${DEFAULT:-origin/master}"
+USE_CACHE=false
 
 print_help() {
     cat <<EOF
@@ -17,8 +18,31 @@ Usage
 EOF
 }
 
+log() {
+    [[ "${DEBUG_GIT_PROMPT:-false}" == false ]] && return
+    echo "git-prompt.sh: $*" >>/tmp/git-prompt-log.txt
+}
+
 g() {
     git "$@" || return 1
+}
+
+cache=("" "" "" "")
+called=(0 0 0 0)
+cached() {
+    slot=$1
+    shift
+    if [[ "${USE_CACHE}" != "true" ]]; then
+        log "not using cache"
+        exit 1
+    fi
+    is_called="${called[$slot]}"
+    if [[ "$is_called" != 0 ]]; then
+        return
+    fi
+    log "no cache for $slot present ($is_called), calling '$*'"
+    cache[$slot]="$("$@" || return 1)" || return 1
+    called[$slot]=1
 }
 
 branch() {
@@ -111,33 +135,42 @@ EOF
     echo -e "$status"
 }
 
-output() {
+get() {
     terms="${1:-4}"
-    out="$({
-        ((terms > 0)) && branch || return 1
-        ((terms > 1)) && state
-        ((terms > 2)) && ahead-behind
-        ((terms > 3)) && local-status
-    } | xargs)"
-    echo "$out"
-    if [[ $out == "" ]]; then
-        return 1
-    fi
+    if ((terms >= 0)); then cached 0 branch || return 1; fi
+    if ((terms >= 1)); then cached 1 state; fi
+    if ((terms >= 2)); then cached 2 ahead-behind; fi
+    if ((terms >= 3)); then cached 3 local-status; fi
+}
+
+output() {
+    log "outputting $terms"
+    echo -e "$(echo "${cache[@]}" | xargs)"
+}
+
+run() {
+    case "${1:-}" in
+    '')
+        get 3 || :
+        output
+        ;;
+    --print-updates)
+        for i in $(seq 0 3); do
+            get "$i" || return 1
+            output
+        done
+        ;;
+    esac
 }
 
 main() {
+    USE_CACHE=true
     case "${1:-}" in
     h | help | -h | --help)
         print_help
         ;;
-    '')
-        output
-        ;;
-    --print-updates)
-        output 1 || return 1
-        output 2
-        output 3
-        output 4
+    '' | --print-updates)
+        run "$1" || echo ""
         ;;
     *)
         print_help
