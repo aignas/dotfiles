@@ -10,3 +10,6 @@ nnoremap <leader>cu :term cargo update<cr>
 
 let b:ale_linters = ['rls', 'cargo']
 let b:ale_fixers = ['rustfmt']
+
+iabbrev xtestmod #[cfg(test)]<cr>mod tests {<cr>}<cr>
+iabbrev xtest #[test]<cr>fn TODO_test() {<cr>assert_eq!(true, false)<cr>}<cr>
