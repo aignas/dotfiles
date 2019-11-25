@@ -48,7 +48,7 @@ set spell                       " vim-unimpaired: use [os and ]os
 set whichwrap+=<,>
 
 if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepprg=rg\ --vimgrep\ --no-heading\ -S
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
