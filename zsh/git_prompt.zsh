@@ -6,7 +6,7 @@
 # This contains just the bare minimum in order to get everything working on my
 # machine.
 
-CMD=git-prompt.sh
+CMD=git-prompt
 DEBUG_GIT_PROMPT="${DEBUG_GIT_PROMPT:-false}"
 readonly _log_file="/tmp/git-prompt-log.txt"
 

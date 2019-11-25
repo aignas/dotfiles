@@ -151,11 +151,11 @@ output() {
 run() {
     case "${1:-}" in
     '')
-        get 3 || :
+        get 2 || :
         output
         ;;
     --print-updates)
-        for i in $(seq 0 3); do
+        for i in $(seq 0 2); do
             get "$i" || return 1
             output
         done
@@ -170,7 +170,7 @@ main() {
         print_help
         ;;
     '' | --print-updates)
-        run "$1" || echo ""
+        run "${1:-}" || echo ""
         ;;
     *)
         print_help

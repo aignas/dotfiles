@@ -36,7 +36,7 @@ wexec() {
     exts="$1";shift
     watchexec --clear --exts "$exts" --restart "wrap $*"
 }
-alias bazelw="wexec go,bazel,bzl bazel"
+alias bazelw="wexec yaml,go,bazel,bzl,star bazel"
 alias cargow="wexec toml,rs cargo"
 alias gow="wexec go go"
 # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
@@ -69,7 +69,7 @@ source "${DOTFILES}/zsh/git_prompt.zsh"
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
 # A nice dir shortening: https://unix.stackexchange.com/questions/273529
-PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f %{$prompt_git_status%}
+PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f %F{yellow}%{${prompt_git_status}%}%f
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
 trysource() { [ -f "${1}" ] && source "${1}"; }
