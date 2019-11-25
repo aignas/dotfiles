@@ -87,6 +87,7 @@ nnoremap <silent> <leader>f :Files<cr>
 
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gd :call LanguageClient_textDocument_definition()<cr>
+nnoremap <silent> <leader>gr :call LanguageClient_textDocument_references()<cr>
 nnoremap <silent> <leader>rn :call LanguageClient_textDocument_rename()<cr>
 nnoremap <silent> <leader>h :call LanguageClient_textDocument_hover()<cr>
 nnoremap <leader>e :e %:h/
