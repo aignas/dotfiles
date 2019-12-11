@@ -38,6 +38,7 @@ wexec() {
 }
 alias bazelw="wexec go,bazel,bzl bazel"
 alias cargow="wexec toml,rs cargo"
+alias gow="wexec go go"
 # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
 # however it would be great to have a 'cargo doc' to include the stdlib docs
 # instead of linking to the online ones.
