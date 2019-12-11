@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eux
 
 readonly repo_dir=${HOME}/src/learning/katas
 readonly date="$(date +%Y-%m-%d)"
@@ -95,17 +95,16 @@ bootstrap_go() {
     echo "Bootstrapping Go kata env"
 
     local src="$1"
-    local n="$2"
 
     currdir=$(basename "$src")
-    echo "Symlinking . to '${GOPATH}/src/github.com/aignas/katas/$currdir'"
-    pushd "${GOPATH}/src/github.com/aignas/katas/"
-    rm -rf "${currdir}"
-    ln -s "$src" .
-    popd
 
-    local main="$1/main.go"
-    local test="$1/main_test.go"
+    pushd "${src}"
+    export GO111MODULE=on
+    go mod init "github.com/aignas/katas/$currdir" || :
+    go get github.com/stretchr/testify
+
+    local main="main.go"
+    local test="main_test.go"
 
     cat <<EOF >"$main"
 package $n
@@ -135,9 +134,12 @@ func TestResult(t *testing.T) {
 	assert.False(t, true)
 }
 EOF
-    go fmt "$test"
+    go fmt "$test" || :
 
-    go test ./...
+    go test ./... && exit 1
+    popd
+
+    echo "stored in $src"
 }
 bootstrap_hs() {
     echo "Bootstrapping Haskell kata env"
@@ -172,4 +174,4 @@ readonly kata_dir="${repo_dir}/${date}-$lang-$n"
 echo "Creating $kata_dir"
 mkdir -p "$kata_dir"
 pushd "$kata_dir"
-eval "bootstrap_$lang" "$kata_dir" "$n"
+"bootstrap_$lang" "$kata_dir" "$n"
