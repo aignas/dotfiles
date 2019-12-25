@@ -11,8 +11,8 @@ if $XDG_DATA_HOME ==# ''
 endif
 call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 Plug 'junegunn/seoul256.vim'
-Plug 'lotabout/skim'
-Plug 'lotabout/skim.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'cappyzawa/starlark.vim'
 Plug 'tpope/vim-abolish'
@@ -23,11 +23,11 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'dense-analysis/ale'
 Plug 'joereynolds/vim-minisnip'
+Plug 'vimwiki/vimwiki'
 Plug 'lervag/vimtex', {'for': ['tex']}
 Plug 'rust-lang/rust.vim', {'for': ['rust', 'markdown']}
 Plug 'arp242/gopher.vim', {'for': ['go', 'markdown']}
 Plug 'tyru/eskk.vim', {'for': ['markdown']}
-Plug 'vimwiki/vimwiki'
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
             \ 'do': 'bash install.sh',
@@ -46,7 +46,6 @@ endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 call plug#end()
 
-let g:python3_host_prog = $XDG_DATA_HOME . '/nvim/venv/bin/python'
 let g:seoul256_background = 235
 colorscheme seoul256
 set guioptions=ag termguicolors lazyredraw
@@ -88,7 +87,7 @@ nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
-set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%{LanguageClient_statusLine()}%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
 
 "let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LanguageClient.log')
 "let g:LanguageClient_loggingLevel = 'DEBUG'

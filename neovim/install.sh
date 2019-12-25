@@ -7,24 +7,19 @@ cd "$(dirname "$0")/.."
 . script/logging.sh
 
 NEOVIM_LOCAL="${HOME}/.local/share/nvim"
-NEOVIM_VENV="${NEOVIM_LOCAL}/venv"
 
 pyenv() {
-    rm -rf "NEOVIM_VENV*"
-    python3 -m venv "${NEOVIM_VENV}"
-    "${NEOVIM_VENV}/bin/pip" -q \
-        install --upgrade \
-        neovim neovim-remote pip setuptools
-    ok "python venv: ${NEOVIM_VENV}"
+    pip3 install --user pynvim
+    ok "pynvim"
 }
 
 update() {
     nvim --headless \
-        +PlugUpgrade \
         +PlugUpdate \
         +PlugInstall \
         +PlugClean! \
         +qa!
+    ok "update"
 }
 
 backupdir() {
@@ -44,6 +39,12 @@ skk() {
     ok "downloading SKK-JISYO.L"
 }
 
+plug() {
+    curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    ok "plug"
+}
+
 case ${1:-} in
 update) update "${2:-}" ;;
 helptags) helptags "${2:-}" ;;
@@ -53,7 +54,7 @@ plug)
     ;;
 reinstall) reinstall ;;
 *)
-    pyenv
+    plug
     update
     backupdir
     skk
