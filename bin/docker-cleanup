@@ -2,13 +2,13 @@
 
 echo removing exited containers...
 docker ps --filter status=dead --filter status=exited -aq |
-    xargs -r docker rm -v
+    xargs -L 1 docker rm -v
 
 echo removing unused images...
 docker images --no-trunc |
     grep '<none>' |
     awk '{ print $3 }' |
-    xargs -r docker rmi
+    xargs -L 1 docker rmi
 
 echo removing unused volumes...
 find '/var/lib/docker/volumes/' -mindepth 1 -maxdepth 1 -type d |
@@ -17,4 +17,4 @@ find '/var/lib/docker/volumes/' -mindepth 1 -maxdepth 1 -type d |
         xargs docker inspect |
         jq -r '.[] | .Mounts | .[] | .Name | select(.)'
     ) |
-        xargs -r rm -fr
+        xargs -L 1 rm -fr
