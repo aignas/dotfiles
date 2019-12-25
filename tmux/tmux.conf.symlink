@@ -8,6 +8,7 @@ set -g renumber-windows on
 set -g history-limit 102400
 set -g repeat-time 500
 set -g default-terminal "screen-256color"
+set -sa terminal-overrides ',xterm-256color:RGB'
 set -g status-keys vi
 setw -g mode-keys vi
 
