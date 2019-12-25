@@ -1,0 +1,4 @@
+#[test]
+fn {{++}}_test() {
+    {{+assert_eq!(true, false)+}}
+}

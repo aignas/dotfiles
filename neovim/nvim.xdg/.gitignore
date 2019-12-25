@@ -1,3 +1,3 @@
 /spell/
 /.netrwhist
-*.local.vim
+*_local.vim
