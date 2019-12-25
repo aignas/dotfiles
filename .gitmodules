@@ -1,0 +1,3 @@
+[submodule "golang/goenv"]
+	path = golang/goenv
+	url = git@github.com:syndbg/goenv
