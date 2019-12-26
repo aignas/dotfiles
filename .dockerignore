@@ -1,2 +1,4 @@
-.git
+**/.git
 *.md
+**/goenv/versions
+**/.dockerignore

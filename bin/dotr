@@ -68,3 +68,5 @@ info "Bootstrapping..."
     info "Pushing"
     git -C "${DOTFILES_ROOT}" push
 }
+
+exit 0
