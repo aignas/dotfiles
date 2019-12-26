@@ -14,11 +14,7 @@ pyenv() {
 }
 
 update() {
-    nvim --headless \
-        +PlugUpdate \
-        +PlugInstall \
-        +PlugClean! \
-        +qa!
+    ./neovim/vim-plugr.sh
     ok "update"
 }
 

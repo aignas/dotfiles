@@ -1,7 +1,6 @@
 " vim: filetype=vim
 scriptencoding utf-8
 
-let g:plug_url_format='git@github.com:%s.git'
 if $XDG_CONFIG_HOME ==# ''
     let $XDG_CONFIG_HOME = $HOME . '/.config'
 endif
@@ -9,42 +8,6 @@ if $XDG_DATA_HOME ==# ''
     " Make vimr work in case XDG_DATA_HOME is not set
     let $XDG_DATA_HOME = $HOME . '/.local/share'
 endif
-call plug#begin('$XDG_DATA_HOME/nvim/plugged')
-Plug 'junegunn/seoul256.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'cappyzawa/starlark.vim'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'dense-analysis/ale'
-Plug 'joereynolds/vim-minisnip'
-Plug 'vimwiki/vimwiki'
-Plug 'lervag/vimtex', {'for': ['tex']}
-Plug 'rust-lang/rust.vim', {'for': ['rust', 'markdown']}
-Plug 'arp242/gopher.vim', {'for': ['go', 'markdown']}
-Plug 'tyru/eskk.vim', {'for': ['markdown']}
-Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
-            \ }
-
-function! BuildComposer(info)
-    if a:info.status !=# 'unchanged' || a:info.force
-        if has('nvim')
-            !cargo build --release --locked
-        else
-            !cargo build --release --locked --no-default-features --features json-rpc
-        endif
-    endif
-endfunction
-
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
-call plug#end()
 
 let g:seoul256_background = 235
 colorscheme seoul256
@@ -83,7 +46,7 @@ let g:maplocalleader='-'
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>cd :cd %:p:h<cr>
 nnoremap <silent> <leader>f :Files<cr>
-nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader>ss :Gstatus<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
