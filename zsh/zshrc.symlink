@@ -76,10 +76,10 @@ PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f %F{yellow}%{${prompt_git_status}%}%f
 trysource() { [ -f "${1}" ] && source "${1}"; }
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
-trysource "${HOME}/.skim/shell/completion.zsh"
-trysource "${HOME}/.skim/shell/key-bindings.zsh"
-trysource /usr/share/skim/completion.zsh
-trysource /usr/share/skim/key-bindings.zsh
+trysource "${HOME}/.fzf/shell/completion.zsh"
+trysource "${HOME}/.fzf/shell/key-bindings.zsh"
+trysource /usr/share/fzf/completion.zsh
+trysource /usr/share/fzf/key-bindings.zsh
 
 # Functions, OS specific, so that they do not appear in the path.
 [[ "$(get_os)" == "ArchLinux" ]] && aur() {
@@ -107,7 +107,7 @@ return
         awk '{pop=$1;name=$2; $1="";$2=""; printf "%5d \x1b[34;1m%s\x1b[m\t%s\n", pop, name, $0}' |
         sort -n -r |
         column -t -s $'\t' |
-        sk --ansi |
+        fzf --ansi |
         awk '{print $2}')
             aur "$selection"
             return
@@ -122,3 +122,5 @@ return
             ;;
     esac
 }
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

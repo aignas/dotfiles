@@ -54,7 +54,7 @@ EOF
     esac
     [[ -z ${targets} ]] && return
     target=$(echo "$targets" |
-        sk --no-hscroll --ansi -d "\t" -n 2) || return
+        fzf --no-hscroll --ansi -d "\t" -n 2) || return
     echo "$target" | awk '{print $2}'
 }
 

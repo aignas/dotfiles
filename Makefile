@@ -20,3 +20,9 @@ push: shed
 		echo "$(DOCKER_PASS)" | docker login -u $(USER) --password-stdin; \
 		docker push $(USER)/$^:latest; \
 	fi
+
+.PHONY: lint
+lint:
+	dotr --lint
+
+check: lint shed debshed
