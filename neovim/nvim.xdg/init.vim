@@ -36,11 +36,6 @@ if executable('rg')
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-iabbrev xtodo TODO @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
-iabbrev xfix  FIXME @aignas (<c-r>=strftime("%Y-%m-%d")<cr>)
-iabbrev xtime <c-r>=strftime("%Y-%m-%d %H:%M:%S")<cr>:
-iabbrev xdate <c-r>=strftime("%Y-%m-%d")<cr>:
-
 let g:mapleader=','
 let g:maplocalleader='-'
 nnoremap <silent> <leader>b :Buffers<cr>
