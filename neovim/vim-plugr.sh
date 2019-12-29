@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+readonly DEST="${HOME}/.local/share/nvim/site/pack/plugr/start/"
+
 github_install() {
     remote=$1
     treeish=$2
@@ -29,9 +31,6 @@ github_install() {
     echo "Downloading $1... DONE"
 }
 
-readonly DEST="${HOME}/.local/share/nvim/site/pack/plugr/start/"
-rm -rf "${DEST}"
-
 Plug() {
     treeish="master"
     dest="${DEST}/$(basename "$1")"
@@ -43,7 +42,10 @@ Plug() {
 
         case $key in
         --dir)
-            dest="$2"
+            if [[ -L $2 ]]; then
+                rm "$2"
+            fi
+            ln -s "$dest" "$2" # make a symbolic link to the main directory
             shift
             shift
             ;;
@@ -76,6 +78,7 @@ Plug() {
     } &
 }
 
+rm -rf "${DEST}"
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/fzf' \
     --dir ~/.fzf \
@@ -103,3 +106,5 @@ Plug 'autozimu/LanguageClient-neovim' \
 #     --do 'cargo build --release --locked'
 
 wait
+
+nvim --headless +"helptags ALL" +qa! || :
