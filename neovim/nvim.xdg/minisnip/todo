@@ -1,1 +1,1 @@
-TODO {{+@aignas+}} {{+`~strftime("%Y-%m-%d")+}}: {{++}}
+TODO @aignas {{+~strftime("%Y-%m-%d")+}}: {{++}}
