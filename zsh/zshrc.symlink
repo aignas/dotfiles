@@ -31,7 +31,7 @@ alias ll='exa -l'
 alias la='exa -a'
 alias vc='e ~/.config/nvim/init.vim'
 
-alias shed="docker run --name shed -v ${PWD}:/x -w /x -ti --rm aignas/shed"
+alias shed="docker run --name shed -v ${PWD}:/x -w /x -ti --rm aignas/shed:debian"
 
 wexec() {
     exts="$1";shift

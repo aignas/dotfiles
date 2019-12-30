@@ -6,10 +6,13 @@ LABELS = $(addprefix --label org.label-schema.,\
 		 vcs-ref=$(shell git rev-parse --short HEAD) \
 		 schema-version=1.0)
 
-.PHONY: shed debshed
-shed debshed:
-	docker build -f $@/Dockerfile -t $(USER)/$@ $(LABELS) .
+.PHONY: debian arch
+debian arch:
+	docker build -f shed/Dockerfile.$@ -t $(USER)/$@ $(LABELS) .
 	touch $@
+
+.PHONY: shed
+shed: debian arch
 
 .PHONY: push
 push: shed

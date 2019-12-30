@@ -25,6 +25,7 @@
     br = branch
     ca = commit --amend --no-edit
     cc = commit
+    cm = commit -a
     co = checkout
     st = status
 
