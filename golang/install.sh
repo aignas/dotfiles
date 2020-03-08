@@ -7,4 +7,5 @@ if [[ -f "$(command -v go)" ]]; then
     go get golang.org/x/tools/cmd/gorename@latest
     go get github.com/golangci/golangci-lint/cmd/golangci-lint@latest
     go get github.com/sourcegraph/src-cli/cmd/src@latest
+    go get github.com/gokcehan/lf
 fi
