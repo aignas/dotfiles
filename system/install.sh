@@ -21,8 +21,6 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
     bottles=(fd exa ripgrep bat htop neovim zsh tig tmux watchexec shfmt python3 coreutils gnu-sed skktools)
     brew install "${bottles[@]}" || :
 
-    brew install git-prompt-bin
-
     info "Installing packages via pip"
     pip3 install --upgrade -U vim-vint
 elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
@@ -39,25 +37,6 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
         --noconfirm \
         "${pkgs[@]}"
     ok "pacman: install"
-
-    aurinstall() {
-        local p="$1"
-        info "Installing from AUR: $p"
-        d=${HOME}/aur/$p
-        if [[ -d $d ]]; then
-            git -C "$d" stash || :
-            git -C "$d" pull --rebase origin master
-            git -C "$d" stash pop || :
-        else
-            git clone "https://aur.archlinux.org/$p.git" "$d"
-        fi
-        pushd "$d"
-        makepkg -si --noconfirm
-        popd
-    }
-
-    aurinstall git-prompt-rs-git
-    ok "AUR"
 elif [[ ${DOTFILES_OS} == "Debian" ]]; then
     info "apt-get"
     sudo apt-get update
