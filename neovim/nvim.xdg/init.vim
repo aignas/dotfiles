@@ -1,6 +1,32 @@
 " vim: filetype=vim
 scriptencoding utf-8
 
+packadd minpac
+
+call minpac#init()
+
+" minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
+call minpac#add('k-takata/minpac', {'type': 'opt'})
+
+call minpac#add('junegunn/seoul256.vim')
+call minpac#add('junegunn/fzf', {'do': './install -all'})
+call minpac#add('junegunn/fzf.vim')
+call minpac#add('AndrewRadev/splitjoin.vim')
+call minpac#add('cappyzawa/starlark.vim')
+call minpac#add('tpope/vim-abolish')
+call minpac#add('tpope/vim-eunuch')
+call minpac#add('tpope/vim-fugitive')
+call minpac#add('tpope/vim-repeat')
+call minpac#add('tpope/vim-surround')
+call minpac#add('tpope/vim-unimpaired')
+call minpac#add('dense-analysis/ale')
+call minpac#add('joereynolds/vim-minisnip')
+call minpac#add('vimwiki/vimwiki')
+call minpac#add('lervag/vimtex')
+call minpac#add('rust-lang/rust.vim')
+call minpac#add('fatih/vim-go')
+call minpac#add('tyru/eskk.vim')
+
 if $XDG_CONFIG_HOME ==# ''
     let $XDG_CONFIG_HOME = $HOME . '/.config'
 endif
