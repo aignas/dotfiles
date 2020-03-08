@@ -2,30 +2,36 @@
 scriptencoding utf-8
 
 packadd minpac
-
 call minpac#init()
 
 " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
 call minpac#add('k-takata/minpac', {'type': 'opt'})
-
 call minpac#add('junegunn/seoul256.vim')
 call minpac#add('junegunn/fzf', {'do': './install -all'})
 call minpac#add('junegunn/fzf.vim')
 call minpac#add('AndrewRadev/splitjoin.vim')
 call minpac#add('cappyzawa/starlark.vim')
 call minpac#add('tpope/vim-abolish')
-call minpac#add('tpope/vim-eunuch')
-call minpac#add('tpope/vim-fugitive')
 call minpac#add('tpope/vim-repeat')
 call minpac#add('tpope/vim-surround')
-call minpac#add('tpope/vim-unimpaired')
 call minpac#add('dense-analysis/ale')
+call minpac#add('autozimu/LanguageClient-neovim', {
+    \ 'rev': 'next',
+    \ 'do': 'bash install.sh',
+    \ })
 call minpac#add('joereynolds/vim-minisnip')
 call minpac#add('vimwiki/vimwiki')
 call minpac#add('lervag/vimtex')
 call minpac#add('rust-lang/rust.vim')
-call minpac#add('fatih/vim-go')
+call minpac#add('arp242/gopher.vim')
 call minpac#add('tyru/eskk.vim')
+
+" Define user commands for updating/cleaning the plugins.
+" Each of them loads minpac, reloads .vimrc to register the
+" information of plugins, then performs the task.
+command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
+command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
+command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
 
 if $XDG_CONFIG_HOME ==# ''
     let $XDG_CONFIG_HOME = $HOME . '/.config'
@@ -52,7 +58,7 @@ set expandtab shiftwidth=4 tabstop=4
 set fileformats=unix,mac,dos
 set linebreak
 set list
-set number relativenumber
+set number norelativenumber
 set spell                       " vim-unimpaired: use [os and ]os
 set whichwrap+=<,>
 set cpoptions+=J                " Double spacing between sentences
@@ -71,8 +77,7 @@ nnoremap <silent> <leader>ss :Gstatus<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
-set statusline=%<%f\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\ %P
-
+"Uncomment for lsp debugging
 "let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LanguageClient.log')
 "let g:LanguageClient_loggingLevel = 'DEBUG'
 let g:LanguageClient_serverCommands = {
