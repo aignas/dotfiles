@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #zmodload zsh/zprof # NOTE: uncomment for profiling
 
 export DOTFILES="$HOME/.dotfiles"
@@ -65,21 +72,19 @@ zstyle ':completion:*' insert-tab pending
 compdef g=git
 compdef l=exa
 
-source "${DOTFILES}/zsh/git_prompt.zsh"
-
-setopt promptsubst
-# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-# A nice dir shortening: https://unix.stackexchange.com/questions/273529
-PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f %F{yellow}%{${prompt_git_status}%}%f
-%(?.%F{magenta}.%F{red})%(!.#.$)%f '
-
-trysource() { [ -f "${1}" ] && source "${1}"; }
+trysource() {
+    if [[ -f "${1}" ]]; then
+        source "${1}"
+    fi
+}
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
 trysource "${HOME}/.fzf/shell/completion.zsh"
 trysource "${HOME}/.fzf/shell/key-bindings.zsh"
 trysource /usr/share/fzf/completion.zsh
 trysource /usr/share/fzf/key-bindings.zsh
+trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
+trysource "${DOTFILES}/zsh/p10k.zsh"
 
 # Functions, OS specific, so that they do not appear in the path.
 [[ "$(get_os)" == "ArchLinux" ]] && aur() {
@@ -122,5 +127,3 @@ return
             ;;
     esac
 }
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -7,3 +7,6 @@
 [submodule "neovim/nvim.xdg/pack/minpac/opt/minpac"]
 	path = neovim/nvim.xdg/pack/minpac/opt/minpac
 	url = https://github.com/k-takata/minpac.git
+[submodule "zsh/p10k"]
+	path = zsh/p10k
+	url = https://github.com/romkatv/powerlevel10k.git
