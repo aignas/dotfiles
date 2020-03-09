@@ -7,7 +7,7 @@ call minpac#init()
 " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
 call minpac#add('k-takata/minpac', {'type': 'opt'})
 call minpac#add('junegunn/seoul256.vim')
-call minpac#add('junegunn/fzf', {'do': './install -all'})
+call minpac#add('junegunn/fzf', {'do': './install --all --xdg --no-update-rc'})
 call minpac#add('junegunn/fzf.vim')
 call minpac#add('AndrewRadev/splitjoin.vim')
 call minpac#add('cappyzawa/starlark.vim')

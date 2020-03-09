@@ -79,10 +79,8 @@ trysource() {
 }
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
-trysource "${HOME}/.fzf/shell/completion.zsh"
-trysource "${HOME}/.fzf/shell/key-bindings.zsh"
-trysource /usr/share/fzf/completion.zsh
-trysource /usr/share/fzf/key-bindings.zsh
+trysource "${HOME}/.config/fzf/completion.zsh"
+trysource "${HOME}/.config/fzf/key-bindings.zsh"
 trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
 trysource "${DOTFILES}/zsh/p10k.zsh"
 
@@ -127,3 +125,5 @@ return
             ;;
     esac
 }
+
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh

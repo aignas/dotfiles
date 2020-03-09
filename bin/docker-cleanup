@@ -14,7 +14,7 @@ echo removing unused volumes...
 find '/var/lib/docker/volumes/' -mindepth 1 -maxdepth 1 -type d |
     grep -vFf <(
         docker ps -aq |
-        xargs docker inspect |
-        jq -r '.[] | .Mounts | .[] | .Name | select(.)'
+            xargs docker inspect |
+            jq -r '.[] | .Mounts | .[] | .Name | select(.)'
     ) |
-        xargs -L 1 rm -fr
+    xargs -L 1 rm -fr
