@@ -1,9 +1,6 @@
 [submodule "golang/goenv"]
 	path = golang/goenv
-	url = git@github.com:syndbg/goenv
-[submodule "neovim/nvim.xdg/pack/plugins/start/vim-plug"]
-	path = neovim/nvim.xdg/pack/plugins/start/vim-plug
-	url = https://github.com/junegunn/vim-plug
+	url = https://github.com/syndbg/goenv.git
 [submodule "neovim/nvim.xdg/pack/minpac/opt/minpac"]
 	path = neovim/nvim.xdg/pack/minpac/opt/minpac
 	url = https://github.com/k-takata/minpac.git
