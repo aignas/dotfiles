@@ -20,6 +20,8 @@ install:
     if [ "${LINT#vint}" != "$LINT" ]; then
       pip install vim-vint
     fi
+  - |
+    ./golang/install.sh
 
 script:
-  - bin/dotr --lint
+  - PATH="${PWD}/tools:$PATH" ./bin/dotr --lint
