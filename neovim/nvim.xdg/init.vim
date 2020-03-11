@@ -1,30 +1,32 @@
 " vim: filetype=vim
 scriptencoding utf-8
 
-packadd minpac
-call minpac#init()
+if exists('*minpac#init')
+    " minpac is loaded.
+    call minpac#init()
 
-" minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
-call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('junegunn/seoul256.vim')
-call minpac#add('junegunn/fzf', {'do': './install --all --xdg --no-update-rc'})
-call minpac#add('junegunn/fzf.vim')
-call minpac#add('AndrewRadev/splitjoin.vim')
-call minpac#add('cappyzawa/starlark.vim')
-call minpac#add('tpope/vim-abolish')
-call minpac#add('tpope/vim-repeat')
-call minpac#add('tpope/vim-surround')
-call minpac#add('dense-analysis/ale')
-call minpac#add('autozimu/LanguageClient-neovim', {
-    \ 'rev': 'next',
-    \ 'do': 'bash install.sh',
-    \ })
-call minpac#add('joereynolds/vim-minisnip')
-call minpac#add('vimwiki/vimwiki')
-call minpac#add('lervag/vimtex')
-call minpac#add('rust-lang/rust.vim')
-call minpac#add('arp242/gopher.vim')
-call minpac#add('tyru/eskk.vim')
+    " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
+    call minpac#add('k-takata/minpac', {'type': 'opt'})
+    call minpac#add('junegunn/seoul256.vim')
+    call minpac#add('junegunn/fzf', {'do': './install --all --xdg --no-update-rc'})
+    call minpac#add('junegunn/fzf.vim')
+    call minpac#add('AndrewRadev/splitjoin.vim')
+    call minpac#add('cappyzawa/starlark.vim')
+    call minpac#add('tpope/vim-abolish')
+    call minpac#add('tpope/vim-repeat')
+    call minpac#add('tpope/vim-surround')
+    call minpac#add('dense-analysis/ale')
+    call minpac#add('autozimu/LanguageClient-neovim', {
+                \ 'rev': 'next',
+                \ 'do': 'bash install.sh',
+                \ })
+    call minpac#add('joereynolds/vim-minisnip')
+    call minpac#add('vimwiki/vimwiki')
+    call minpac#add('lervag/vimtex')
+    call minpac#add('rust-lang/rust.vim')
+    call minpac#add('arp242/gopher.vim')
+    call minpac#add('tyru/eskk.vim')
+endif
 
 " Define user commands for updating/cleaning the plugins.
 " Each of them loads minpac, reloads .vimrc to register the
