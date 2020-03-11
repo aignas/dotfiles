@@ -18,7 +18,7 @@ if [[ ${DOTFILES_OS} == "Mac" ]]; then
     ok "brew cask upgrade"
 
     info "Installing packages"
-    bottles=(fd exa ripgrep bat htop neovim zsh tig tmux watchexec shfmt python3 coreutils gnu-sed skktools)
+    bottles=(fd exa ripgrep bat htop neovim zsh tmux watchexec shfmt python3 coreutils gnu-sed skktools)
     brew install "${bottles[@]}" || :
 
     info "Installing packages via pip"
@@ -30,7 +30,7 @@ elif [[ ${DOTFILES_OS} == "ArchLinux" ]]; then
     ok "pacman: update"
 
     debug "pacman: install"
-    pkgs=(python base-devel fd exa ripgrep bat htop neovim zsh tig tmux watchexec shfmt shellcheck skk-jisyo pamixer otf-fira-code rustup go vint)
+    pkgs=(python base-devel fd exa ripgrep bat htop neovim zsh tmux watchexec shfmt shellcheck skk-jisyo pamixer otf-fira-code rustup go vint)
     sudo pacman -S \
         --quiet \
         --needed \
@@ -44,7 +44,7 @@ elif [[ ${DOTFILES_OS} == "Debian" ]]; then
 
     debug "apt-get: install"
     sudo apt-get install -y \
-        python3 python3-venv fd-find exa ripgrep htop neovim zsh tig tmux shellcheck curl unzip
+        python3 python3-venv fd-find exa ripgrep htop neovim zsh tmux shellcheck curl unzip
 
     ok "apt-get: install"
 fi
