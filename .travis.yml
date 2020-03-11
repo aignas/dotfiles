@@ -1,27 +1,28 @@
 dist: xenial
-language: python
-python: 3.7
-
 cache:
   pip: true
 
-env:
-  matrix:
-    - LINT=vint-errors
-    - LINT=vint
-    - LINT=shellcheck
-
 matrix:
+  include:
+    - language: python
+      python: 3.7
+      env: LINT=vint
+      before_script: |
+        pip install vim-vint
+      script:
+        - bin/dotr --lint
+    - language: python
+      python: 3.7
+      env: LINT=vint-errors
+      before_script: |
+        pip install vim-vint
+      script:
+        - bin/dotr --lint
+    - language: go
+      go: 1.13.x
+      env: LINT=shellcheck
+      script:
+        - GOBIN="$(pwd)/tools" go install mvdan.cc/sh/v3/cmd/shfmt
+        - bin/dotr --lint
   allow_failures:
     - env: LINT=vint
-
-install:
-  - |
-    if [ "${LINT#vint}" != "$LINT" ]; then
-      pip install vim-vint
-    fi
-  - |
-    ./golang/install.sh
-
-script:
-  - PATH="${PWD}/tools:$PATH" ./bin/dotr --lint
