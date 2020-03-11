@@ -13,7 +13,6 @@ installs=(
     ./system
     ./git
     ./keyboard
-    ./golang
     ./rust
     ./neovim
 )

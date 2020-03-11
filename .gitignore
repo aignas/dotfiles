@@ -2,5 +2,3 @@ git/gitconfig.symlink
 
 # Ignore local gitconfig
 .gitconfig
-go.mod
-go.sum
