@@ -60,7 +60,7 @@ set expandtab shiftwidth=4 tabstop=4
 set fileformats=unix,mac,dos
 set linebreak
 set list
-set number norelativenumber
+set number relativenumber
 set spell                       " vim-unimpaired: use [os and ]os
 set whichwrap+=<,>
 set cpoptions+=J                " Double spacing between sentences
