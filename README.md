@@ -47,13 +47,12 @@ image with many command-line tools.  The idea taken from
 
 Setup:
 ```sh
-$ grep -A3 shed ~/.zshrc
-shed() {
-    docker run --name shed -v `pwd`:/x -w /x -ti --rm aignas/shed "$@"
-}
+$ grep -A1 shed ~/.zshrc
+alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:debian"
 ```
 
-The above will execute the shed with `/x/` mounted as the current directory.
+The above will execute the container with the current directory mounted as
+`/x/` in the container.
 
 ### A few examples
 
