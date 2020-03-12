@@ -10,11 +10,12 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 installs=(
-    ./system
     ./git
+    ./golang
     ./keyboard
-    ./rust
     ./neovim
+    ./rust
+    ./system
 )
 
 {
