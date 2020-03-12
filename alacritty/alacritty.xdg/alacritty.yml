@@ -32,3 +32,6 @@ colors:
     magenta: '0xffafaf'
     cyan:    '0x87d7d7'
     white:   '0xe4e4e4'
+
+mouse_bindings:
+  - { mouse: Right,  action: SpawnNewInstance }
