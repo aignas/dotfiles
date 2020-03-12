@@ -8,18 +8,19 @@ if exists('*minpac#init')
     " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
     call minpac#add('k-takata/minpac', {'type': 'opt'})
     call minpac#add('junegunn/seoul256.vim')
-    call minpac#add('junegunn/fzf', {'do': './install --all --xdg --no-update-rc'})
+    call minpac#add('junegunn/fzf', {
+                \ 'do': './install --all --xdg --no-update-rc',
+                \})
     call minpac#add('junegunn/fzf.vim')
     call minpac#add('AndrewRadev/splitjoin.vim')
     call minpac#add('cappyzawa/starlark.vim')
+    call minpac#add('tpope/vim-fugitive')
     call minpac#add('tpope/vim-abolish')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
     call minpac#add('dense-analysis/ale')
-    call minpac#add('autozimu/LanguageClient-neovim', {
-                \ 'rev': 'next',
-                \ 'do': 'bash install.sh',
-                \ })
+    call minpac#add('prabirshrestha/async.vim')
+    call minpac#add('prabirshrestha/vim-lsp')
     call minpac#add('joereynolds/vim-minisnip')
     call minpac#add('vimwiki/vimwiki')
     call minpac#add('lervag/vimtex')
@@ -86,14 +87,34 @@ let g:LanguageClient_serverCommands = {
             \ 'rust': ['rustup', 'run', 'stable', 'rls'],
             \ 'go': ['gopls'],
             \ }
-nnoremap <silent> <leader>gd :call LanguageClient#textDocument_definition()<cr>
-nnoremap <silent> <leader>gh :call LanguageClient#textDocument_hover()<cr>
-nnoremap <silent> <leader>gi :call LanguageClient#textDocument_implementation()<cr>
-nnoremap <silent> <leader>gr :call LanguageClient#textDocument_references()<cr>
-nnoremap <silent> <leader>gs :call LanguageClient#textDocument_documentSymbol()<cr>
-nnoremap <silent> <leader>gR :call LanguageClient#textDocument_rename()<cr>
-nnoremap <silent> <leader>gH :call LanguageClient#textDocument_signatureHelp()<cr>
-nnoremap <silent> <leader>gD :call LanguageClient#textDocument_typeDefinition()<cr>
+
+augroup lsp_install
+    autocmd!
+    if executable('gopls')
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'gopls',
+            \ 'cmd': {server_info->['gopls']},
+            \ 'whitelist': ['go'],
+            \ })
+    endif
+
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+let g:lsp_diagnostics_enabled = 0
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    nmap <buffer> <leader>gd <plug>(lsp-peek-definition)
+    nmap <buffer> <leader>gh <plug>(lsp-hover)
+    nmap <buffer> <leader>gi <plug>(lsp-implementation)
+    nmap <buffer> <leader>gr <plug>(lsp-references)
+    nmap <buffer> <leader>gs <plug>(lsp-workspace-symbol)
+    nmap <buffer> <leader>gR <plug>(lsp-rename)
+    nmap <buffer> <leader>gH <plug>(lsp-signature-help)
+    nmap <buffer> <leader>gD <plug>(lsp-type-definition)
+endfunction
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_save = 1
