@@ -17,7 +17,16 @@ set $right l
 set $term alacritty
 # Your preferred application launcher
 # Note: it's recommended that you pass the final command to sway
-set $menu dmenu_path | dmenu | xargs swaymsg exec
+set $menu bemenu_path \
+    | bemenu-run --ignorecase --no-overlap \
+        --nb=#3a3a3a \
+        --ff=#d0d0d0 \
+        --sb=#2a2a2a \
+        --hf=#e0e0e0 \
+        --sf=#e0e0e0 \
+        --tf=#c0c0c0 \
+        --ff=#e0e0e0 \
+    | xargs swaymsg exec
 
 font pango:Fira Code,10
 
@@ -186,10 +195,10 @@ exec swaymsg exec nm-applet --indicator
 #
 # Media keys:
 #
-    bindsym XF86AudioMute exec pamixer --toggle-mute
-    bindsym XF86AudioLowerVolume exec pamixer --decrease 5
-    bindsym XF86AudioRaiseVolume exec pamixer --increase 5
-    bindsym XF86AudioMicMute exec pamixer --increase 5
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 #
 # Power keys:
