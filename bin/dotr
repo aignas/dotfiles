@@ -11,9 +11,9 @@ source "./script/logging.sh"
 
 print_help() {
     cat <<EOF
-dot -- dotfiles management
+$(basename "$0") -- dotfiles management
 
-Usage: dot [options]
+Usage: $(basename "$0") [options]
 
 Default is to update the dotfiles and setup the system for work.
 
