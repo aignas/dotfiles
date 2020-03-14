@@ -7,12 +7,12 @@ Stats for [aignas/shed](https://hub.docker.com/r/aignas/shed/) docker image:
 
 Highlights:
 - `XDG_DIR` support.
-- `dot --lint` to lint files in the repo.
+- `dotr --lint` to lint files in the repo.
 - logging for timing the installations.
 - dependency framework to run the install.sh files are run in a particular order.
 - some consistency checks of the configuration.
 - travis CI setup.
-- `dot` script, which is used to update system and sync with the github repo.
+- `dotr` script, which is used to update system and sync with the github repo.
   Run this every time every day at the start of your working routine.
 - Async information about the current git repository in the ZSH prompt without
   any plugins.

@@ -51,6 +51,7 @@
     dir                       # current directory
     vcs                       # git status
     command_execution_time    # previous command duration
+    battery
     # =========================[ Line #2 ]=========================
     newline                   # \n
     virtualenv                # python virtual environment

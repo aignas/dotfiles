@@ -47,6 +47,8 @@ exec swaymsg exec redshift -m wayland
 
 exec swaymsg exec blueman-applet
 
+exec swaymsg exec nm-applet --indicator
+
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
