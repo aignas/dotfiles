@@ -13,11 +13,6 @@ pyenv() {
     ok "pynvim"
 }
 
-update() {
-    ./neovim/vim-plugr.sh
-    ok "update"
-}
-
 backupdir() {
     readonly backup_dir="${NEOVIM_LOCAL}/backup"
     mkdir -p "${backup_dir}"
@@ -35,23 +30,10 @@ skk() {
     ok "downloading SKK-JISYO.L"
 }
 
-plug() {
-    curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    ok "plug"
-}
-
 case ${1:-} in
-update) update "${2:-}" ;;
 helptags) helptags "${2:-}" ;;
-plug)
-    shift
-    plug "$@"
-    ;;
 reinstall) reinstall ;;
 *)
-    plug
-    update
     backupdir
     skk
     ;;

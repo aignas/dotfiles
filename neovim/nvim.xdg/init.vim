@@ -9,7 +9,7 @@ if exists('*minpac#init')
     call minpac#add('k-takata/minpac', {'type': 'opt'})
     call minpac#add('junegunn/seoul256.vim')
     call minpac#add('junegunn/fzf', {
-                \ 'do': './install --all --xdg --no-update-rc',
+                \ 'do': '!./install --64 --xdg --no-update-rc',
                 \})
     call minpac#add('junegunn/fzf.vim')
     call minpac#add('AndrewRadev/splitjoin.vim')
@@ -32,9 +32,7 @@ endif
 " Define user commands for updating/cleaning the plugins.
 " Each of them loads minpac, reloads .vimrc to register the
 " information of plugins, then performs the task.
-command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update('', {'do': 'call minpac#status()'})
-command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
-command! PackStatus packadd minpac | source $MYVIMRC | call minpac#status()
+command! Pack packadd minpac | source $MYVIMRC | call minpac#update() | call minpac#clean()
 
 if $XDG_CONFIG_HOME ==# ''
     let $XDG_CONFIG_HOME = $HOME . '/.config'
@@ -80,33 +78,25 @@ nnoremap <silent> <leader>ss :Gstatus<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
-"Uncomment for lsp debugging
-"let g:LanguageClient_loggingFile = expand('~/.local/share/nvim/LanguageClient.log')
-"let g:LanguageClient_loggingLevel = 'DEBUG'
-let g:LanguageClient_serverCommands = {
-            \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-            \ 'go': ['gopls'],
-            \ }
-
+"let g:lsp_log_file = expand('~/.local/share/nvim/vim-lsp.log')
 augroup lsp_install
     autocmd!
-    if executable('gopls')
-        autocmd User lsp_setup call lsp#register_server({
-            \ 'name': 'gopls',
-            \ 'cmd': {server_info->['gopls']},
-            \ 'whitelist': ['go'],
-            \ })
-    endif
+    autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'gopls',
+        \ 'cmd': {server_info->[$XDG_CONFIG_HOME . '/nvim/pack/minpac/start/gopher.vim/tools/bin/gopls']},
+        \ 'whitelist': ['go'],
+        \ })
 
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
 let g:lsp_diagnostics_enabled = 0
+
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
-    nmap <buffer> <leader>gd <plug>(lsp-peek-definition)
+    nmap <buffer> <leader>gd <plug>(lsp-definition)
     nmap <buffer> <leader>gh <plug>(lsp-hover)
     nmap <buffer> <leader>gi <plug>(lsp-implementation)
     nmap <buffer> <leader>gr <plug>(lsp-references)
