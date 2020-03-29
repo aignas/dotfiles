@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -euo pipefail
+
+readonly _shebang='^#!/(usr/bin/env |bin)/(ba|)sh'
+
+_filter() {
+    git ls-files "$@" |
+        while read -r f; do
+            if [[ ! -f $f ]]; then
+                continue
+            fi
+            if head -1 "$f" | grep -qE "$_shebang"; then
+                echo "$f"
+            fi
+        done
+}
+
+_grepbang() {
+    if [[ -n "$*" ]]; then
+        _filter "$@"
+    else
+        git grep -lE "$_shebang"
+    fi
+}
+
+_grepbang "$@"

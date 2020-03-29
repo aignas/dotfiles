@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $(get_os) == "Mac" ]]; then
+if [[ $("$(dirname "$0")/../bin/get_os") == "Mac" ]]; then
     if [[ -n $(command -v gdate) ]]; then
         now() { gdate +%s%N; }
     else

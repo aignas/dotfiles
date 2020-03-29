@@ -11,10 +11,7 @@ if [[ ! -f "$(command -v shellcheck)" ]]; then
 fi
 
 function test_file() {
-    local -r file="${1}"
-    if [ -f "${file}" ] && head -1 "${file}" | grep -qE '^#!/bin/(ba|)sh$'; then
-        shellcheck "${file}"
-    fi
+    shellcheck "${1}"
 }
 
 case "${1:-}" in
@@ -22,7 +19,7 @@ case "${1:-}" in
     echo "shellcheck sh or bash shell scripts."
     ;;
 '')
-    git diff-index --cached --name-only HEAD |
+    git ls-sh-scripts "$(git diff-index --cached --name-only HEAD)" |
         while read -r file; do
             test_file "${file}"
         done

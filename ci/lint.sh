@@ -29,18 +29,10 @@ _ls() {
     git -C "${DOTFILES_ROOT}" ls-files "$@"
 }
 
-_lsh() {
-    _grepbang '(usr/bin/env |bin)/(ba|)sh'
-}
-
-_grepbang() {
-    git -C "${DOTFILES_ROOT}" grep -l -E "^#!/$1" || :
-}
-
 main() {
     case "${1:-all}" in
     sh)
-        IFS=$'\n' read -r -d '' -a sh_files < <(_lsh && printf '\0')
+        IFS=$'\n' read -r -d '' -a sh_files < <(./bin/git-ls-sh-scripts && printf '\0')
         _shlint "${sh_files[@]}"
         ;;
     vim)
