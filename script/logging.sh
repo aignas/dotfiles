@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ${DOTFILES_OS} == "Mac" ]]; then
+if [[ $(get_os) == "Mac" ]]; then
     if [[ -n $(command -v gdate) ]]; then
         now() { gdate +%s%N; }
     else

@@ -19,7 +19,6 @@ Default is to update the dotfiles and setup the system for work.
 
 Options:
  -e, --edit     Open dotfiles directory for editing
- -l, --lint     Lint dotfiles
  -h, --help     Show this help message and exti
  --no-push      Don't push the updated dotfiles repo
  --no-gitconfig Don't setup gitconfig
@@ -30,7 +29,6 @@ while test $# -gt 0; do
     case "$1" in
     "-h" | "--help") print_help ;;
     "-e" | "--edit") exec e "${DOTFILES_ROOT}" ;;
-    "-l" | "--lint") exec "${DOTFILES_ROOT}/script/lint" ;;
     "--no-push")
         NO_PUSH=true
         shift
