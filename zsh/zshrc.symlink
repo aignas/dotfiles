@@ -86,11 +86,9 @@ trysource() {
 }
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
-trysource "${HOME}/.config/fzf/completion.zsh"
-trysource "${HOME}/.config/fzf/key-bindings.zsh"
+trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
 trysource "${DOTFILES}/zsh/p10k.zsh"
-trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
 # Functions, OS specific, so that they do not appear in the path.
 [[ "$(get_os)" == "ArchLinux" ]] && aur() {
