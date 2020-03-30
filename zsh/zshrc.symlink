@@ -7,11 +7,19 @@ fi
 
 #zmodload zsh/zprof # NOTE: uncomment for profiling
 
+set -o vi
+
 export DOTFILES="$HOME/.dotfiles"
 export GOPATH="${HOME}/gocode"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export PATH="${GOENV_ROOT}/bin:${GOPATH}/bin:${DOTFILES}/tools:${DOTFILES}/bin:${PATH}"
+if [[ -d "${HOME}/bin" ]]; then
+    export PATH="${HOME}/bin:$PATH"
+fi
+if [[ -d "${XDG_CONFIG_HOME}/nvim/pack/minpac/start/gopher.vim/tools/bin" ]]; then
+    export PATH="${PATH}:${XDG_CONFIG_HOME}/nvim/pack/minpac/start/gopher.vim/tools/bin"
+fi
 export EDITOR="nvim"
 export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || fd --type f ."
 export HISTFILE=~/.zsh_history
@@ -33,7 +41,7 @@ alias g='git'
 alias gd='git diff'
 alias gs='git status'
 alias wip='git commit -am "WIP"'
-alias l='exa'
+alias ls='exa'
 alias ll='exa -l'
 alias la='exa -a'
 alias vc='e ~/.config/nvim/init.vim'
@@ -70,7 +78,6 @@ zstyle 'history' 'completion' 'git'
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
-compdef l=exa
 
 trysource() {
     if [[ -f "${1}" ]]; then
@@ -83,6 +90,7 @@ trysource "${HOME}/.config/fzf/completion.zsh"
 trysource "${HOME}/.config/fzf/key-bindings.zsh"
 trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
 trysource "${DOTFILES}/zsh/p10k.zsh"
+trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
 # Functions, OS specific, so that they do not appear in the path.
 [[ "$(get_os)" == "ArchLinux" ]] && aur() {
@@ -126,4 +134,5 @@ return
     esac
 }
 
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+eval "$(goenv init - zsh)"
+goenv shell 1.13.5
