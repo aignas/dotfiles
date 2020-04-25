@@ -1,6 +1,5 @@
 window:
   dynamic_padding: true
-tabspaces: 4
 selection:
   save_to_clipboard: true
 
