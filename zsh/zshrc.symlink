@@ -90,47 +90,5 @@ trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
 trysource "${DOTFILES}/zsh/p10k.zsh"
 
-# Functions, OS specific, so that they do not appear in the path.
-[[ "$(get_os)" == "ArchLinux" ]] && aur() {
-case "$1" in
-    "--help"|"-h")
-        cat <<EOF
-AUR downloading function.
-
-Usage:
-  aur [-s|--search] [PACKAGE_NAME]
-EOF
-return
-;;
-''|'-s'|'--search')
-    local input
-    if [[ -z $2 ]]; then
-        echo -n "enter AUR search term: "
-        read input
-    else
-        input="$2"
-    fi
-    selection=$(
-    curl --silent "https://aur.archlinux.org/rpc/?v=5&type=search&arg=$input" |
-        jq -r '.results[] | "\(.NumVotes)\t\(.Name)\t\(.Description)"' |
-        awk '{pop=$1;name=$2; $1="";$2=""; printf "%5d \x1b[34;1m%s\x1b[m\t%s\n", pop, name, $0}' |
-        sort -n -r |
-        column -t -s $'\t' |
-        fzf --ansi |
-        awk '{print $2}')
-            aur "$selection"
-            return
-            ;;
-        *)
-            local dir="${HOME}/aur/$1"
-            [[ ! -d "$dir" ]] && git clone "https://aur.archlinux.org/$1.git" "$dir"
-
-            pushd "$dir"
-            git checkout .
-            git pull --rebase origin master
-            ;;
-    esac
-}
-
 eval "$(goenv init - zsh)"
 goenv shell 1.13.5
