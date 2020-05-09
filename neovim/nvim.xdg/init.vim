@@ -21,6 +21,7 @@ if exists('*minpac#init')
     call minpac#add('dense-analysis/ale')
     call minpac#add('prabirshrestha/async.vim')
     call minpac#add('prabirshrestha/vim-lsp')
+    call minpac#add('mattn/vim-lsp-settings')
     call minpac#add('joereynolds/vim-minisnip')
     call minpac#add('vimwiki/vimwiki')
     call minpac#add('lervag/vimtex')
@@ -86,12 +87,21 @@ augroup lsp_install
         \ 'cmd': {server_info->[$XDG_CONFIG_HOME . '/nvim/pack/minpac/start/gopher.vim/tools/bin/gopls']},
         \ 'whitelist': ['go'],
         \ })
+    autocmd User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
 
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
 let g:lsp_diagnostics_enabled = 0
+let g:lsp_preview_max_height = 3
+"let g:lsp_signature_help_enabled = 0
+set previewheight=5
 
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
