@@ -12,6 +12,7 @@ set -o vi
 export DOTFILES="$HOME/.dotfiles"
 export GOPATH="${HOME}/gocode"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
+export GOENV_VERSION="1.14.2"
 export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export PATH="${GOENV_ROOT}/bin:${GOPATH}/bin:${DOTFILES}/tools:${DOTFILES}/bin:${PATH}"
 if [[ -d "${HOME}/bin" ]]; then
@@ -51,7 +52,7 @@ wexec() {
     exts="$1";shift
     watchexec --clear --exts "$exts" --restart "wrap $*"
 }
-alias bazelw="wexec yaml,go,bazel,bzl,star bazel"
+alias bazelw="wexec sh,yaml,go,bazel,bzl,star bazel"
 alias cargow="wexec toml,rs cargo"
 alias gow="wexec go go"
 # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
@@ -90,4 +91,3 @@ trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
 trysource "${DOTFILES}/zsh/p10k.zsh"
 
 eval "$(goenv init - zsh)"
-goenv shell 1.13.5
