@@ -16,18 +16,22 @@ if exists('*minpac#init')
     call minpac#add('cappyzawa/starlark.vim')
     call minpac#add('tpope/vim-fugitive')
     call minpac#add('tpope/vim-abolish')
-    call minpac#add('tpope/vim-repeat')
-    call minpac#add('tpope/vim-surround')
-    call minpac#add('dense-analysis/ale')
     call minpac#add('prabirshrestha/async.vim')
     call minpac#add('prabirshrestha/vim-lsp')
     call minpac#add('mattn/vim-lsp-settings')
+    call minpac#add('tpope/vim-repeat')
+    call minpac#add('tpope/vim-surround')
     call minpac#add('joereynolds/vim-minisnip')
+    call minpac#add('neomake/neomake')
+    call minpac#add('sbdchd/neoformat')
     call minpac#add('vimwiki/vimwiki')
     call minpac#add('lervag/vimtex')
     call minpac#add('rust-lang/rust.vim')
-    call minpac#add('arp242/gopher.vim')
+    call minpac#add('fatih/vim-go')
     call minpac#add('tyru/eskk.vim')
+    call minpac#add('euclio/vim-markdown-composer', {
+                \ 'do': '!cargo build --release --locked',
+                \})
 endif
 
 " Define user commands for updating/cleaning the plugins.
@@ -84,7 +88,7 @@ augroup lsp_install
     autocmd!
     autocmd User lsp_setup call lsp#register_server({
         \ 'name': 'gopls',
-        \ 'cmd': {server_info->[$XDG_CONFIG_HOME . '/nvim/pack/minpac/start/gopher.vim/tools/bin/gopls']},
+        \ 'cmd': {server_info->[$GOBIN . '/gopls']},
         \ 'whitelist': ['go'],
         \ })
     autocmd User lsp_setup call lsp#register_server({
@@ -115,6 +119,16 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <leader>gH <plug>(lsp-signature-help)
     nmap <buffer> <leader>gD <plug>(lsp-type-definition)
 endfunction
+
+packadd neomake
+call neomake#configure#automake('w')
+augroup fmt
+    autocmd!
+    autocmd BufWritePre *.{sh,go,bazel,bzl,star} Neoformat
+augroup END
+
+let g:go_template_autocreate = 0
+let g:go_version_warning = 0
 
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_save = 1
