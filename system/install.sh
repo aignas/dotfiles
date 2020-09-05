@@ -16,7 +16,7 @@ if [[ ${DOTFILES_OS} == "Debian" ]]; then
     debug "apt-get: install"
     sudo apt-get install -y \
         jq python3 python3-venv fd-find exa ripgrep htop neovim zsh tmux \
-        shellcheck curl unzip
+        shellcheck curl unzip golang fonts-firacode kitty
 
     ok "apt-get: install"
 else

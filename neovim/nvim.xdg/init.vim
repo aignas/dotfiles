@@ -12,15 +12,19 @@ if exists('*minpac#init')
                 \ 'do': '!./install --64 --xdg --no-update-rc',
                 \})
     call minpac#add('junegunn/fzf.vim')
-    call minpac#add('AndrewRadev/splitjoin.vim')
     call minpac#add('cappyzawa/starlark.vim')
     call minpac#add('tpope/vim-fugitive')
     call minpac#add('tpope/vim-abolish')
-    call minpac#add('prabirshrestha/async.vim')
-    call minpac#add('prabirshrestha/vim-lsp')
-    call minpac#add('mattn/vim-lsp-settings')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
+    call minpac#add('sbdchd/neoformat')
+    "call minpac#add('prabirshrestha/async.vim')
+    "call minpac#add('prabirshrestha/vim-lsp')
+    call minpac#add('autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': '!./install.sh',
+        \ })
+    "call minpac#add('mattn/vim-lsp-settings')
     call minpac#add('joereynolds/vim-minisnip')
     call minpac#add('neomake/neomake')
     call minpac#add('sbdchd/neoformat')
@@ -83,42 +87,24 @@ nnoremap <silent> <leader>ss :Gstatus<cr>
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
-"let g:lsp_log_file = expand('~/.local/share/nvim/vim-lsp.log')
-augroup lsp_install
-    autocmd!
-    autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'gopls',
-        \ 'cmd': {server_info->[$GOBIN . '/gopls']},
-        \ 'whitelist': ['go'],
-        \ })
-    autocmd User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-        \ 'whitelist': ['rust'],
-        \ })
+" Required for operations modifying multiple buffers like rename.
+set hidden
 
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.local/share/vim-lsp-settings/servers/rust-analyzer/rust-analyzer'],
+    \ }
 
-let g:lsp_diagnostics_enabled = 0
-let g:lsp_preview_max_height = 3
-"let g:lsp_signature_help_enabled = 0
-set previewheight=5
+nmap <leader>gd <plug>(lcn-definition)
+nmap <leader>gh <plug>(lcn-hover)
+nmap <leader>gi <plug>(lcn-implementation)
+nmap <leader>gr <plug>(lcn-references)
+nmap <leader>gs <plug>(lcn-workspace-symbol)
+nmap <leader>gR <plug>(lcn-rename)
+nmap <leader>gH <plug>(lcn-signature-help)
+nmap <leader>gD <plug>(lcn-type-definition)
 
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    nmap <buffer> <leader>gd <plug>(lsp-definition)
-    nmap <buffer> <leader>gh <plug>(lsp-hover)
-    nmap <buffer> <leader>gi <plug>(lsp-implementation)
-    nmap <buffer> <leader>gr <plug>(lsp-references)
-    nmap <buffer> <leader>gs <plug>(lsp-workspace-symbol)
-    nmap <buffer> <leader>gR <plug>(lsp-rename)
-    nmap <buffer> <leader>gH <plug>(lsp-signature-help)
-    nmap <buffer> <leader>gD <plug>(lsp-type-definition)
-endfunction
+let g:go_template_autocreate = 0
+let g:go_version_warning = 0
 
 packadd neomake
 call neomake#configure#automake('w')
@@ -136,6 +122,9 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 0
 let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
+
+let g:neoformat_run_all_formatters = 1
+let g:neoformat_basic_format_trim = 1
 
 let g:vimwiki_folding='expr'
 let g:vimwiki_list = [{'path': '~/vimwiki2/content',

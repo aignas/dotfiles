@@ -12,7 +12,6 @@ source "./script/logging.sh"
 installs=(
     ./git
     ./golang
-    ./keyboard
     ./neovim
     ./rust
     ./system

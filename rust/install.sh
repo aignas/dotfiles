@@ -5,4 +5,6 @@ if [[ -f "$(command -v rustup)" ]]; then
     rustup component add clippy rustfmt rls
     rustup default stable
     rustup update
+
+    cargo install watchexec
 fi
