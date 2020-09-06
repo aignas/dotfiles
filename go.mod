@@ -10,6 +10,7 @@ require (
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/sourcegraph/src-cli v0.0.0-20200310124528-8e39fbe29c2d
 	github.com/stretchr/testify v1.4.0
+	go.uber.org/zap v1.10.0
 	golang.org/x/tools v0.0.0-20200311090712-aafaee8bce8c
 	golang.org/x/tools/gopls v0.3.3
 	gotest.tools v2.2.0+incompatible

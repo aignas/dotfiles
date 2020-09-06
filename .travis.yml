@@ -11,7 +11,7 @@ matrix:
       script:
         - ./ci/lint.sh vim
     - language: go
-      go: 1.13.x
+      go: 1.14.x
       script:
         - GOBIN="$(pwd)/tools" go install mvdan.cc/sh/v3/cmd/shfmt
         - ./ci/lint.sh sh

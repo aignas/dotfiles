@@ -3,6 +3,7 @@
 package tools
 
 import (
+	_ "github.com/aignas/dotfiles/cmd/godot"
 	_ "github.com/aignas/dotfiles/cmd/kata"
 	_ "github.com/git-hooks/git-hooks"
 	_ "github.com/gokcehan/lf"
