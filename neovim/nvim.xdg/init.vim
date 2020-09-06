@@ -122,6 +122,8 @@ augroup END
 let g:go_template_autocreate = 0
 let g:go_version_warning = 0
 
+let g:tex_flavor = "latex"
+
 let g:ale_fix_on_save = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
