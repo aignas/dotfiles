@@ -9,6 +9,7 @@ import (
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
 	_ "github.com/haya14busa/go-vimlparser/cmd/vimlparser"
 	_ "golang.org/x/tools/cmd/godoc"
+	_ "golang.org/x/tools/cmd/goimports"
 	_ "golang.org/x/tools/cmd/gorename"
 	_ "golang.org/x/tools/cmd/stringer"
 	_ "golang.org/x/tools/gopls"
