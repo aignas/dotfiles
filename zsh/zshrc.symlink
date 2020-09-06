@@ -52,12 +52,12 @@ alias vc='e ~/.config/nvim/init.vim'
 alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:debian"
 
 wexecall() {
-    watchexec --clear --restart "wrap $*"
+    watchexec --clear --restart "$*"
 }
 
 wexec() {
     exts="$1";shift
-    watchexec --clear --exts "$exts" --restart "wrap $*"
+    watchexec --clear --exts "$exts" --restart "$*"
 }
 alias bazelw="wexecall bazel"
 alias cargow="wexec toml,rs cargo"
