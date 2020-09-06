@@ -1,14 +1,6 @@
 #!/bin/bash
 
-if [[ $("$(dirname "$0")/../bin/get_os") == "Mac" ]]; then
-    if [[ -n $(command -v gdate) ]]; then
-        now() { gdate +%s%N; }
-    else
-        now() { date +%s; }
-    fi
-else
-    now() { date +%s%N; }
-fi
+now() { date +%s%N; }
 export DOTFILES_START=${DOTFILES_START:-$(now)}
 
 log() {
