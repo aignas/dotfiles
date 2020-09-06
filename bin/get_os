@@ -1,10 +1,6 @@
 #!/bin/bash
 
-if [[ $(uname -s) == "Darwin" ]]; then
-    echo "Mac"
-elif [[ -f /etc/arch-release ]]; then
-    echo "ArchLinux"
-elif [[ -f /etc/debian_version ]]; then
+if [[ -f /etc/debian_version ]]; then
     echo "Debian"
 else
     echo "Linux"

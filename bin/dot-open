@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if [[ ${DOTFILES_OS} == "Mac" ]]; then
-    exec open "$@"
-else
-    exec xdg-open "$@"
-fi

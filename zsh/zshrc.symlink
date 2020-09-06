@@ -13,7 +13,6 @@ export DOTFILES="$HOME/.dotfiles"
 export GOPATH="${HOME}/gocode"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export GOENV_VERSION=1.14.2
-export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export PATH="${GOENV_ROOT}/bin:${GOPATH}/bin:${DOTFILES}/tools:${DOTFILES}/bin:${PATH}"
 if [[ -d "${HOME}/bin" ]]; then
     export PATH="${HOME}/bin:$PATH"
@@ -97,6 +96,5 @@ trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
 trysource "${DOTFILES}/zsh/p10k.zsh"
 
-eval "$(goenv init - zsh)"
 export DIRENV_LOG_FORMAT=
 eval "$(direnv hook zsh)"
