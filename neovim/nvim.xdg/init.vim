@@ -32,6 +32,7 @@ if exists('*minpac#init')
     call minpac#add('lervag/vimtex')
     call minpac#add('rust-lang/rust.vim')
     call minpac#add('fatih/vim-go')
+    call minpac#add('autowitch/hive.vim')
     call minpac#add('tyru/eskk.vim')
     call minpac#add('euclio/vim-markdown-composer', {
                 \ 'do': '!cargo build --release --locked',
@@ -105,6 +106,11 @@ nmap <leader>gD <plug>(lcn-type-definition)
 
 let g:go_template_autocreate = 0
 let g:go_version_warning = 0
+
+au BufNewFile,BufRead *.hql set filetype=hive expandtab
+au BufNewFile,BufRead *.ddl set filetype=hive expandtab
+
+nmap <leader>gg :!tdd
 
 packadd neomake
 call neomake#configure#automake('w')
