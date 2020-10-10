@@ -13,7 +13,7 @@ fi
 function test_file() {
     local -r file="${1}"
     if [ -f "${file}" ]; then
-		vimlparser "${file}" >/dev/null
+        vimlparser "${file}" >/dev/null
     fi
 }
 
