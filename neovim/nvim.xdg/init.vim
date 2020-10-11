@@ -1,7 +1,9 @@
 " vim: filetype=vim
 scriptencoding utf-8
 
-if exists('*minpac#init')
+function! Pack() abort
+    packadd minpac
+
     " minpac is loaded.
     call minpac#init()
 
@@ -9,7 +11,7 @@ if exists('*minpac#init')
     call minpac#add('k-takata/minpac', {'type': 'opt'})
     call minpac#add('junegunn/seoul256.vim')
     call minpac#add('junegunn/fzf', {
-                \ 'do': '!./install --64 --xdg --no-update-rc',
+                \ 'do': '!./install --xdg --no-update-rc',
                 \})
     call minpac#add('junegunn/fzf.vim')
     call minpac#add('cappyzawa/starlark.vim')
@@ -37,12 +39,15 @@ if exists('*minpac#init')
     call minpac#add('euclio/vim-markdown-composer', {
                 \ 'do': '!cargo build --release --locked',
                 \})
-endif
+
+    call minpac#update()
+    call minpac#clean()
+endfunction
 
 " Define user commands for updating/cleaning the plugins.
 " Each of them loads minpac, reloads .vimrc to register the
 " information of plugins, then performs the task.
-command! Pack packadd minpac | source $MYVIMRC | call minpac#update() | call minpac#clean()
+command! Pack call Pack()
 
 if $XDG_CONFIG_HOME ==# ''
     let $XDG_CONFIG_HOME = $HOME . '/.config'
