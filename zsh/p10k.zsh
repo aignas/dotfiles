@@ -46,7 +46,7 @@
 
   # Left prompt segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-    context dir vcs command_execution_time newline
+    context dir vcs command_execution_time virtualenv newline
     prompt_char
   )
 
