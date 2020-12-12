@@ -78,6 +78,7 @@ set number relativenumber
 set spell                       " vim-unimpaired: use [os and ]os
 set whichwrap+=<,>
 set cpoptions+=J                " Double spacing between sentences
+set scrolloff=5
 
 if executable('rg')
     set grepprg=rg\ --vimgrep\ --no-heading\ -S
@@ -121,7 +122,7 @@ packadd neomake
 call neomake#configure#automake('w')
 augroup fmt
     autocmd!
-    autocmd BufWritePre *.{sh,go,bazel,bzl,star} Neoformat
+    autocmd BufWritePre *.{sh,go} Neoformat
 augroup END
 
 let g:go_template_autocreate = 0
