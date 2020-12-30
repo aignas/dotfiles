@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 #zmodload zsh/zprof # NOTE: uncomment for profiling
 
 set -o vi
@@ -43,7 +36,7 @@ alias b='bat'
 alias se='sudo -e $(which e)'
 alias g='git'
 alias gd='git diff'
-alias gs='git status'
+alias gs='git status --short --branch --show-stash'
 alias ls='exa'
 alias ll='exa -l'
 alias la='exa -a'
@@ -78,6 +71,12 @@ cargodocw () {
     cargow doc --all --document-private-items $@
 }
 
+setopt promptsubst
+# http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
+# A nice dir shortening: https://unix.stackexchange.com/questions/273529
+PROMPT='%F{blue}%(5~|%-1~/…/%3~|%4~)%f
+%(?.%F{magenta}.%F{red})%(!.#.$)%f '
+
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
 compinit -d
@@ -94,8 +93,6 @@ trysource() {
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
 trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
-trysource "${DOTFILES}/zsh/p10k/powerlevel10k.zsh-theme"
-trysource "${DOTFILES}/zsh/p10k.zsh"
 
 export DIRENV_LOG_FORMAT=
 eval "$(direnv hook zsh)"

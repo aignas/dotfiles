@@ -20,13 +20,10 @@ function! Pack() abort
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
     call minpac#add('sbdchd/neoformat')
-    "call minpac#add('prabirshrestha/async.vim')
-    "call minpac#add('prabirshrestha/vim-lsp')
     call minpac#add('autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': '!./install.sh',
-        \ })
-    "call minpac#add('mattn/vim-lsp-settings')
+                \ 'branch': 'next',
+                \ 'do': '!./install.sh',
+                \ })
     call minpac#add('joereynolds/vim-minisnip')
     call minpac#add('neomake/neomake')
     call minpac#add('sbdchd/neoformat')
@@ -98,10 +95,13 @@ nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 set hidden
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.local/share/vim-lsp-settings/servers/rust-analyzer/rust-analyzer'],
+    \ 'rust': ['rust-analyzer'],
     \ }
 
 nmap <leader>gd <plug>(lcn-definition)
+nmap <leader>ga <plug>(lcn-code-action)
+nmap <leader>gA <plug>(lcn-code-lens-action)
+nmap <leader>gm <plug>(lcn-menu)
 nmap <leader>gh <plug>(lcn-hover)
 nmap <leader>gi <plug>(lcn-implementation)
 nmap <leader>gr <plug>(lcn-references)
@@ -122,7 +122,7 @@ packadd neomake
 call neomake#configure#automake('w')
 augroup fmt
     autocmd!
-    autocmd BufWritePre *.{sh,go} Neoformat
+    autocmd BufWritePre *.{sh,go,rs} Neoformat
 augroup END
 
 let g:go_template_autocreate = 0

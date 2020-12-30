@@ -10,3 +10,6 @@ rustup default stable
 rustup update
 
 cargo install watchexec
+
+curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o tools/rust-analyzer
+chmod +x tools/rust-analyzer
