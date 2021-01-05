@@ -8,10 +8,13 @@
 [push]
     default = matching
 
+[pull]
+    ff = only
+
 [core]
     editor = nvim
     whitespace = fix,-indent-with-non-tab,trailing-space
-	fsmonitor = rs-git-fsmonitor
+    fsmonitor = rs-git-fsmonitor
 
 [diff]
     tool = nvimdiff
