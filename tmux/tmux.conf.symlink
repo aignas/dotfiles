@@ -7,6 +7,7 @@ set -g base-index 1
 set -g renumber-windows on
 set -g history-limit 102400
 set -g repeat-time 500
+# Got from https://copr.fedorainfracloud.org/coprs/panagiotiss/tmux/
 set -g default-terminal "tmux-256color"
 set -ga terminal-overrides ",*256col*:Tc"  # true colous support
 set -as terminal-overrides ',*:sitm=\E[3m' # Italics support for older ncurses
