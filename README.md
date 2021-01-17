@@ -1,10 +1,5 @@
 # Dotfiles
 
-Lint status: [![Build Status](https://travis-ci.org/aignas/dotfiles.svg?branch=master)](https://travis-ci.org/aignas/dotfiles)
-
-Stats for [aignas/shed](https://hub.docker.com/r/aignas/shed/) docker image:
-[![aignas/shed container status](https://images.microbadger.com/badges/image/aignas/shed.svg)](https://microbadger.com/images/aignas/shed "Docker image badger from microbadger.com")
-
 Highlights:
 - `XDG_DIR` support.
 - `dotr --lint` to lint files in the repo.
@@ -36,30 +31,6 @@ which sets up a few paths that'll be different on your particular machine.
 defaults, and so on. Tweak this script, and occasionally run `dotr` from time to
 time to keep your environment fresh and up-to-date. You can find this script in
 `bin/`.
-
-## Toolshed
-
-[aignas/shed](https://hub.docker.com/r/aignas/shed/) is a docker
-image with many command-line tools.  The idea taken from
-[motiejus/toolshed](https://github.com/motiejus/toolshed/).
-
-### Usage
-
-Setup:
-```sh
-$ grep -A1 shed ~/.zshrc
-alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:debian"
-```
-
-The above will execute the container with the current directory mounted as
-`/x/` in the container.
-
-### A few examples
-
-A Bash prompt in a rich environment:
-```sh
-$ shed
-```
 
 ## Thanks
 
