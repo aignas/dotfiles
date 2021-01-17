@@ -1,5 +1,3 @@
-let b:ale_fixers = ['latexindent', 'textlint']
-
 " put into PDF viewer 'nvr --remote-silent %f -c %l' for synctex
 let g:vimtex_compiler_progname = 'nvr'
 " Disable custom warnings based on regexp

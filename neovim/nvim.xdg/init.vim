@@ -14,19 +14,19 @@ function! Pack() abort
                 \ 'do': '!./install --xdg --no-update-rc',
                 \})
     call minpac#add('junegunn/fzf.vim')
-    call minpac#add('cappyzawa/starlark.vim')
     call minpac#add('tpope/vim-fugitive')
     call minpac#add('tpope/vim-abolish')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
-    call minpac#add('sbdchd/neoformat')
+
     call minpac#add('autozimu/LanguageClient-neovim', {
                 \ 'branch': 'next',
                 \ 'do': '!./install.sh',
                 \ })
     call minpac#add('joereynolds/vim-minisnip')
-    call minpac#add('neomake/neomake')
     call minpac#add('sbdchd/neoformat')
+
+    call minpac#add('cappyzawa/starlark.vim')
     call minpac#add('vimwiki/vimwiki')
     call minpac#add('lervag/vimtex')
     call minpac#add('rust-lang/rust.vim')
@@ -88,6 +88,7 @@ nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>cd :cd %:p:h<cr>
 nnoremap <silent> <leader>f :Files<cr>
 nnoremap <silent> <leader>ss :Gstatus<cr>
+nnoremap <leader>gg :!tdd
 nnoremap <leader>e :e %:h/
 nnoremap <silent> <leader>z :e %:h/BUILD.bazel<cr>
 
@@ -110,16 +111,9 @@ nmap <leader>gR <plug>(lcn-rename)
 nmap <leader>gH <plug>(lcn-signature-help)
 nmap <leader>gD <plug>(lcn-type-definition)
 
-let g:go_template_autocreate = 0
-let g:go_version_warning = 0
-
 au BufNewFile,BufRead *.hql set filetype=hive expandtab
 au BufNewFile,BufRead *.ddl set filetype=hive expandtab
 
-nmap <leader>gg :!tdd
-
-packadd neomake
-call neomake#configure#automake('w')
 augroup fmt
     autocmd!
     autocmd BufWritePre *.{sh,go,rs} Neoformat
@@ -128,17 +122,11 @@ augroup END
 let g:go_template_autocreate = 0
 let g:go_version_warning = 0
 
-let g:tex_flavor = "latex"
-
-let g:ale_fix_on_save = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 0
-let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
 
 let g:neoformat_run_all_formatters = 1
 let g:neoformat_basic_format_trim = 1
+
+let g:tex_flavor = "latex"
 
 let g:vimwiki_folding='expr'
 let g:vimwiki_list = [{'path': '~/vimwiki2/content',
