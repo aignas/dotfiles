@@ -73,7 +73,6 @@ cargodocw () {
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-# A nice dir shortening: https://unix.stackexchange.com/questions/273529
 PROMPT='%F{blue}%~%f %F{yellow}$(git rev-parse --abbrev-ref HEAD 2>/dev/null|| :)%f
 %(?.%F{magenta}.%F{red})%(!.#.$)%f '
 
