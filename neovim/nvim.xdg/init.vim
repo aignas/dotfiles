@@ -9,7 +9,7 @@ function! Pack() abort
 
     " minpac must have {'type': 'opt'} so that it can be loaded with `packadd`.
     call minpac#add('k-takata/minpac', {'type': 'opt'})
-    call minpac#add('junegunn/seoul256.vim')
+    call minpac#add('https://git.sr.ht/~romainl/vim-bruin')
     call minpac#add('junegunn/fzf', {
                 \ 'do': '!./install --xdg --no-update-rc',
                 \})
@@ -61,9 +61,8 @@ if $XDG_DATA_HOME ==# ''
     let $XDG_DATA_HOME = $HOME . '/.local/share'
 endif
 
-let g:seoul256_background = 235
-colorscheme seoul256
 set guioptions=ag termguicolors lazyredraw
+colorscheme bruin
 
 if has('patch-8.1.0360')
     set diffopt+=internal,algorithm:patience
