@@ -18,11 +18,8 @@ function! Pack() abort
     call minpac#add('tpope/vim-abolish')
     call minpac#add('tpope/vim-repeat')
     call minpac#add('tpope/vim-surround')
+    call minpac#add('tpope/vim-unimpaired')
 
-    call minpac#add('autozimu/LanguageClient-neovim', {
-                \ 'branch': 'next',
-                \ 'do': '!./install.sh',
-                \ })
     call minpac#add('joereynolds/vim-minisnip')
     call minpac#add('sbdchd/neoformat')
 
@@ -37,9 +34,19 @@ function! Pack() abort
                 \ 'do': '!cargo build --release --locked',
                 \})
 
+    call minpac#add('autozimu/LanguageClient-neovim', {
+                \ 'branch': 'next',
+                \ 'do': '!./install.sh',
+                \ 'type': 'opt',
+                \ })
+
     call minpac#update()
     call minpac#clean()
 endfunction
+
+" Use opt so that I can have support for neovim 0.5 in a branch more easily so
+" that incompatible plugins are optional
+packadd LanguageClient-neovim
 
 " Define user commands for updating/cleaning the plugins.
 " Each of them loads minpac, reloads .vimrc to register the
