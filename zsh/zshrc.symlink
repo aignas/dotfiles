@@ -42,6 +42,9 @@ alias ls='exa'
 alias ll='exa -l'
 alias la='exa -a'
 alias vc='e ~/.config/nvim/init.vim'
+if [[ "$TERM" == tmux-256color ]]; then
+    alias ssh='TERM=screen-256color ssh'
+fi
 
 alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:debian"
 
