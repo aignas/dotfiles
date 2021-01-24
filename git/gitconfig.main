@@ -12,12 +12,10 @@
     ff = only
 
 [core]
-    editor = nvim
     whitespace = fix,-indent-with-non-tab,trailing-space
     fsmonitor = rs-git-fsmonitor
 
 [diff]
-    tool = nvimdiff
     algorithm = patience
 
 [difftool]
