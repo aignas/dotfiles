@@ -32,7 +32,6 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 
 # aliases
-alias b='bat'
 alias se='sudo -e $(which e)'
 alias g='git'
 alias gd='git diff'

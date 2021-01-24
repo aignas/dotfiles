@@ -31,8 +31,6 @@ skk() {
 }
 
 case ${1:-} in
-helptags) helptags "${2:-}" ;;
-reinstall) reinstall ;;
 *)
     backupdir
     skk
