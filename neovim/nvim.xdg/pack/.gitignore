@@ -1,3 +1,4 @@
 /minpac/start
 /minpac/opt/*
 !/minpac/opt/minpac
+!/minpac/opt/packer.nvim

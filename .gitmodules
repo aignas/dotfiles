@@ -1,6 +1,6 @@
-[submodule "neovim/nvim.xdg/pack/minpac/opt/minpac"]
-	path = neovim/nvim.xdg/pack/minpac/opt/minpac
-	url = https://github.com/k-takata/minpac.git
 [submodule "tmux/tpm"]
 	path = tmux/tpm
 	url = https://github.com/tmux-plugins/tpm
+[submodule "neovim/nvim.xdg/pack/minpac/opt/packer.nvim"]
+	path = neovim/nvim.xdg/pack/minpac/opt/packer.nvim
+	url = https://github.com/wbthomason/packer.nvim

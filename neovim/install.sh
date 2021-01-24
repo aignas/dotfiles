@@ -13,6 +13,17 @@ pyenv() {
     ok "pynvim"
 }
 
+appimage() {
+    target="${DOTFILES}/tools/nvim.appimage"
+    curl \
+        --create-dirs \
+        --output "${target}" \
+        --location \
+        https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+    chmod +x "$target"
+    ok "appimage: $target"
+}
+
 backupdir() {
     readonly backup_dir="${NEOVIM_LOCAL}/backup"
     mkdir -p "${backup_dir}"
@@ -25,6 +36,7 @@ skk() {
     curl \
         --create-dirs \
         --output "${target}.gz" \
+        --location \
         https://skk-dev.github.io/dict/SKK-JISYO.L.gz
     gunzip "${target}.gz"
     ok "downloading SKK-JISYO.L"
@@ -32,6 +44,7 @@ skk() {
 
 case ${1:-} in
 *)
+    appimage
     backupdir
     skk
     ;;
