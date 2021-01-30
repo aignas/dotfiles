@@ -2,18 +2,14 @@ if vim.env.XDG_CONFIG_HOME == nil then
     vim.env.XDG_CONFIG_HOME = vim.env.HOME .. '/.config'
 end
 if vim.env.XDG_DATA_HOME == nil then
-    -- Make vimr work in case XDG_DATA_HOME is not set
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
--- Only required if you have packer in your `opt` pack
 vim.cmd [[packadd packer.nvim]]
-
 require('packer').startup({function()
-    -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim', opt = true}
 
-    use 'https://git.sr.ht/~romainl/vim-bruin'
+    use 'rktjmp/lush.nvim'
 
     use 'tpope/vim-fugitive'
     use 'tpope/vim-unimpaired'
@@ -82,7 +78,7 @@ require 'nvim-treesitter.configs'.setup {
 
 vim.cmd [[
 set guioptions=ag termguicolors lazyredraw
-colorscheme bruin
+colorscheme simple
 
 set diffopt+=internal,algorithm:patience
 set history=10000 undofile backup backupcopy=yes
