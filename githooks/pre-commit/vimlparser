@@ -1,5 +1,9 @@
 #!/bin/bash
 
+readonly _ignored=(
+    neovim/nvim.xdg/plugin/packer_compiled.vim
+)
+
 set -eu
 
 _log() {
@@ -12,20 +16,18 @@ fi
 
 function test_file() {
     local -r file="${1}"
-    if [ -f "${file}" ]; then
-        vimlparser "${file}" >/dev/null
+    if [[ ! -f "${file}" || " ${_ignored[*]} " == *" $file "* ]]; then
+        return
     fi
+
+    vimlparser "${file}" >/dev/null
 }
 
-case "${1:-}" in
---about)
+if [[ "${1:-}" == --about ]]; then
     echo "vint sh or bash shell scripts."
-    ;;
-*)
-    git diff-index --cached --name-only HEAD |
-        grep -E "\.vim$" |
-        while read -r file; do
-            test_file "${file}"
-        done
-    ;;
-esac
+    return
+fi
+
+git diff-index --cached --name-only HEAD |
+    grep -E "\.vim$" |
+    while read -r file; do test_file "$file"; done

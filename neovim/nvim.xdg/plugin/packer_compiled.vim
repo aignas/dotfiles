@@ -9,7 +9,17 @@ endif
 try
 
 lua << END
-local plugins = {
+  local package_path_str = "/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
+  local install_cpath_pattern = "/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+  if not string.find(package.path, package_path_str, 1, true) then
+    package.path = package.path .. ';' .. package_path_str
+  end
+
+  if not string.find(package.cpath, install_cpath_pattern, 1, true) then
+    package.cpath = package.cpath .. ';' .. install_cpath_pattern
+  end
+
+_G.packer_plugins = {
   ["LanguageClient-neovim"] = {
     loaded = false,
     only_sequence = false,
@@ -22,11 +32,47 @@ local plugins = {
     only_setup = false,
     path = "/home/aignas/.config/nvim/pack/minpac/opt/completion-nvim"
   },
+  ["eskk.vim"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/eskk.vim"
+  },
+  fzf = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/fzf"
+  },
+  ["fzf.vim"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/fzf.vim"
+  },
+  ["hive.vim"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/hive.vim"
+  },
+  ["lush.nvim"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/lush.nvim"
+  },
   minpac = {
     loaded = false,
     only_sequence = false,
     only_setup = false,
     path = "/home/aignas/.config/nvim/pack/minpac/opt/minpac"
+  },
+  neoformat = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/neoformat"
   },
   ["nvim-lspconfig"] = {
     loaded = false,
@@ -45,12 +91,84 @@ local plugins = {
     only_sequence = false,
     only_setup = false,
     path = "/home/aignas/.config/nvim/pack/minpac/opt/packer.nvim"
+  },
+  ["rust.vim"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/rust.vim"
+  },
+  ["starlark.vim"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/starlark.vim"
+  },
+  ["vim-abolish"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-abolish"
+  },
+  ["vim-fugitive"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-fugitive"
+  },
+  ["vim-go"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-go"
+  },
+  ["vim-markdown-composer"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-markdown-composer"
+  },
+  ["vim-minisnip"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-minisnip"
+  },
+  ["vim-repeat"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-repeat"
+  },
+  ["vim-surround"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-surround"
+  },
+  ["vim-unimpaired"] = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vim-unimpaired"
+  },
+  vimtex = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vimtex"
+  },
+  vimwiki = {
+    loaded = true,
+    only_sequence = true,
+    only_setup = false,
+    path = "/home/aignas/.config/nvim/pack/minpac/start/vimwiki"
   }
 }
 
 local function handle_bufread(names)
   for _, name in ipairs(names) do
-    local path = plugins[name].path
+    local path = packer_plugins[name].path
     for _, dir in ipairs({ 'ftdetect', 'ftplugin', 'after/ftdetect', 'after/ftplugin' }) do
       if #vim.fn.finddir(dir, path) > 0 then
         vim.cmd('doautocmd BufRead')
@@ -62,7 +180,7 @@ end
 
 local packer_load = nil
 local function handle_after(name, before)
-  local plugin = plugins[name]
+  local plugin = packer_plugins[name]
   plugin.load_after[before] = nil
   if next(plugin.load_after) == nil then
     packer_load({name}, {})
@@ -72,7 +190,7 @@ end
 packer_load = function(names, cause)
   local some_unloaded = false
   for _, name in ipairs(names) do
-    if not plugins[name].loaded then
+    if not packer_plugins[name].loaded then
       some_unloaded = true
       break
     end
@@ -84,14 +202,14 @@ packer_load = function(names, cause)
   local del_cmds = {}
   local del_maps = {}
   for _, name in ipairs(names) do
-    if plugins[name].commands then
-      for _, cmd in ipairs(plugins[name].commands) do
+    if packer_plugins[name].commands then
+      for _, cmd in ipairs(packer_plugins[name].commands) do
         del_cmds[cmd] = true
       end
     end
 
-    if plugins[name].keys then
-      for _, key in ipairs(plugins[name].keys) do
+    if packer_plugins[name].keys then
+      for _, key in ipairs(packer_plugins[name].keys) do
         del_maps[key] = true
       end
     end
@@ -106,22 +224,22 @@ packer_load = function(names, cause)
   end
 
   for _, name in ipairs(names) do
-    if not plugins[name].loaded then
+    if not packer_plugins[name].loaded then
       vim.cmd('packadd ' .. name)
-      if plugins[name].config then
-        for _i, config_line in ipairs(plugins[name].config) do
+      if packer_plugins[name].config then
+        for _i, config_line in ipairs(packer_plugins[name].config) do
           loadstring(config_line)()
         end
       end
 
-      if plugins[name].after then
-        for _, after_name in ipairs(plugins[name].after) do
+      if packer_plugins[name].after then
+        for _, after_name in ipairs(packer_plugins[name].after) do
           handle_after(after_name, name)
           vim.cmd('redraw')
         end
       end
 
-      plugins[name].loaded = true
+      packer_plugins[name].loaded = true
     end
   end
 
