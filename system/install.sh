@@ -12,6 +12,7 @@ ok "apt-get: update"
 debug "apt-get: install"
 sudo apt-get install -y \
     jq python3 python3-venv fd-find exa ripgrep htop neovim zsh tmux \
-    shellcheck curl unzip golang fonts-firacode kitty direnv watchman tig
+    shellcheck curl unzip golang fonts-firacode direnv watchman tig \
+    font-hack
 
 ok "apt-get: install"
