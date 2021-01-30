@@ -17,10 +17,11 @@ appimage() {
     target="${DOTFILES}/tools/nvim.appimage"
     curl \
         --create-dirs \
-        --output "${target}" \
+        --output "${target}.new" \
         --location \
         https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
-    chmod +x "$target"
+    chmod +x "$target.new"
+    mv "$target.new" "$target"
     ok "appimage: $target"
 }
 
