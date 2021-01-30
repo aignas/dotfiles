@@ -41,7 +41,7 @@ while test $# -gt 1; do
     shift
 done
 
-src="$1"
+src="$(realpath "$1")"
 
 # Check if we have a destination config file, which tells us where the
 # symlink will endup:
