@@ -57,6 +57,7 @@ config = {
 vim.cmd [[packadd nvim-treesitter]]
 vim.cmd [[packadd nvim-lspconfig]]
 vim.cmd [[packadd completion-nvim]]
+vim.cmd [[let g:completion_enable_auto_popup = 0]]
 
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
@@ -89,7 +90,7 @@ set autoindent breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
 set fileformats=unix,mac,dos
 set linebreak list number
-set spell
+set nospell
 set whichwrap+=<,>
 set cpoptions+=J
 set scrolloff=5

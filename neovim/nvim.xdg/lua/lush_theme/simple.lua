@@ -50,7 +50,7 @@ return lush(function()
         Substitute   { },
         LineNr       { },
         CursorLineNr { },
-        MatchParen   { fg = green, gui = "reverse" },
+        MatchParen   { fg = green },
         ModeMsg      { fg = green },
         MsgArea      { },
         MsgSeparator { },
@@ -66,10 +66,10 @@ return lush(function()
         QuickFixLine { },
         Search       { bg = yellow, fg = black },
         SpecialKey   { },
-        SpellBad     { gui = "undercurl", sp = red },
-        SpellCap     { gui = "undercurl", sp = blue },
-        SpellLocal   { gui = "undercurl", sp = magenta },
-        SpellRare    { gui = "undercurl", sp = cyan },
+        SpellBad     { bg = black.lighten(93) },
+        SpellCap     { bg = black.lighten(93) },
+        SpellLocal   { bg = black.lighten(93) },
+        SpellRare    { bg = black.lighten(93) },
         StatusLine   { gui = "reverse" },
         StatusLineNC { gui = "underline" },
         TabLine      { gui = "underline" },
@@ -82,7 +82,7 @@ return lush(function()
         Whitespace   { },
         WildMenu     { },
 
-        -- defacto standard groups
+        -- de facto standard groups
         Constant       { gui = "bold" }, -- (preferred) any constant
         String         { Normal }, --   a string constant: "this is a string"
         Character      { }, --  a character constant: 'c', '\n'
@@ -117,7 +117,7 @@ return lush(function()
         -- SpecialChar    { }, --  special character in a constant
         -- Tag            { }, --    you can use CTRL-] on this
         Delimiter      { }, --  character that needs attention
-        Comment        { fg = black.lighten(40), gui = "italic" },
+        Comment        { fg = black.lighten(30), gui = "italic" },
         -- SpecialComment { }, -- special things inside a comment
         -- Debug          { }, --    debugging statements
 
