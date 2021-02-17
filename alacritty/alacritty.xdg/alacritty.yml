@@ -18,7 +18,7 @@ colors:
   normal:
     black:   '0x000000'
     red:     '0x840000'
-    green:   '0x033500'
+    green:   '0x15b01a'
     yellow:  '0xd5b60a'
     blue:    '0x00035b'
     magenta: '0x960056'
@@ -29,7 +29,7 @@ colors:
   bright:
     black:   '0x808080'
     red:     '0xe50000'
-    green:   '0x15b01a'
+    green:   '0x01ff07'
     yellow:  '0xffff14'
     blue:    '0x0343df'
     magenta: '0xc20078'
@@ -38,3 +38,6 @@ colors:
 
 mouse_bindings:
   - { mouse: Right,  action: SpawnNewInstance }
+
+key_bindings:
+  - { key: F11,      action: ToggleFullscreen }
