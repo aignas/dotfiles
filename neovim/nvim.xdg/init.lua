@@ -16,6 +16,7 @@ require('packer').startup({function()
     use 'tpope/vim-abolish'
     use 'tpope/vim-repeat'
     use 'tpope/vim-surround'
+    use 'tpope/vim-eunuch'
 
     use {
         'junegunn/fzf.vim',

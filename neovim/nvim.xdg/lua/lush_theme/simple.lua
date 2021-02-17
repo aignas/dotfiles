@@ -4,7 +4,7 @@ return lush(function()
     -- base colors taken from https://xkcd.com/color/rgb/
     black       = lush.hsl('#000000')
     darkred     = lush.hsl('#840000')
-    darkgreen   = lush.hsl('#033500')
+    darkgreen   = lush.hsl('#15b01a')
     darkyellow  = lush.hsl('#d5b60a')
     darkblue    = lush.hsl('#00035b')
     darkmagenta = lush.hsl('#960056')
@@ -12,7 +12,7 @@ return lush(function()
     gray        = lush.hsl('#c0c0c0')
     darkgray    = lush.hsl('#808080')
     red         = lush.hsl('#e50000')
-    green       = lush.hsl('#15b01a')
+    green       = lush.hsl('#01ff07')
     yellow      = lush.hsl('#ffff14')
     blue        = lush.hsl('#0343df')
     magenta     = lush.hsl('#c20078')
@@ -23,6 +23,7 @@ return lush(function()
     lightgreen  = lush.hsl('#d1ffbd')
     lightred    = lush.hsl('#fd3c06')
     lightgray   = gray.lighten(50)
+    lightyellow = yellow.lighten(40)
 
     return {
         ColorColumn  { fg = "darkred" },
@@ -36,7 +37,7 @@ return lush(function()
         DiffAdd      { bg = lightgreen, },
         DiffChange   { bg = lightgray },
         DiffDelete   { bg = lightred },
-        DiffText     { bg = lightgray },
+        DiffText     { bg = lightyellow },
         NonText      { fg = darkgray },
         EndOfBuffer  { NonText },
         TermCursor   { },
@@ -50,8 +51,8 @@ return lush(function()
         Substitute   { },
         LineNr       { },
         CursorLineNr { },
-        MatchParen   { fg = green },
-        ModeMsg      { fg = green },
+        MatchParen   { fg = darkgreen },
+        ModeMsg      { fg = darkgreen },
         MsgArea      { },
         MsgSeparator { },
         MoreMsg      { fg = magenta },
@@ -194,7 +195,7 @@ return lush(function()
         -- TSUnderline          { }, -- For text to be represented with an underline.
         -- TSTitle              { }, -- Text that is part of a title.
         -- TSLiteral            { }, -- Literal text.
-        TSURI                { gui = "underline" }, -- Any URI like a link or email.
+        TSURI                { fg = blue, gui = "underline" }, -- Any URI like a link or email.
         -- TSVariable           { }, -- Any variable name that does not have another highlight.
         -- TSVariableBuiltin    { }, -- Variable names that are defined by the languages, like `this` or `self`.
     }
