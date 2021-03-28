@@ -5,18 +5,26 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
+-- TODO @aignas 2021-03-28: once I have a working luarocks setup on my Linux
+-- mashine, I can use the `posix` support to check for directories.
+--
+-- require 'posix'
+-- function isdir(fn)
+--     return (posix.stat(fn, "type") == 'directory')
+-- end
+
 vim.cmd [[packadd packer.nvim]]
 require('packer').startup({function()
     use {'wbthomason/packer.nvim', opt = true}
 
     use 'rktjmp/lush.nvim'
 
-    use 'tpope/vim-fugitive'
-    use 'tpope/vim-unimpaired'
     use 'tpope/vim-abolish'
+    use 'tpope/vim-eunuch'
+    use 'tpope/vim-fugitive'
     use 'tpope/vim-repeat'
     use 'tpope/vim-surround'
-    use 'tpope/vim-eunuch'
+    use 'tpope/vim-unimpaired'
 
     use {
         'junegunn/fzf.vim',
@@ -27,39 +35,31 @@ require('packer').startup({function()
     }
 
     use 'joereynolds/vim-minisnip'
-    use 'sbdchd/neoformat'
 
-    use 'cappyzawa/starlark.vim'
-    use 'vimwiki/vimwiki'
-    use 'lervag/vimtex'
-    use 'rust-lang/rust.vim'
-    use 'fatih/vim-go'
     use 'autowitch/hive.vim'
+    use 'cappyzawa/starlark.vim'
+    use 'fatih/vim-go'
+    use 'lervag/vimtex'
+    use 'neovim/nvim-lspconfig'
+    use 'nvim-lua/completion-nvim'
+    use 'rust-lang/rust.vim'
     use 'tyru/eskk.vim'
+    use 'vimwiki/vimwiki'
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = [[:TSUpdate]],
+    }
     use {
         'euclio/vim-markdown-composer',
-        run = [[cargo build --release --locked]]
+        run = [[cargo build --release --locked]],
     }
-
-    -- legacy plugins to manage, but not enable
-    use {'autozimu/LanguageClient-neovim', opt = true}
-    use {'k-takata/minpac', opt = true, as = 'minpac'}
-
-    -- plugins that need 0.5+
-    use {'nvim-treesitter/nvim-treesitter', run = "TSUpdate", opt = true}
-    use {'neovim/nvim-lspconfig', opt = true}
-    use {'nvim-lua/completion-nvim', opt = true}
 end,
 config = {
     package_root = "/home/aignas/.config/nvim/pack",
-    plugin_package = "minpac",
+    plugin_package = "packer.nvim",
 }})
 
-vim.cmd [[packadd nvim-treesitter]]
-vim.cmd [[packadd nvim-lspconfig]]
-vim.cmd [[packadd completion-nvim]]
-vim.cmd [[let g:completion_enable_auto_popup = 0]]
-
+vim.g.completion_enable_auto_popup = 0
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
 
@@ -73,7 +73,35 @@ remap("n", "<Leader>cd", "<CMD>cd %:p:h<CR>", { noremap = true })
 remap("n", "<Leader>z", "<CMD>e %:h/BUILD.bazel<CR>", { noremap = true })
 
 require 'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
+    ensure_installed = {
+      "bash",
+      "c",
+      "c_sharp",
+      "comment",
+      "cpp",
+      "css",
+      "go",
+      "graphql",
+      "html",
+      "java",
+      "javascript",
+      "jsdoc",
+      "json",
+      "julia",
+      "lua",
+      "php",
+      "python",
+      "ql",
+      "query",
+      "r",
+      "regex",
+      "rst",
+      "rust",
+      "toml",
+      "typescript",
+      "yaml",
+      "zig",
+    },
     highlight = { enable = true },
     indent = { enable = true }
 }
@@ -137,7 +165,7 @@ local on_attach = function(client, bufnr)
 end
 
 local nvim_lsp = require('lspconfig')
-local servers = {'gopls', 'rust_analyzer'}
+local servers = {'gopls', 'rust_analyzer', 'sqls'}
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
         on_attach = on_attach,
@@ -154,8 +182,12 @@ vim.g.vimwiki_list = {{
     ext         = '.md',
 }}
 
+function eskk(key, val)
+    vim.g['eskk#' .. key ] = val
+end
+
+eskk('start_completion_length', 2)
 vim.cmd [[
-let g:eskk#start_completion_length=2
 let g:eskk#directory = $XDG_DATA_HOME . '/nvim/skk'
 let g:eskk#select_cand_keys = 'aoeuhtns'
 let g:eskk#show_annotation = 1
