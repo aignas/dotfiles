@@ -1,0 +1,46 @@
+{
+    "test": {
+        "prefix": "test",
+        "scope": "go",
+        "body": [
+            "func Test$1(t *testing.T) {",
+            "\t$2",
+            "}",
+        ],
+        "description": "A new test function"
+    },
+    "ttable": {
+        "prefix": "ttable",
+        "scope": "go",
+        "body": [
+            "tests := []struct{",
+            "\tmsg     string",
+            "\twantErr string",
+            "}{",
+            "\t{",
+            "\t\tmsg:     \"ok\",",
+            "\t\twantErr: \"\",",
+            "\t},",
+            "}",
+            "",
+            "for _, tt := range tests {",
+            "\tt.Run(tt.msg, func(t *testing.T) {",
+            "\t\t$1",
+            "\t})",
+            "}"
+        ],
+        "description": "A table test template"
+    },
+    "terr": {
+        "prefix": "terr",
+        "scope": "go",
+        "body": [
+            "if tt.wantErr != \"\" {",
+            "\tassert.EqualError(t, err, tt.wantErr)",
+            "\treturn",
+            "}",
+            "assert.NoError(t, err)",
+        ],
+        "description": "Check for error equality"
+    }
+}

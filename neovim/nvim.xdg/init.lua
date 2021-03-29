@@ -34,7 +34,8 @@ require('packer').startup({function()
         }}
     }
 
-    use 'joereynolds/vim-minisnip'
+    use 'hrsh7th/vim-vsnip'
+    use 'hrsh7th/vim-vsnip-integ'
 
     use 'autowitch/hive.vim'
     use 'cappyzawa/starlark.vim'
@@ -59,9 +60,17 @@ config = {
     plugin_package = "packer.nvim",
 }})
 
+vim.cmd [[
+imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
+smap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+]]
+
 vim.g.completion_enable_auto_popup = 0
 vim.g.mapleader = ","
 vim.g.maplocalleader = '-'
+vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 
 local remap = vim.api.nvim_set_keymap
 remap("n", "<Leader>b", "<CMD>Buffers<CR>", { noremap = true })
@@ -124,19 +133,14 @@ set whichwrap+=<,>
 set cpoptions+=J
 set scrolloff=5
 
-let g:neoformat_verbose = 1
-
 autocmd BufNewFile,BufRead *.{hql,ddl} set filetype=hive expandtab
 autocmd BufWritePost init.lua PackerCompile
-autocmd BufWritePre *.{rs,go,lua,sh} Neoformat
-
-if executable('rg')
-    set grepprg=rg\ --vimgrep\ --no-heading\ -S
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
 ]]
 
--- [[ LSP ]]
+vim.o.grepprg=[[rg --vimgrep --no-heading -S]]
+vim.o.grepformat=[[%f:%l:%c:%m,%f:%l:%m]]
+
+-- LSP
 local on_attach = function(client, bufnr)
     require('completion').on_attach()
 
@@ -200,5 +204,3 @@ endif
 let g:eskk#dictionary =       {'path': g:skk_path . '/skk-jisyo.s', }
 let g:eskk#large_dictionary = {'path': g:skk_path . '/SKK-JISYO.L'}
 ]]
-
-vim.api.nvim_set_var("minisnip_dir", os.getenv("XDG_CONFIG_HOME") .. '/nvim/minisnip')

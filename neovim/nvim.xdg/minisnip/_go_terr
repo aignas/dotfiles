@@ -1,5 +1,0 @@
-if tt.wantErr != "" {
-    assert.EqualError(t, err, tt.wantErr)
-    return
-}
-assert.NoError(t, err)

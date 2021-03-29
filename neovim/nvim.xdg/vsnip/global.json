@@ -1,0 +1,17 @@
+{
+    "todo": {
+        "prefix": "todo",
+        "body": "TODO @aignas $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE: ",
+        "description": "A TODO note"
+    },
+    "fixme": {
+        "prefix": "fixme",
+        "body": "FIXME @aignas $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE: ",
+        "description": "A FIXME note"
+    },
+    "note": {
+        "prefix": "note",
+        "body": "NOTE @aignas $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE: ",
+        "description": "A note"
+    }
+}
