@@ -1,0 +1,12 @@
+#!/bin/sh
+
+msg="$*"
+if [ $# -eq 0 ]; then
+    msg=${1:-snapshot}
+    echo "No arguments supplied"
+fi
+
+git -C ~/.notes add -A .
+git -C ~/.notes commit -am "${msg}"
+git -C ~/.notes pull origin main --rebase
+git -C ~/.notes push -u origin main
