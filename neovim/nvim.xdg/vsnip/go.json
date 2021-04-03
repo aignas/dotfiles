@@ -4,7 +4,7 @@
         "scope": "go",
         "body": [
             "func Test$1(t *testing.T) {",
-            "\t$2",
+            "\t$0",
             "}",
         ],
         "description": "A new test function"

@@ -30,7 +30,7 @@ require('packer').startup({function()
         'junegunn/fzf.vim',
         requires = {{
             'junegunn/fzf',
-            run = [[./install --xdg --no-update-rc]],
+            run = [[./install --xdg --no-update-rc --completion --key-bindings]],
         }}
     }
 
@@ -130,7 +130,6 @@ set fileformats=unix,mac,dos
 set linebreak list number
 set nospell
 set whichwrap+=<,>
-set cpoptions+=J
 set scrolloff=5
 
 autocmd BufNewFile,BufRead *.{hql,ddl} set filetype=hive expandtab
@@ -143,6 +142,8 @@ vim.o.grepformat=[[%f:%l:%c:%m,%f:%l:%m]]
 -- LSP
 local on_attach = function(client, bufnr)
     require('completion').on_attach()
+
+    vim.cmd [[autocmd BufWritePre *.{rs,go} lua vim.lsp.buf.formatting_sync(nil, 1000)]]
 
     local function remap(key, cmd)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', key, cmd, {noremap=true, silent=true})
@@ -177,12 +178,12 @@ for _, lsp in ipairs(servers) do
 end
 
 vim.g.tex_flavor = "latex"
-vim.g.vimwiki_folding = 'expr'
+vim.g.vimwiki_folding = ''
 vim.g.vimwiki_list = {{
-    path        = '~/vimwiki2/content',
+    path        = '~/.notes',
     syntax      = 'markdown',
-    index       = '_index',
-    diary_index = '_index',
+    index       = 'README',
+    diary_index = 'README',
     ext         = '.md',
 }}
 

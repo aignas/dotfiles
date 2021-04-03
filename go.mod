@@ -3,7 +3,7 @@ module github.com/aignas/dotfiles
 go 1.12
 
 require (
-	github.com/git-hooks/git-hooks v1.3.0 // indirect
+	github.com/git-hooks/git-hooks v1.3.1 // indirect
 	github.com/gokcehan/lf v0.0.0-20191223133345-3c5abbbc5daf
 	github.com/golangci/golangci-lint v1.23.8
 	github.com/haya14busa/go-vimlparser v0.0.0-20171121121341-6c96c660fcd0 // indirect

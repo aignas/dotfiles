@@ -96,5 +96,4 @@ trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
 trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
-export DIRENV_LOG_FORMAT=
 eval "$(direnv hook zsh)"

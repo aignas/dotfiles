@@ -49,6 +49,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/git-hooks/git-hooks v1.3.0 h1:nZHKsx/AEKOqvREJFGcqbg1ztZdDPWj/57lFIahSS9k=
 github.com/git-hooks/git-hooks v1.3.0/go.mod h1:RBqjgxUpRSLI4AxVZGV1FsODclMjpsJIaDEyJSoK3ws=
+github.com/git-hooks/git-hooks v1.3.1 h1:ypdvNTXMiITXQxuqIl6t1f8R3V1FrUXPi1CwQ4guClo=
+github.com/git-hooks/git-hooks v1.3.1/go.mod h1:RBqjgxUpRSLI4AxVZGV1FsODclMjpsJIaDEyJSoK3ws=
 github.com/go-critic/go-critic v0.4.1 h1:4DTQfT1wWwLg/hzxwD9bkdhDQrdJtxe6DUTadPlrIeE=
 github.com/go-critic/go-critic v0.4.1/go.mod h1:7/14rZGnZbY6E38VEGk2kVhoq6itzc1E68facVDK23g=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
