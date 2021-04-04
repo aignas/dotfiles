@@ -178,13 +178,16 @@ for _, lsp in ipairs(servers) do
 end
 
 vim.g.tex_flavor = "latex"
+vim.g.vimwiki_auto_header = 1
 vim.g.vimwiki_folding = ''
 vim.g.vimwiki_list = {{
-    path        = '~/.notes',
-    syntax      = 'markdown',
-    index       = 'README',
-    diary_index = 'README',
-    ext         = '.md',
+    path             = '~/.notes',
+    syntax           = 'markdown',
+    index            = 'README',
+    diary_index      = 'README',
+    ext              = '.md',
+    auto_tags        = 1,
+    auto_diary_index = 1,
 }}
 
 function eskk(key, val)
