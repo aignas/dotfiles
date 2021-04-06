@@ -6,7 +6,7 @@
 	path = neovim/nvim.xdg/pack/minpac/opt/minpac
 	url = https://github.com/k-takata/minpac
 	branch = master
-[submodule "neovim/nvim.xdg/pack/minpac/opt/packer.nvim"]
-	path = neovim/nvim.xdg/pack/minpac/opt/packer.nvim
+[submodule "neovim/nvim.xdg/pack/packer.nvim/opt/packer.nvim"]
+	path = neovim/nvim.xdg/pack/packer.nvim/opt/packer.nvim
 	url = https://github.com/wbthomason/packer.nvim
 	branch = master
