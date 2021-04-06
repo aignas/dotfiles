@@ -56,6 +56,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/aignas/.config/nvim/pack/packer.nvim/start/lush.nvim"
   },
+  ["markdown-preview.nvim"] = {
+    loaded = true,
+    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/markdown-preview.nvim"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/home/aignas/.config/nvim/pack/packer.nvim/start/nvim-lspconfig"
@@ -92,10 +96,6 @@ _G.packer_plugins = {
   ["vim-go"] = {
     loaded = true,
     path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-go"
-  },
-  ["vim-markdown-composer"] = {
-    loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-markdown-composer"
   },
   ["vim-repeat"] = {
     loaded = true,

@@ -34,14 +34,14 @@ require('packer').startup({function()
         }}
     }
 
+    use 'neovim/nvim-lspconfig'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/vim-vsnip-integ'
 
+    use 'lervag/vimtex'
     use 'autowitch/hive.vim'
     use 'cappyzawa/starlark.vim'
     use 'fatih/vim-go'
-    use 'lervag/vimtex'
-    use 'neovim/nvim-lspconfig'
     use 'nvim-lua/completion-nvim'
     use 'rust-lang/rust.vim'
     use 'tyru/eskk.vim'
@@ -51,8 +51,8 @@ require('packer').startup({function()
         run = [[:TSUpdate]],
     }
     use {
-        'euclio/vim-markdown-composer',
-        run = [[cargo build --release --locked]],
+        'iamcco/markdown-preview.nvim',
+        run = [[:call mkdp#util#install()]],
     }
 end,
 config = {
@@ -68,7 +68,9 @@ smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-T
 ]]
 
 vim.g.completion_enable_auto_popup = 0
-vim.g.mapleader = ","
+vim.g.completion_enable_snippet = 'vim-vsnip'
+
+vim.g.mapleader = ','
 vim.g.maplocalleader = '-'
 vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 
@@ -170,7 +172,7 @@ local on_attach = function(client, bufnr)
 end
 
 local nvim_lsp = require('lspconfig')
-local servers = {'gopls', 'rust_analyzer', 'sqls'}
+local servers = {'gopls', 'rust_analyzer', 'sqls', 'texlab'}
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
         on_attach = on_attach,
@@ -178,7 +180,8 @@ for _, lsp in ipairs(servers) do
 end
 
 vim.g.tex_flavor = "latex"
-vim.g.vimwiki_auto_header = 1
+vim.g.vimwiki_markdown_link_ext = 1
+vim.g.vimwiki_global_ext = 0
 vim.g.vimwiki_folding = ''
 vim.g.vimwiki_list = {{
     path             = '~/.notes',
