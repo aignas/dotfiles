@@ -1,46 +1,26 @@
 {
-    "test": {
-        "prefix": "test",
-        "scope": "go",
-        "body": [
-            "func Test$1(t *testing.T) {",
-            "\t$0",
-            "}",
-        ],
-        "description": "A new test function"
-    },
     "ttable": {
         "prefix": "ttable",
         "scope": "go",
-        "body": [
-            "tests := []struct{",
-            "\tmsg     string",
-            "\twantErr string",
-            "}{",
-            "\t{",
-            "\t\tmsg:     \"ok\",",
-            "\t\twantErr: \"\",",
-            "\t},",
-            "}",
-            "",
-            "for _, tt := range tests {",
-            "\tt.Run(tt.msg, func(t *testing.T) {",
-            "\t\t$1",
-            "\t})",
-            "}"
-        ],
-        "description": "A table test template"
+        "body": "tests := []struct {\n\tname string\n} {\n\t{\n\t\tname: \"default\",\n\t},\n}\n\nfor _, tt := range tests {\n\tt.Run(t, func(t *testing.T) {\n\t$0\t\n})\n)",
+       "description": "A new table test"
+    },
+    "test": {
+        "prefix": "test",
+        "scope": "go",
+        "body": "func Test$1(t *testing.T) {\n\t$0\n}",
+       "description": "New test function"
+    },
+    "err": {
+        "prefix": "err",
+        "scope": "go",
+        "body": "if err != nil {\n\treturn fmt.Errorf(\"$1: %w\", err)\n}$0",
+        "description": "Check for error equality"
     },
     "terr": {
         "prefix": "terr",
         "scope": "go",
-        "body": [
-            "if tt.wantErr != \"\" {",
-            "\tassert.EqualError(t, err, tt.wantErr)",
-            "\treturn",
-            "}",
-            "assert.NoError(t, err)",
-        ],
+        "body": "if tt.wantErr != \"\" {\n\tassert.EqualError(t, err, tt.wantErr)\n\treturn\n}\nassert.NoError(t, err)",
         "description": "Check for error equality"
     }
 }
