@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-readonly sha256=9508317393f32b467057b8024d9712434ee5691094b3e638c551588559a5da3c
-readonly version=0.7.2-1
+readonly sha256=815259faa2fc543b7a8bf2aeff00dbc1f181c2581663a31c1f732cfc589cf57e
+readonly version=0.7.2-2
 readonly flavour=testing
 readonly target="${HOME}/Downloads/alacritty-${version}_amd64.deb"
 
