@@ -42,14 +42,15 @@ set -g status-style none
 set -g pane-active-border-style fg="yellow"
 set -g status-right "#h │ %Y-%m-%d %H:%M"
 
+# tmux-open settings
+set -g @open-editor-command 'e'
+
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-urlview'
 set -g @plugin 'tmux-plugins/tmux-yank'
-
-# tmux-open
+set -g @plugin 'tmux-plugins/tmux-copycat'
 set -g @plugin 'tmux-plugins/tmux-open'
-set -g @open-editor-command 'e'
 
 # NOTE: keep at the bottom
 run -b '~/.dotfiles/tmux/tpm/tpm'
