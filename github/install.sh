@@ -12,6 +12,7 @@ download() {
     chmod +x "$dest"
 }
 
+download imsnif/diskonaut diskonaut-0.11.0-unknown-linux-musl.tar diskonaut
 download latex-lsp/texlab texlab-x86_64-linux.tar texlab
 download rust-analyzer/rust-analyzer rust-analyzer-linux rust-analyzer
 download tree-sitter/tree-sitter tree-sitter-linux-x64 tree-sitter
