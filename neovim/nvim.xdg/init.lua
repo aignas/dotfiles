@@ -180,17 +180,28 @@ for _, lsp in ipairs(servers) do
 end
 
 vim.g.tex_flavor = "latex"
+
+vim.g.neuron_dir = '~/.notes/zettel'
+
 vim.g.vimwiki_markdown_link_ext = 1
+vim.g.vimwiki_url_maxsave = 0
 vim.g.vimwiki_global_ext = 0
 vim.g.vimwiki_folding = ''
 vim.g.vimwiki_list = {{
-    path             = '~/.notes',
+    path             = '~/.notes/zettel',
     syntax           = 'markdown',
-    index            = 'README',
-    diary_index      = 'README',
+    index            = 'index',
+    diary_rel_path   = '',
+    diary_index      = 'diary',
     ext              = '.md',
+    links_space_char = '-',
     auto_tags        = 1,
     auto_diary_index = 1,
+    auto_diary_index = 1,
+    auto_generate_links = 1,
+    nested_syntaxes  = {
+        starlark = "python",
+    },
 }}
 
 function eskk(key, val)

@@ -117,6 +117,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-vsnip-integ"
   },
+  vimtex = {
+    loaded = true,
+    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vimtex"
+  },
   vimwiki = {
     loaded = true,
     path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vimwiki"
