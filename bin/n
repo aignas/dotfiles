@@ -1,12 +1,98 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
-msg="$*"
-if [ $# -eq 0 ]; then
-    msg=${1:-snapshot}
-    echo "No arguments supplied"
-fi
+die() {
+    echo >&2 ERROR: $@
+    echo >&2 Exiting...
+    exit 1
+}
 
-git -C ~/.notes add -A .
-git -C ~/.notes commit -am "${msg}"
-git -C ~/.notes pull origin main --rebase
-git -C ~/.notes push -u origin main
+commit() {
+    msg="$*"
+    if [ $# -eq 0 ]; then
+        msg=${1:-snapshot}
+    fi
+
+    git -C ~/.notes add -A .
+    git -C ~/.notes commit -am "${msg}"
+    git -C ~/.notes pull origin main --rebase
+    git -C ~/.notes push -u origin main
+}
+
+notes_dir() {
+    dir="$HOME/.$1/zettel"
+    [[ -d $dir ]] || die directory "$dir" does not exist
+    echo $dir
+}
+
+neuron() {
+    dir="$(notes_dir notes)"
+    if [[ "$#" != 0 && "$1" == --dir ]]; then
+        dir="$(notes_dir "$2")"
+        shift; shift
+    fi
+
+    args="$@"
+    if [[ "$#" == 0 ]]; then
+        args=(
+            -o /tmp
+            gen
+            --watch
+            --pretty-urls
+            --serve 0.0.0.0:8080
+        )
+    fi
+
+    exec sudo docker run \
+        --rm \
+        --tty \
+        --interactive \
+        --publish 8080:8080 \
+        --volume "$dir":/notes \
+        sridca/neuron \
+        neuron "${args[@]}"
+}
+
+rename() {
+    [[ "${1:-}" != "" ]] || die "No arguments supplied"
+
+    case ${2:-} in
+        '')
+            rg "$1" -w
+            exit 0
+            ;;
+        *)
+            if [[ "$#" != 2 ]]; then
+                echo no spaces in the name plz
+                exit 1
+            fi
+
+            rg "$1" -l zettel | xargs sed -i "s/($1)/($2)/g"
+            mv "zettel/$1.md" "zettel/$2.md"
+            git add -A zettel
+            git commit -m "Rename: $1 -> $2"
+            ls -l zettel | head
+            ;;
+    esac
+}
+
+main() {
+    command="$1"; shift
+
+    case "$command" in
+        serve|neuron)
+            neuron "$@"
+            ;;
+        commit)
+            commit "$@"
+            ;;
+        rename)
+            rename "$@"
+            ;;
+        *)
+            die unknown command "$command"
+            ;;
+    esac
+}
+
+main "$@"

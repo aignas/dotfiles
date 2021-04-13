@@ -183,26 +183,36 @@ vim.g.tex_flavor = "latex"
 
 vim.g.neuron_dir = '~/.notes/zettel'
 
+function wiki(path)
+    return {
+        path                = path,
+        syntax              = 'markdown',
+        index               = 'index',
+        diary_rel_path      = '',
+        diary_index         = 'diary',
+        ext                 = '.md',
+        links_space_char    = '-',
+        auto_tags           = 1,
+        auto_diary_index    = 1,
+        auto_diary_index    = 1,
+        auto_generate_links = 1,
+        nested_syntaxes     = {
+            starlark = "python",
+        },
+    }
+end
+
 vim.g.vimwiki_markdown_link_ext = 1
 vim.g.vimwiki_url_maxsave = 0
 vim.g.vimwiki_global_ext = 0
 vim.g.vimwiki_folding = ''
-vim.g.vimwiki_list = {{
-    path             = '~/.notes/zettel',
-    syntax           = 'markdown',
-    index            = 'index',
-    diary_rel_path   = '',
-    diary_index      = 'diary',
-    ext              = '.md',
-    links_space_char = '-',
-    auto_tags        = 1,
-    auto_diary_index = 1,
-    auto_diary_index = 1,
-    auto_generate_links = 1,
-    nested_syntaxes  = {
-        starlark = "python",
-    },
-}}
+vim.g.vimwiki_list = {
+    wiki('~/.notes/zettel'),
+    wiki('~/.work/zettel'),
+}
+vim.g.vimwiki_key_mappings = {
+    table_mappings = 0,
+}
 
 function eskk(key, val)
     vim.g['eskk#' .. key ] = val
