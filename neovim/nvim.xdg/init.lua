@@ -183,54 +183,25 @@ vim.g.tex_flavor = "latex"
 
 vim.g.neuron_dir = '~/.notes/zettel'
 
-function wiki(path)
-    return {
-        path                = path,
-        syntax              = 'markdown',
-        index               = 'index',
-        diary_rel_path      = '',
-        diary_index         = 'diary',
-        ext                 = '.md',
-        links_space_char    = '-',
-        auto_tags           = 1,
-        auto_diary_index    = 1,
-        auto_diary_index    = 1,
-        auto_generate_links = 1,
-        nested_syntaxes     = {
-            starlark = "python",
-        },
-    }
-end
+local vimwiki = require('vimwiki')
+vimwiki.setup({
+    markdown_link_ext = 1,
+    url_maxsave = 0,
+    global_ext = 0,
+    folding = '',
+    key_mappings = {
+        table_mappings = 0,
+    },
+    list = {
+        vimwiki.wiki('~/.notes/zettel'),
+        vimwiki.wiki('~/.work/zettel'),
+    },
+})
 
-vim.g.vimwiki_markdown_link_ext = 1
-vim.g.vimwiki_url_maxsave = 0
-vim.g.vimwiki_global_ext = 0
-vim.g.vimwiki_folding = ''
-vim.g.vimwiki_list = {
-    wiki('~/.notes/zettel'),
-    wiki('~/.work/zettel'),
-}
-vim.g.vimwiki_key_mappings = {
-    table_mappings = 0,
-}
-
-remap("n", "<Leader>wo", "<cmd>!xdg-open http://localhost:8080/%:t:r.html<CR>", { noremap = true })
-
-function eskk(key, val)
-    vim.g['eskk#' .. key ] = val
-end
-
-eskk('start_completion_length', 2)
-vim.cmd [[
-let g:eskk#directory = $XDG_DATA_HOME . '/nvim/skk'
-let g:eskk#select_cand_keys = 'aoeuhtns'
-let g:eskk#show_annotation = 1
-let g:eskk#kakutei_when_unique_candidate = 1
-
-let g:skk_path = $XDG_DATA_HOME . '/nvim/skk'
-if finddir('/usr/share/skk')
-    let g:skk_path = '/usr/share/skk'
-endif
-let g:eskk#dictionary =       {'path': g:skk_path . '/skk-jisyo.s', }
-let g:eskk#large_dictionary = {'path': g:skk_path . '/SKK-JISYO.L'}
-]]
+require 'eskk'.setup({
+    start_completion_length = 2,
+    directory = vim.env.XDG_DATA_HOME .. '/nvim/skk',
+    select_cand_keys = 'aoeuhtns',
+    show_annotation = 1,
+    kakutei_when_unique_candidate = 1,
+})
