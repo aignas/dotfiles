@@ -214,6 +214,8 @@ vim.g.vimwiki_key_mappings = {
     table_mappings = 0,
 }
 
+remap("n", "<Leader>wo", "<cmd>!xdg-open http://localhost:8080/%:t:r.html<CR>", { noremap = true })
+
 function eskk(key, val)
     vim.g['eskk#' .. key ] = val
 end
