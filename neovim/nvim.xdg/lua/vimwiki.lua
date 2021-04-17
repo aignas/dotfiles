@@ -50,5 +50,5 @@ end
 
 return {
     setup = setup,
-    path = path,
+    wiki = wiki,
 }
