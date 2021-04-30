@@ -13,6 +13,8 @@ colors:
   primary:
     background: '0xfafafa'
     foreground: '0x111111'
+    #foreground: '0xfafafa'
+    #background: '0x111111'
 
   # Normal colors
   normal:
