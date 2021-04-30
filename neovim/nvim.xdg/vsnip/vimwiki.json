@@ -1,0 +1,8 @@
+{
+    "tags": {
+        "prefix": "tags",
+        "scope": "vimwiki",
+        "body": "---\ntags: [$0]\n---\n",
+       "description": "Tags for a vimwiki entry"
+    }
+}
