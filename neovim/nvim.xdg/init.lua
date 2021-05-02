@@ -56,7 +56,7 @@ require('packer').startup({function()
     }
 end,
 config = {
-    package_root = "/home/aignas/.config/nvim/pack",
+    package_root = vim.env.XDG_CONFIG_HOME .. "/nvim/pack",
     plugin_package = "packer.nvim",
 }})
 
