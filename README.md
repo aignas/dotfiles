@@ -16,8 +16,6 @@ Highlights:
 
 ```sh
 ... setup brew
-$ brew install coreutils # using realpath here
-
 $ git clone https://github.com/aignas/dotfiles ~/src/github/aignas/dotfiles
 $ ln -s ~/src/github/aignas/dotfiles ~/.dotfiles
 $ cd ~/.dotfiles

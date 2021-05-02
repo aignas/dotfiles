@@ -41,6 +41,23 @@ while test $# -gt 1; do
     shift
 done
 
+# realpath is a cross-platform way of getting the realpath. It is available on
+# Linuxes, but not MacOS and this version works on `/bin/sh` as per author's
+# claim.
+# Taken from https://stackoverflow.com/a/18443300
+realpath() {
+  local OURPWD=$PWD
+  cd "$(dirname "$1")"
+  local LINK=$(readlink "$(basename "$1")")
+  while [ "$LINK" ]; do
+    cd "$(dirname "$LINK")"
+    local LINK=$(readlink "$(basename "$1")")
+  done
+  local REALPATH="$PWD/$(basename "$1")"
+  cd "$OURPWD"
+  echo "$REALPATH"
+}
+
 src="$(realpath "$1")"
 
 # Check if we have a destination config file, which tells us where the
