@@ -12,8 +12,8 @@ packadd packer.nvim
 try
 
 lua << END
-local package_path_str = "/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/Users/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/aignas/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -34,96 +34,96 @@ end
 _G.packer_plugins = {
   ["completion-nvim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/completion-nvim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/completion-nvim"
   },
   ["eskk.vim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/eskk.vim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/eskk.vim"
   },
   fzf = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/fzf"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/fzf"
   },
   ["fzf.vim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/fzf.vim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/fzf.vim"
   },
   ["hive.vim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/hive.vim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/hive.vim"
   },
   ["lush.nvim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/lush.nvim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/lush.nvim"
   },
   ["markdown-preview.nvim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/markdown-preview.nvim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/markdown-preview.nvim"
   },
   ["nvim-lspconfig"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/nvim-lspconfig"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/nvim-lspconfig"
   },
   ["nvim-treesitter"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/nvim-treesitter"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/nvim-treesitter"
   },
   ["packer.nvim"] = {
     loaded = false,
     needs_bufread = false,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/opt/packer.nvim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/opt/packer.nvim"
   },
   ["rust.vim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/rust.vim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/rust.vim"
   },
   ["starlark.vim"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/starlark.vim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/starlark.vim"
   },
   ["vim-abolish"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-abolish"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-abolish"
   },
   ["vim-eunuch"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-eunuch"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-eunuch"
   },
   ["vim-fugitive"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-fugitive"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-fugitive"
   },
   ["vim-go"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-go"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-go"
   },
   ["vim-repeat"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-repeat"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-repeat"
   },
   ["vim-surround"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-surround"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-surround"
   },
   ["vim-unimpaired"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-unimpaired"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-unimpaired"
   },
   ["vim-vsnip"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-vsnip"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-vsnip"
   },
   ["vim-vsnip-integ"] = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vim-vsnip-integ"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-vsnip-integ"
   },
   vimtex = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vimtex"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vimtex"
   },
   vimwiki = {
     loaded = true,
-    path = "/home/aignas/.config/nvim/pack/packer.nvim/start/vimwiki"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vimwiki"
   }
 }
 

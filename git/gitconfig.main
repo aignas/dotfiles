@@ -32,6 +32,6 @@
     st = status
 
 [init]
-    templatedir = /home/aignas/.git-template-with-git-hooks
+    templatedir = /Users/aignas/.git-template-with-git-hooks
 
 # vim: ft=gitconfig

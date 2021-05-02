@@ -15,7 +15,11 @@ end
 
 vim.cmd [[packadd packer.nvim]]
 require('packer').startup({function()
-    use {'wbthomason/packer.nvim', opt = true}
+    use {
+        'wbthomason/packer.nvim',
+        branch = 'master',
+        opt = true,
+    }
 
     use 'rktjmp/lush.nvim'
 
