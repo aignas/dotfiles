@@ -1,3 +1,5 @@
+# defaults: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
+
 window:
   dynamic_padding: true
 selection:
@@ -37,9 +39,3 @@ colors:
     magenta: '0xc20078'
     cyan:    '0x00ffff'
     white:   '0xffffff'
-
-mouse_bindings:
-  - { mouse: Right,  action: SpawnNewInstance }
-
-key_bindings:
-  - { key: F11,      action: ToggleFullscreen }
