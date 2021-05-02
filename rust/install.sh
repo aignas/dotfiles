@@ -11,5 +11,4 @@ rustup component add clippy rustfmt \
 rustup default stable
 rustup update
 
-cargo install watchexec
 cargo install --git=https://github.com/jgavris/rs-git-fsmonitor.git
