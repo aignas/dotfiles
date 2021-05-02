@@ -16,7 +16,7 @@ fi
 if [[ -d "${XDG_CONFIG_HOME}/nvim/pack/minpac/start/gopher.vim/tools/bin" ]]; then
     export PATH="${PATH}:${XDG_CONFIG_HOME}/nvim/pack/minpac/start/gopher.vim/tools/bin"
 fi
-export EDITOR="nvim.appimage"
+export EDITOR="nvim"
 export SKIM_DEFAULT_COMMAND="git ls-tree -r --name-only HEAD || fd --type f ."
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000

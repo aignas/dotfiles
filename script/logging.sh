@@ -1,11 +1,10 @@
 #!/bin/bash
 
-now() { date +%s%N; }
+now() { date +%s; }
 export DOTFILES_START=${DOTFILES_START:-$(now)}
 
 log() {
-    timestamp=$((($(now) - DOTFILES_START) / 1000))
-    timestamp="$((timestamp / 1000)).$((timestamp % 1000))"
+    timestamp=$(($(now) - DOTFILES_START))
     local level=$1
     shift
     case "$level" in
