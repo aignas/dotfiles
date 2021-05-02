@@ -12,6 +12,9 @@ ok "brew: update"
 brew upgrade
 ok "brew: upgrade"
 
+brew tap homebrew/cask-fonts
+ok "brew: tap"
+
 debug "brew: install"
 brew install --HEAD neovim
 brew install \
@@ -21,6 +24,7 @@ brew install \
     exa \
     fd \
     font-hack \
+    gh \
     golang \
     htop \
     jq \
@@ -28,10 +32,8 @@ brew install \
     rust-analyzer \
     shellcheck \
     texlab \
-    texlive \
     tig \
     tmux \
     tree-sitter \
     watchman
-
 ok "brew: install"
