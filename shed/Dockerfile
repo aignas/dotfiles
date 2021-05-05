@@ -71,8 +71,8 @@ RUN apt-get update && \
 RUN git clone \
         https://github.com/aignas/dotfiles \
         /root/.dotfiles && \
-    stow -d /root/.dotfiles tmux zsh && \
     mkdir -p /root/.config && \
-    stow -d /root/.dotfiles -t /root/.config neovim
+    stow --dotfiles -d /root/.dotfiles tmux zsh && \
+    stow --dotfiles -d /root/.dotfiles -t /root/.config neovim
 
 COPY overlay/ /
