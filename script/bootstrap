@@ -44,7 +44,7 @@ source script/logging.sh
 echo ''
 
 setup_gitconfig() {
-    [ -f git/gitconfig.symlink ] && return
+    [ -f git/dot-gitconfig ] && return
 
     info 'setup gitconfig'
 
@@ -52,8 +52,6 @@ setup_gitconfig() {
     if [ "$(uname -s)" == "Darwin" ]; then
         git_credential='osxkeychain'
     fi
-
-    gitconfig_main=${DOTFILES_ROOT}/git/gitconfig.main
 
     user ' - What is your author name?'
     read -re git_authorname
@@ -63,23 +61,24 @@ setup_gitconfig() {
     sed -e "s|AUTHORNAME|$git_authorname|g" \
         -e "s|AUTHOREMAIL|$git_authoremail|g" \
         -e "s|GIT_CREDENTIAL_HELPER|$git_credential|g" \
-        -e "s|GITCONFIG_MAIN|$gitconfig_main|g" \
-        git/gitconfig.symlink.example >git/gitconfig.symlink
+        git/gitconfig.tmpl >git/dot-gitconfig
 
     ok 'gitconfig'
 }
 
 install_dotfiles() {
-    info 'installing dotfiles'
-    cmd=(script/link_dotfile)
-    [[ ${OVERWRITE_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --overwrite)
-    [[ ${BACKUP_ALL:-false} == "true" ]] && cmd=("${cmd[@]}" --backup)
-    find . -maxdepth 2 -name '*.symlink' -exec "${cmd[@]}" {} \;
-    find . -maxdepth 2 -name '*.xdg' -exec "${cmd[@]}" {} \;
+    stow --dotfiles \
+        -R zsh \
+        -R tmux \
+        -R git
+    stow --dotfiles \
+        --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
+        -R alacritty \
+        -R neovim
+    ok 'stow'
 }
 
 setup_gitconfig
-install_dotfiles
 
 info "installing dependencies"
 export DOTFILES="$DOTFILES_ROOT"
@@ -88,5 +87,7 @@ if "$DOTFILES_ROOT/script/install" 2>&1 | tee /tmp/dotfiles-dot; then
 else
     fail "error installing dependencies"
 fi
+
+install_dotfiles
 
 info 'All setup!'

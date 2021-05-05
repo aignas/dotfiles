@@ -1,0 +1,11 @@
+[user]
+    name = Ignas Anikevicius
+    email = anikevicius@gmail.com
+
+[credential]
+    helper = osxkeychain
+
+[include]
+    path = .gitconfig.main
+
+# vim: ft=gitconfig

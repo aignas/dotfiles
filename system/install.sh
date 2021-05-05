@@ -31,6 +31,7 @@ brew install \
     ripgrep \
     rust-analyzer \
     shellcheck \
+    stow \
     texlab \
     tig \
     tmux \

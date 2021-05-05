@@ -1,0 +1,7 @@
+--ignore='tpm'
+--ignore='install.sh'
+--ignore='\.git'
+--ignore='\.gitconfig'
+--ignore='gitconfig.tmpl'
+--ignore='README.*'
+-v

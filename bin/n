@@ -43,7 +43,7 @@ neuron() {
         )
     fi
 
-    exec sudo docker run \
+    exec docker run \
         --rm \
         --tty \
         --interactive \

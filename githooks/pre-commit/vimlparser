@@ -1,7 +1,7 @@
 #!/bin/bash
 
 readonly _ignored=(
-    neovim/nvim.xdg/plugin/packer_compiled.vim
+    neovim/nvim/plugin/packer_compiled.vim
 )
 
 set -eu
