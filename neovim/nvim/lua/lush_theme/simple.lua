@@ -1,53 +1,66 @@
 local lush = require('lush')
 
+-- base colors taken from https://xkcd.com/color/rgb/
+local black       = lush.hsl('#121212')
+local darkred     = lush.hsl('#840000')
+local darkgreen   = lush.hsl('#15b01a')
+local darkyellow  = lush.hsl('#d5b60a')
+local darkblue    = lush.hsl('#00035b')
+local darkmagenta = lush.hsl('#960056')
+local darkcyan    = lush.hsl('#0a888a')
+local gray        = lush.hsl('#c0c0c0')
+local darkgray    = lush.hsl('#808080')
+local red         = lush.hsl('#e50000')
+local green       = lush.hsl('#01ff07')
+local yellow      = lush.hsl('#ffff14')
+local blue        = lush.hsl('#0343df')
+local magenta     = lush.hsl('#c20078')
+local cyan        = lush.hsl('#00ffff')
+local white       = lush.hsl('#f0f0f0')
+
+local bg = white
+local fg = black
+
+-- more colors for git diff
+local lightgreen  = lush.hsl('#d1ffbd')
+local lightred    = lush.hsl('#fd3c06')
+local lightfg     = fg.lighten(20)
+local lightbg     = bg.darken(20)
+local lightyellow = yellow.lighten(40)
+
+-- color options
+if vim.o.background == 'dark' then
+    fg      = white
+    bg      = black
+    lightfg = fg.lighten(20)
+    lightbg = bg.darken(20)
+    lightyellow = yellow.darken(40)
+end
+
 return lush(function()
-    -- base colors taken from https://xkcd.com/color/rgb/
-    black       = lush.hsl('#000000')
-    darkred     = lush.hsl('#840000')
-    darkgreen   = lush.hsl('#15b01a')
-    darkyellow  = lush.hsl('#d5b60a')
-    darkblue    = lush.hsl('#00035b')
-    darkmagenta = lush.hsl('#960056')
-    darkcyan    = lush.hsl('#0a888a')
-    gray        = lush.hsl('#c0c0c0')
-    darkgray    = lush.hsl('#808080')
-    red         = lush.hsl('#e50000')
-    green       = lush.hsl('#01ff07')
-    yellow      = lush.hsl('#ffff14')
-    blue        = lush.hsl('#0343df')
-    magenta     = lush.hsl('#c20078')
-    cyan        = lush.hsl('#00ffff')
-    white       = lush.hsl('#ffffff')
-
-    -- more colors for git diff
-    lightgreen  = lush.hsl('#d1ffbd')
-    lightred    = lush.hsl('#fd3c06')
-    lightgray   = gray.lighten(50)
-    lightyellow = yellow.lighten(40)
-
     return {
         ColorColumn  { fg = "darkred" },
         Conceal      { gui = "italic" },
-        Cursor       { },
+        Cursor       { gui = "reverse"},
         lCursor      { Cursor },
         CursorIM     { Cursor },
         CursorColumn { Cursor },
         CursorLine   { },
         Directory    { gui = "bold" },
-        DiffAdd      { bg = lightgreen, },
-        DiffChange   { bg = lightgray },
+        DiffAdd      { bg = lightgreen, fg = black },
+        DiffChange   { bg = lightbg },
         DiffDelete   { bg = lightred },
         DiffText     { bg = lightyellow },
-        NonText      { fg = darkgray },
+        NonText      { bg = bg, fg = darkgray },
         EndOfBuffer  { NonText },
         TermCursor   { },
         TermCursorNC { },
-        ErrorMsg     { bg = white, fg = red, gui = "reverse" },
+        ErrorMsg     { bg = bg, fg = red, gui = "reverse" },
         VertSplit    { },
         Folded       { },
         FoldColumn   { },
         SignColumn   { },
-        IncSearch    { bg = green, fg = black },
+        IncSearch    { bg = green, fg = fg },
         Substitute   { },
         LineNr       { },
         CursorLineNr { },
@@ -56,7 +69,7 @@ return lush(function()
         MsgArea      { },
         MsgSeparator { },
         MoreMsg      { fg = magenta },
-        Normal       { },
+        Normal       { bg = bg, fg = fg },
         NormalFloat  { },
         NormalNC     { },
         Pmenu        { },
@@ -67,16 +80,16 @@ return lush(function()
         QuickFixLine { },
         Search       { bg = yellow, fg = black },
         SpecialKey   { },
-        SpellBad     { bg = black.lighten(83) },
-        SpellCap     { bg = black.lighten(83) },
-        SpellLocal   { bg = black.lighten(83) },
-        SpellRare    { bg = black.lighten(83) },
+        SpellBad     { bg = lightbg },
+        SpellCap     { bg = lightbg },
+        SpellLocal   { bg = lightbg },
+        SpellRare    { bg = lightbg },
         StatusLine   { gui = "reverse" },
         StatusLineNC { gui = "underline" },
         TabLine      { gui = "underline" },
         TabLineFill  { TabLine },
         TabLineSel   { gui = "reverse" },
-        Title        { },
+        Title        { gui = "bold" },
         Visual       { fg = darkcyan, gui = "reverse,bold" },
         VisualNOS    { },
         WarningMsg   { fg = red },
@@ -118,7 +131,7 @@ return lush(function()
         -- SpecialChar    { }, --  special character in a constant
         -- Tag            { }, --    you can use CTRL-] on this
         Delimiter      { }, --  character that needs attention
-        Comment        { fg = black.lighten(30), gui = "italic" },
+        Comment        { fg = lightfg, gui = "italic" },
         -- SpecialComment { }, -- special things inside a comment
         -- Debug          { }, --    debugging statements
 
@@ -154,7 +167,7 @@ return lush(function()
         -- TSError -> Error for example, so you do not have to define these unless
         -- you explicitly want to support Treesitter's improved syntax awareness.
 
-        TSError              { bg = lightred.lighten(80) }, -- For syntax/parser errors.
+        TSError              { bg = lightred.lighten(80), fg = black }, -- For syntax/parser errors.
         -- TSPunctDelimiter     { }, -- For delimiters ie: `.`
         TSPunctBracket       { }, -- For brackets and parens.
         -- TSPunctSpecial       { }, -- For special punctutation that does not fall in the catagories before.
@@ -191,7 +204,7 @@ return lush(function()
         -- TSAnnotation         { }, -- For C++/Dart attributes, annotations that can be attached to the code to denote some kind of meta information.
         -- TSText               { }, -- For strings considered text in a markup language.
         -- TSStrong             { }, -- For text to be represented with strong.
-        -- TSEmphasis           { }, -- For text to be represented with emphasis.
+        TSEmphasis           { gui = "italic" }, -- For text to be represented with emphasis.
         -- TSUnderline          { }, -- For text to be represented with an underline.
         -- TSTitle              { }, -- Text that is part of a title.
         -- TSLiteral            { }, -- Literal text.
