@@ -20,6 +20,7 @@ Options:
  -e, --edit     Open dotfiles directory for editing
  -h, --help     Show this help message and exti
  --no-push      Don't push the updated dotfiles repo
+ --pull-shed    pull-shed
  --no-gitconfig Don't setup gitconfig
 EOF
 }
@@ -28,6 +29,11 @@ while test $# -gt 0; do
     case "$1" in
     "-h" | "--help") print_help ;;
     "-e" | "--edit") exec e "${DOTFILES_ROOT}" ;;
+    "--pull-shed")
+        PULL_SHED=true
+        shift
+        continue
+        ;;
     "--no-push")
         NO_PUSH=true
         shift
@@ -47,7 +53,7 @@ while test $# -gt 0; do
     exit 0
 done
 
-# Update if successful
+# Pull a new version
 [[ -z ${NO_PUSH:-} ]] && {
     [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] &&
         fail "Commit the changes and try again."
@@ -64,6 +70,11 @@ info "Bootstrapping..."
 [[ -z ${NO_PUSH:-} ]] && {
     info "Pushing"
     git -C "${DOTFILES_ROOT}" push
+}
+
+[[ -z ${PULL_SHED:-} ]] || {
+    info "pulling shed"
+    docker pull aignas/shed:latest
 }
 
 exit 0
