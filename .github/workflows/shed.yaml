@@ -1,4 +1,4 @@
-name: CI
+name: Docker
 
 on:
   # Trigger the workflow on push or pull request,
@@ -11,25 +11,24 @@ on:
     - cron:  '0 7 * * 1'
 
 jobs:
-  Publish:
-    name: Publish docker image
+  publish:
     environment: prod
     runs-on: ubuntu-latest
 
     steps:
       -
-        name: Checkout
+        name: checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
       -
-        name: Login to DockerHub
+        name: login
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: build and push
         id: docker_build
         uses: docker/build-push-action@v2
         # https://github.com/marketplace/actions/build-and-push-docker-images#customizing
