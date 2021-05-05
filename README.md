@@ -1,5 +1,7 @@
 # Dotfiles
 
+* Shed: [![Docker](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml/badge.svg)](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml)
+
 Highlights:
 - `XDG_DIR` support.
 - logging for timing the installations.
