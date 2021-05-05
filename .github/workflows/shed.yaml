@@ -36,7 +36,7 @@ jobs:
           context: shed
           push: true
           no-cache: true
-          tags: user/app:latest
+          tags: aignas/shed:latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
