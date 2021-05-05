@@ -36,7 +36,7 @@ alias ll='exa -l --colour=never'
 alias la='exa -a --colour=never'
 alias vc='e ~/.config/nvim/init.lua'
 
-alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:debian"
+alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:latest"
 
 wexecall() {
     watchexec --clear --restart "$*"

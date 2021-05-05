@@ -1,6 +1,6 @@
 # Dotfiles
 
-* Shed: [![Docker](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml/badge.svg)](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml)
+* Tool shed: [![Docker](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml/badge.svg)](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml) [![Layers](https://img.shields.io/microbadger/layers/aignas/shed)](https://hub.docker.com/r/aignas/shed) [![Size](https://img.shields.io/docker/image-size/aignas/shed)](https://hub.docker.com/r/aignas/shed)
 
 Highlights:
 - `XDG_DIR` support.

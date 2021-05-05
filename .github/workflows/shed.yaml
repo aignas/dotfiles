@@ -1,11 +1,6 @@
 name: Docker
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  push:
-    branches:
-      - main
   schedule:
     # https://crontab.guru/#0_7_*_*_1
     - cron:  '0 7 * * 1'
