@@ -2,15 +2,12 @@
 
 Highlights:
 - `XDG_DIR` support.
-- `dotr --lint` to lint files in the repo.
 - logging for timing the installations.
 - dependency framework to run the install.sh files are run in a particular order.
 - some consistency checks of the configuration.
-- travis CI setup.
 - `dotr` script, which is used to update system and sync with the github repo.
   Run this every time every day at the start of your working routine.
-- Async information about the current git repository in the ZSH prompt without
-  any plugins.
+- Usage of `stow` for dotfile management.
 
 ## Install
 
@@ -46,16 +43,3 @@ thanks note by Zach:
 > dotfiles were an easy way to get into bash customization, and then to jump
 > ship to zsh a bit later. A decent amount of the code in these dotfiles stem
 > or are inspired from Ryan's original project.
-
-## Ideas on moving this to a monorepo
-
-This is using bazel for setting up and testing various things, because:
-* Some things need to be shell scripts and having a test runner is good.
-* Some things need to be golang and having the same command to build/test things is nice.
-* We can build docker images without docker.
-* We can build debian package if we need to.
-* If this works out, we may have this as a monorepo setup, because having a single repo for all of my things would be cool.  Possible structure:
-  * `<root>/dotfiles` - what this is now
-  * `<root>/blog` - anikevicius.lt blog
-  * `<root>/katas` - katas where I hone my coding skills
-  * `<root>/<some-project>` - Some go or rust project that I want to work on.
