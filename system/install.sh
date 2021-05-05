@@ -13,6 +13,7 @@ brew upgrade
 ok "brew: upgrade"
 
 brew tap homebrew/cask-fonts
+brew tap jgavris/rs-git-fsmonitor https://github.com/jgavris/rs-git-fsmonitor.git
 ok "brew: tap"
 
 debug "brew: install"
@@ -29,6 +30,7 @@ brew install \
     htop \
     jq \
     ripgrep \
+    rs-git-fsmonitor \
     rust-analyzer \
     shellcheck \
     stow \
