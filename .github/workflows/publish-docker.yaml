@@ -1,5 +1,7 @@
 name: Publish Docker image
 on:
+  push:
+  pull_request_target:
   release:
     types: [published]
 
