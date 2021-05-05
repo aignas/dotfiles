@@ -29,8 +29,8 @@ while test $# -gt 0; do
     case "$1" in
     "-h" | "--help") print_help ;;
     "-e" | "--edit") exec e "${DOTFILES_ROOT}" ;;
-    "--pull-shed")
-        PULL_SHED=true
+    "--no-pull-shed")
+        NO_PULL_SHED=true
         shift
         continue
         ;;
@@ -54,27 +54,27 @@ while test $# -gt 0; do
 done
 
 # Pull a new version
-[[ -z ${NO_PUSH:-} ]] && {
+if [[ -z ${NO_PUSH:-} ]]; then
     [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] &&
         fail "Commit the changes and try again."
     info "Rebasing on master"
     git -C "${DOTFILES_ROOT}" pull --rebase
     info "Updating submodules"
     git -C "${DOTFILES_ROOT}" submodule update --recursive
-}
+fi
 
 info "Bootstrapping..."
-"${DOTFILES_ROOT}/script/bootstrap" --overwrite
+"${DOTFILES_ROOT}/script/bootstrap"
 
 # Update if successful
-[[ -z ${NO_PUSH:-} ]] && {
+if [[ -z ${NO_PUSH:-} ]]; then
     info "Pushing"
     git -C "${DOTFILES_ROOT}" push
-}
+fi
 
-[[ -z ${PULL_SHED:-} ]] || {
+if [[ -z ${NO_PULL_SHED:-} ]]; then
     info "pulling shed"
     docker pull aignas/shed:latest
-}
+fi
 
 exit 0

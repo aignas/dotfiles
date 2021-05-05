@@ -12,9 +12,6 @@ bootstrap -- dotfiles management
 Usage: script/bootstrap [options]
 
 Options:
-  -o, --overwrite Replace the existing dotfiles with dotfile symlinks
-  -b, --backup    Backup the existing dotfiles before creating dotfile symlinks
-  -s, --skip      Skip the existing dotfiles
   -h, --help      Show this help message and exit
 EOF
 }
@@ -25,8 +22,6 @@ while test $# -gt 0; do
         print_help
         exit
         ;;
-    "-o" | "--overwrite") OVERWRITE_ALL=true ;;
-    "-b" | "--backup") BACKUP_ALL=true ;;
     *)
         echo "Invalid option: $1"
         print_help
