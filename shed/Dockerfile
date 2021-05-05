@@ -6,13 +6,15 @@ RUN apt-get update && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-file \
         build-essential \
-        stow \
         busybox \
         clang \
         cloc \
         cowbuilder \
         cowsay \
+        direnv \
         dropbear-initramfs \
+        exa \
+        fd-find \
         gdb \
         golang \
         graphicsmagick \
@@ -41,6 +43,7 @@ RUN apt-get update && \
         sdparm \
         shellcheck \
         sloccount \
+        stow \
         strace \
         sudo \
         tcpdump \
@@ -76,3 +79,5 @@ RUN git clone \
     stow --dotfiles -d /root/.dotfiles -t /root/.config neovim
 
 COPY overlay/ /
+
+CMD zsh
