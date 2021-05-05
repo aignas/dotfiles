@@ -59,9 +59,9 @@ RUN apt-get update && \
         xinetd \
         youtube-dl \
         zsh \
-        wireguard
-
-RUN systemctl disable \
+        wireguard && \
+    \
+    systemctl disable \
         apt-daily-upgrade.timer apt-daily.timer \
         containerd.service \
         dnsmasq.service \
@@ -79,7 +79,8 @@ RUN systemctl disable \
     git clone \
         https://github.com/aignas/dotfiles \
         /root/.dotfiles && \
-    stow -d /root/.dotfiles ctags tmux vim && \
+    stow -d /root/.dotfiles tmux zsh && \
+    stow -d /root/.dotfiles/config neovim && \
     \
     apt-file update
 
