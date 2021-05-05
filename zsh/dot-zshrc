@@ -67,7 +67,7 @@ cargodocw () {
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
-PROMPT='%~ %B$(git rev-parse --abbrev-ref HEAD 2>/dev/null|| :)%b
+PROMPT='%n@${${(%):-%m}#1} %~ %B$(git rev-parse --abbrev-ref HEAD 2>/dev/null|| :)%b
 %B%(!.#.$)%b '
 
 # initialize autocomplete here, otherwise functions won't be loaded
