@@ -1,0 +1,19 @@
+#!/bin/sh
+
+cd "$(dirname $0)/.."
+
+stow --dotfiles -R stow "$@"
+
+echo "stow: dotfiles"
+stow --dotfiles \
+    -R git \
+    -R tmux \
+    -R zsh \
+    "$@"
+
+echo "stow: XDG config"
+stow --dotfiles \
+    --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
+    -R alacritty \
+    -R neovim \
+    "$@"

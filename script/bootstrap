@@ -48,29 +48,14 @@ setup_gitconfig() {
         git_credential='osxkeychain'
     fi
 
-    user ' - What is your author name?'
-    read -re git_authorname
-    user ' - What is your author email?'
+    user ' - Email to use for commits by default?'
     read -re git_authoremail
 
-    sed -e "s|AUTHORNAME|$git_authorname|g" \
-        -e "s|AUTHOREMAIL|$git_authoremail|g" \
+    sed -e "s|AUTHOREMAIL|$git_authoremail|g" \
         -e "s|GIT_CREDENTIAL_HELPER|$git_credential|g" \
-        git/gitconfig.tmpl >git/dot-gitconfig
+        git/gitconfig.tmpl >git/dot-gitconfig.local
 
     ok 'gitconfig'
-}
-
-install_dotfiles() {
-    stow --dotfiles \
-        -R zsh \
-        -R tmux \
-        -R git
-    stow --dotfiles \
-        --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
-        -R alacritty \
-        -R neovim
-    ok 'stow'
 }
 
 setup_gitconfig
@@ -83,6 +68,6 @@ else
     fail "error installing dependencies"
 fi
 
-install_dotfiles
+${DOTFILES}/bin/restow
 
 info 'All setup!'

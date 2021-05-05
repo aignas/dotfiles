@@ -75,6 +75,7 @@ RUN git clone \
         https://github.com/aignas/dotfiles \
         /root/.dotfiles && \
     mkdir -p /root/.config && \
+    stow --dotfiles -d /root/.dotfiles stow && \
     stow --dotfiles -d /root/.dotfiles tmux zsh && \
     stow --dotfiles -d /root/.dotfiles -t /root/.config neovim
 

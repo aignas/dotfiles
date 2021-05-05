@@ -1,11 +1,43 @@
 [user]
     name = Ignas Anikevicius
-    email = anikevicius@gmail.com
 
-[credential]
-    helper = osxkeychain
+[color]
+    status = auto
+    branch = auto
+    interactive = auto
+    diff = auto
+    ui = true
+
+[push]
+    default = matching
+
+[pull]
+    ff = only
+
+[core]
+    whitespace = fix,-indent-with-non-tab,trailing-space
+    fsmonitor = rs-git-fsmonitor
+
+[diff]
+    algorithm = patience
+
+[difftool]
+    prompt = false
+
+[alias]
+    aa = add -A
+    au = add -u
+    br = branch
+    ca = commit --amend --no-edit
+    cc = commit
+    cm = commit -a
+    co = checkout
+    st = status
+
+[init]
+    templatedir = /Users/aignas/.git-template-with-git-hooks
 
 [include]
-    path = .gitconfig.main
+    path = .gitconfig.local
 
 # vim: ft=gitconfig

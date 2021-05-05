@@ -2,9 +2,9 @@
 # a template.
 
 [user]
-    email = AUTHOREMAIL
+    email = anikevicius@gmail.com
 
 [credential]
-    helper = GIT_CREDENTIAL_HELPER
+    helper = osxkeychain
 
 # vim: ft=gitconfig
