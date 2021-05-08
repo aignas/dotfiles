@@ -45,7 +45,7 @@ function setup(cfg)
 
     -- add extra
     _setup(cfg)
-    remap("n", "<Leader>wo", "<cmd>!xdg-open http://localhost:8080/%:t:r.html<CR>", { noremap = true })
+    remap("n", "<Leader>wo", "<cmd>!open http://localhost:8080/%:t:r.html<CR>", { noremap = true })
 
     vim.cmd [[autocmd FileType vimwiki setlocal spell]]
 end
