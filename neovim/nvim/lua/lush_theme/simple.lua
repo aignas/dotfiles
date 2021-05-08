@@ -29,6 +29,10 @@ local lightbg     = bg.darken(20)
 local lightyellow = yellow.lighten(40)
 
 -- color options
+if vim.o.background == nil then
+    vim.o.background = 'light'
+end
+
 if vim.o.background == 'dark' then
     fg      = white
     bg      = black
