@@ -6,6 +6,7 @@ stow --dotfiles -R stow "$@"
 
 echo "stow: dotfiles"
 stow --dotfiles \
+    --target="${HOME}" \
     -R git \
     -R tmux \
     -R zsh \
