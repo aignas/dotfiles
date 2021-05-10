@@ -6,55 +6,63 @@ if vim.env.XDG_DATA_HOME == nil then
 end
 
 vim.cmd [[packadd packer.nvim]]
-require('packer').startup({function()
-    use {
-        'wbthomason/packer.nvim',
-        branch = 'master',
-        opt = true,
+require('packer').startup({
+    function()
+        use {
+            'wbthomason/packer.nvim',
+            branch = 'master',
+            opt = true,
+        }
+
+        use 'rktjmp/lush.nvim'
+
+        use 'tpope/vim-abolish'
+        use 'tpope/vim-eunuch'
+        use 'tpope/vim-fugitive'
+        use 'tpope/vim-repeat'
+        use 'tpope/vim-surround'
+        use 'tpope/vim-unimpaired'
+
+        use {
+            'junegunn/fzf.vim',
+            requires = {
+                {
+                    'junegunn/fzf',
+                    run = [[./install --xdg --no-update-rc --completion --key-bindings]]
+                }
+            }
+        }
+
+        use 'neovim/nvim-lspconfig'
+        use 'hrsh7th/vim-vsnip'
+        use 'hrsh7th/vim-vsnip-integ'
+        use 'sbdchd/neoformat'
+
+        use 'lervag/vimtex'
+        use 'autowitch/hive.vim'
+        use 'cappyzawa/starlark.vim'
+        use 'fatih/vim-go'
+        use 'nvim-lua/completion-nvim'
+        use 'rust-lang/rust.vim'
+        use 'tyru/eskk.vim'
+        use {
+            'vimwiki/vimwiki',
+            branch = 'dev',
+        }
+        use {
+            'nvim-treesitter/nvim-treesitter',
+            run = [[:TSUpdate]],
+        }
+        use {
+            'iamcco/markdown-preview.nvim',
+            run = [[:call mkdp#util#install()]]
+        }
+    end,
+    config = {
+        package_root = vim.env.XDG_CONFIG_HOME .. "/nvim/pack",
+        plugin_package = "packer.nvim"
     }
-
-    use 'rktjmp/lush.nvim'
-
-    use 'tpope/vim-abolish'
-    use 'tpope/vim-eunuch'
-    use 'tpope/vim-fugitive'
-    use 'tpope/vim-repeat'
-    use 'tpope/vim-surround'
-    use 'tpope/vim-unimpaired'
-
-    use {
-        'junegunn/fzf.vim',
-        requires = {{
-            'junegunn/fzf',
-            run = [[./install --xdg --no-update-rc --completion --key-bindings]],
-        }}
-    }
-
-    use 'neovim/nvim-lspconfig'
-    use 'hrsh7th/vim-vsnip'
-    use 'hrsh7th/vim-vsnip-integ'
-
-    use 'lervag/vimtex'
-    use 'autowitch/hive.vim'
-    use 'cappyzawa/starlark.vim'
-    use 'fatih/vim-go'
-    use 'nvim-lua/completion-nvim'
-    use 'rust-lang/rust.vim'
-    use 'tyru/eskk.vim'
-    use 'vimwiki/vimwiki'
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = [[:TSUpdate]],
-    }
-    use {
-        'iamcco/markdown-preview.nvim',
-        run = [[:call mkdp#util#install()]],
-    }
-end,
-config = {
-    package_root = vim.env.XDG_CONFIG_HOME .. "/nvim/pack",
-    plugin_package = "packer.nvim",
-}})
+})
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'

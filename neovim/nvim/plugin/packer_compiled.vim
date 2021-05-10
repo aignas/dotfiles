@@ -99,6 +99,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/markdown-preview.nvim"
   },
+  neoformat = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/neoformat"
+  },
   ["nvim-lspconfig"] = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/nvim-lspconfig"
