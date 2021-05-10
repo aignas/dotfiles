@@ -5,14 +5,6 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
--- TODO @aignas 2021-03-28: once I have a working luarocks setup on my Linux
--- mashine, I can use the `posix` support to check for directories.
---
--- require 'posix'
--- function isdir(fn)
---     return (posix.stat(fn, "type") == 'directory')
--- end
-
 vim.cmd [[packadd packer.nvim]]
 require('packer').startup({function()
     use {
