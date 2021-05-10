@@ -17,10 +17,7 @@ Usage: $(basename "$0") [options]
 Default is to update the dotfiles and setup the system for work.
 
 Options:
- -e, --edit     Open dotfiles directory for editing
  -h, --help     Show this help message and exti
- --no-push      Don't push the updated dotfiles repo
- --pull-shed    pull-shed
  --no-gitconfig Don't setup gitconfig
 EOF
 }
@@ -28,14 +25,8 @@ EOF
 while test $# -gt 0; do
     case "$1" in
     "-h" | "--help") print_help ;;
-    "-e" | "--edit") exec e "${DOTFILES_ROOT}" ;;
-    "--no-pull-shed")
-        NO_PULL_SHED=true
-        shift
-        continue
-        ;;
-    "--no-push")
-        NO_PUSH=true
+    "--no-pull")
+        NO_PULL=true
         shift
         continue
         ;;
@@ -54,7 +45,7 @@ while test $# -gt 0; do
 done
 
 # Pull a new version
-if [[ -z ${NO_PUSH:-} ]]; then
+if [[ -z ${NO_PULL:-} ]]; then
     [[ -n "$(git -C "${DOTFILES_ROOT}" diff)" ]] &&
         fail "Commit the changes and try again."
     info "Rebasing on master"
@@ -66,15 +57,7 @@ fi
 info "Bootstrapping..."
 "${DOTFILES_ROOT}/script/bootstrap"
 
-# Update if successful
-if [[ -z ${NO_PUSH:-} ]]; then
-    info "Pushing"
-    git -C "${DOTFILES_ROOT}" push
-fi
-
-if [[ -z ${NO_PULL_SHED:-} ]]; then
-    info "pulling shed"
-    docker pull aignas/shed:latest
-fi
+info "pulling shed"
+docker pull aignas/shed:latest
 
 exit 0
