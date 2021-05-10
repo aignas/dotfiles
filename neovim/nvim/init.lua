@@ -177,7 +177,7 @@ local on_attach = function(client, bufnr)
 end
 
 local nvim_lsp = require('lspconfig')
-local servers = {'gopls', 'rust_analyzer', 'sqls', 'texlab'}
+local servers = {'gopls', 'pyls', 'rust_analyzer', 'sqls', 'texlab'}
 for _, lsp in ipairs(servers) do nvim_lsp[lsp].setup {on_attach = on_attach} end
 
 vim.g.tex_flavor = "latex"
@@ -190,13 +190,8 @@ vimwiki.setup({
     url_maxsave = 0,
     global_ext = 0,
     folding = '',
-    key_mappings = {
-        table_mappings = 0,
-    },
-    list = {
-        vimwiki.wiki('~/.notes/zettel'),
-        vimwiki.wiki('~/.work/zettel'),
-    },
+    key_mappings = {table_mappings = 0},
+    list = {vimwiki.wiki('~/.notes/zettel'), vimwiki.wiki('~/.work/zettel')}
 })
 
 require'eskk'.setup({
