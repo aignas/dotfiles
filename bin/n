@@ -8,15 +8,25 @@ die() {
 }
 
 commit() {
+    local -r dir="$1"
+    shift
+
     msg="$*"
     if [ $# -eq 0 ]; then
         msg=${1:-snapshot}
     fi
 
-    git -C ~/.notes add -A .
-    git -C ~/.notes commit -am "${msg}"
-    git -C ~/.notes pull origin main --rebase
-    git -C ~/.notes push -u origin main
+    if git diff --cached --exit-code HEAD^ > /dev/null; then
+        echo "commiting changes: $(basename $dir)"
+    else
+        echo "no changes: $(basename $dir)"
+        return 1
+    fi
+
+    git -C "$dir" add -A .
+    git -C "$dir" commit -am "${msg}"
+    git -C "$dir" pull origin main --rebase || :
+    git -C "$dir" push -u origin main || :
 }
 
 notes_dir() {
@@ -80,18 +90,10 @@ main() {
     command="$1"; shift
 
     case "$command" in
-        serve|neuron)
-            neuron "$@"
-            ;;
-        commit)
-            commit "$@"
-            ;;
-        rename)
-            rename "$@"
-            ;;
-        *)
-            die unknown command "$command"
-            ;;
+        serve|neuron)   neuron "$@" ;;
+        commit)         commit ~/.notes "$@" || commit ~/.work "$@" ;;
+        rename)         rename "$@" ;;
+        *)              die unknown command "$command" ;;
     esac
 }
 
