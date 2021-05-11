@@ -38,5 +38,6 @@ brew install \
     tig \
     tmux \
     tree-sitter \
-    watchman
+    watchman \
+    zola
 ok "brew: install"
