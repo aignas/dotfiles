@@ -191,7 +191,10 @@ vimwiki.setup({
     global_ext = 0,
     folding = '',
     key_mappings = {table_mappings = 0},
-    list = {vimwiki.wiki('~/.notes/zettel'), vimwiki.wiki('~/.work/zettel')}
+    list = {
+        vimwiki.wiki('personal', '~/.notes/zettel'),
+        vimwiki.wiki('work', '~/.work/zettel'),
+    }
 })
 
 require'eskk'.setup({

@@ -11,7 +11,20 @@ fi
 ${DIR}/venv/bin/pip install --upgrade pip setuptools
 ${DIR}/venv/bin/pip install -r python/requirements.txt
 
-for i in pyls; do
+for i in \
+    pyls \
+    pylint \
+    pyflakes \
+    pydocstyle \
+    pycodestyle \
+    yapf \
+    pyreverse \
+    isort-identify-imports \
+    isort \
+    flake8 \
+    epylint \
+    autopep8
+do
     cat <<EOF >"tools/$i"
 #!/bin/bash
 

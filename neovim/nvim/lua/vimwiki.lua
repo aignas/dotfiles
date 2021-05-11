@@ -6,8 +6,9 @@ local function _setup(cfg)
     end
 end
 
-function wiki(path, opts)
+function wiki(name, path, opts)
     cfg = {
+        name                = name,
         path                = path,
         syntax              = 'markdown',
         index               = 'index',
