@@ -16,11 +16,11 @@ commit() {
         msg=${1:-snapshot}
     fi
 
-    if git diff --cached --exit-code HEAD^ > /dev/null; then
-        echo "commiting changes: $(basename $dir)"
-    else
+    if git -C "$dir" diff --exit-code >/dev/null; then
         echo "no changes: $(basename $dir)"
         return 1
+    else
+        echo "commiting changes: $(basename $dir)"
     fi
 
     git -C "$dir" add -A .
