@@ -149,7 +149,7 @@ vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
 local on_attach = function(client, bufnr)
     require('completion').on_attach()
 
-    vim.cmd [[autocmd BufWritePre *.{rs,go,lua} lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+    vim.cmd [[autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)]]
 
     local function remap(key, cmd)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', key, cmd,
