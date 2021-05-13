@@ -25,7 +25,8 @@ local fg = black
 local lightgreen  = lush.hsl('#d1ffbd')
 local lightred    = lush.hsl('#fd3c06')
 local lightfg     = fg.lighten(20)
-local lightbg     = bg.darken(20)
+local strongbg    = bg.darken(10)
+local strongerbg  = bg.darken(20)
 local lightyellow = yellow.lighten(40)
 
 -- color options
@@ -34,10 +35,11 @@ if vim.o.background == nil then
 end
 
 if vim.o.background == 'dark' then
-    fg      = white
-    bg      = black
-    lightfg = fg.lighten(20)
-    lightbg = bg.darken(20)
+    fg          = white
+    bg          = black
+    lightfg     = fg.lighten(20)
+    strongbg    = bg.lighten(10)
+    strongerbg  = bg.lighten(20)
     lightyellow = yellow.darken(40)
 end
 
@@ -52,7 +54,7 @@ return lush(function()
         CursorLine   { },
         Directory    { gui = "bold" },
         DiffAdd      { bg = lightgreen, fg = black },
-        DiffChange   { bg = lightbg },
+        DiffChange   { bg = strongerbg },
         DiffDelete   { bg = lightred },
         DiffText     { bg = lightyellow },
         NonText      { bg = bg, fg = darkgray },
@@ -76,18 +78,18 @@ return lush(function()
         Normal       { bg = bg, fg = fg },
         NormalFloat  { },
         NormalNC     { },
-        Pmenu        { },
-        PmenuSel     { },
-        PmenuSbar    { },
-        PmenuThumb   { },
+        Pmenu        { bg = strongerbg },
+        PmenuSel     { bg = strongbg, gui = "bold" },
+        PmenuSbar    { bg = strongerbg },
+        PmenuThumb   { bg = bg },
         Question     { },
         QuickFixLine { },
         Search       { bg = yellow, fg = black },
         SpecialKey   { },
-        SpellBad     { bg = lightbg },
-        SpellCap     { bg = lightbg },
-        SpellLocal   { bg = lightbg },
-        SpellRare    { bg = lightbg },
+        SpellBad     { bg = strongerbg },
+        SpellCap     { bg = strongerbg },
+        SpellLocal   { bg = strongerbg },
+        SpellRare    { bg = strongerbg },
         StatusLine   { gui = "reverse" },
         StatusLineNC { gui = "underline" },
         TabLine      { gui = "underline" },
