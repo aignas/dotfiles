@@ -18,30 +18,29 @@ local magenta     = lush.hsl('#c20078')
 local cyan        = lush.hsl('#00ffff')
 local white       = lush.hsl('#f0f0f0')
 
-local bg = white
-local fg = black
 
 -- more colors for git diff
 local lightgreen  = lush.hsl('#d1ffbd')
 local lightred    = lush.hsl('#fd3c06')
+
+local fg          = white
+local bg          = lush.hsl('#3a3a3a')
 local lightfg     = fg.lighten(20)
-local strongbg    = bg.darken(10)
-local strongerbg  = bg.darken(20)
-local lightyellow = yellow.lighten(40)
+local strongbg    = bg.lighten(10)
+local strongerbg  = bg.lighten(20)
+local lightyellow = yellow.darken(40)
+
 
 -- color options
-if vim.o.background == nil then
-    vim.o.background = 'light'
+if vim.o.background == 'light' then
+     bg = white
+     fg = black
+     lightfg     = fg.lighten(20)
+     strongbg    = bg.darken(10)
+     strongerbg  = bg.darken(20)
+     lightyellow = yellow.lighten(40)
 end
 
-if vim.o.background == 'dark' then
-    fg          = white
-    bg          = black
-    lightfg     = fg.lighten(20)
-    strongbg    = bg.lighten(10)
-    strongerbg  = bg.lighten(20)
-    lightyellow = yellow.darken(40)
-end
 
 return lush(function()
     return {

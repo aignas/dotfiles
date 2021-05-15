@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Light switch for my terminal
+
+theme=light
+case ${1:-} in
+    light|l)
+        ;;
+    dark|d)
+        theme=dark
+        ;;
+    *)
+        echo "unknown theme: $*"
+        exit 1
+        ;;
+esac
+
+cd "$(dirname "$0")"/../alacritty/alacritty
+
+{
+    sed -n '/^colors:/q;p' alacritty.yml
+    cat ${theme}.yml
+} > alacritty.yml

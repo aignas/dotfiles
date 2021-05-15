@@ -80,7 +80,8 @@ vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 
 local remap = vim.api.nvim_set_keymap
 remap("n", "<Leader>b", "<CMD>Buffers<CR>", {noremap = true})
-remap("n", "<Leader>f", "<CMD>Files<CR>", {noremap = true})
+remap("n", "<Leader>f", "<CMD>GitFiles<CR>", {noremap = true})
+remap("n", "<Leader>F", "<CMD>Files<CR>", {noremap = true})
 remap("n", "<Leader>e", ":e %:h/", {noremap = true})
 remap("n", "<Leader>ss", "<CMD>Gstatus<CR>", {noremap = true})
 remap("n", "<Leader>gg", ":!tdd ", {noremap = true})
@@ -123,6 +124,7 @@ require'nvim-treesitter.configs'.setup {
 
 vim.cmd [[
 set guioptions=ag termguicolors lazyredraw
+set background=light
 colorscheme simple
 
 set diffopt+=internal,algorithm:patience
@@ -202,5 +204,11 @@ require'eskk'.setup({
     directory = vim.env.XDG_DATA_HOME .. '/nvim/skk',
     select_cand_keys = 'aoeuhtns',
     show_annotation = 1,
-    kakutei_when_unique_candidate = 1
+    kakutei_when_unique_candidate = 1,
+    log_cmdline_level = 2,
+    log_file_level = 4,
+    server = {
+        host = '0.0.0.0',
+        port = 1178
+    }
 })
