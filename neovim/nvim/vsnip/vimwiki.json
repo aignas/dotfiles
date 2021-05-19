@@ -1,8 +1,14 @@
 {
-    "tags": {
-        "prefix": "tags",
-        "scope": "vimwiki",
-        "body": "---\ntags: [$0]\n---\n",
-       "description": "Tags for a vimwiki entry"
-    }
+  "tags": {
+    "prefix": "tags",
+    "scope": "vimwiki",
+    "body": "---\ntags: [$0]\n---\n",
+    "description": "Tags for a vimwiki entry"
+  },
+  "td": {
+    "prefix": "td",
+    "scope": "vimwiki",
+    "body": "# $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE: ",
+    "description": "Heading for the diary entry"
+  }
 }
