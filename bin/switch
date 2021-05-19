@@ -2,22 +2,36 @@
 #
 # Light switch for my terminal
 
-theme=light
-case ${1:-} in
-light | l) ;;
+alacritty() {
+    local -r theme="$1"
+    (
+        cd alacritty/alacritty
 
-dark | d)
-    theme=dark
-    ;;
-*)
-    echo "unknown theme: $*"
-    exit 1
-    ;;
-esac
+        cp alacritty.yml alacritty.yml.bak
+        trap 'rm alacritty.yml.bak' EXIT
+        {
+            sed -n '/^colors:/q;p' alacritty.yml.bak
+            cat ${theme}.yml
+        } >alacritty.yml
+    )
+}
 
-cd "$(dirname "$0")"/../alacritty/alacritty
+main() {
+    theme=light
+    case ${1:-} in
+    light | l) ;;
 
-{
-    sed -n '/^colors:/q;p' alacritty.yml
-    cat ${theme}.yml
-} >alacritty.yml
+    dark | d)
+        theme=dark
+        ;;
+    *)
+        echo "unknown theme: $*"
+        exit 1
+        ;;
+    esac
+
+    cd "$(dirname "$0")"/..
+    alacritty "$theme"
+}
+
+main "$@"
