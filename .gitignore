@@ -1,7 +1,2 @@
-git/gitconfig.symlink
-
-# Ignore local gitconfig
-.gitconfig
-
 # Ignore the /tools dir, where we are installing various tools locally
 /tools
