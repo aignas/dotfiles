@@ -37,9 +37,9 @@ notes_dir() {
 
 neuron() {
     dir="$(notes_dir notes)"
-    if [[ "$#" != 0 && "$1" == --dir ]]; then
-        dir="$(notes_dir "$2")"
-        shift; shift
+    if [[ "$#" != 0 && "$1" == --work ]]; then
+        dir="$(notes_dir "work")"
+        shift
     fi
 
     args=($@)
