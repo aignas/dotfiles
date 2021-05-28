@@ -8,7 +8,7 @@
   "td": {
     "prefix": "td",
     "scope": "vimwiki",
-    "body": "# $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE: ",
+    "body": "# $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE: $0\n\n[TODO notes](todo.md)\n",
     "description": "Heading for the diary entry"
   }
 }
