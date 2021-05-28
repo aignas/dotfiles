@@ -4,6 +4,13 @@ cd "$(dirname $0)/.."
 
 stow --dotfiles -R stow "$@"
 
+echo "stow: bin"
+mkdir -p "${HOME}/bin"
+stow \
+    --target="${HOME}/bin" \
+    -R bin \
+    "$@"
+
 echo "stow: dotfiles"
 stow --dotfiles \
     --target="${HOME}" \
