@@ -3,7 +3,7 @@
 set -oe pipefail
 
 # depends on having this script in the path
-export DOTFILES_ROOT="${DOTFILES_ROOT:-$(command -v "$0" | xargs dirname)/..}"
+export DOTFILES_ROOT="${DOTFILES_ROOT:-${DOTFILES:-$(command -v "$0" | xargs dirname)/..}}"
 cd "${DOTFILES_ROOT}"
 # shellcheck source=/dev/null
 source "./script/logging.sh"
