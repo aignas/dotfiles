@@ -5,7 +5,7 @@ set -o vi
 export DOTFILES="$HOME/.dotfiles"
 export GOPATH="${HOME}/gocode"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-export PATH="${GOENV_ROOT}/bin:${GOPATH}/bin:${DOTFILES}/tools:${DOTFILES}/bin:${PATH}"
+export PATH="${GOENV_ROOT}/bin:${GOPATH}/bin:${DOTFILES}/tools:${PATH}"
 if [[ -d "${HOME}/bin" ]]; then
     export PATH="${HOME}/bin:$PATH"
 fi
