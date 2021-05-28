@@ -77,7 +77,7 @@ rename() {
                 exit 1
             fi
 
-            rg "$1" -l zettel | xargs sed -i "s/($1)/($2)/g"
+            rg "$1" -l zettel | xargs gsed -i "s/($1)/($2)/g"
             mv "zettel/$1.md" "zettel/$2.md"
             git add -A zettel
             git commit -m "Rename: $1 -> $2"
