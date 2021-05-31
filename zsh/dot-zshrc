@@ -13,7 +13,10 @@ if [[ -d "${HOME}/.local/bin" ]]; then
     export PATH="${HOME}/.local/bin:$PATH"
 fi
 
-export EDITOR="nvim"
+export EDITOR="vim"
+if type nvim >/dev/null; then
+    export EDITOR="nvim"
+fi
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
@@ -33,9 +36,11 @@ alias gs='git status --short --branch --show-stash'
 if type fdfind >/dev/null; then
     alias fd='fdfind --color=never'
 fi
-alias ls='exa --colour=never'
-alias ll='exa -l --colour=never'
-alias la='exa -a --colour=never'
+if type exa >/dev/null; then
+    alias ls='exa --colour=never'
+fi
+alias ll='ls -l'
+alias la='ls -a'
 alias vc='e ~/.config/nvim/init.lua'
 
 alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:latest"
