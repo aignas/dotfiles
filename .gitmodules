@@ -1,5 +1,5 @@
-[submodule "tmux/tpm"]
-	path = tmux/tpm
+[submodule "tmux/dot-tmux/plugins/tpm"]
+	path = tmux/dot-tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
 	branch = master
 [submodule "neovim/nvim/pack/packer.nvim/opt/packer.nvim"]
