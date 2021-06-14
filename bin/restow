@@ -8,8 +8,11 @@ _stow() {
     #stow 2>/dev/null
 }
 
-if [[ "$(_stow -V)" =~ "2.2.2" ]] then
+if [[ "$(_stow -V)" =~ "2.2.2" ]]; then
     echo "stow: legacy"
+    pushd legacy
+    ./refresh.sh
+    popd
     _stow \
         --target="${HOME}" \
         -R legacy \
