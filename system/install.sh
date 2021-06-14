@@ -54,14 +54,6 @@ _setup_deb() {
         htop \
         jq \
         less \
-        lsof \
-        lua5.2 \
-        lua5.2-doc \
-        lvm2 \
-        lynx \
-        man-db \
-        manpages \
-        manpages-dev \
         rsync \
         shellcheck \
         stow \
