@@ -48,5 +48,5 @@ _setup_mac() {
 
 if [ "$(uname -s)" == "Darwin" ]; then
     _setup_mac
-    return
+    exit 0
 fi
