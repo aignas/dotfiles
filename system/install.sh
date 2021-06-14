@@ -47,8 +47,6 @@ _setup_mac() {
 }
 
 _setup_deb() {
-  sudo apt-get update && \
-    \
     env DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
         direnv \
         htop \

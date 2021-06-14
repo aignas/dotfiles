@@ -35,7 +35,7 @@ _install() {
 
     cd "\$(dirname "\$0")"/..
     exec ${DIR}/venv/bin/$i "\$@"
-    EOF
+EOF
         chmod +x "tools/$i"
     done
 }
