@@ -78,6 +78,8 @@ vim.g.mapleader = ','
 vim.g.maplocalleader = '-'
 vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 
+vim.g.neoformat_run_all_formatters = 1
+
 local remap = vim.api.nvim_set_keymap
 remap("n", "<Leader>b", "<CMD>Buffers<CR>", {noremap = true})
 remap("n", "<Leader>f", "<CMD>GitFiles<CR>", {noremap = true})
