@@ -9,3 +9,15 @@ rustup component add clippy rustfmt \
     rust-src # needed for rust-analyzer
 rustup default stable
 rustup update
+
+if [ "$(uname -s)" == "Darwin" ]; then
+    return
+fi
+
+crates=(
+    exa
+    fd-find
+    watchexec-cli
+)
+
+cargo install "${crates[@]}"
