@@ -3,25 +3,38 @@ set -euo pipefail
 
 cd "${HOME}/.dotfiles"
 
-stow --dotfiles -R stow "$@"
+_stow() {
+    stow
+    #stow 2>/dev/null
+}
+
+if [[ "$(_stow -V)" =~ "2.2.2" ]] then
+    echo "stow: legacy"
+    _stow \
+        --target="${HOME}" \
+        -R legacy \
+        "$@"
+else
+    _stow --dotfiles -R stow "$@"
+
+    echo "stow: dotfiles"
+    _stow --dotfiles \
+        --target="${HOME}" \
+        -R git \
+        -R tmux \
+        -R zsh \
+        "$@"
+fi
 
 echo "stow: bin"
 mkdir -p "${HOME}/bin"
-stow \
+_stow \
     --target="${HOME}/bin" \
     -R bin \
     "$@"
 
-echo "stow: dotfiles"
-stow --dotfiles \
-    --target="${HOME}" \
-    -R git \
-    -R tmux \
-    -R zsh \
-    "$@"
-
 echo "stow: XDG config"
-stow \
+_stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
     -R alacritty \
     -R neovim \
