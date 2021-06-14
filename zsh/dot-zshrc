@@ -29,7 +29,7 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 
 # aliases
-alias se='sudo -e $(which e)'
+alias se='sudo -E $(which e)'
 alias g='git'
 alias gd='git diff'
 alias gs='git status --short --branch --show-stash'
@@ -43,19 +43,10 @@ alias ll='ls -l'
 alias la='ls -a'
 alias vc='e ~/.config/nvim/init.lua'
 
-alias shed="docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:latest"
+alias shed='docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:latest'
 
-wexecall() {
-    watchexec --clear --restart "$*"
-}
+alias w='watchexec --clear --restart'
 
-wexec() {
-    exts="$1";shift
-    watchexec --clear --exts "$exts" --restart "$*"
-}
-alias bazelw="wexecall bazel"
-alias cargow="wexec toml,rs cargo"
-alias gow="wexec go go"
 # Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
 # however it would be great to have a 'cargo doc' to include the stdlib docs
 # instead of linking to the online ones.
@@ -69,7 +60,7 @@ cargodocw () {
     mkdir -p "$dest"
     (cd "$src" && tar -cf - .) | (cd "$dest" && tar -xpf -)
 
-    cargow doc --all --document-private-items $@
+    w cargo doc --all --document-private-items $@
 }
 
 setopt promptsubst
@@ -94,4 +85,6 @@ trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
 trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 
-eval "$(direnv hook zsh)"
+if type direnv >/dev/null; then
+    eval "$(direnv hook zsh)"
+fi
