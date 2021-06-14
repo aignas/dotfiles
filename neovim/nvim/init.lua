@@ -181,7 +181,7 @@ local on_attach = function(client, bufnr)
 end
 
 local nvim_lsp = require('lspconfig')
-local servers = {'gopls', 'pyls', 'rust_analyzer', 'sqls', 'texlab'}
+local servers = {'gopls', 'pyright', 'rust_analyzer', 'sqls', 'texlab'}
 for _, lsp in ipairs(servers) do nvim_lsp[lsp].setup {on_attach = on_attach} end
 
 vim.g.tex_flavor = "latex"
