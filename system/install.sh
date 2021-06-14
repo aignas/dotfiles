@@ -59,7 +59,6 @@ _setup_deb() {
         lua5.2-doc \
         lvm2 \
         lynx \
-        lz4 \
         man-db \
         manpages \
         manpages-dev \
