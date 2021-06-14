@@ -30,15 +30,45 @@ commit() {
 }
 
 notes_dir() {
-    dir="$HOME/.$1/zettel"
+    dir="$HOME/.$1"
     [[ -d $dir ]] || die directory "$dir" does not exist
     echo $dir
 }
 
-neuron() {
-    dir="$(notes_dir notes)"
+build() {
+    d=notes
     if [[ "$#" != 0 && "$1" == --work ]]; then
-        dir="$(notes_dir "work")"
+        d=work
+        shift
+    fi
+
+    pushd "$(notes_dir "$d")"
+
+    echo "Copying files"
+    rsync -rL --delete --delete-excluded \
+        --filter="- /personal/2021*" \
+        --filter="- /personal/diary.md" \
+        --filter="- /personal/todo.md" \
+        --filter="- /personal/index.md" \
+        zettel/* neuron/
+
+    echo "Transforming links to neuron style"
+    # TODO @aignas 2021-06-07: use the following once it works
+    # -e 's/\[\(.*\)\](\(.*\).md)/[[\2 | \1]]/g' \
+    gsed -i -E \
+        -e 's|\(personal/|(|g' \
+        -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2]]|g' \
+        neuron/*.md neuron/personal/*.md
+    echo "Done"
+    popd
+}
+
+neuron() {
+    build "$@"
+
+    d=notes
+    if [[ "$#" != 0 && "$1" == --work ]]; then
+        d=work
         shift
     fi
 
@@ -53,14 +83,18 @@ neuron() {
         )
     fi
 
+    set -x
     exec docker run \
         --rm \
         --tty \
         --interactive \
         --publish 8080:8080 \
-        --volume "$dir":/notes \
+        --volume "$(notes_dir $d)/neuron:/notes" \
         sridca/neuron:1.9.27.3 \
         neuron "${args[@]}"
+
+    # See https://hub.docker.com/r/sridca/neuron/tags?page=1&ordering=last_updated
+    # for new releases
 }
 
 rename() {
@@ -91,6 +125,7 @@ main() {
 
     case "$command" in
         serve|neuron)   neuron "$@" ;;
+        build)          build "$@" ;;
         commit)         commit ~/.notes "$@" || commit ~/.work "$@" ;;
         rename)         rename "$@" ;;
         *)              die unknown command "$command" ;;
