@@ -8,30 +8,36 @@ if [[ ! -d ${DIR}/venv ]]; then
 	python3 -m venv ${DIR}/venv
 fi
 
-${DIR}/venv/bin/pip install --upgrade pip setuptools
-${DIR}/venv/bin/pip install -r python/requirements.txt
+_install() {
+    mkdir -p ./tools
 
-tools=(
-    black
-    epylint
-    flake8
-    isort
-    isort-identify-imports
-    okta-awscli
-    pycodestyle
-    pydocstyle
-    pyflakes
-    pylint
-    pyls
-    pyreverse
-)
+    ${DIR}/venv/bin/pip install --upgrade pip setuptools
+    ${DIR}/venv/bin/pip install -r python/requirements.txt
 
-for i in "${tools[@]}"; do
-    cat <<EOF >"tools/$i"
-#!/bin/bash
+    tools=(
+        black
+        epylint
+        flake8
+        isort
+        isort-identify-imports
+        okta-awscli
+        pycodestyle
+        pydocstyle
+        pyflakes
+        pylint
+        pyls
+        pyreverse
+    )
 
-cd "\$(dirname "\$0")"/..
-exec ${DIR}/venv/bin/$i "\$@"
-EOF
-    chmod +x "tools/$i"
-done
+    for i in "${tools[@]}"; do
+        cat <<EOF >"tools/$i"
+    #!/bin/bash
+
+    cd "\$(dirname "\$0")"/..
+    exec ${DIR}/venv/bin/$i "\$@"
+    EOF
+        chmod +x "tools/$i"
+    done
+}
+
+_install

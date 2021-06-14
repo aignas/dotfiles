@@ -46,7 +46,37 @@ _setup_mac() {
     ok "brew: install"
 }
 
+_setup_deb() {
+  sudo apt-get update && \
+    \
+    env DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
+        direnv \
+        htop \
+        jq \
+        less \
+        lsof \
+        lua5.2 \
+        lua5.2-doc \
+        lvm2 \
+        lynx \
+        lz4 \
+        man-db \
+        manpages \
+        manpages-dev \
+        rsync \
+        shellcheck \
+        stow \
+        texlive \
+        texlive-lang-european \
+        texlive-latex-extra \
+        tmux \
+        zsh \
+        python3-venv
+}
+
 if [ "$(uname -s)" == "Darwin" ]; then
     _setup_mac
     exit 0
 fi
+
+_setup_deb
