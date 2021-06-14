@@ -21,7 +21,7 @@ stow --dotfiles \
     "$@"
 
 echo "stow: XDG config"
-stow --dotfiles \
+stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
     -R alacritty \
     -R neovim \
