@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd "$(dirname $0)/.."
+cd "${HOME}/.dotfiles"
 
 stow --dotfiles -R stow "$@"
 
