@@ -65,9 +65,6 @@ _setup_deb() {
         rsync \
         shellcheck \
         stow \
-        texlive \
-        texlive-lang-european \
-        texlive-latex-extra \
         tmux \
         zsh \
         python3-venv
