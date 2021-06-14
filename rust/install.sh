@@ -11,7 +11,7 @@ rustup default stable
 rustup update
 
 if [ "$(uname -s)" == "Darwin" ]; then
-    return
+    exit 0
 fi
 
 crates=(
