@@ -30,6 +30,7 @@ _setup_mac() {
         golang \
         htop \
         jq \
+        netlify-cli \
         npm \
         ripgrep \
         rs-git-fsmonitor \
