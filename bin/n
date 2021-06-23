@@ -53,11 +53,9 @@ build() {
         zettel/* neuron/
 
     echo "Transforming links to neuron style"
-    # TODO @aignas 2021-06-07: use the following once it works
-    # -e 's/\[\(.*\)\](\(.*\).md)/[[\2 | \1]]/g' \
     gsed -i -E \
         -e 's|\(personal/|(|g' \
-        -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2]]|g' \
+        -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
         neuron/*.md neuron/personal/*.md
     echo "Done"
     popd
@@ -90,7 +88,7 @@ neuron() {
         --interactive \
         --publish 8080:8080 \
         --volume "$(notes_dir $d)/neuron:/notes" \
-        sridca/neuron:1.9.27.3 \
+        sridca/neuron:1.9.31.0 \
         neuron "${args[@]}"
 
     # See https://hub.docker.com/r/sridca/neuron/tags?page=1&ordering=last_updated
