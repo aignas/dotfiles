@@ -49,6 +49,7 @@ _setup_mac() {
 
 _setup_deb() {
     env DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
+        awscli \
         direnv \
         htop \
         jq \
