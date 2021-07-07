@@ -18,7 +18,6 @@ _setup_mac() {
     ok "brew: tap"
 
     debug "brew: install"
-    brew install --HEAD neovim
     brew install \
         coreutils \
         direnv \
@@ -30,6 +29,7 @@ _setup_mac() {
         golang \
         htop \
         jq \
+        neovim \
         netlify-cli \
         npm \
         ripgrep \
