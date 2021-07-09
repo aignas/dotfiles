@@ -142,6 +142,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-go"
   },
+  ["vim-markdown"] = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-markdown"
+  },
   ["vim-repeat"] = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/vim-repeat"

@@ -35,6 +35,7 @@ require('packer').startup({
 
         use 'neovim/nvim-lspconfig'
         use 'hrsh7th/vim-vsnip'
+        use 'plasticboy/vim-markdown'
         use 'hrsh7th/vim-vsnip-integ'
         use 'sbdchd/neoformat'
 
@@ -78,6 +79,8 @@ vim.g.maplocalleader = '-'
 vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 
 vim.g.neoformat_run_all_formatters = 1
+
+vim.g.vim_markdown_folding_disabled = 1
 
 local remap = vim.api.nvim_set_keymap
 remap("n", "<Leader>b", "<CMD>Buffers<CR>", {noremap = true})
