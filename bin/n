@@ -1,6 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
+pushd () {
+    command pushd "$@" > /dev/null
+}
+
+popd () {
+    command popd "$@" > /dev/null
+}
+
 die() {
     echo >&2 ERROR: $@
     echo >&2 Exiting...
