@@ -38,17 +38,16 @@ require('packer').startup({
         use 'hrsh7th/vim-vsnip-integ'
         use 'sbdchd/neoformat'
 
-        use 'lervag/vimtex'
         use 'autowitch/hive.vim'
         use 'cappyzawa/starlark.vim'
         use 'fatih/vim-go'
+        use 'lervag/vimtex'
+        use 'lervag/wiki.vim'
+        use 'lervag/lists.vim'
         use 'nvim-lua/completion-nvim'
         use 'rust-lang/rust.vim'
         use 'tyru/eskk.vim'
-        use {
-            'vimwiki/vimwiki',
-            branch = 'dev',
-        }
+
         use {
             'nvim-treesitter/nvim-treesitter',
             run = [[:TSUpdate]],
@@ -186,20 +185,26 @@ for _, lsp in ipairs(servers) do nvim_lsp[lsp].setup {on_attach = on_attach} end
 
 vim.g.tex_flavor = "latex"
 
-vim.g.neuron_dir = '~/.notes/zettel'
+vim.g.wiki_root = '~/.work/zettel'
+vim.g.wiki_journal = {
+    name = '',
+    frequency = 'daily',
+    date_format = {
+        daily = '%Y-%m-%d',
+        weekly = '%Y_w%V',
+        monthly = '%Y_m%m',
+    },
+}
+vim.g.wiki_link_extension = '.md'
+vim.g.wiki_link_target_type = 'md'
+vim.g.wiki_filetypes = {'md'}
 
-local vimwiki = require('vimwiki')
-vimwiki.setup({
-    markdown_link_ext = 1,
-    url_maxsave = 0,
-    global_ext = 0,
-    folding = '',
-    key_mappings = {table_mappings = 0},
-    list = {
-        vimwiki.wiki('personal', '~/.notes/zettel'),
-        vimwiki.wiki('work', '~/.work/zettel'),
-    }
-})
+remap("n", "<Leader>w<Leader>m", "<CMD>WikiJournalNext<CR>", {noremap = true})
+remap("n", "<Leader>w<Leader>y", "<CMD>WikiJournalPrev<CR>", {noremap = true})
+remap("n", "<Leader>WW", "<CMD>e ~/.work/zettel/index.md<CR>", {noremap = true})
+remap("n", "<Leader>WN", "<CMD>e ~/.notes/zettel/index.md<CR>", {noremap = true})
+
+vim.g.lists_filetypes = {'md'}
 
 require'eskk'.setup({
     start_completion_length = 2,
