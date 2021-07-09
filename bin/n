@@ -43,22 +43,56 @@ build() {
     fi
 
     pushd "$(notes_dir "$d")"
+    checkpoint || :
 
-    echo "Copying files"
-    rsync -rL --delete --delete-excluded \
-        --filter="- /personal/2021*" \
-        --filter="- /personal/diary.md" \
-        --filter="- /personal/todo.md" \
-        --filter="- /personal/index.md" \
-        zettel/* neuron/
+    cat <<EOF
+############ Watchexec metadata ################
+# created: $(_target ${WATCHEXEC_CREATED_PATH:-unknown})
+# removed: $(_target ${WATCHEXEC_REMOVED_PATH:-unknown})
+# renamed: $(_target ${WATCHEXEC_RENAMED_PATH:-unknown})
+# written: $(_target ${WATCHEXEC_WRITTEN_PATH:-unknown})
+# path   : $(_target ${WATCHEXEC_META_CHANGED_PATH:-unknown})
+# common : $(_target ${WATCHEXEC_COMMON_PATH:-unknown})
+################################################
 
-    echo "Transforming links to neuron style"
-    gsed -i -E \
-        -e 's|\(personal/|(|g' \
-        -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
-        neuron/*.md neuron/personal/*.md
-    echo "Done"
+EOF
+
+    if [[ -n "${WATCHEXEC_WRITTEN_PATH:-}" ]]; then
+        # No rsync, just copy the updated file
+        local -r rel_path="$(_target "${WATCHEXEC_WRITTEN_PATH}")"
+        echo "Transforming a single file ${rel_path}"
+        cp zettel/"${rel_path}" neuron/"${rel_path}"
+
+        gsed -i -E \
+            -e 's|\(personal/|(|g' \
+            -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
+            "neuron/${rel_path}"
+    else
+        echo "Copying all files"
+        rsync -rL --delete --delete-excluded \
+            --filter="- /personal/2021*" \
+            --filter="- /personal/diary.md" \
+            --filter="- /personal/todo.md" \
+            --filter="- /personal/index.md" \
+            zettel/* neuron/
+
+        echo "Transforming links to neuron style"
+        gsed -i -E \
+            -e 's|\(personal/|(|g' \
+            -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
+            neuron/*.md neuron/personal/*.md
+        echo "Done"
+    fi
     popd
+}
+
+checkpoint() {
+    git add -A .
+    git commit -m "autocommit"
+}
+
+_target() {
+    echo "${1#*zettel/}"
 }
 
 neuron() {
