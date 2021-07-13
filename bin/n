@@ -1,10 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-pushd () {
-    command pushd "$@" > /dev/null
-}
-
 popd () {
     command popd "$@" > /dev/null
 }
@@ -45,8 +41,11 @@ notes_dir() {
 
 build() {
     d=notes
+    all=(neuron/*.md)
+
     if [[ "$#" != 0 && "$1" == --work ]]; then
         d=work
+        all+=(neuron/personal/*.md)
         shift
     fi
 
@@ -66,10 +65,16 @@ build() {
 EOF
 
     if [[ -n "${WATCHEXEC_WRITTEN_PATH:-}" ]]; then
-        # No rsync, just copy the updated file
         local -r rel_path="$(_target "${WATCHEXEC_WRITTEN_PATH}")"
+
+        if [[ ! -f zettel/"${rel_path}" ]]; then
+            echo "NOT FOUND: ${WATCHEXEC_WRITTEN_PATH}"
+            return 1
+        fi
+
+        # No rsync, just copy the updated file
         echo "Transforming a single file ${rel_path}"
-        cp zettel/"${rel_path}" neuron/"${rel_path}"
+        cp zettel/"${rel_path}" neuron/"${rel_path}" 
 
         gsed -i -E \
             -e 's|\(personal/|(|g' \
@@ -77,7 +82,10 @@ EOF
             "neuron/${rel_path}"
     else
         echo "Copying all files"
-        rsync -rL --delete --delete-excluded \
+        rm -rf neuron
+        rsync -rL \
+            --delete \
+            --delete-excluded \
             --filter="- /personal/2021*" \
             --filter="- /personal/diary.md" \
             --filter="- /personal/todo.md" \
@@ -88,7 +96,7 @@ EOF
         gsed -i -E \
             -e 's|\(personal/|(|g' \
             -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
-            neuron/*.md neuron/personal/*.md
+            ${all[@]}
         echo "Done"
     fi
     popd
@@ -166,6 +174,7 @@ main() {
     case "$command" in
         serve|neuron)   neuron "$@" ;;
         build)          build "$@" ;;
+        watch)          watchexec --clear -w ~/.notes -w ~/.work "n build; n build --work" ;;
         commit)         commit ~/.notes "$@" || commit ~/.work "$@" ;;
         rename)         rename "$@" ;;
         *)              die unknown command "$command" ;;

@@ -132,8 +132,7 @@ set background=light
 colorscheme simple
 
 set diffopt+=internal,algorithm:patience
-set history=10000 undofile backup backupcopy=yes
-set backupdir-=.
+set history=10000 undofile
 set directory-=.
 set backspace=eol,start,indent
 set autoindent breakindent showbreak=»»
