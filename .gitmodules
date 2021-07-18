@@ -6,3 +6,6 @@
 	path = neovim/nvim/pack/packer.nvim/opt/packer.nvim
 	url = https://github.com/wbthomason/packer.nvim
 	branch = master
+[submodule "fzf/fzf"]
+	path = fzf/fzf
+	url = https://github.com/junegunn/fzf.git

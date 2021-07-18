@@ -17,8 +17,10 @@ Usage: $(basename "$0") [options]
 Default is to update the dotfiles and setup the system for work.
 
 Options:
- -h, --help     Show this help message and exti
- --no-gitconfig Don't setup gitconfig
+ -h, --help     Show this help message and exit.
+ --no-gitconfig Don't setup gitconfig.
+ --no-pull      Don't pull latest changes from git. Makes it easier to
+                test local changes to the scripts.
 EOF
 }
 

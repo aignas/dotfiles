@@ -77,13 +77,9 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/eskk.vim"
   },
-  fzf = {
+  ["goyo.vim"] = {
     loaded = true,
-    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/fzf"
-  },
-  ["fzf.vim"] = {
-    loaded = true,
-    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/fzf.vim"
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/goyo.vim"
   },
   ["hive.vim"] = {
     loaded = true,
@@ -109,6 +105,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/nvim-lspconfig"
   },
+  ["nvim-lspinstall"] = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/nvim-lspinstall"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/nvim-treesitter"
@@ -118,6 +118,14 @@ _G.packer_plugins = {
     needs_bufread = false,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/opt/packer.nvim"
   },
+  ["plenary.nvim"] = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/plenary.nvim"
+  },
+  ["popup.nvim"] = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/popup.nvim"
+  },
   ["rust.vim"] = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/rust.vim"
@@ -125,6 +133,14 @@ _G.packer_plugins = {
   ["starlark.vim"] = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/starlark.vim"
+  },
+  tabular = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/tabular"
+  },
+  ["telescope.nvim"] = {
+    loaded = true,
+    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/telescope.nvim"
   },
   ["vim-abolish"] = {
     loaded = true,

@@ -24,16 +24,15 @@ require('packer').startup({
         use 'tpope/vim-unimpaired'
 
         use {
-            'junegunn/fzf.vim',
+            'nvim-telescope/telescope.nvim',
             requires = {
-                {
-                    'junegunn/fzf',
-                    run = [[./install --xdg --no-update-rc --completion --key-bindings]]
-                }
+                {'nvim-lua/popup.nvim'},
+                {'nvim-lua/plenary.nvim'},
             }
         }
 
         use 'neovim/nvim-lspconfig'
+        use 'kabouzeid/nvim-lspinstall'
         use 'hrsh7th/vim-vsnip'
         use 'plasticboy/vim-markdown'
         use 'hrsh7th/vim-vsnip-integ'
@@ -43,7 +42,11 @@ require('packer').startup({
         use 'cappyzawa/starlark.vim'
         use 'fatih/vim-go'
         use 'lervag/vimtex'
-        use 'lervag/wiki.vim'
+        use {
+            'aignas/wiki.vim',
+            branch = 'patch-1',
+        }
+        use 'godlygeek/tabular'
         use 'lervag/lists.vim'
         use 'nvim-lua/completion-nvim'
         use 'rust-lang/rust.vim'
@@ -71,6 +74,35 @@ imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-T
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 ]]
 
+actions = require("telescope.actions")
+require("telescope").setup {
+  pickers = {
+    buffers = {
+      show_all_buffers = true,
+      sort_lastused = true,
+      mappings = {
+        i = {
+          ["<c-d>"] = actions.delete_buffer,
+        },
+        n = {
+          ["<c-d>"] = actions.delete_buffer,
+        }
+      }
+    },
+    live_grep = {
+      mappings = {
+        i = {
+          ["<c-l>"] = actions.send_to_loclist,
+        },
+        n = {
+          ["<c-l>"] = actions.send_to_loclist,
+        }
+      }
+    }
+  }
+}
+
+
 vim.g.completion_enable_auto_popup = 0
 vim.g.completion_enable_snippet = 'vim-vsnip'
 
@@ -83,11 +115,14 @@ vim.g.neoformat_run_all_formatters = 1
 vim.g.vim_markdown_folding_disabled = 1
 
 local remap = vim.api.nvim_set_keymap
-remap("n", "<Leader>b", "<CMD>Buffers<CR>", {noremap = true})
-remap("n", "<Leader>f", "<CMD>GitFiles<CR>", {noremap = true})
-remap("n", "<Leader>F", "<CMD>Files<CR>", {noremap = true})
-remap("n", "<Leader>e", ":e %:h/", {noremap = true})
+remap("n", "<Leader>b", "<CMD>Telescope buffers<CR>", {noremap = true})
+remap("n", "<Leader>f", "<CMD>Telescope git_files<CR>", {noremap = true})
+remap("n", "<Leader>F", "<CMD>Telescope find_files<CR>", {noremap = true})
+remap("n", "<Leader>tg", "<CMD>Telescope grep_string<CR>", {noremap = true})
+remap("n", "<Leader>tG", "<CMD>Telescope live_grep<CR>", {noremap = true})
+
 remap("n", "<Leader>ss", "<CMD>Gstatus<CR>", {noremap = true})
+remap("n", "<Leader>e", ":e %:h/", {noremap = true})
 remap("n", "<Leader>gg", ":!tdd ", {noremap = true})
 remap("n", "<Leader>cd", "<CMD>lcd %:p:h<CR>", {noremap = true})
 remap("n", "<Leader>z", "<CMD>e %:h/BUILD.bazel<CR>", {noremap = true})
@@ -132,7 +167,8 @@ set background=light
 colorscheme simple
 
 set diffopt+=internal,algorithm:patience
-set history=10000 undofile
+set history=10000 undofile backup backupcopy=yes
+set backupdir-=.
 set directory-=.
 set backspace=eol,start,indent
 set autoindent breakindent showbreak=»»
@@ -181,9 +217,20 @@ local on_attach = function(client, bufnr)
     remap('<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>')
 end
 
-local nvim_lsp = require('lspconfig')
-local servers = {'gopls', 'pyright', 'rust_analyzer', 'sqls', 'texlab'}
-for _, lsp in ipairs(servers) do nvim_lsp[lsp].setup {on_attach = on_attach} end
+local function setup_servers()
+    require'lspinstall'.setup()
+    local servers = require'lspinstall'.installed_servers()
+    local nvim_lsp = require('lspconfig')
+    for _, lsp in ipairs(servers) do nvim_lsp[lsp].setup {on_attach = on_attach} end
+end
+
+setup_servers()
+
+-- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
+require'lspinstall'.post_install_hook = function ()
+  setup_servers() -- reload installed servers
+  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
+end
 
 vim.g.tex_flavor = "latex"
 

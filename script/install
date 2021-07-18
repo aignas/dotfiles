@@ -13,6 +13,7 @@ installs=(
     ./golang
     ./neovim
     ./rust
+    ./fzf
     ./system
     ./lua
     ./python
