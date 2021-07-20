@@ -1,10 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-popd () {
-    command popd "$@" > /dev/null
+popd() {
+    command popd "$@" >/dev/null
 }
 
+# die echos some text into standard error and exits the script with exit_status of 1.
 die() {
     echo >&2 ERROR: $@
     echo >&2 Exiting...
@@ -74,7 +75,7 @@ EOF
 
         # No rsync, just copy the updated file
         echo "Transforming a single file ${rel_path}"
-        cp zettel/"${rel_path}" neuron/"${rel_path}" 
+        cp zettel/"${rel_path}" neuron/"${rel_path}"
 
         gsed -i -E \
             -e 's|\(personal/|(|g' \
@@ -149,35 +150,36 @@ rename() {
     [[ "${1:-}" != "" ]] || die "No arguments supplied"
 
     case ${2:-} in
-        '')
-            rg "$1" -w
-            exit 0
-            ;;
-        *)
-            if [[ "$#" != 2 ]]; then
-                echo no spaces in the name plz
-                exit 1
-            fi
+    '')
+        rg "$1" -w
+        exit 0
+        ;;
+    *)
+        if [[ "$#" != 2 ]]; then
+            echo no spaces in the name plz
+            exit 1
+        fi
 
-            rg "$1" -l zettel | xargs gsed -i "s/($1)/($2)/g"
-            mv "zettel/$1.md" "zettel/$2.md"
-            git add -A zettel
-            git commit -m "Rename: $1 -> $2"
-            ls -l zettel | head
-            ;;
+        rg "$1" -l zettel | xargs gsed -i "s/($1)/($2)/g"
+        mv "zettel/$1.md" "zettel/$2.md"
+        git add -A zettel
+        git commit -m "Rename: $1 -> $2"
+        ls -l zettel | head
+        ;;
     esac
 }
 
 main() {
-    command="$1"; shift
+    command="$1"
+    shift
 
     case "$command" in
-        serve|neuron)   neuron "$@" ;;
-        build)          build "$@" ;;
-        watch)          watchexec --clear -w ~/.notes -w ~/.work "n build; n build --work" ;;
-        commit)         commit ~/.notes "$@" || commit ~/.work "$@" ;;
-        rename)         rename "$@" ;;
-        *)              die unknown command "$command" ;;
+    serve | neuron) neuron "$@" ;;
+    build) build "$@" ;;
+    watch) watchexec --clear -w ~/.notes -w ~/.work "n build; n build --work" ;;
+    commit) commit ~/.notes "$@" || commit ~/.work "$@" ;;
+    rename) rename "$@" ;;
+    *) die unknown command "$command" ;;
     esac
 }
 
