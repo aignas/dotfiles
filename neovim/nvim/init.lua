@@ -42,10 +42,7 @@ require('packer').startup({
         use 'cappyzawa/starlark.vim'
         use 'fatih/vim-go'
         use 'lervag/vimtex'
-        use {
-            'aignas/wiki.vim',
-            branch = 'patch-1',
-        }
+        use 'lervag/wiki.vim'
         use 'godlygeek/tabular'
         use 'lervag/lists.vim'
         use 'nvim-lua/completion-nvim'
@@ -113,19 +110,49 @@ vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 vim.g.neoformat_run_all_formatters = 1
 
 vim.g.vim_markdown_folding_disabled = 1
+vim.g.vim_markdown_auto_insert_bullets = 0
+
+set_leader_mappings = function(mappings, prefix)
+    prefix = prefix or ""
+
+    for key, command in pairs(mappings) do
+        key = prefix .. '<Leader>' .. key
+
+        if (type(command) == "table") then
+            set_leader_mappings(command, key)
+        else
+            vim.api.nvim_set_keymap('n', key, command, {noremap = true})
+        end
+    end
+end
+
+set_leader_mappings({
+    WN = '<CMD>e ~/.notes/zettel/index.md<CR>',
+    WW = '<CMD>e ~/.work/zettel/index.md<CR>',
+
+    cd = '<CMD>lcd %:p:h<CR>',
+    e = ':e %:h/',
+    gg = ':!tdd ',
+    ss = '<CMD>Gstatus<CR>',
+
+    tF = '<CMD>Telescope find_files<CR>',
+    tG = '<CMD>Telescope live_grep<CR>',
+    tb = '<CMD>Telescope buffers<CR>',
+    tB = '<CMD>Telescope git_branches<CR>',
+    tf = '<CMD>Telescope git_files<CR>',
+    ts = '<CMD>Telescope git_status<CR>',
+    tg = '<CMD>Telescope grep_string<CR>',
+    tq = '<CMD>Telescope quickfix<CR>',
+    tl = '<CMD>Telescope loclist<CR>',
+    w = {
+        m = '<CMD>WikiJournalNext<CR>',
+        y = '<CMD>WikiJournalPrev<CR>',
+    },
+    z = '<CMD>e %:h/BUILD.bazel<CR>',
+})
 
 local remap = vim.api.nvim_set_keymap
-remap("n", "<Leader>b", "<CMD>Telescope buffers<CR>", {noremap = true})
-remap("n", "<Leader>f", "<CMD>Telescope git_files<CR>", {noremap = true})
-remap("n", "<Leader>F", "<CMD>Telescope find_files<CR>", {noremap = true})
-remap("n", "<Leader>tg", "<CMD>Telescope grep_string<CR>", {noremap = true})
-remap("n", "<Leader>tG", "<CMD>Telescope live_grep<CR>", {noremap = true})
 
-remap("n", "<Leader>ss", "<CMD>Gstatus<CR>", {noremap = true})
-remap("n", "<Leader>e", ":e %:h/", {noremap = true})
-remap("n", "<Leader>gg", ":!tdd ", {noremap = true})
-remap("n", "<Leader>cd", "<CMD>lcd %:p:h<CR>", {noremap = true})
-remap("n", "<Leader>z", "<CMD>e %:h/BUILD.bazel<CR>", {noremap = true})
 
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
@@ -247,11 +274,6 @@ vim.g.wiki_journal = {
 vim.g.wiki_link_extension = '.md'
 vim.g.wiki_link_target_type = 'md'
 vim.g.wiki_filetypes = {'md'}
-
-remap("n", "<Leader>w<Leader>m", "<CMD>WikiJournalNext<CR>", {noremap = true})
-remap("n", "<Leader>w<Leader>y", "<CMD>WikiJournalPrev<CR>", {noremap = true})
-remap("n", "<Leader>WW", "<CMD>e ~/.work/zettel/index.md<CR>", {noremap = true})
-remap("n", "<Leader>WN", "<CMD>e ~/.notes/zettel/index.md<CR>", {noremap = true})
 
 vim.g.lists_filetypes = {'md'}
 

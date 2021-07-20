@@ -77,10 +77,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/eskk.vim"
   },
-  ["goyo.vim"] = {
-    loaded = true,
-    path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/goyo.vim"
-  },
   ["hive.vim"] = {
     loaded = true,
     path = "/Users/aignas/.config/nvim/pack/packer.nvim/start/hive.vim"
