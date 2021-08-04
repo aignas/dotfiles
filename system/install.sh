@@ -19,6 +19,7 @@ _setup_mac() {
 
     debug "brew: install"
     brew install \
+        autossh \
         coreutils \
         direnv \
         diskonaut \
