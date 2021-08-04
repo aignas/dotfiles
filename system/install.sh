@@ -39,6 +39,7 @@ _setup_mac() {
         shellcheck \
         stow \
         texlab \
+        k3d \
         tig \
         tmux \
         tree-sitter \
