@@ -2,6 +2,8 @@ function setup(config)
     for key, val in pairs(config) do
         vim.g['eskk#' .. key ] = val
     end
+
+    vim.cmd [[lang en_US.UTF-8]]
 end
 
 vim.g.skk_path = vim.env.XDG_DATA_HOME .. '/nvim/skk'

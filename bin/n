@@ -79,7 +79,7 @@ EOF
 
         gsed -i -E \
             -e 's|\(personal/|(|g' \
-            -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
+            -e 's|\[([a-zA-Z 0-9]+)\]\(([a-zA-Z0-9\-]+)\.md\)|[[\2\|\1]]|g' \
             "neuron/${rel_path}"
     else
         echo "Copying all files"
@@ -96,10 +96,15 @@ EOF
         echo "Transforming links to neuron style"
         gsed -i -E \
             -e 's|\(personal/|(|g' \
-            -e 's|\[([a-zA-Z 0-9]+)\]\((.*).md\)|[[\2\|\1]]|g' \
+            -e 's|\[([a-zA-Z 0-9]+)\]\(([a-zA-Z0-9\-]+)\.md\)|[[\2\|\1]]|g' \
             ${all[@]}
         echo "Done"
     fi
+
+    if [[ "$#" != 0 ]]; then
+        cat "neuron/$1"
+    fi
+
     popd
 }
 
@@ -139,7 +144,7 @@ neuron() {
         --interactive \
         --publish 8080:8080 \
         --volume "$(notes_dir $d)/neuron:/notes" \
-        sridca/neuron:1.9.31.0 \
+        sridca/neuron:1.9.34.0 \
         neuron "${args[@]}"
 
     # See https://hub.docker.com/r/sridca/neuron/tags?page=1&ordering=last_updated

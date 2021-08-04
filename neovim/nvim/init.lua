@@ -111,6 +111,7 @@ vim.g.neoformat_run_all_formatters = 1
 
 vim.g.vim_markdown_folding_disabled = 1
 vim.g.vim_markdown_auto_insert_bullets = 0
+vim.g.vim_markdown_new_list_item_indent = 0
 
 set_leader_mappings = function(mappings, prefix)
     prefix = prefix or ""
@@ -144,11 +145,10 @@ set_leader_mappings({
     tg = '<CMD>Telescope grep_string<CR>',
     tq = '<CMD>Telescope quickfix<CR>',
     tl = '<CMD>Telescope loclist<CR>',
-    w = {
-        m = '<CMD>WikiJournalNext<CR>',
-        y = '<CMD>WikiJournalPrev<CR>',
-    },
     z = '<CMD>e %:h/BUILD.bazel<CR>',
+
+    [']w'] = '<CMD>WikiJournalNext<CR>',
+    ['[w'] = '<CMD>WikiJournalPrev<CR>',
 })
 
 local remap = vim.api.nvim_set_keymap
@@ -256,7 +256,6 @@ setup_servers()
 -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
 require'lspinstall'.post_install_hook = function ()
   setup_servers() -- reload installed servers
-  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end
 
 vim.g.tex_flavor = "latex"
