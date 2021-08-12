@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-[[ -z "${DOTFILES_ROOT}" ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+[[ -z ${DOTFILES_ROOT} ]] && DOTFILES_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 export DOTFILES_ROOT
 cd "$(dirname "$0")/.."
 

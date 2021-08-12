@@ -1,0 +1,18 @@
+# See https://pre-commit.com/#usage
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+  - id: check-yaml
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+- repo: local
+  hooks:
+    - id: shfmt
+      name: shfmt
+      minimum_pre_commit_version: 2.4.0
+      language: golang
+      additional_dependencies: [mvdan.cc/sh/v3/cmd/shfmt@v3.3.1]
+      entry: shfmt
+      args: [-w, -s, -i, "4"]
+      types: [shell]

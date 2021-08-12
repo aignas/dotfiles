@@ -44,7 +44,7 @@ build() {
     d=notes
     all=(neuron/*.md)
 
-    if [[ "$#" != 0 && "$1" == --work ]]; then
+    if [[ $# != 0 && $1 == --work ]]; then
         d=work
         all+=(neuron/personal/*.md)
         shift
@@ -65,7 +65,7 @@ build() {
 
 EOF
 
-    if [[ -n "${WATCHEXEC_WRITTEN_PATH:-}" ]]; then
+    if [[ -n ${WATCHEXEC_WRITTEN_PATH:-} ]]; then
         local -r rel_path="$(_target "${WATCHEXEC_WRITTEN_PATH}")"
 
         if [[ ! -f zettel/"${rel_path}" ]]; then
@@ -101,7 +101,7 @@ EOF
         echo "Done"
     fi
 
-    if [[ "$#" != 0 ]]; then
+    if [[ $# != 0 ]]; then
         cat "neuron/$1"
     fi
 
@@ -121,13 +121,13 @@ neuron() {
     build "$@"
 
     d=notes
-    if [[ "$#" != 0 && "$1" == --work ]]; then
+    if [[ $# != 0 && $1 == --work ]]; then
         d=work
         shift
     fi
 
     args=($@)
-    if [[ "$#" == 0 ]]; then
+    if [[ $# == 0 ]]; then
         args=(
             -o /tmp
             gen
@@ -152,7 +152,7 @@ neuron() {
 }
 
 rename() {
-    [[ "${1:-}" != "" ]] || die "No arguments supplied"
+    [[ ${1:-} != "" ]] || die "No arguments supplied"
 
     case ${2:-} in
     '')
@@ -160,7 +160,7 @@ rename() {
         exit 0
         ;;
     *)
-        if [[ "$#" != 2 ]]; then
+        if [[ $# != 2 ]]; then
             echo no spaces in the name plz
             exit 1
         fi

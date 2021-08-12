@@ -17,7 +17,7 @@ _filter() {
 }
 
 _grepbang() {
-    if [[ -n "$*" ]]; then
+    if [[ -n $* ]]; then
         _filter "$@"
     else
         git grep -lE "$_shebang"

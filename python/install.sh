@@ -5,7 +5,7 @@ cd "$(dirname $0)"/..
 DIR=python
 
 if [[ ! -d ${DIR}/venv ]]; then
-	python3 -m venv ${DIR}/venv
+    python3 -m venv ${DIR}/venv
 fi
 
 _install() {
