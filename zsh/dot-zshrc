@@ -84,6 +84,8 @@ trysource() {
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
 trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+export NVM_DIR=${HOME}/.nvm"
+trysource "${NVM_DIR}"/nvm.sh
 
 if type direnv >/dev/null; then
     eval "$(direnv hook zsh)"
