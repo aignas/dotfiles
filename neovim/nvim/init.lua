@@ -18,7 +18,12 @@ require('packer').startup({
 
         use 'tpope/vim-abolish'
         use 'tpope/vim-eunuch'
-        use 'tpope/vim-fugitive'
+        use {
+            'tpope/vim-fugitive',
+            requires = {
+                {'tpope/vim-rhubarb'},
+            }
+        }
         use 'tpope/vim-repeat'
         use 'tpope/vim-surround'
         use 'tpope/vim-unimpaired'
