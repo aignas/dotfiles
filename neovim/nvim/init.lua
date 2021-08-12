@@ -81,7 +81,7 @@ require("telescope").setup {
   pickers = {
     buffers = {
       show_all_buffers = true,
-      sort_lastused = true,
+      sort_mru = true,
       mappings = {
         i = {
           ["<c-d>"] = actions.delete_buffer,
