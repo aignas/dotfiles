@@ -42,4 +42,5 @@ _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
     -R alacritty \
     -R neovim \
+    -R yabai \
     "$@"
