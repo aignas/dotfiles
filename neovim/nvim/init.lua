@@ -39,7 +39,6 @@ require('packer').startup({
         use 'neovim/nvim-lspconfig'
         use 'kabouzeid/nvim-lspinstall'
         use 'hrsh7th/vim-vsnip'
-        use 'plasticboy/vim-markdown'
         use 'hrsh7th/vim-vsnip-integ'
         use 'sbdchd/neoformat'
 
@@ -58,6 +57,7 @@ require('packer').startup({
             'nvim-treesitter/nvim-treesitter',
             run = [[:TSUpdate]],
         }
+        use 'plasticboy/vim-markdown'
         use {
             'iamcco/markdown-preview.nvim',
             run = [[:call mkdp#util#install()]]
@@ -117,6 +117,7 @@ vim.g.neoformat_run_all_formatters = 1
 vim.g.vim_markdown_folding_disabled = 1
 vim.g.vim_markdown_auto_insert_bullets = 0
 vim.g.vim_markdown_new_list_item_indent = 0
+vim.g.mkdp_markdown_css = vim.env.XDG_CONFIG_HOME .. '/nvim/styles/gdocs.css'
 
 set_leader_mappings = function(mappings, prefix)
     prefix = prefix or ""
