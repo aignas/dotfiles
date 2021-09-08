@@ -30,16 +30,17 @@ _setup_mac() {
         golang \
         htop \
         jq \
+        k3d \
         neovim \
         netlify-cli \
         npm \
         ripgrep \
         rs-git-fsmonitor \
         rust-analyzer \
+        saml2aws \
         shellcheck \
         stow \
         texlab \
-        k3d \
         tig \
         tmux \
         tree-sitter \
