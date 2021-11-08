@@ -32,6 +32,7 @@ setopt HIST_REDUCE_BLANKS
 alias se='sudo -E $(which e)'
 alias g='git'
 alias gd='git diff'
+alias gp='git push -fu'
 alias gs='git status --short --branch --show-stash'
 if type fdfind >/dev/null; then
     alias fd='fdfind --color=never'
