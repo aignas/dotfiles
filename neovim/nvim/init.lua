@@ -15,6 +15,7 @@ require('packer').startup({
         }
 
         use 'rktjmp/lush.nvim'
+        use 'shaunsingh/seoul256.nvim'
 
         use 'tpope/vim-abolish'
         use 'tpope/vim-eunuch'
@@ -37,7 +38,7 @@ require('packer').startup({
         }
 
         use 'neovim/nvim-lspconfig'
-        use 'kabouzeid/nvim-lspinstall'
+        use 'williamboman/nvim-lsp-installer'
         use 'hrsh7th/vim-vsnip'
         use 'hrsh7th/vim-vsnip-integ'
         use 'sbdchd/neoformat'
@@ -187,6 +188,7 @@ require'nvim-treesitter.configs'.setup {
       "rust",
       "toml",
       "typescript",
+      "vim",
       "yaml",
       "zig",
     },
@@ -220,10 +222,8 @@ vim.o.grepprg = [[rg --vimgrep --no-heading -S]]
 vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
 
 -- LSP
-local on_attach = function(client, bufnr)
+on_attach = function(client, bufnr)
     require('completion').on_attach()
-
-    vim.cmd [[autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)]]
 
     local function remap(key, cmd)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', key, cmd,
@@ -250,19 +250,11 @@ local on_attach = function(client, bufnr)
     remap('<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>')
 end
 
-local function setup_servers()
-    require'lspinstall'.setup()
-    local servers = require'lspinstall'.installed_servers()
-    local nvim_lsp = require('lspconfig')
-    for _, lsp in ipairs(servers) do nvim_lsp[lsp].setup {on_attach = on_attach} end
-end
+local lsp_installer = require("nvim-lsp-installer")
 
-setup_servers()
-
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-require'lspinstall'.post_install_hook = function ()
-  setup_servers() -- reload installed servers
-end
+lsp_installer.on_server_ready(function(server)
+    server:setup({on_attach = on_attach})
+end)
 
 vim.g.tex_flavor = "latex"
 
@@ -295,3 +287,7 @@ require'eskk'.setup({
         port = 1178
     }
 })
+
+for rc in string.gmatch(vim.env.EXTRA_NVIMRC or '', '[^:]+') do
+    vim.cmd('exec "source' .. rc .. '"')
+end

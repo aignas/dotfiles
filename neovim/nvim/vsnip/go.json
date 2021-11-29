@@ -2,7 +2,7 @@
     "ttable": {
         "prefix": "ttable",
         "scope": "go",
-        "body": "tests := []struct {\n\tname string\n} {\n\t{\n\t\tname: \"default\",\n\t},\n}\n\nfor _, tt := range tests {\n\tt.Run(t, func(t *testing.T) {\n\t$0\t\n})\n)",
+        "body": "tests := []struct {\n\tname string\n} {\n\t{\n\t\tname: \"default\",\n\t},\n}\n\nfor _, tt := range tests {\n\tt.Run(tt.name, func(t *testing.T) {\n\t$0\t\n})\n}",
        "description": "A new table test"
     },
     "test": {

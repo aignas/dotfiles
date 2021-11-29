@@ -25,7 +25,8 @@ local lightred    = lush.hsl('#fd3c06')
 
 local fg          = white
 local bg          = lush.hsl('#3a3a3a')
-local lightfg     = fg.lighten(20)
+local lightfg     = fg.darken(20)
+local strongfg    = fg.lighten(30)
 local strongbg    = bg.lighten(10)
 local strongerbg  = bg.lighten(20)
 local lightyellow = yellow.darken(40)
@@ -36,6 +37,7 @@ if vim.o.background == 'light' then
      bg = white
      fg = black
      lightfg     = fg.lighten(20)
+     strongfg    = fg.darken(20)
      strongbg    = bg.darken(10)
      strongerbg  = bg.darken(20)
      lightyellow = yellow.lighten(40)
@@ -44,7 +46,7 @@ end
 
 return lush(function()
     return {
-        ColorColumn  { fg = "darkred" },
+        ColorColumn  { fg = lightred, bg = strongbg },
         Conceal      { gui = "italic" },
         Cursor       { gui = "reverse"},
         lCursor      { Cursor },
@@ -60,7 +62,7 @@ return lush(function()
         EndOfBuffer  { NonText },
         TermCursor   { },
         TermCursorNC { },
-        ErrorMsg     { bg = bg, fg = red, gui = "reverse" },
+        ErrorMsg     { bg = fg, fg = darkred, gui = "bold,reverse" },
         VertSplit    { },
         Folded       { },
         FoldColumn   { },
@@ -109,14 +111,14 @@ return lush(function()
         Boolean        { }, --  a boolean constant: TRUE, false
         Float          { }, --    a floating point constant: 2.3e10
 
-        Identifier     { gui = "underline,bold" }, -- (preferred) any variable name
+        Identifier     { gui = "bold" }, -- (preferred) any variable name
         Function       {}, -- function name (also: methods for classes)
 
-        Statement      { gui = "bold" },
-        -- Conditional    { }, --  if, then, else, endif, switch, etc.
-        -- Repeat         { }, --   for, do, while, etc.
-        -- Label          { }, --    case, default, etc.
-        -- Operator       { }, -- "sizeof", "+", "*", etc.
+        Statement      { fg = strongfg, gui = "bold" },
+        Conditional    { Statement }, --  if, then, else, endif, switch, etc.
+        Repeat         { Statement }, --   for, do, while, etc.
+        Label          { Statement }, --    case, default, etc.
+        Operator       { Statement }, -- "sizeof", "+", "*", etc.
         Keyword        { }, --  any other keyword
         -- Exception      { }, --  try, catch, throw
 
@@ -137,7 +139,7 @@ return lush(function()
         -- Tag            { }, --    you can use CTRL-] on this
         Delimiter      { }, --  character that needs attention
         Comment        { fg = lightfg, gui = "italic" },
-        -- SpecialComment { }, -- special things inside a comment
+        SpecialComment { fg = lightfg, gui = "italic" },
         -- Debug          { }, --    debugging statements
 
         Underlined { gui = "underline" },
