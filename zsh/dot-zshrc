@@ -44,6 +44,7 @@ alias ll='ls -l'
 alias la='ls -a'
 alias vc='e ~/.config/nvim/init.lua'
 
+alias docker='lima nerdctl'
 alias shed='docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:latest'
 
 alias w='watchexec --clear --restart'
