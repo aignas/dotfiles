@@ -5,6 +5,12 @@
         "body": "tests := []struct {\n\tname string\n} {\n\t{\n\t\tname: \"default\",\n\t},\n}\n\nfor _, tt := range tests {\n\tt.Run(tt.name, func(t *testing.T) {\n\t$0\t\n})\n}",
        "description": "A new table test"
     },
+    "trun": {
+        "prefix": "trun",
+        "scope": "go",
+        "body": "t.Run(\"$1\", func(t *testing.T) {\n\t$0\n})",
+       "description": "A new subtest"
+    },
     "test": {
         "prefix": "test",
         "scope": "go",

@@ -42,6 +42,7 @@ require('packer').startup({
         use 'hrsh7th/vim-vsnip'
         use 'hrsh7th/vim-vsnip-integ'
         use 'sbdchd/neoformat'
+        use 'mfussenegger/nvim-lint'
 
         use 'autowitch/hive.vim'
         use 'cappyzawa/starlark.vim'
@@ -152,7 +153,7 @@ set_leader_mappings({
     tg = '<CMD>Telescope grep_string<CR>',
     tq = '<CMD>Telescope quickfix<CR>',
     tl = '<CMD>Telescope loclist<CR>',
-    z = '<CMD>e %:h/BUILD.bazel<CR>',
+    z = '<CMD>e %:h/BUILD<CR>',
 
     [']w'] = '<CMD>WikiJournalNext<CR>',
     ['[w'] = '<CMD>WikiJournalPrev<CR>',
@@ -236,6 +237,7 @@ on_attach = function(client, bufnr)
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings
+    remap('<leader>gf', '<Cmd>lua vim.lsp.buf.formatting()<CR>')
     remap('<leader>gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
     remap('<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>')
     remap('<leader>gh', '<Cmd>lua vim.lsp.buf.hover()<CR>')
