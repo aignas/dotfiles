@@ -267,7 +267,7 @@ end)
 
 vim.g.tex_flavor = "latex"
 
-vim.g.wiki_root = '~/.work/zettel'
+vim.g.wiki_root = '~/.notes/zettel'
 vim.g.wiki_journal = {
     name = '',
     frequency = 'daily',
