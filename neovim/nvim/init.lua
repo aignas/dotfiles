@@ -119,6 +119,8 @@ vim.g.neoformat_run_all_formatters = 1
 vim.g.vim_markdown_folding_disabled = 1
 vim.g.vim_markdown_auto_insert_bullets = 0
 vim.g.vim_markdown_new_list_item_indent = 0
+vim.g.mkdp_auto_start = 0
+vim.g.mkdp_auto_close = 0
 vim.g.mkdp_markdown_css = vim.env.XDG_CONFIG_HOME .. '/nvim/styles/gdocs.css'
 
 set_leader_mappings = function(mappings, prefix)
@@ -172,6 +174,7 @@ require'nvim-treesitter.configs'.setup {
       "css",
       "go",
       "graphql",
+      "hcl",
       "html",
       "java",
       "javascript",
@@ -236,20 +239,24 @@ on_attach = function(client, bufnr)
 
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    -- Mappings
-    remap('<leader>gf', '<Cmd>lua vim.lsp.buf.formatting()<CR>')
-    remap('<leader>gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>')
-    remap('<leader>gd', '<Cmd>lua vim.lsp.buf.definition()<CR>')
-    remap('<leader>gh', '<Cmd>lua vim.lsp.buf.hover()<CR>')
-    remap('<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-    remap('<leader>gH', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
-    remap('<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
-    remap('<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-    remap('<leader>gR', '<cmd>lua vim.lsp.buf.rename()<CR>')
-    remap('[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')
-    remap(']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')
-    remap('<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>')
-    remap('<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>')
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    remap('gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
+    remap('gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+    remap('K', '<cmd>lua vim.lsp.buf.hover()<CR>')
+    remap('gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+    remap('<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
+    remap('<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>')
+    remap('<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>')
+    remap('<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>')
+    remap('<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    remap('<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+    remap('<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    remap('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+    remap('<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>')
+    remap('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+    remap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    remap('<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>')
+    remap('<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
 end
 
 local lsp_installer = require("nvim-lsp-installer")
