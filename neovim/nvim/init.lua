@@ -156,9 +156,6 @@ set_leader_mappings({
     tq = '<CMD>Telescope quickfix<CR>',
     tl = '<CMD>Telescope loclist<CR>',
     z = '<CMD>e %:h/BUILD<CR>',
-
-    [']w'] = '<CMD>WikiJournalNext<CR>',
-    ['[w'] = '<CMD>WikiJournalPrev<CR>',
 })
 
 local remap = vim.api.nvim_set_keymap
@@ -280,6 +277,55 @@ vim.g.wiki_journal = {
 vim.g.wiki_link_extension = '.md'
 vim.g.wiki_link_target_type = 'md'
 vim.g.wiki_filetypes = {'md'}
+vim.g.wiki_mappings_use_defaults = 'global'
+vim.g.wiki_mappings_local = {
+    ['<plug>(wiki-graph-find-backlinks)'] = '<leader>wb',
+    ['<plug>(wiki-graph-check-links)'] = '<leader>wlc',
+    ['<plug>(wiki-graph-in)'] = '<leader>wg',
+    ['<plug>(wiki-graph-out)'] = '<leader>wG',
+    -- ['<plug>(wiki-link-next)'] = '<tab>',
+    -- ['<plug>(wiki-link-prev)'] = '<s-tab>',
+    ['<plug>(wiki-link-show)'] = '<leader>wll',
+    ['<plug>(wiki-link-extract-header)'] = '<leader>wlh',
+    ['<plug>(wiki-link-follow)'] = '<cr>',
+    ['<plug>(wiki-link-follow-split)'] = '<c-w><cr>',
+    ['<plug>(wiki-link-follow-tab)'] = '<c-w>u',
+    ['<plug>(wiki-link-return)'] = '<bs>',
+    ['<plug>(wiki-link-toggle)'] = '<leader>wf',
+    ['<plug>(wiki-link-toggle-operator)'] = 'gl',
+    ['<plug>(wiki-page-delete)'] = '<leader>wd',
+    ['<plug>(wiki-page-rename)'] = '<leader>wr',
+    ['<plug>(wiki-page-toc)'] = '<leader>wt',
+    ['<plug>(wiki-page-toc-local)'] = '<leader>wT',
+    ['<plug>(wiki-export)'] = '<leader>wp',
+    ['x_<plug>(wiki-export)'] = '<leader>wp',
+    ['<plug>(wiki-tag-list)'] = '<leader>wsl',
+    ['<plug>(wiki-tag-reload)'] = '<leader>wsr',
+    ['<plug>(wiki-tag-search)'] = '<leader>wss',
+    ['<plug>(wiki-tag-rename)'] = '<leader>wsn',
+    ['x_<plug>(wiki-link-toggle-visual)'] = '<cr>',
+    ['o_<plug>(wiki-au)'] = 'au',
+    ['x_<plug>(wiki-au)'] = 'au',
+    ['o_<plug>(wiki-iu)'] = 'iu',
+    ['x_<plug>(wiki-iu)'] = 'iu',
+    ['o_<plug>(wiki-at)'] = 'at',
+    ['x_<plug>(wiki-at)'] = 'at',
+    ['o_<plug>(wiki-it)'] = 'it',
+    ['x_<plug>(wiki-it)'] = 'it',
+}
+vim.g.wiki_mappings_local_journal = {
+    ['<plug>(wiki-journal-prev)'] = '[w',
+    ['<plug>(wiki-journal-next)'] = ']w',
+    ['<plug>(wiki-journal-copy-tonext)'] = '<leader><c-n>',
+    ['<plug>(wiki-journal-toweek)'] = '<leader>wu',
+    ['<plug>(wiki-journal-tomonth)'] = '<leader>wm',
+}
+vim.cmd [[
+let g:wiki_map_link_create = 'MyFunction'
+function MyFunction(text) abort
+  return substitute(tolower(a:text), '\s\+', '-', 'g')
+endfunction
+]]
 
 vim.g.lists_filetypes = {'md'}
 
