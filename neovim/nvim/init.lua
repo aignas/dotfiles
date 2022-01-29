@@ -57,7 +57,7 @@ require('packer').startup({
 
         use {
             'nvim-treesitter/nvim-treesitter',
-            run = [[:TSUpdate]],
+            run = [[:TSUpdateSync]],
         }
         use 'plasticboy/vim-markdown'
         use {
