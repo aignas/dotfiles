@@ -2,19 +2,36 @@
 
 set -o vi
 
+add_path() {
+    local -r item="$1"
+
+    if [[ "${PATH#*$item}" != "$PATH" ]]; then
+        echo "ERR:  Adding a second time: $item"
+        return
+    fi
+
+    if [[ ! -d "$item" ]]; then
+        echo "WARN: Does not exist: $item"
+        return
+    fi
+
+    export PATH="$item:$PATH"
+}
+
 export DOTFILES="$HOME/.dotfiles"
-export GOPATH="${HOME}/gocode"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-export PATH="${GOENV_ROOT}/bin:${GOPATH}/bin:${DOTFILES}/tools:${PATH}"
-if [[ -d "${HOME}/bin" ]]; then
-    export PATH="${HOME}/bin:$PATH"
-fi
-if [[ -d "${HOME}/.local/bin" ]]; then
-    export PATH="${HOME}/.local/bin:$PATH"
-fi
-if [[ -d "${HOME}/.cargo/bin" ]]; then
-    export PATH="${HOME}/.cargo/bin:$PATH"
-fi
+export GOENV_ROOT="${DOTFILES}/golang/goenv"
+export GOENV_SHELL=zsh
+
+extra_paths=(
+    "${GOENV_ROOT}/bin"
+    "${GOENV_ROOT}/shims"
+    "${HOME}/.local/bin"
+)
+
+for item in ${extra_paths[@]}; do
+    add_path "$item"
+done
 
 export EDITOR="vim"
 if type nvim >/dev/null; then
@@ -101,3 +118,21 @@ fi
 
 # The next line updates PATH for Netlify's Git Credential Helper.
 test -f '/Users/aignas/Library/Preferences/netlify/helper/path.zsh.inc' && source '/Users/aignas/Library/Preferences/netlify/helper/path.zsh.inc'
+
+source "${GOENV_ROOT}/completions/goenv.zsh"
+command goenv rehash 2>/dev/null
+goenv() {
+  local command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(goenv "sh-$command" "$@")";;
+  *)
+    command goenv "$command" "$@";;
+  esac
+}
+goenv rehash --only-manage-paths
