@@ -2,31 +2,24 @@
 
 cd "$(dirname $0)"/..
 
-DIR=python
+DIR=./python
 
 if [[ ! -d ${DIR}/venv ]]; then
-    python3 -m venv ${DIR}/venv
+    python -m venv ${DIR}/venv
 fi
 
 _install() {
     mkdir -p ./tools
 
-    ${DIR}/venv/bin/pip install --upgrade pip setuptools
+    source ${DIR}/venv/bin/activate
+    python -m pip install --upgrade pip-tools pip
     ${DIR}/venv/bin/pip install -r python/requirements.txt
 
     tools=(
         black
-        epylint
-        flake8
         isort
-        isort-identify-imports
-        okta-awscli
-        pycodestyle
-        pydocstyle
-        pyflakes
-        pylint
         pyls
-        pyreverse
+        pre-commit
     )
 
     for i in "${tools[@]}"; do

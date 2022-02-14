@@ -62,7 +62,8 @@ _setup_deb() {
         stow \
         tmux \
         zsh \
-        python3-venv
+        python3-venv \
+        python-is-python3
 }
 
 if [ "$(uname -s)" == "Darwin" ]; then
