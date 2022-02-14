@@ -57,13 +57,14 @@ _setup_deb() {
         htop \
         jq \
         less \
+        python-is-python3 \
+        python3-venv \
         rsync \
         shellcheck \
         stow \
         tmux \
-        zsh \
-        python3-venv \
-        python-is-python3
+        watchman \
+        zsh
 }
 
 if [ "$(uname -s)" == "Darwin" ]; then

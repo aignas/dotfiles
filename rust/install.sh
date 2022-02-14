@@ -23,3 +23,4 @@ crates=(
 )
 
 cargo install "${crates[@]}"
+cargo install --git https://github.com/jgavris/rs-git-fsmonitor
