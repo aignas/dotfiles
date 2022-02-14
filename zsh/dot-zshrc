@@ -11,7 +11,7 @@ add_path() {
     fi
 
     if [[ ! -d "$item" ]]; then
-        echo "WARN: Does not exist: $item"
+        #echo "WARN: Does not exist: $item"
         return
     fi
 
