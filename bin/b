@@ -1,0 +1,8 @@
+#!/bin/bash
+
+[[ -f "$(command -v bazelisk)" ]] && exec bazelisk "$@"
+
+[[ -f "$(command -v bazel)" ]] && exec bazel "$@"
+
+echo "Please install 'bazel' or 'bazelisk' in order to continue!"
+exit 1
