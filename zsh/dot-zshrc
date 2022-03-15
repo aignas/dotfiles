@@ -24,8 +24,8 @@ export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export GOENV_SHELL=zsh
 
 extra_paths=(
-    "${GOENV_ROOT}/bin"
-    "${GOENV_ROOT}/shims"
+    "${DOTFILES}/bin"
+    "${DOTFILES}/tools"
     "${HOME}/.local/bin"
 )
 
