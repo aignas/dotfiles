@@ -51,6 +51,8 @@ _setup_mac() {
 }
 
 _setup_deb() {
+    sudo add-apt-repository ppa:neovim-ppa/stable
+
     env DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
         awscli \
         direnv \
