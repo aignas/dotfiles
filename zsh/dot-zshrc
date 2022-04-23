@@ -2,20 +2,13 @@
 
 set -o vi
 
-add_path() {
+path_prepend() {
     local -r item="$1"
 
-    if [[ "${PATH#*$item}" != "$PATH" ]]; then
-        echo "ERR:  Adding a second time: $item"
-        return
-    fi
+    [[ ! -d "$item" ]]                    && return # does not exist
+    [[ ${path[(ie)$item]} -le ${#path} ]] && return # already in PATH
 
-    if [[ ! -d "$item" ]]; then
-        #echo "WARN: Does not exist: $item"
-        return
-    fi
-
-    export PATH="$item:$PATH"
+    path=("$item" $path)
 }
 
 export DOTFILES="$HOME/.dotfiles"
@@ -26,12 +19,15 @@ export GOENV_SHELL=zsh
 extra_paths=(
     "${DOTFILES}/bin"
     "${DOTFILES}/tools"
+    "${GOENV_ROOT}/bin"
+    "${GOENV_ROOT}/shims"
     "${HOME}/.local/bin"
 )
 
 for item in ${extra_paths[@]}; do
-    add_path "$item"
+    path_prepend "$item"
 done
+export PATH
 
 export EDITOR="vim"
 if type nvim >/dev/null; then
@@ -43,6 +39,8 @@ export SAVEHIST=10000
 
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
+setopt DVORAK
+setopt CORRECT
 setopt SHARE_HISTORY
 setopt EXTENDED_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
