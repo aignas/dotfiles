@@ -1,3 +1,9 @@
 #!/bin/bash
 
-exec "${EDITOR}" "$@"
+readonly bg=$(grep "background" "${HOME}/.config/alacritty/alacritty.yml")
+
+if [[ "$bg" == "    background: '#3a3a3a'" ]]; then
+exec env "$EDITOR" --cmd "let theme = 'dark'" $@
+fi
+
+exec env "$EDITOR" --cmd "let theme = 'light'" $@

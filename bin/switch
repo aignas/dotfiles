@@ -5,6 +5,7 @@
 alacritty() {
     local -r theme="$1"
     (
+        cd "${HOME}/.config/alacritty"
         cp alacritty.yml alacritty.yml.bak
         trap 'rm alacritty.yml.bak' EXIT
         {
@@ -28,7 +29,6 @@ main() {
         ;;
     esac
 
-    cd "${HOME}/.config/alacritty"
     alacritty "$theme"
 }
 
