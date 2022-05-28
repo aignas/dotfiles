@@ -69,9 +69,28 @@ _setup_deb() {
         zsh
 }
 
-if [ "$(uname -s)" == "Darwin" ]; then
-    _setup_mac
-    exit 0
-fi
+_setup_arch() {
+    sudo pacman -S \
+        base-devel
+        direnv \
+        htop \
+        jq \
+        rsync \
+        shellcheck \
+        stow \
+        tmux \
+        zsh
+}
 
-_setup_deb
+
+case "$(uname -a)" in
+    Darwin*)
+        _setup_mac
+        ;;
+    Linux*arch*)
+        _setup_arch
+        ;;
+    *)
+        _setup_deb
+        ;;
+esac
