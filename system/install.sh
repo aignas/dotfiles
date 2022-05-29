@@ -94,6 +94,7 @@ _setup_arch() {
         tmux
         ttf-hack
         watchexec
+        xdg-utils
         zsh
     )
 
