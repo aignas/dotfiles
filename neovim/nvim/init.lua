@@ -210,6 +210,7 @@ set backspace=eol,start,indent
 set autoindent breakindent showbreak=»»
 set expandtab shiftwidth=4 tabstop=4
 set fileformats=unix,mac,dos
+set laststatus=3
 set linebreak list number
 set nospell
 set whichwrap+=<,>
