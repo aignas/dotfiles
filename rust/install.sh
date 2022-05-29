@@ -12,15 +12,19 @@ rustup component add clippy rustfmt \
 rustup default stable
 rustup update
 
-if [ "$(uname -s)" == "Darwin" ]; then
-    exit 0
-fi
+case $(./bin/dotos) in
+    Darwin|"Arch Linux")
+        ;;
+    *)
+        crates=(
+            exa
+            fd-find
+            watchexec-cli
+        )
+        echo "Installing ${crates[*]} as crates"
 
-crates=(
-    exa
-    fd-find
-    watchexec-cli
-)
+        cargo install "${crates[@]}"
+        ;;
+esac
 
-cargo install "${crates[@]}"
-cargo install --git https://github.com/jgavris/rs-git-fsmonitor
+cargo uninstall https://github.com/jgavris/rs-git-fsmonitor || :

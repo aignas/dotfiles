@@ -18,79 +18,100 @@ _setup_mac() {
     ok "brew: tap"
 
     debug "brew: install"
-    brew install \
-        autossh \
-        coreutils \
-        direnv \
-        diskonaut \
-        exa \
-        fd \
-        font-hack \
-        gh \
-        golang \
-        htop \
-        jq \
-        k3d \
-        neovim \
-        netlify-cli \
-        npm \
-        ripgrep \
-        rs-git-fsmonitor \
-        rust-analyzer \
-        saml2aws \
-        shellcheck \
-        stow \
-        texlab \
-        tig \
-        tmux \
-        tree-sitter \
-        watchexec \
-        watchman \
+    local -r pkgs=(
+        autossh
+        coreutils
+        direnv
+        diskonaut
+        exa
+        fd
+        font-hack
+        gh
+        golang
+        htop
+        jq
+        k3d
+        neovim
+        npm
+        ripgrep
+        rs-git-fsmonitor
+        rust-analyzer
+        saml2aws
+        shellcheck
+        stow
+        texlab
+        tig
+        tmux
+        tree-sitter
+        watchexec
         zola
+    )
+
+    brew install "${pkgs[@]}"
     ok "brew: install"
 }
 
 _setup_deb() {
     sudo add-apt-repository ppa:neovim-ppa/stable
 
-    env DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
-        awscli \
-        direnv \
-        htop \
-        jq \
-        less \
-        python-is-python3 \
-        python3-venv \
-        rsync \
-        shellcheck \
-        stow \
-        tmux \
-        watchman \
+    local -r pkgs=(
+        awscli
+        direnv
+        htop
+        jq
+        less
+        python-is-python3
+        python3-venv
+        rsync
+        shellcheck
+        stow
+        tmux
         zsh
+    )
+
+    debug "apt-get: install"
+    env DEBIAN_FRONTEND=noninteractive sudo apt-get install -y "${pkgs[@]}"
+    ok "apt-get: install"
 }
 
 _setup_arch() {
-    sudo pacman -S \
+    local -r pkgs=(
         base-devel
-        direnv \
-        htop \
-        jq \
-        rsync \
-        shellcheck \
-        stow \
-        tmux \
+        direnv
+        diskonaut
+        exa
+        fd
+        gh
+        htop
+        jq
+        jq
+        npm
+        rg
+        rsync
+        shellcheck
+        stow
+        tig
+        tmux
+        ttf-hack
+        watchexec
+        watchman
         zsh
+    )
+
+    debug "pacman: install"
+    sudo pacman -S --needed "${pkgs[@]}"
+    ok "pacman: install"
 }
 
 
-case "$(uname -a)" in
-    Darwin*)
+case "$(./bin/dotos)" in
+    Mac)
         _setup_mac
         ;;
-    Linux*arch*)
+    "Arch Linux")
         _setup_arch
         ;;
-    *)
+    Ubuntu)
         _setup_deb
         ;;
 esac
