@@ -81,12 +81,12 @@ _setup_arch() {
         diskonaut
         exa
         fd
-        gh
+        github-cli
         htop
         jq
         jq
         npm
-        rg
+        ripgrep
         rsync
         shellcheck
         stow
@@ -94,7 +94,6 @@ _setup_arch() {
         tmux
         ttf-hack
         watchexec
-        watchman
         zsh
     )
 
