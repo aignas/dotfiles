@@ -1,0 +1,20 @@
+#!/bin/sh
+
+case $(uname -a) in
+    Darwin*)
+        echo "Mac"
+        ;;
+    Linux*)
+        [[ -f /etc/os-release ]] && {
+            source /etc/os-release
+            echo "$NAME"
+            exit 0
+        }
+
+        echo "Unknown Linux"
+        ;;
+    *)
+        echo "Unknown OS"
+        exit 1
+        ;;
+esac
