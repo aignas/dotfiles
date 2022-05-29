@@ -1,5 +1,6 @@
 window:
   dynamic_padding: true
+  decorations: none
 selection:
   save_to_clipboard: true
 font:
