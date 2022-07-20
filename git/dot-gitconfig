@@ -36,7 +36,6 @@
     st = status
 
 [init]
-    templatedir = /Users/aignas/.git-template-with-git-hooks
     defaultBranch = main
 
 [include]
