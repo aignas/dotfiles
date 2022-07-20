@@ -90,7 +90,6 @@ _setup_arch() {
         python-pre-commit
         ripgrep
         rsync
-        rust
         rustup
         shellcheck
         stow
