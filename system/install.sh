@@ -86,13 +86,19 @@ _setup_arch() {
         jq
         jq
         npm
+        otf-ipaexfont
+        python-pre-commit
         ripgrep
         rsync
+        rust
+        rustup
         shellcheck
         stow
         tig
         tmux
         ttf-hack
+        ttf-hanazono
+        ttf-sazanami
         watchexec
         xdg-utils
         zsh

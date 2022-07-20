@@ -1,0 +1,11 @@
+#!/bin/bash
+
+main() {
+    local -r pkg="$1"
+    local -r dst=~/src/aur/$pkg
+
+    git clone https://aur.archlinux.org/${pkg}.git "$dst"
+    cd $dst
+}
+
+main "$@"
