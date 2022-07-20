@@ -4,7 +4,7 @@ set -euo pipefail
 cd "${HOME}/.dotfiles"
 
 _stow() {
-    stow "$@"
+    stow -v "$@"
     #stow "$@" 2>/dev/null
 }
 
@@ -41,6 +41,7 @@ echo "stow: XDG config"
 _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
     -R alacritty \
+    -R lf \
     -R neovim \
     -R yabai \
     "$@"
