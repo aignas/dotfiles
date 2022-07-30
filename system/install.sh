@@ -76,6 +76,7 @@ _setup_deb() {
 
 _setup_arch() {
     local -r pkgs=(
+        asp
         base-devel
         direnv
         diskonaut
@@ -88,6 +89,7 @@ _setup_arch() {
         npm
         otf-ipaexfont
         python-pre-commit
+        python-pillow # required for qmk
         ripgrep
         rsync
         rustup
