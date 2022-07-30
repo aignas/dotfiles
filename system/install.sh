@@ -80,6 +80,7 @@ _setup_arch() {
         base-devel
         direnv
         diskonaut
+        docker
         exa
         fd
         github-cli
