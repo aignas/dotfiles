@@ -1,2 +1,3 @@
 set shellopts -eu
 map p $eog $f
+map w $darktable $f
