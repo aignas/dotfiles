@@ -107,7 +107,7 @@ _setup_arch() {
     )
 
     debug "pacman: install"
-    sudo pacman -S --needed "${pkgs[@]}"
+    sudo pacman -S --needed --noconfirm "${pkgs[@]}"
     ok "pacman: install"
 }
 
