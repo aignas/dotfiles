@@ -43,5 +43,6 @@ _stow \
     -R alacritty \
     -R lf \
     -R neovim \
+    -R pacman \
     -R yabai \
     "$@"
