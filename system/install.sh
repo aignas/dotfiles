@@ -104,6 +104,21 @@ _setup_arch() {
         watchexec
         xdg-utils
         zsh
+        # UI
+        luakit
+        vimb
+        # Steam
+        steam-native-runtime
+        lib32-vulkan-mesa-layers
+        # Sway
+        sway
+        bemenu-wayland
+        mako
+        swaybg
+        swayidle
+        swaylock
+        waybar
+        i3status
     )
 
     debug "pacman: install"
