@@ -44,5 +44,6 @@ _stow \
     -R lf \
     -R neovim \
     -R pacman \
+    -R sway \
     -R yabai \
     "$@"
