@@ -47,11 +47,14 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 
 # aliases
-alias se='sudo -E $(which e)'
 alias g='git'
 alias gd='git diff'
 alias gp='git push -fu'
 alias gs='git status --short --branch --show-stash'
+if type kubectl >/dev/null; then
+    alias k='kubectl'
+fi
+alias se='sudo -E $(which e)'
 if type fdfind >/dev/null; then
     alias fd='fdfind --color=never'
 fi
