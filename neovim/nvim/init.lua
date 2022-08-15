@@ -199,7 +199,11 @@ require'nvim-treesitter.configs'.setup {
 
 vim.cmd [[
 set guioptions=ag termguicolors lazyredraw
-set background=dark
+if exists('theme') && theme == 'light'
+  set background=light
+else
+  set background=dark
+endif
 colorscheme simple
 
 set diffopt+=internal,algorithm:patience
