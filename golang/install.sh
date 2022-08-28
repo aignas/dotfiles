@@ -12,7 +12,6 @@ if [[ -f "$(command -v goenv)" ]]; then
     goenv rehash
 fi
 
-
 if [[ -f "$(command -v go)" ]]; then
     pushd ${DOTFILES}/golang/tools
     grep "_" "tools.go" |
