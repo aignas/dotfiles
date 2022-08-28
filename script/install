@@ -10,11 +10,13 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 installs=(
+    ./apt-get
+    ./brew
+    ./pacman
     ./golang
     ./neovim
     ./rust
     ./fzf
-    ./system
     ./lua
     ./python
 )
