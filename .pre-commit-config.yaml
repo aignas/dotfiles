@@ -6,6 +6,12 @@ repos:
   - id: check-yaml
   - id: end-of-file-fixer
   - id: trailing-whitespace
+- repo: https://github.com/jazzband/pip-tools
+  rev: 6.8.0
+  hooks:
+    - id: pip-compile
+      files: ^python/requirements.(in|txt)$
+      args: [python/requirements.in]
 - repo: local
   hooks:
     - id: shfmt

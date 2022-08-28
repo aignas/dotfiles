@@ -1,4 +1,3 @@
-black
-isort
-python-language-server
+pip-tools
 pre-commit
+pip

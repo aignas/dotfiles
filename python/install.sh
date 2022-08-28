@@ -12,13 +12,14 @@ _install() {
     mkdir -p ./tools
 
     source ${DIR}/venv/bin/activate
-    python -m pip install --upgrade pip-tools pip
-    ${DIR}/venv/bin/pip install -r python/requirements.txt
+    if [[ ! -f ${DIR}/venv/bin/pip-sync ]]; then
+        python -m pip install pip-tools
+    fi
+    ${DIR}/venv/bin/pip-sync python/requirements.txt
 
     tools=(
-        black
-        isort
-        pyls
+        pip-compile
+        pip-sync
         pre-commit
     )
 
