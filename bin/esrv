@@ -1,0 +1,22 @@
+#!/bin/bash
+# See below
+# https://neovide.dev/features.html?highlight=ssh#remote-tcp-support
+set -euo pipefail
+
+case ${1:--h} in
+'' | -h | --help | -*)
+    cat <<EOF
+Usage $0 [--help] HOSTNAME
+
+HOSTNAME is the ssh config entry or the IP of a remote host that has 'nvim' installed.
+EOF
+    exit 1
+    ;;
+*) ;;
+
+esac
+
+echo "Starting a remote neovim session on '$1'"
+echo "Connect to this by running:"
+echo "'neovide --remote-tcp=localhost:6666'"
+exec ssh -L 6666:localhost:6666 "$1" nvim --headless --listen localhost:6666
