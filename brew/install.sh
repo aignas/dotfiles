@@ -38,6 +38,7 @@ _install() {
         ripgrep
         rs-git-fsmonitor
         rust-analyzer
+        rustup-init
         saml2aws
         shellcheck
         stow
