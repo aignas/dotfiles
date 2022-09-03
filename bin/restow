@@ -4,7 +4,7 @@ set -euo pipefail
 cd "${HOME}/.dotfiles"
 
 _stow() {
-    stow -v "$@"
+    stow -v --ignore=install.sh "$@"
     #stow "$@" 2>/dev/null
 }
 
