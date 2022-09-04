@@ -326,7 +326,7 @@ vim.g.wiki_mappings_local_journal = {
     ['<plug>(wiki-journal-tomonth)'] = '<leader>wm',
 }
 vim.cmd [[
-let g:neovide_cursor_animation_length=0
+let g:neovide_cursor_animation_length=0.01
 let g:neovide_refresh_rate_idle=5
 let g:wiki_map_link_create = 'MyFunction'
 function MyFunction(text) abort
