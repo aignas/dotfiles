@@ -1,6 +1,6 @@
 # See https://sr.ht/~emersion/kanshi/
 profile {
-    output eDP-1 enable mode 1920x1080 scale 1.5 position 1920,480
+    output eDP-1 disable
     output "Dell Inc. DELL U2421E JFHVC23" mode 1920x1200 position 0,0
 }
 
