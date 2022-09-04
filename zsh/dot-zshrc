@@ -54,6 +54,9 @@ alias gs='git status --short --branch --show-stash'
 if type kubectl >/dev/null; then
     alias k='kubectl'
 fi
+if type terragrunt >/dev/null; then
+    alias tg='terragrunt'
+fi
 alias se='sudo -E $(which e)'
 if type fdfind >/dev/null; then
     alias fd='fdfind --color=never'
