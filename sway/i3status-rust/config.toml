@@ -1,0 +1,57 @@
+# See https://github.com/greshake/i3status-rust/blob/v0.22.0/doc/blocks.md
+theme = "modern"
+icons = "awesome"
+
+[[block]]
+block = "cpu"
+interval = 5
+
+[[block]]
+block = "load"
+interval = 5
+format = "{5m}"
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "battery"
+driver = "upower"
+format = "{percentage} {time}"
+
+[[block]]
+block = "disk_space"
+path = "/"
+info_type = "used"
+alert_absolute = true
+unit = "GB"
+alert = 1
+warning = 2
+format = "/:{available}"
+
+[[block]]
+block = "disk_space"
+path = "/home/"
+info_type = "used"
+alert_absolute = true
+unit = "GB"
+alert = 5
+warning = 20
+format = "/home:{available}"
+
+[[block]]
+block = "docker"
+interval = 10
+format = "{running}/{total}"
+
+[[block]]
+block = "networkmanager"
+on_click = "alacritty -e nmtui"
+interface_name_exclude = ['docker\d+']
+primary_only = true
+
+[[block]]
+block = "time"
+format = "%Y-%m-%d %H:%M"
+on_click = "alacritty -e 'cal -3'"
+timezone = "Asia/Tokyo"

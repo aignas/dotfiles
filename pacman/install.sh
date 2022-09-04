@@ -31,6 +31,7 @@ _install() {
         stow
         tig
         tmux
+        ttf-font-awesome
         ttf-hack
         ttf-hanazono
         ttf-sazanami
@@ -44,7 +45,7 @@ _install() {
         bemenu-wayland
         brightnessctl
         gammastep
-        i3status
+        i3status-rust
         kanshi
         mako
         pamixer
