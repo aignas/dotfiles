@@ -37,21 +37,23 @@ _install() {
         watchexec
         xdg-utils
         zsh
-        # UI
-        luakit
-        vimb
         # Steam
         steam-native-runtime
         lib32-vulkan-mesa-layers
         # Sway
-        sway
         bemenu-wayland
+        brightnessctl
+        gammastep
+        i3status
         mako
+        pamixer
+        python-tldextract
+        qutebrowser
+        sway
         swaybg
         swayidle
         swaylock
         waybar
-        i3status
     )
 
     debug "pacman: install"
