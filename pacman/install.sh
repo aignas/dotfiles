@@ -45,6 +45,7 @@ _install() {
         brightnessctl
         gammastep
         i3status
+        kanshi
         mako
         pamixer
         python-tldextract
