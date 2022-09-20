@@ -19,7 +19,6 @@ _install() {
         github-cli
         htop
         jq
-        jq
         npm
         otf-ipaexfont
         python-pre-commit
@@ -31,8 +30,6 @@ _install() {
         stow
         tig
         tmux
-        ttf-font-awesome
-        ttf-hack
         ttf-hanazono
         ttf-sazanami
         watchexec
@@ -55,7 +52,13 @@ _install() {
         swaybg
         swayidle
         swaylock
+        ttf-font-awesome
+        ttf-hack
         waybar
+        # Yubikey
+        yubikey-manager
+        libfido2
+        yubico-pam
     )
 
     debug "pacman: install"
