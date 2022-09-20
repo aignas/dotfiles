@@ -37,18 +37,13 @@ alert_absolute = true
 unit = "GB"
 alert = 5
 warning = 20
-format = "/home:{available}"
-
-[[block]]
-block = "docker"
-interval = 10
-format = "{running}/{total}"
+format = "/home/:{available}"
 
 [[block]]
 block = "networkmanager"
 on_click = "alacritty -e nmtui"
 interface_name_exclude = ['docker\d+']
-primary_only = true
+primary_only = false
 
 [[block]]
 block = "time"

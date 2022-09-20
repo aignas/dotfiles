@@ -35,8 +35,8 @@ font pango:Hack,10
 
 # Taken from
 # https://webbtelescope.org/contents/media/images/2022/031/01G77PKB8NKR7S8Z6HBXMYATGJ
-output * bg ~/.config/sway/james-webb-1.png fill
 exec "kanshi"
+output * bg ~/.config/sway/james-webb-1.png fill
 
 # screen backlight, first set min and restore previous
 bindsym XF86MonBrightnessUp   exec "lightctl +5%"
@@ -254,11 +254,10 @@ bindsym $mod+r mode "resize"
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    font pango:Hack, FontAwesome 12
+    font pango:Hack, "Font Awesome 6 Free" 11
     position top
 
     status_command i3status-rs ~/.config/i3status-rust/config.toml
-
     colors {
         separator #666666
         background #222222
@@ -274,5 +273,3 @@ bar {
 # Decorations
 #
 default_border pixel
-
-include /etc/sway/config.d/*
