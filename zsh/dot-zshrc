@@ -49,7 +49,8 @@ setopt HIST_REDUCE_BLANKS
 # aliases
 alias g='git'
 alias gd='git diff'
-alias gp='git push -fu'
+alias gp='git push'
+alias gpf='git push -fu'
 alias gs='git status --short --branch --show-stash'
 if type kubectl >/dev/null; then
     alias k='kubectl'
