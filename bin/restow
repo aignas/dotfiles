@@ -45,6 +45,7 @@ _stow \
     -R neovim \
     -R pacman \
     -R qutebrowser \
+    -R spotify \
     -R sway \
     -R wezterm \
     -R yabai \

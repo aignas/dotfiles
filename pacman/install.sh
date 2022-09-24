@@ -52,8 +52,10 @@ _install() {
         kanshi
         mako
         pamixer
+        playerctl
         python-tldextract
         qutebrowser
+        spotifyd
         sway
         swaybg
         swayidle
