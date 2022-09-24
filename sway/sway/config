@@ -35,7 +35,7 @@ font pango:Hack,10
 
 # Taken from
 # https://webbtelescope.org/contents/media/images/2022/031/01G77PKB8NKR7S8Z6HBXMYATGJ
-exec "kanshi"
+exec_always "pkill kanshi; kanshi"
 output * bg ~/.config/sway/james-webb-1.png fill
 
 # screen backlight, first set min and restore previous
@@ -209,7 +209,7 @@ exec swaymsg exec nm-applet --indicator
 #
 # Power keys:
 #
-    bindsym $mod+Shift+Escape exec systemctl suspend
+    bindsym $mod+ctrl+q exec systemctl suspend
     bindsym XF86Sleep exec systemctl suspend
 
 #
