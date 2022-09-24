@@ -8,7 +8,7 @@ source script/logging.sh
 type pacman >/dev/null || exit 0
 
 _install() {
-    local -r pkgs=(
+    local pkgs=(
         asp
         base-devel
         direnv
@@ -35,10 +35,16 @@ _install() {
         watchexec
         xdg-utils
         zsh
-        # Steam
+    )
+
+    # Steam
+    pkgs+=(
         steam-native-runtime
         lib32-vulkan-mesa-layers
-        # Sway
+    )
+
+    # Sway
+    pkgs+=(
         bemenu-wayland
         brightnessctl
         gammastep
@@ -55,10 +61,20 @@ _install() {
         ttf-font-awesome
         ttf-hack
         waybar
-        # Yubikey
+    )
+
+    # Yubikey
+    pkgs+=(
         yubikey-manager
         libfido2
         yubico-pam
+    )
+
+    # Mail
+    pkgs+=(
+        aerc
+        dante
+        w3m
     )
 
     debug "pacman: install"
