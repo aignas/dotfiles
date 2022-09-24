@@ -78,6 +78,7 @@ _install() {
     )
 
     debug "pacman: install"
+    sudo pacman -Syu
     sudo pacman -Sy --needed --noconfirm "${pkgs[@]}"
     ok "pacman: install"
 }
