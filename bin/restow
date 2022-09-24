@@ -50,3 +50,11 @@ _stow \
     -R wezterm \
     -R yabai \
     "$@"
+
+type systemctl >/dev/null || exit 0
+
+echo "stow: systemd overrides"
+_stow \
+    --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
+    -R systemd \
+    "$@"
