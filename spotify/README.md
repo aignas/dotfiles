@@ -1,4 +1,6 @@
-# Setup instructions for SpotifyD
+# Spotify
+
+## spotifyd setup
 
 ```
 secret-tool store --label='daemons' application rust-keyring service spotifyd username <username>
@@ -6,7 +8,7 @@ systemctl --user start spotifyd.service
 systemctl --user enable spotifyd.service
 ```
 
-# Enabling 'playerctl' integration
+### Enabling 'playerctl' integration
 
 The following commands were needed in order to setup the loading of my config
 correctly. However, `restow` should symlink the required modifications to any
