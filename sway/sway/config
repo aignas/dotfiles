@@ -47,12 +47,7 @@ exec "avizo-service"
 #
 # Example configuration:
 #
-exec swayidle \
-    timeout 300 'swaylock -c 3a3a3a' \
-    timeout 600 'swaymsg "output * dpms off"' \
-       resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock -c 3a3a3a' \
-    before-sleep 'playerctl pause'
+exec swayidle swaylock
 
 ### Redshift configuration
 exec swaymsg exec gammastep-indicator
@@ -120,7 +115,7 @@ exec swaymsg exec nm-applet --indicator
     # exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-    bindsym $mod+Escape exec swaylock -c 3a3a3a
+    bindsym $mod+Escape exec swaylock
 #
 # Moving around:
 #
@@ -205,11 +200,16 @@ exec swaymsg exec nm-applet --indicator
     bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
     bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
     bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+    bindsym XF86AudioPlay exec playerctl play-pause
+    bindsym XF86AudioPause exec playerctl pause
+    bindsym XF86AudioStop exec playerctl stop
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioPrev exec playerctl previous
 
 #
 # Power keys:
 #
-    bindsym $mod+ctrl+q exec systemctl suspend
+    bindsym $mod+ctrl+q exec "systemctl suspend"
     bindsym XF86Sleep exec systemctl suspend
 
 #
