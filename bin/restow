@@ -47,7 +47,6 @@ _stow \
     -R qutebrowser \
     -R spotify \
     -R sway \
-    -R wezterm \
     -R yabai \
     "$@"
 
@@ -55,6 +54,6 @@ type systemctl >/dev/null || exit 0
 
 echo "stow: systemd overrides"
 _stow \
-    --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
+    --target="${XDG_CONFIG_HOME:-${HOME}/.config}/systemd/user/" \
     -R systemd \
     "$@"

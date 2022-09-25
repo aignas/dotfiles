@@ -19,7 +19,6 @@ installs=(
     ./fzf
     ./lua
     ./python
-    ./wezterm
 )
 
 {
