@@ -43,6 +43,7 @@ require('packer').startup({
         use 'hrsh7th/vim-vsnip-integ'
         use 'sbdchd/neoformat'
         use 'mfussenegger/nvim-lint'
+        use 'gpanders/editorconfig.nvim'
 
         use 'autowitch/hive.vim'
         use 'cappyzawa/starlark.vim'
@@ -59,7 +60,6 @@ require('packer').startup({
             'nvim-treesitter/nvim-treesitter',
             run = [[:TSUpdateSync]],
         }
-        use 'plasticboy/vim-markdown'
         use {
             'iamcco/markdown-preview.nvim',
             run = [[:call mkdp#util#install()]]
@@ -70,6 +70,10 @@ require('packer').startup({
         plugin_package = "packer.nvim"
     }
 })
+
+require('editorconfig').properties.foo = function(bufnr, val)
+  vim.b[bufnr].foo = val
+end
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
@@ -179,6 +183,8 @@ require'nvim-treesitter.configs'.setup {
       "json",
       "julia",
       "lua",
+      "markdown",
+      "markdown_inline",
       "php",
       "python",
       "ql",
@@ -204,6 +210,16 @@ if exists('theme') && theme == 'light'
 else
   set background=dark
 endif
+
+let g:seoul256_italic_comments = v:true
+let g:seoul256_italic_keywords = v:true
+let g:seoul256_italic_functions = v:true
+let g:seoul256_italic_variables = v:false
+let g:seoul256_contrast = v:true
+let g:seoul256_borders = v:false
+let g:seoul256_disable_background = v:false
+let g:seoul256_hl_current_line = v:true
+
 colorscheme simple
 
 set diffopt+=internal,algorithm:patience
