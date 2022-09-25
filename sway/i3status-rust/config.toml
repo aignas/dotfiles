@@ -3,11 +3,10 @@ theme = "modern"
 icons = "awesome"
 
 [[block]]
-block = "custom"
-command = "playerctl metadata --format '{{title}} \uf001 {{artist}}' || :"
-interval = 5
-on_click = "playerctl play-pause"
-hide_when_empty = true
+block = "music"
+player = "spotify"
+buttons = ["play", "next"]
+format = "'{title}' by {artist}"
 
 [[block]]
 block = "cpu"
