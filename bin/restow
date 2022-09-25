@@ -50,10 +50,8 @@ _stow \
     -R yabai \
     "$@"
 
-type systemctl >/dev/null || exit 0
-
-echo "stow: systemd overrides"
+echo "stow: aerc config"
 _stow \
-    --target="${XDG_CONFIG_HOME:-${HOME}/.config}/systemd/user/" \
-    -R systemd \
+    --target="${XDG_CONFIG_HOME:-${HOME}/.config}/aerc" \
+    -R aerc \
     "$@"
