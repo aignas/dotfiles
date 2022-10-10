@@ -37,6 +37,14 @@ _install() {
         zsh
     )
 
+    # Laptop powersaving
+    pkgs+=(
+        tlp
+        smartmontools
+        ethtool
+        tp_smapi
+    )
+
     # Steam
     pkgs+=(
         steam-native-runtime
