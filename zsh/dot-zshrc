@@ -10,11 +10,23 @@ path_prepend() {
 
     path=("$item" $path)
 }
+trysource() {
+    if [[ -f "${1}" ]]; then
+        source "${1}"
+    fi
+}
+exists() {
+    if type "$1" >/dev/null; then
+        return 0
+    fi
+    return 1
+}
 
 export DOTFILES="$HOME/.dotfiles"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
 export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export GOENV_SHELL=zsh
+export NVM_DIR="${HOME}/.nvm"
 
 extra_paths=(
     "${DOTFILES}/bin"
@@ -30,9 +42,7 @@ done
 export PATH
 
 export EDITOR="vim"
-if type nvim >/dev/null; then
-    export EDITOR="nvim"
-fi
+exists nvim && export EDITOR="nvim"
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
@@ -52,42 +62,19 @@ alias gd='git diff'
 alias gp='git push'
 alias gpf='git push -fu'
 alias gs='git status --short --branch --show-stash'
-if type kubectl >/dev/null; then
-    alias k='kubectl'
-fi
-if type terragrunt >/dev/null; then
-    alias tg='terragrunt'
-fi
+
+alias vc='e ~/.config/nvim/init.lua'
 alias se='sudo -E $(which e)'
-if type fdfind >/dev/null; then
-    alias fd='fdfind --color=never'
-fi
-if type exa >/dev/null; then
-    alias ls='exa --colour=never'
-fi
+exists kubectl && alias k='kubectl'
+exists terragrunt && alias tg='terragrunt'
+exists fd && alias fd='fd --color=never'
+exists fdfind && alias fd='fdfind --color=never'
+
+exists exa && alias ls='exa --color=never'
 alias ll='ls -l'
 alias la='ls -a'
-alias vc='e ~/.config/nvim/init.lua'
-
-alias shed='docker run --name shed --volume ${PWD}:/x --workdir /x --tty --interactive --rm aignas/shed:latest'
 
 alias w='watchexec --clear --restart'
-
-# Original idea based on: https://github.com/rust-lang/rfcs/issues/2324,
-# however it would be great to have a 'cargo doc' to include the stdlib docs
-# instead of linking to the online ones.
-cargodocw () {
-    # pipe-tar is so fast for lots of small files
-    src="$(dirname "$(rustup doc --path)")"
-    dest="./target/doc"
-    echo "Copying standard rust documentation:"
-    echo "$src -> $dest"
-    rm -rf "$dest"
-    mkdir -p "$dest"
-    (cd "$src" && tar -cf - .) | (cd "$dest" && tar -xpf -)
-
-    w cargo doc --all --document-private-items $@
-}
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html
@@ -102,29 +89,16 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 compdef g=git
 
-trysource() {
-    if [[ -f "${1}" ]]; then
-        source "${1}"
-    fi
-}
 trysource "${HOME}/.local.sh"
 trysource "${HOME}/.localrc"
 trysource "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
-export NVM_DIR="${HOME}/.nvm"
 trysource "${NVM_DIR}"/nvm.sh
 
 if type direnv >/dev/null; then
     eval "$(direnv hook zsh)"
 fi
 
-if type netlify >/dev/null; then
-    trysource "${HOME}/Library/Preferences/netlify/helper/path.zsh.inc"
-fi
-
-# The next line updates PATH for Netlify's Git Credential Helper.
-test -f '/Users/aignas/Library/Preferences/netlify/helper/path.zsh.inc' && source '/Users/aignas/Library/Preferences/netlify/helper/path.zsh.inc'
-
-source "${GOENV_ROOT}/completions/goenv.zsh"
+trysource "${GOENV_ROOT}/completions/goenv.zsh"
 command goenv rehash 2>/dev/null
 goenv() {
   local command
