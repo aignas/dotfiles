@@ -5,7 +5,7 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
-vim.cmd [[packadd packer.nvim]]
+vim.cmd.packadd "packer.nvim"
 require('packer').startup({
     function()
         use {
@@ -193,7 +193,8 @@ require'nvim-treesitter.configs'.setup {
       "zig",
     },
     highlight = {enable = true},
-    indent = {enable = true}
+    indent = {enable = true},
+    additional_vim_regex_highlighting = false,
 }
 
 vim.cmd [[
@@ -203,35 +204,40 @@ if exists('theme') && theme == 'light'
 else
   set background=dark
 endif
-
-let g:seoul256_italic_comments = v:true
-let g:seoul256_italic_keywords = v:true
-let g:seoul256_italic_functions = v:true
-let g:seoul256_italic_variables = v:false
-let g:seoul256_contrast = v:true
-let g:seoul256_borders = v:false
-let g:seoul256_disable_background = v:false
-let g:seoul256_hl_current_line = v:true
-
-colorscheme simple
-
-set diffopt+=internal,algorithm:patience
-set history=10000 undofile backup backupcopy=yes
-set backupdir-=.
-set directory-=.
-set backspace=eol,start,indent
-set autoindent breakindent showbreak=»»
-set expandtab shiftwidth=4 tabstop=4
-set fileformats=unix,mac,dos
-set laststatus=3
-set linebreak list number
-set nospell
-set whichwrap+=<,>
-set scrolloff=5
-
-autocmd BufNewFile,BufRead *.{hql,ddl} set filetype=hive expandtab
-autocmd BufWritePost init.lua PackerCompile
 ]]
+
+vim.cmd.colorscheme "simple"
+
+vim.opt.autoindent = true
+vim.opt.backspace = "eol,start,indent"
+vim.opt.backup = true
+vim.opt.backupcopy = "yes"
+vim.opt.backupdir:remove "."
+vim.opt.breakindent = true
+vim.opt.diffopt:append {"internal", "algorithm:patience"}
+vim.opt.directory:remove "."
+vim.opt.expandtab = true
+vim.opt.fileformats = { "unix", "mac", "dos"}
+vim.opt.history = 10000
+vim.opt.laststatus = 3
+vim.opt.linebreak = true
+vim.opt.list = true
+vim.opt.number = true
+vim.opt.scrolloff = 5
+vim.opt.shiftwidth = 4
+vim.opt.showbreak = "»»"
+vim.opt.spell = true
+vim.opt.tabstop = 4
+vim.opt.undofile = true
+vim.opt.whichwrap = 'b,s,<,>'
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+    pattern = { "*.{hdl,ddl}" },
+    command = [[set filetype=hive expandtab]],
+})
+vim.api.nvim_create_autocmd({"BufWritePost"}, {
+    pattern = { "init.lua" },
+    command = [[PackerCompile]],
+})
 
 vim.o.grepprg = [[rg --vimgrep --no-heading -S]]
 vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
@@ -334,9 +340,9 @@ vim.g.wiki_mappings_local_journal = {
     ['<plug>(wiki-journal-toweek)'] = '<leader>wu',
     ['<plug>(wiki-journal-tomonth)'] = '<leader>wm',
 }
+vim.g.neovide_cursor_animation_length = 0.01
+vim.g.neovide_refresh_rate_idle = 5
 vim.cmd [[
-let g:neovide_cursor_animation_length=0.01
-let g:neovide_refresh_rate_idle=5
 let g:wiki_map_link_create = 'MyFunction'
 function MyFunction(text) abort
   return substitute(tolower(a:text), '\s\+', '-', 'g')
