@@ -41,8 +41,6 @@ require('packer').startup({
         use 'williamboman/nvim-lsp-installer'
         use 'hrsh7th/vim-vsnip'
         use 'hrsh7th/vim-vsnip-integ'
-        use 'sbdchd/neoformat'
-        use 'mfussenegger/nvim-lint'
         use 'gpanders/editorconfig.nvim'
 
         use 'autowitch/hive.vim'
@@ -118,11 +116,6 @@ vim.g.mapleader = ','
 vim.g.maplocalleader = '-'
 vim.g.vsnip_snippet_dir = os.getenv("XDG_CONFIG_HOME") .. '/nvim/vsnip'
 
-vim.g.neoformat_run_all_formatters = 1
-
-vim.g.vim_markdown_folding_disabled = 1
-vim.g.vim_markdown_auto_insert_bullets = 0
-vim.g.vim_markdown_new_list_item_indent = 0
 vim.g.mkdp_auto_start = 0
 vim.g.mkdp_auto_close = 0
 vim.g.mkdp_markdown_css = vim.env.XDG_CONFIG_HOME .. '/nvim/styles/gdocs.css'
