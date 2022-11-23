@@ -88,6 +88,15 @@ exec swaymsg exec nm-applet --indicator
     input "1390:306:ELECOM_TrackBall_Mouse_DEFT_Pro_TrackBall" {
         natural_scroll enabled
     }
+    input "2:14:ETPS/2_Elantech_Touchpad" {
+        events disabled_on_external_mouse
+        dwt enabled
+        natural_scroll enabled
+        tap enabled
+    }
+    input "2:14:ETPS/2_Elantech_TrackPoint" {
+        events disabled
+    }
 
 ### Key bindings
 #
