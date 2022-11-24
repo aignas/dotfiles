@@ -15,7 +15,6 @@ require('packer').startup({
         }
 
         use 'rktjmp/lush.nvim'
-        use 'shaunsingh/seoul256.nvim'
 
         use 'tpope/vim-abolish'
         use 'tpope/vim-eunuch'
