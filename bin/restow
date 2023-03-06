@@ -38,6 +38,7 @@ _stow \
     "$@"
 
 echo "stow: XDG config"
+mkdir -p "${HOME}/.config"
 _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
     -R alacritty \
@@ -51,6 +52,7 @@ _stow \
     "$@"
 
 echo "stow: aerc config"
+mkdir -p "${HOME}/.config/aerc"
 _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}/aerc" \
     -R aerc \
