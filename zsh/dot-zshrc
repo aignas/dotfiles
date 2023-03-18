@@ -62,6 +62,7 @@ alias gd='git diff'
 alias gp='git push'
 alias gpf='git push -fu'
 alias gs='git status --short --branch --show-stash'
+alias fixup='git commit --fixup'
 
 alias vc='e ~/.config/nvim/init.lua'
 alias se='sudo -E $(which e)'
