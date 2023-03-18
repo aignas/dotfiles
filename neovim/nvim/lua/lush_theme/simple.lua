@@ -22,6 +22,7 @@ local white       = lush.hsl('#f0f0f0')
 -- more colors for git diff
 local lightgreen  = lush.hsl('#d1ffbd')
 local lightred    = lush.hsl('#fd3c06')
+local lightblue   = lush.hsl('#95d0fc')
 
 local fg          = white
 local bg          = lush.hsl('#3a3a3a')
@@ -34,18 +35,26 @@ local lightyellow = yellow.darken(40)
 
 -- color options
 if vim.o.background == 'light' then
-     bg = white
-     fg = black
-     lightfg     = fg.lighten(20)
-     strongfg    = fg.darken(20)
-     strongbg    = bg.darken(10)
-     strongerbg  = bg.darken(20)
-     lightyellow = yellow.lighten(40)
+    bg = white
+    fg = black
+    lightfg     = fg.lighten(20)
+    strongfg    = fg.darken(20)
+    strongbg    = bg.darken(10)
+    strongerbg  = bg.darken(20)
+    lightyellow = yellow.lighten(40)
+else
+    darkblue = blue
+    blue = lightblue
 end
 
 
 return lush(function()
     return {
+        Underlined { gui = "underline" },
+        Bold       { gui = "bold" },
+        Italic     { gui = "italic" },
+        Undercurl  { gui = "undercurl" },
+
         ColorColumn  { fg = lightred, bg = strongbg },
         Conceal      { gui = "italic" },
         Cursor       { gui = "reverse"},
@@ -67,7 +76,7 @@ return lush(function()
         Folded       { },
         FoldColumn   { },
         SignColumn   { },
-        IncSearch    { bg = green, fg = fg },
+        IncSearch    { bg = darkgreen, fg = fg },
         Substitute   { },
         LineNr       { },
         CursorLineNr { },
@@ -87,10 +96,10 @@ return lush(function()
         QuickFixLine { },
         Search       { bg = yellow, fg = black },
         SpecialKey   { },
-        SpellBad     { sp = red, gui = "undercurl" },
-        SpellCap     { sp = red, gui = "undercurl" },
-        SpellLocal   { sp = red, gui = "undercurl" },
-        SpellRare    { sp = red, gui = "undercurl" },
+        SpellBad     { Undercurl, sp = red },
+        SpellCap     { Undercurl, sp = red },
+        SpellLocal   { Undercurl, sp = red },
+        SpellRare    { Undercurl, sp = red },
         StatusLine   { gui = "reverse" },
         StatusLineNC { gui = "underline" },
         TabLine      { gui = "underline" },
@@ -127,7 +136,7 @@ return lush(function()
         -- Define         { }, --   preprocessor #define
         -- Macro          { }, --    same as Define
         -- PreCondit      { }, --  preprocessor #if, #else, #endif, etc.
-        Error          { ErrorMsg },
+        Error          { Undercurl, sp = "red" },
 
         Type           { gui = "bold" }, -- (preferred) int, long, char, etc.
         -- StorageClass   { }, -- static, register, volatile, etc.
@@ -142,18 +151,14 @@ return lush(function()
         SpecialComment { fg = lightfg, gui = "italic" },
         -- Debug          { }, --    debugging statements
 
-        Underlined { gui = "underline" },
-        Bold       { gui = "bold" },
-        Italic     { gui = "italic" },
-
         Ignore { },
-        Todo { gui = "reverse" },
+        Todo { gui = "reverse", fg = "yellow" },
 
         -- These groups are for the native LSP client. Some other LSP clients may use
         -- these groups, or use their own. Consult your LSP client's documentation.
 
         LspDiagnosticsError               { bg = lightred }, -- used for "Error" diagnostic virtual text
-        LspDiagnosticsErrorSign           { fg = darkred }, -- used for "Error" diagnostic signs in sign column
+        LspDiagnosticsErrorSign           { fg = red }, -- used for "Error" diagnostic signs in sign column
         LspDiagnosticsErrorFloating       { bg = lightred }, -- used for "Error" diagnostic messages in the diagnostics float
         -- LspDiagnosticsWarning             { }, -- used for "Warning" diagnostic virtual text
         -- LspDiagnosticsWarningSign         { }, -- used for "Warning" diagnostic signs in sign column
@@ -174,7 +179,7 @@ return lush(function()
         -- TSError -> Error for example, so you do not have to define these unless
         -- you explicitly want to support Treesitter's improved syntax awareness.
 
-        TSError              { bg = lightred.lighten(80), fg = black }, -- For syntax/parser errors.
+        TSError              { Error }, -- For syntax/parser errors.
         -- TSPunctDelimiter     { }, -- For delimiters ie: `.`
         TSPunctBracket       { }, -- For brackets and parens.
         -- TSPunctSpecial       { }, -- For special punctutation that does not fall in the catagories before.
