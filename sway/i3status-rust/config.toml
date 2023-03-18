@@ -1,12 +1,25 @@
-# See https://github.com/greshake/i3status-rust/blob/v0.22.0/doc/blocks.md
-theme = "modern"
-icons = "awesome"
+# See 'man i3status-rs'
+[theme]
+theme = "slick"
+[icons]
+icons = "awesome6"
 
 [[block]]
 block = "music"
 player = "spotify"
-buttons = ["play", "next"]
-format = "'{title}' by {artist}"
+format = " $icon {$combo.str(max_w:20) $play $next |}"
+[[block.click]]
+button = "up"
+action = "volume_up"
+[[block.click]]
+button = "down"
+action = "volume_down"
+[[block.click]]
+button = "forward"
+action = "seek_forward"
+[[block.click]]
+button = "back"
+action = "seek_backward"
 
 [[block]]
 block = "cpu"
@@ -15,7 +28,7 @@ interval = 5
 [[block]]
 block = "load"
 interval = 5
-format = "{5m}"
+format = "$icon $5m [5m]"
 
 [[block]]
 block = "sound"
@@ -23,36 +36,34 @@ block = "sound"
 [[block]]
 block = "battery"
 driver = "upower"
-format = "{percentage} {time}"
+format = "$icon $percentage $time"
 
 [[block]]
 block = "disk_space"
 path = "/"
-info_type = "used"
-alert_absolute = true
-unit = "GB"
+info_type = "available"
+alert_unit = "GB"
 alert = 1
 warning = 2
-format = "/:{available}"
+format = "$icon /:$available"
 
 [[block]]
 block = "disk_space"
 path = "/home/"
-info_type = "used"
-alert_absolute = true
-unit = "GB"
+info_type = "available"
+alert_unit = "GB"
 alert = 5
 warning = 20
-format = "/home/:{available}"
+format = "/home/:$available"
 
 [[block]]
-block = "networkmanager"
-on_click = "alacritty -e nmtui"
-interface_name_exclude = ['docker\d+']
-primary_only = false
+block = "net"
+format = " $icon {$signal_strength [$ssid]$frequency|wired} [$device]"
 
 [[block]]
 block = "time"
-format = "%Y-%m-%d %H:%M"
-on_click = "alacritty -e 'cal -3'"
+interval = 60
 timezone = "Asia/Tokyo"
+[block.format]
+full = " $icon $timestamp.datetime(f:'%Y-%m-%d %H:%M') "
+short = " $icon $timestamp.datetime(f:%R) "
