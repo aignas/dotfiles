@@ -4,6 +4,7 @@ package tools
 
 import (
 	_ "github.com/bazelbuild/bazelisk"
+	_ "github.com/bazelbuild/buildtools/buildozer"
 	_ "github.com/gokcehan/lf"
 	_ "golang.org/x/tools/cmd/godoc"
 	_ "golang.org/x/tools/cmd/goimports"

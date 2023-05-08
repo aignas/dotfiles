@@ -2,7 +2,7 @@
 
 export GO111MODULE=on
 export GOBIN=$DOTFILES/tools
-readonly _go_version=1.19.0
+readonly _go_version=1.20.1
 mkdir -p ${GOBIN}
 
 if [[ -f "$(command -v goenv)" ]]; then
@@ -12,11 +12,13 @@ if [[ -f "$(command -v goenv)" ]]; then
     goenv rehash
 fi
 
+readonly go=$(goenv which go)
+
 if [[ -f "$(command -v go)" ]]; then
     pushd ${DOTFILES}/golang/tools
     grep "_" "tools.go" |
         awk '{print $2}' |
-        xargs -L 1 go install
+        xargs -L 1 $go install
     popd
 fi
 
