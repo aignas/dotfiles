@@ -87,6 +87,12 @@ _install() {
         w3m
     )
 
+    # Photo
+    pkgs+=(
+        darktable
+        imv
+    )
+
     debug "pacman: install"
     sudo pacman -Syu --noconfirm
     sudo pacman -Sy --needed --noconfirm "${pkgs[@]}"
