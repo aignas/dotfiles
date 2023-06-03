@@ -25,6 +25,7 @@ else
     _stow --dotfiles \
         --target="${HOME}" \
         -R git \
+        -R task \
         -R tmux \
         -R zsh \
         "$@"
