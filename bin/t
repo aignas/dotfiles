@@ -1,0 +1,24 @@
+#!/bin/bash
+
+type task >/dev/null || {
+    echo "taskwarrior must be installed"
+    exit 1
+}
+
+readonly _taskdir="${HOME}/.task"
+
+[[ -d "$_taskdir" ]] || {
+    echo "taskwarrior must be initialized in '$_taskdir'"
+    exit 1
+}
+
+main() {
+    task $@
+
+    git -C $_taskdir diff --quiet 
+
+    git -C $_taskdir add -A
+    git -C $_taskdir commit -m 
+}
+
+main $@
