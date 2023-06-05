@@ -75,6 +75,8 @@ exists exa && alias ls='exa --color=never'
 alias ll='ls -l'
 alias la='ls -a'
 
+exists task && alias t=task
+
 alias w='watchexec --clear --restart'
 
 setopt promptsubst

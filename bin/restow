@@ -58,3 +58,11 @@ _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}/aerc" \
     -R aerc \
     "$@"
+
+echo "stow: taskwarrior hooks"
+mkdir -p "${HOME}/.task/hooks"
+_stow \
+    --target="${HOME}/.task/hooks" \
+    --dir task/ \
+    -R taskhooks \
+    "$@"
