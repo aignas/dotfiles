@@ -13,7 +13,7 @@ local darkgray    = lush.hsl('#808080')
 local red         = lush.hsl('#e50000')
 local green       = lush.hsl('#01ff07')
 local yellow      = lush.hsl('#ffff14')
-local blue        = lush.hsl('#0343df')
+local blue        = lush.hsl('#0485d1')
 local magenta     = lush.hsl('#c20078')
 local cyan        = lush.hsl('#00ffff')
 local white       = lush.hsl('#f0f0f0')
@@ -30,21 +30,34 @@ local lightfg     = fg.darken(20)
 local strongfg    = fg.lighten(30)
 local strongbg    = bg.lighten(10)
 local strongerbg  = bg.lighten(20)
-local lightyellow = yellow.darken(40)
+local lightyellow = lush.hsl('#ffff84')
 
 
 -- color options
 if vim.o.background == 'light' then
-    bg = white
-    fg = black
+    black       = lush.hsl('#121212')
+    darkred     = lush.hsl('#a90308')
+    darkgreen   = lush.hsl('#019529')
+    darkyellow  = lush.hsl('#d5b60a')
+    darkblue    = lush.hsl('#030aa7')
+    darkmagenta = lush.hsl('#960056')
+    darkcyan    = lush.hsl('#0a888a')
+    gray        = lush.hsl('#c0c0c0')
+    darkgray    = lush.hsl('#808080')
+    red         = lush.hsl('#e50000')
+    green       = lush.hsl('#51b73b')
+    yellow      = lush.hsl('#fec615')
+    blue        = lush.hsl('#0343df')
+    magenta     = lush.hsl('#c20078')
+    cyan        = lush.hsl('#00ffff')
+    white       = lush.hsl('#f0f0f0')
+
+    fg          = black
+    bg          = white
     lightfg     = fg.lighten(20)
-    strongfg    = fg.darken(20)
+    strongfg    = fg.darken(30)
     strongbg    = bg.darken(10)
     strongerbg  = bg.darken(20)
-    lightyellow = yellow.lighten(40)
-else
-    darkblue = blue
-    blue = lightblue
 end
 
 
@@ -94,7 +107,7 @@ return lush(function()
         PmenuThumb   { bg = bg },
         Question     { },
         QuickFixLine { },
-        Search       { bg = yellow, fg = black },
+        Search       { bg = yellow.lighten(30), fg = black },
         SpecialKey   { },
         SpellBad     { Undercurl, sp = red },
         SpellCap     { Undercurl, sp = red },
@@ -147,22 +160,36 @@ return lush(function()
         -- SpecialChar    { }, --  special character in a constant
         -- Tag            { }, --    you can use CTRL-] on this
         Delimiter      { }, --  character that needs attention
-        Comment        { fg = lightfg, gui = "italic" },
-        SpecialComment { fg = lightfg, gui = "italic" },
+        Comment        { Italic, fg = lightfg },
+        SpecialComment { Italic, fg = lightfg },
         -- Debug          { }, --    debugging statements
 
         Ignore { },
-        Todo { gui = "reverse", fg = "yellow" },
+        Todo { gui = "reverse", fg = darkyellow },
 
         -- These groups are for the native LSP client. Some other LSP clients may use
         -- these groups, or use their own. Consult your LSP client's documentation.
 
-        LspDiagnosticsError               { bg = lightred }, -- used for "Error" diagnostic virtual text
-        LspDiagnosticsErrorSign           { fg = red }, -- used for "Error" diagnostic signs in sign column
-        LspDiagnosticsErrorFloating       { bg = lightred }, -- used for "Error" diagnostic messages in the diagnostics float
-        -- LspDiagnosticsWarning             { }, -- used for "Warning" diagnostic virtual text
-        -- LspDiagnosticsWarningSign         { }, -- used for "Warning" diagnostic signs in sign column
-        -- LspDiagnosticsWarningFloating     { }, -- used for "Warning" diagnostic messages in the diagnostics float
+        DiagnosticError            { Error },
+        DiagnosticFloatingError    { bg = strongbg },
+        DiagnosticSignError        { fg = red, bg = strongbg },
+        DiagnosticVirtualTextError { fg = red },
+
+        DiagnosticFloatingWarn    { bg = strongbg },
+        DiagnosticSignWarn        { fg = darkyellow },
+        DiagnosticVirtualTextWarn { Italic, fg = darkyellow },
+        DiagnosticWarn            { Undercurl, sp = darkyellow },
+
+        DiagnosticInfo           { fg = lightblue },
+        DiagnosticHint           { Comment },
+        DiagnosticOK             { fg = darkgreen },
+
+        -- LspDiagnosticsError               { bg = red }, -- used for "Error" diagnostic virtual text
+        -- LspDiagnosticsErrorSign           { fg = red }, -- used for "Error" diagnostic signs in sign column
+        -- LspDiagnosticsErrorFloating       { bg = strongbg }, -- used for "Error" diagnostic messages in the diagnostics float
+        -- LspDiagnosticsWarning             { bg = yellow }, -- used for "Warning" diagnostic virtual text
+        -- LspDiagnosticsWarningSign         { fg = darkyellow }, -- used for "Warning" diagnostic signs in sign column
+        -- LspDiagnosticsWarningFloating     { bg = strongbg }, -- used for "Warning" diagnostic messages in the diagnostics float
         -- LspDiagnosticsInformation         { }, -- used for "Information" diagnostic virtual text
         -- LspDiagnosticsInformationSign     { }, -- used for "Information" signs in sign column
         -- LspDiagnosticsInformationFloating { }, -- used for "Information" diagnostic messages in the diagnostics float

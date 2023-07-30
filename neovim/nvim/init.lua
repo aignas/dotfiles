@@ -14,51 +14,37 @@ require('packer').startup({
             opt = true,
         }
 
+        use "williamboman/mason-lspconfig.nvim"
+        use 'hrsh7th/cmp-buffer'
+        use 'hrsh7th/cmp-cmdline'
+        use 'hrsh7th/cmp-nvim-lsp'
+        use 'hrsh7th/cmp-path'
+        use 'hrsh7th/nvim-cmp'
+        use 'hrsh7th/vim-vsnip'
+        use 'hrsh7th/vim-vsnip-integ'
+        use 'lervag/lists.vim'
+        use 'lervag/vimtex'
+        use 'lervag/wiki.vim'
+        use 'mfussenegger/nvim-dap'
+        -- use 'mfussenegger/nvim-lint'
+        use 'neovim/nvim-lspconfig'
+        use 'nvim-lua/plenary.nvim'
+        use 'nvim-telescope/telescope.nvim'
         use 'rktjmp/lush.nvim'
-
         use 'tpope/vim-abolish'
         use 'tpope/vim-eunuch'
-        use {
-            'tpope/vim-fugitive',
-            requires = {
-                {'tpope/vim-rhubarb'},
-            }
-        }
+        use 'tpope/vim-fugitive'
         use 'tpope/vim-repeat'
         use 'tpope/vim-surround'
         use 'tpope/vim-unimpaired'
-
-        use {
-            'nvim-telescope/telescope.nvim',
-            requires = {
-                {'nvim-lua/popup.nvim'},
-                {'nvim-lua/plenary.nvim'},
-            }
-        }
-
-        use 'neovim/nvim-lspconfig'
-        use 'williamboman/nvim-lsp-installer'
-        use 'hrsh7th/vim-vsnip'
-        use 'hrsh7th/vim-vsnip-integ'
-        use 'gpanders/editorconfig.nvim'
-
-        use 'autowitch/hive.vim'
-        use 'fatih/vim-go'
-        use 'lervag/vimtex'
-        use 'lervag/wiki.vim'
-        use 'godlygeek/tabular'
-        use 'lervag/lists.vim'
-        use 'nvim-lua/completion-nvim'
-        use 'rust-lang/rust.vim'
         use 'tyru/eskk.vim'
+        use 'williamboman/mason.nvim'
+
+        use '~/src/github/aignas/nvim-lint'
 
         use {
             'nvim-treesitter/nvim-treesitter',
             run = [[:TSUpdateSync]],
-        }
-        use {
-            'iamcco/markdown-preview.nvim',
-            run = [[:call mkdp#util#install()]]
         }
     end,
     config = {
@@ -67,9 +53,7 @@ require('packer').startup({
     }
 })
 
-require('editorconfig').properties.foo = function(bufnr, val)
-  vim.b[bufnr].foo = val
-end
+require("mason").setup()
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
@@ -106,6 +90,19 @@ require("telescope").setup {
   }
 }
 
+require('lint').linters_by_ft = {
+    bzl = {'buildifier'},
+    py = {'ruff',},
+    sh = {'shellcheck',},
+    tf = {'tflint',},
+    yaml = {'yamllint',},
+}
+
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+  callback = function()
+    require("lint").try_lint()
+  end,
+})
 
 vim.g.completion_enable_auto_popup = 0
 vim.g.completion_enable_snippet = 'vim-vsnip'
@@ -285,17 +282,16 @@ on_attach = function(client, bufnr)
     remap('<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
     remap('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
     remap('<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>')
-    remap('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-    remap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
     remap('<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>')
     remap('<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>')
 end
 
-local lsp_installer = require("nvim-lsp-installer")
+local function remap(key, cmd)
+    vim.api.nvim_set_keymap('n', key, cmd, {noremap = true, silent = true})
+end
 
-lsp_installer.on_server_ready(function(server)
-    server:setup({on_attach = on_attach})
-end)
+remap('[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+remap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 
 vim.g.tex_flavor = "latex"
 
