@@ -1,7 +1,7 @@
 # NOTE @aignas 2022-09-24: only a single before-sleep cmd can exist
 
-timeout 120 'swaylock'
-timeout 80 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
-timeout 300 'systemctl sleep'
+timeout 120 '~/.config/swaylock/lock.sh'
+timeout 80 '~/.config/swaylock/inhibitor/pulse.sh && swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+timeout 300 '~/.config/swaylock/inhibitor/pulse.sh && systemctl sleep'
 before-sleep 'playerctl pause'
 before-sleep 'swaylock'
