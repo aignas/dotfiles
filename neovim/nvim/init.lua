@@ -27,6 +27,7 @@ require('packer').startup({
         use 'lervag/wiki.vim'
         use 'mfussenegger/nvim-dap'
         -- use 'mfussenegger/nvim-lint'
+        use {'aignas/nvim-lint', branch = 'feat/buildifier'}
         use 'neovim/nvim-lspconfig'
         use 'nvim-lua/plenary.nvim'
         use 'nvim-telescope/telescope.nvim'
@@ -39,8 +40,6 @@ require('packer').startup({
         use 'tpope/vim-unimpaired'
         use 'tyru/eskk.vim'
         use 'williamboman/mason.nvim'
-
-        use '~/src/github/aignas/nvim-lint'
 
         use {
             'nvim-treesitter/nvim-treesitter',
@@ -135,8 +134,6 @@ set_leader_mappings({
 
     cd = '<CMD>lcd %:p:h<CR>',
     e = ':e %:h/',
-    gg = ':!tdd ',
-    ss = '<CMD>Gstatus<CR>',
 
     tF = '<CMD>Telescope find_files<CR>',
     tG = '<CMD>Telescope live_grep<CR>',
@@ -151,7 +148,6 @@ set_leader_mappings({
 })
 
 local remap = vim.api.nvim_set_keymap
-
 
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
