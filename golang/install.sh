@@ -2,7 +2,7 @@
 
 export GO111MODULE=on
 export GOBIN=$DOTFILES/tools
-readonly _go_version=1.20.1
+readonly _go_version=1.21.0
 mkdir -p ${GOBIN}
 
 if [[ -f "$(command -v goenv)" ]]; then

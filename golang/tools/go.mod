@@ -1,9 +1,9 @@
 module github.com/aignas/dotfiles
 
-go 1.19
+go 1.21
 
 require (
-	github.com/bazelbuild/bazelisk v1.11.0
+	github.com/bazelbuild/bazelisk v1.18.0
 	github.com/bazelbuild/buildtools v0.0.0-20230302165817-a6ca93fd072d
 	github.com/gokcehan/lf v0.0.0-20191223133345-3c5abbbc5daf
 	golang.org/x/tools v0.0.0-20200311090712-aafaee8bce8c
@@ -13,9 +13,10 @@ require (
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
+	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
-	github.com/hashicorp/go-version v1.3.0 // indirect
+	github.com/hashicorp/go-version v1.6.0 // indirect
 	github.com/mattn/go-runewidth v0.0.8 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/nsf/termbox-go v0.0.0-20190325093121-288510b9734e // indirect
