@@ -4,11 +4,11 @@ set -euo pipefail
 cd "${HOME}/.dotfiles"
 
 _stow() {
-    stow -v --ignore=install.sh "$@"
+    stow --verbose --ignore=install.sh "$@"
     #stow "$@" 2>/dev/null
 }
 
-if [[ "$(_stow -V)" =~ "2.2.2" ]]; then
+if [[ "$(stow --version)" =~ "2.2.2" ]]; then
     echo "stow: legacy"
     pushd legacy
     ./refresh.sh
@@ -16,18 +16,18 @@ if [[ "$(_stow -V)" =~ "2.2.2" ]]; then
 
     _stow \
         --target="${HOME}" \
-        -R legacy \
+        --restow legacy \
         "$@"
 else
-    _stow --dotfiles -R stow "$@"
+    _stow --dotfiles --restow stow "$@"
 
     echo "stow: dotfiles"
     _stow --dotfiles \
         --target="${HOME}" \
-        -R git \
-        -R task \
-        -R tmux \
-        -R zsh \
+        --restow git \
+        --restow task \
+        --restow tmux \
+        --restow zsh \
         "$@"
 fi
 
@@ -35,28 +35,29 @@ echo "stow: bin"
 mkdir -p "${HOME}/bin"
 _stow \
     --target="${HOME}/bin" \
-    -R bin \
+    --restow bin \
     "$@"
 
 echo "stow: XDG config"
 mkdir -p "${HOME}/.config"
 _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
-    -R alacritty \
-    -R lf \
-    -R neovim \
-    -R pacman \
-    -R qutebrowser \
-    -R spotify \
-    -R sway \
-    -R yabai \
+    --restow alacritty \
+    --restow lf \
+    --restow neovim \
+    --restow pacman \
+    --restow qutebrowser \
+    --restow spotify \
+    --restow sway \
+    --restow yabai \
+    --restow xdg \
     "$@"
 
 echo "stow: aerc config"
 mkdir -p "${HOME}/.config/aerc"
 _stow \
     --target="${XDG_CONFIG_HOME:-${HOME}/.config}/aerc" \
-    -R aerc \
+    --restow aerc \
     "$@"
 
 echo "stow: taskwarrior hooks"
@@ -64,5 +65,5 @@ mkdir -p "${HOME}/.task/hooks"
 _stow \
     --target="${HOME}/.task/hooks" \
     --dir task/ \
-    -R taskhooks \
+    --restow taskhooks \
     "$@"
