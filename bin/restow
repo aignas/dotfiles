@@ -8,6 +8,15 @@ _stow() {
     #stow "$@" 2>/dev/null
 }
 
+_stow_dir() {
+    local -r dir=$1
+    shift
+
+    echo "stow: $dir"
+    mkdir -p "$dir"
+    _stow --target="$dir" "$@"
+}
+
 if [[ "$(stow --version)" =~ "2.2.2" ]]; then
     echo "stow: legacy"
     pushd legacy
@@ -21,49 +30,44 @@ if [[ "$(stow --version)" =~ "2.2.2" ]]; then
 else
     _stow --dotfiles --restow stow "$@"
 
-    echo "stow: dotfiles"
-    _stow --dotfiles \
-        --target="${HOME}" \
+    _stow_dir \
+        "${HOME}" \
         --restow git \
         --restow task \
         --restow tmux \
         --restow zsh \
+        --dotfiles \
         "$@"
 fi
 
-echo "stow: bin"
-mkdir -p "${HOME}/bin"
-_stow \
-    --target="${HOME}/bin" \
-    --restow bin \
-    "$@"
+_stow_dir "${HOME}/bin" --restow bin "$@"
 
-echo "stow: XDG config"
-mkdir -p "${HOME}/.config"
-_stow \
-    --target="${XDG_CONFIG_HOME:-${HOME}/.config}" \
-    --restow alacritty \
-    --restow lf \
-    --restow neovim \
-    --restow pacman \
-    --restow qutebrowser \
-    --restow spotify \
-    --restow sway \
-    --restow yabai \
-    --restow xdg \
-    "$@"
+xdg_stow=(
+    --restow alacritty
+    --restow lf
+    --restow neovim
+    --restow qutebrowser
+    --restow spotify
+)
 
-echo "stow: aerc config"
-mkdir -p "${HOME}/.config/aerc"
-_stow \
-    --target="${XDG_CONFIG_HOME:-${HOME}/.config}/aerc" \
-    --restow aerc \
-    "$@"
+if [[ $(uname -s) == "Linux" ]]; then
+    xdg_stow+=(
+        --restow pacman
+        --restow sway
+        --restow xdg
+    )
+else
+    xdg_stow+=(
+        --restow skhd
+        --restow yabai
+    )
+fi
 
-echo "stow: taskwarrior hooks"
-mkdir -p "${HOME}/.task/hooks"
-_stow \
-    --target="${HOME}/.task/hooks" \
+_stow_dir "${XDG_CONFIG_HOME:-${HOME}/.config}" "${xdg_stow[@]}" "$@"
+_stow_dir "${XDG_CONFIG_HOME:-${HOME}/.config}/aerc" --restow aerc "$@"
+
+_stow_dir \
+    "${HOME}/.task/hooks" \
     --dir task/ \
     --restow taskhooks \
     "$@"
