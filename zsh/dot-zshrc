@@ -63,6 +63,13 @@ alias gp='git push'
 alias gpf='git push -fu'
 alias gs='git status --short --branch --show-stash'
 alias fixup='git commit --fixup'
+gh_cleanup() {
+    {
+        gh pr list --state merged --json headRefName | jq ".[].headRefName"
+        git branch --list
+    } | uniq --repeated |
+        xargs git branch --delete --force
+}
 
 alias vc='e ~/.config/nvim/init.lua'
 alias se='sudo -E $(which e)'
