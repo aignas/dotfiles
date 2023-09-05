@@ -28,17 +28,8 @@ export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export GOENV_SHELL=zsh
 export NVM_DIR="${HOME}/.nvm"
 
-extra_paths=(
-    "${DOTFILES}/bin"
-    "${DOTFILES}/tools"
-    "${GOENV_ROOT}/bin"
-    "${GOENV_ROOT}/shims"
-    "${HOME}/.local/bin"
-)
-
-for item in ${extra_paths[@]}; do
-    path_prepend "$item"
-done
+path_prepend "${HOME}/.local/bin"
+path_prepend "${GOENV_ROOT}/shims"
 export PATH
 
 export EDITOR="vim"
@@ -63,14 +54,6 @@ alias gp='git push'
 alias gpf='git push -fu'
 alias gs='git status --short --branch --show-stash'
 alias fixup='git commit --fixup'
-gh_cleanup() {
-    {
-        gh pr list --state merged --json headRefName | jq ".[].headRefName"
-        git branch --list
-    } | uniq --repeated |
-        xargs git branch --delete --force
-}
-
 alias vc='e ~/.config/nvim/init.lua'
 alias se='sudo -E $(which e)'
 exists kubectl && alias k='kubectl'

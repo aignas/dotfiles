@@ -40,7 +40,16 @@ else
         "$@"
 fi
 
-_stow_dir "${HOME}/bin" --restow bin "$@"
+_stow_dir "${HOME}/.local/bin" \
+    --restow bin \
+    --restow tools \
+    "$@"
+
+pushd golang/goenv
+_stow_dir "${HOME}/.local/bin" \
+    --restow bin \
+    "$@"
+popd
 
 xdg_stow=(
     --restow alacritty
