@@ -14,7 +14,7 @@ _install() {
         direnv
         diskonaut
         docker
-        exa
+        eza
         fd
         github-cli
         htop
