@@ -1,3 +1,4 @@
 max-items       100
 browser         qutebrowser
 show-read-feeds no
+reload-time     60
