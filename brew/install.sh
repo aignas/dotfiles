@@ -34,6 +34,7 @@ _install() {
         jq
         k3d
         neovim
+        newsboat
         npm
         pre-commit
         ripgrep
