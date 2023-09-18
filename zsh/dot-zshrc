@@ -28,6 +28,7 @@ export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export GOENV_SHELL=zsh
 export NVM_DIR="${HOME}/.nvm"
 
+path_prepend "${HOME}/.cargo/bin"
 path_prepend "${HOME}/.local/bin"
 path_prepend "${GOENV_ROOT}/shims"
 export PATH
