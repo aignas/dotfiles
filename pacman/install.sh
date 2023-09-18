@@ -47,8 +47,9 @@ _install() {
 
     # Steam
     pkgs+=(
-        steam-native-runtime
         lib32-vulkan-mesa-layers
+        pipewire-alsa
+        steam-native-runtime
     )
 
     # Sway
@@ -56,6 +57,7 @@ _install() {
         bemenu-wayland
         brightnessctl
         gammastep
+        gnome-keyring
         i3status-rust
         kanshi
         mako
@@ -80,10 +82,12 @@ _install() {
         yubico-pam
     )
 
-    # Mail
+    # Mail + news
     pkgs+=(
         aerc
         dante
+        newsboat
+        translate-shell
         w3m
     )
 
