@@ -62,7 +62,7 @@ exists terragrunt && alias tg='terragrunt'
 exists fd && alias fd='fd --color=never'
 exists fdfind && alias fd='fdfind --color=never'
 
-exists exa && alias ls='exa --color=never'
+exists eza && alias ls='eza --color=never'
 alias ll='ls -l'
 alias la='ls -a'
 

@@ -126,8 +126,9 @@ set_leader_mappings = function(mappings, prefix)
 end
 
 set_leader_mappings({
-    WN = '<CMD>e ~/.notes/zettel/index.md<CR>',
+    WN = '<CMD>e ~/.notes/content/index.md<CR>',
     WW = '<CMD>e ~/.work/zettel/index.md<CR>',
+    ww = '<CMD>WikiJournal<CR>',
 
     cd = '<CMD>lcd %:p:h<CR>',
     e = ':e %:h/',
@@ -239,10 +240,6 @@ vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
     pattern = { "*.{hdl,ddl}" },
     command = [[set filetype=hive expandtab]],
 })
-vim.api.nvim_create_autocmd({"BufWritePost"}, {
-    pattern = { "init.lua" },
-    command = [[PackerCompile]],
-})
 
 vim.o.grepprg = [[rg --vimgrep --no-heading -S]]
 vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
@@ -288,9 +285,10 @@ remap(']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 
 vim.g.tex_flavor = "latex"
 
-vim.g.wiki_root = '~/.notes/zettel'
+vim.g.wiki_root = '~/.notes'
 vim.g.wiki_journal = {
-    name = '',
+    name = 'journal',
+    root = '',
     frequency = 'daily',
     date_format = {
         daily = '%Y-%m-%d',
@@ -315,8 +313,8 @@ vim.g.wiki_mappings_local = {
     ['<plug>(wiki-link-follow-split)'] = '<c-w><cr>',
     ['<plug>(wiki-link-follow-tab)'] = '<c-w>u',
     ['<plug>(wiki-link-return)'] = '<bs>',
-    ['<plug>(wiki-link-toggle)'] = '<leader>wf',
-    ['<plug>(wiki-link-toggle-operator)'] = 'gl',
+    ['<plug>(wiki-link-transform)'] = '<leader>wf',
+    ['<plug>(wiki-link-transform-operator)'] = 'gl',
     ['<plug>(wiki-page-delete)'] = '<leader>wd',
     ['<plug>(wiki-page-rename)'] = '<leader>wr',
     ['<plug>(wiki-page-toc)'] = '<leader>wt',
@@ -327,7 +325,7 @@ vim.g.wiki_mappings_local = {
     ['<plug>(wiki-tag-reload)'] = '<leader>wsr',
     ['<plug>(wiki-tag-search)'] = '<leader>wss',
     ['<plug>(wiki-tag-rename)'] = '<leader>wsn',
-    ['x_<plug>(wiki-link-toggle-visual)'] = '<cr>',
+    ['x_<plug>(wiki-link-transform-visual)'] = '<cr>',
     ['o_<plug>(wiki-au)'] = 'au',
     ['x_<plug>(wiki-au)'] = 'au',
     ['o_<plug>(wiki-iu)'] = 'iu',
@@ -346,12 +344,22 @@ vim.g.wiki_mappings_local_journal = {
 }
 vim.g.neovide_cursor_animation_length = 0.01
 vim.g.neovide_refresh_rate_idle = 5
-vim.cmd [[
-let g:wiki_map_link_create = 'MyFunction'
-function MyFunction(text) abort
-  return substitute(tolower(a:text), '\s\+', '-', 'g')
-endfunction
-]]
+vim.g.wiki_link_creation = {
+    md = {
+        link_type = 'md',
+        url_extension = '.md',
+        url_transform = function(x)
+            return "content/" .. vim.fn.substitute(x, '\\[\\s\\]\\+', '-', 'g')
+        end
+    },
+    ['_'] = {
+        link_type = 'md',
+        url_extension = '.md',
+        url_transform = function(x)
+            return "unknown link type"
+        end
+    },
+}
 
 vim.g.lists_filetypes = {'md'}
 
