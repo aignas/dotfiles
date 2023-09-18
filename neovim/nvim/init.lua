@@ -5,51 +5,49 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
-vim.cmd.packadd "packer.nvim"
-require('packer').startup({
-    function()
-        use {
-            'wbthomason/packer.nvim',
-            branch = 'master',
-            opt = true,
-        }
+vim.cmd.packadd "pckr.nvim"
+require('pckr').setup{
+    package_root = vim.env.XDG_CONFIG_HOME .. '/nvim/pack',
+    auto_install = true,
+}
+require('pckr').add{
+    {
+        'lewis6991/pckr.nvim',
+        branch = 'main',
+        opt = true,
+    };
 
-        use "williamboman/mason-lspconfig.nvim"
-        use 'hrsh7th/cmp-buffer'
-        use 'hrsh7th/cmp-cmdline'
-        use 'hrsh7th/cmp-nvim-lsp'
-        use 'hrsh7th/cmp-path'
-        use 'hrsh7th/nvim-cmp'
-        use 'hrsh7th/vim-vsnip'
-        use 'hrsh7th/vim-vsnip-integ'
-        use 'lervag/lists.vim'
-        use 'lervag/vimtex'
-        use 'lervag/wiki.vim'
-        use 'mfussenegger/nvim-dap'
-        use 'mfussenegger/nvim-lint'
-        use 'neovim/nvim-lspconfig'
-        use 'nvim-lua/plenary.nvim'
-        use 'nvim-telescope/telescope.nvim'
-        use 'rktjmp/lush.nvim'
-        use 'tpope/vim-abolish'
-        use 'tpope/vim-eunuch'
-        use 'tpope/vim-fugitive'
-        use 'tpope/vim-repeat'
-        use 'tpope/vim-surround'
-        use 'tpope/vim-unimpaired'
-        use 'tyru/eskk.vim'
-        use 'williamboman/mason.nvim'
+    'williamboman/mason-lspconfig.nvim';
+    'hrsh7th/cmp-buffer';
+    'hrsh7th/cmp-cmdline';
+    'hrsh7th/cmp-nvim-lsp';
+    'hrsh7th/cmp-path';
+    'hrsh7th/nvim-cmp';
+    'hrsh7th/vim-vsnip';
+    'hrsh7th/vim-vsnip-integ';
+    'lervag/lists.vim';
+    'lervag/vimtex';
+    'lervag/wiki.vim';
+    'mfussenegger/nvim-dap';
+    'mfussenegger/nvim-lint';
+    'neovim/nvim-lspconfig';
+    'nvim-lua/plenary.nvim';
+    'nvim-telescope/telescope.nvim';
+    'rktjmp/lush.nvim';
+    'tpope/vim-abolish';
+    'tpope/vim-eunuch';
+    'tpope/vim-fugitive';
+    'tpope/vim-repeat';
+    'tpope/vim-surround';
+    'tpope/vim-unimpaired';
+    'tyru/eskk.vim';
+    'williamboman/mason.nvim';
 
-        use {
-            'nvim-treesitter/nvim-treesitter',
-            run = [[:TSUpdateSync]],
-        }
-    end,
-    config = {
-        package_root = vim.env.XDG_CONFIG_HOME .. "/nvim/pack",
-        plugin_package = "packer.nvim"
-    }
-})
+    {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdateSync',
+    };
+}
 
 require("mason").setup()
 

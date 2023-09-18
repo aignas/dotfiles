@@ -1,7 +1,6 @@
 /spell/
 /.netrwhist
-/plugin/packer_compiled.lua
 
-/pack/packer.nvim/start
+/pack/pckr
 /pack/local/start/local/plugin/*
 !/pack/local/start/local/plugin/README.md
