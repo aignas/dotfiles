@@ -59,7 +59,4 @@ fi
 info "Bootstrapping..."
 "${DOTFILES_ROOT}/script/bootstrap"
 
-info "pulling shed"
-docker pull aignas/shed:latest
-
 exit 0

@@ -15,11 +15,8 @@ installs=(
     ./pacman
     ./golang
     ./neovim
-    ./rust
     ./fzf
     ./systemd
-    ./lua
-    ./python
 )
 
 {
