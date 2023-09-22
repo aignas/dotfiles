@@ -19,6 +19,7 @@ _install() {
         github-cli
         htop
         jq
+        nix
         npm
         otf-ipaexfont
         python-pre-commit
