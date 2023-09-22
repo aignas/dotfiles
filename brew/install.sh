@@ -35,6 +35,7 @@ _install() {
         k3d
         neovim
         npm
+        pre-commit
         ripgrep
         rs-git-fsmonitor
         rust-analyzer
