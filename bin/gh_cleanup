@@ -2,7 +2,10 @@
 set -euxo pipefail
 
 {
-    gh pr list --state merged --json headRefName --limit 100 | jq ".[].headRefName" | sed 's/"//g' | sort -u
+    gh pr list --state merged --author @me --json headRefName --limit 100 |
+        jq ".[].headRefName" |
+        sed 's/"//g' |
+        sort -u
     git branch --list
 } | uniq --repeated |
     xargs git branch --delete --force || echo "Everything is clean"

@@ -38,6 +38,7 @@ require('pckr').add{
     'tpope/vim-eunuch';
     'tpope/vim-fugitive';
     'tpope/vim-repeat';
+    'tpope/vim-rhubarb';
     'tpope/vim-surround';
     'tpope/vim-unimpaired';
     'tyru/eskk.vim';
