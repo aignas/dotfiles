@@ -61,6 +61,7 @@ xdg_stow=(
 
 if [[ $(uname -s) == "Linux" ]]; then
     xdg_stow+=(
+        --restow nix
         --restow pacman
         --restow xdg
     )

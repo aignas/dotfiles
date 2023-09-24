@@ -93,6 +93,7 @@ if type direnv >/dev/null; then
 fi
 
 trysource "${GOENV_ROOT}/completions/goenv.zsh"
+trysource "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 command goenv rehash 2>/dev/null
 goenv() {
   local command

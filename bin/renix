@@ -1,0 +1,5 @@
+#!/bin/bash
+
+type home-manager >/dev/null || exit 0
+
+time home-manager switch

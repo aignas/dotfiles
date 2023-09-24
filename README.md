@@ -1,7 +1,5 @@
 # Dotfiles
 
-* Tool shed: [![Docker](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml/badge.svg)](https://github.com/aignas/dotfiles/actions/workflows/shed.yaml) [![Layers](https://img.shields.io/microbadger/layers/aignas/shed)](https://hub.docker.com/r/aignas/shed) [![Size](https://img.shields.io/docker/image-size/aignas/shed)](https://hub.docker.com/r/aignas/shed)
-
 Highlights:
 - `XDG_DIR` support.
 - logging for timing the installations.
@@ -10,6 +8,7 @@ Highlights:
 - `dotr` script, which is used to update system and sync with the github repo.
   Run this every time every day at the start of your working routine.
 - Usage of `stow` for dotfile management.
+- Usage of `<home-manager>` and `nix` on `ArchLinux`.
 
 ## Install
 

@@ -69,5 +69,6 @@ else
 fi
 
 ${DOTFILES}/bin/restow
+${DOTFILES}/bin/renix
 
 info 'All setup!'
