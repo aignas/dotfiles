@@ -10,9 +10,25 @@
 
   home.packages = [
     pkgs.aerc
+    pkgs.eza
+    pkgs.fzf
     pkgs.lf
     pkgs.newsboat
-    pkgs.eza
+
+    # nvim dependencies
+    pkgs.black
+    pkgs.gopls
+    pkgs.pyright
+    pkgs.ruff
+    pkgs.shellcheck
+    pkgs.shfmt
+    pkgs.yamlfmt
+    pkgs.yamllint
+
+    # bazel and friends
+    pkgs.buildifier
+    pkgs.buildozer
+    pkgs.bazelisk
   ];
 
   # Manage dotfiles
