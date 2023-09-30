@@ -68,7 +68,10 @@ else
     fail "error installing dependencies"
 fi
 
-${DOTFILES}/bin/restow
-${DOTFILES}/bin/renix
+if type stow >/dev/null; then
+    "${DOTFILES}"/bin/restow
+elif type nix >/dev/null; then
+    "${DOTFILES}"/bin/renix
+fi
 
 info 'All setup!'
