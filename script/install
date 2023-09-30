@@ -15,6 +15,7 @@ installs=(
     ./pacman
     ./golang
     ./neovim
+    ./nix
     ./fzf
     ./systemd
 )
