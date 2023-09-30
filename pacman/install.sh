@@ -14,11 +14,8 @@ _install() {
         direnv
         diskonaut
         docker
-        eza
-        fd
         github-cli
         htop
-        jq
         nix
         npm
         otf-ipaexfont
@@ -27,13 +24,10 @@ _install() {
         ripgrep
         rsync
         rustup
-        shellcheck
         stow
-        tig
         tmux
         ttf-hanazono
         ttf-sazanami
-        watchexec
         xdg-utils
         zsh
     )
@@ -85,9 +79,7 @@ _install() {
 
     # Mail + news
     pkgs+=(
-        aerc
         dante
-        newsboat
         translate-shell
         w3m
     )

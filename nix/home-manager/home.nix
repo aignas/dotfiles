@@ -13,6 +13,8 @@
     pkgs.eza
     pkgs.fzf
     pkgs.lf
+    pkgs.fd
+    pkgs.jq
     pkgs.newsboat
 
     # nvim dependencies
