@@ -22,7 +22,6 @@ local function bootstrap_pckr()
 end
 
 bootstrap_pckr()
-
 require('pckr').add{
     {
         'lewis6991/pckr.nvim',
