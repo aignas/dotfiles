@@ -11,10 +11,10 @@
   home.packages = [
     pkgs.aerc
     pkgs.eza
-    pkgs.fzf
-    pkgs.lf
     pkgs.fd
+    pkgs.fzf
     pkgs.jq
+    pkgs.lf
     pkgs.newsboat
 
     # nvim dependencies
@@ -36,40 +36,40 @@
   # Manage dotfiles
   home.file = {
     ".local/bin" = {
-        source = ../../bin;
-        recursive = true;
+      source = ../../bin;
+      recursive = true;
     };
 
     ".config/aerc/aerc.conf".source = ../../aerc/aerc.conf;
     ".config/aerc/binds.conf".source = ../../aerc/binds.conf;
     ".config/aerc/scripts" = {
-        source = ../../aerc/scripts;
-        recursive = true;
+      source = ../../aerc/scripts;
+      recursive = true;
     };
     ".config/alacritty" = {
-        source = ../../alacritty/alacritty;
-        recursive = true;
+      source = ../../alacritty/alacritty;
+      recursive = true;
     };
     ".config/gammastep" = {
-        source = ../../xdg/gammastep;
-        recursive = true;
+      source = ../../xdg/gammastep;
+      recursive = true;
     };
     ".config/i3status-rust" = {
-        source = ../../xdg/i3status-rust;
-        recursive = true;
+      source = ../../xdg/i3status-rust;
+      recursive = true;
     };
     ".config/kanshi" = {
-        source = ../../xdg/kanshi;
-        recursive = true;
+      source = ../../xdg/kanshi;
+      recursive = true;
     };
     ".config/lf" = {
-        source = ../../lf/lf;
-        recursive = true;
+      source = ../../lf/lf;
+      recursive = true;
     };
     ".config/mimeapps.list".source = ../../xdg/mimeapps.list;
     ".config/newsboat" = {
-        source = ../../xdg/newsboat;
-        recursive = true;
+      source = ../../xdg/newsboat;
+      recursive = true;
     };
     # ".config/nvim" = {
     #     source = ../../neovim/nvim;
@@ -80,20 +80,20 @@
         recursive = true;
     };
     ".config/qutebrowser" = {
-        source = ../../qutebrowser/qutebrowser;
-        recursive = true;
+      source = ../../qutebrowser/qutebrowser;
+      recursive = true;
     };
     ".config/sway" = {
-        source = ../../xdg/sway;
-        recursive = true;
+      source = ../../xdg/sway;
+      recursive = true;
     };
     ".config/swayidle" = {
-        source = ../../xdg/swayidle;
-        recursive = true;
+      source = ../../xdg/swayidle;
+      recursive = true;
     };
     ".config/swaylock" = {
-        source = ../../xdg/swaylock;
-        recursive = true;
+      source = ../../xdg/swaylock;
+      recursive = true;
     };
     ".config/user-dirs.dirs".source = ../../xdg/user-dirs.dirs;
     ".config/user-dirs.locale".source = ../../xdg/user-dirs.locale;
