@@ -9,6 +9,7 @@
     eza
     fd
     fzf
+    ghostscript
     github-cli
     htop
     jq
@@ -46,6 +47,7 @@
     terragrunt
     tflint
     kubectl
+    postgresql # for psql CLI tool
 
     # media
     imv
