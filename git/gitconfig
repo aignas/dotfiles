@@ -34,6 +34,7 @@
     cm = commit -a
     co = checkout
     st = status
+    s  = status --short --branch --show-stash
 
 [init]
     defaultBranch = main
