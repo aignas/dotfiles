@@ -9,6 +9,7 @@ type pacman >/dev/null || exit 0
 
 _install() {
     local pkgs=(
+        adobe-source-han-serif-jp-fonts
         asp
         base-devel
         direnv
@@ -16,11 +17,12 @@ _install() {
         docker
         github-cli
         htop
+        ipa-fonts
         nix
         npm
         otf-ipaexfont
-        python-pre-commit
         python-pillow # required for qmk
+        python-pre-commit
         ripgrep
         rsync
         rustup
