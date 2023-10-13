@@ -1,0 +1,10 @@
+# Configuration that should be present only on this machine. This is built from
+# a template.
+
+[user]
+    email = 240938+aignas@users.noreply.github.com
+
+[credential]
+    helper = cache
+
+# vim: ft=gitconfig

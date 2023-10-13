@@ -36,73 +36,73 @@
   # Manage dotfiles
   home.file = {
     ".local/bin" = {
-      source = ../../bin;
+      source = ../bin;
       recursive = true;
     };
 
-    ".config/aerc/aerc.conf".source = ../../aerc/aerc.conf;
-    ".config/aerc/binds.conf".source = ../../aerc/binds.conf;
+    ".config/aerc/aerc.conf".source = ../aerc/aerc.conf;
+    ".config/aerc/binds.conf".source = ../aerc/binds.conf;
     ".config/aerc/scripts" = {
-      source = ../../aerc/scripts;
+      source = ../aerc/scripts;
       recursive = true;
     };
     ".config/alacritty" = {
-      source = ../../alacritty/alacritty;
+      source = ../alacritty;
       recursive = true;
     };
     ".config/gammastep" = {
-      source = ../../xdg/gammastep;
+      source = ../xdg/gammastep;
       recursive = true;
     };
     ".config/i3status-rust" = {
-      source = ../../xdg/i3status-rust;
+      source = ../xdg/i3status-rust;
       recursive = true;
     };
     ".config/kanshi" = {
-      source = ../../xdg/kanshi;
+      source = ../xdg/kanshi;
       recursive = true;
     };
     ".config/lf" = {
-      source = ../../lf/lf;
+      source = ../lf;
       recursive = true;
     };
-    ".config/mimeapps.list".source = ../../xdg/mimeapps.list;
+    ".config/mimeapps.list".source = ../xdg/mimeapps.list;
     ".config/newsboat" = {
-      source = ../../xdg/newsboat;
+      source = ../xdg/newsboat;
       recursive = true;
     };
     # ".config/nvim" = {
-    #     source = ../../neovim/nvim;
+    #     source = ../neovim/nvim;
     #     recursive = false;
     # };
     ".config/pacman" = {
-        source = ../../pacman/pacman;
+        source = ../pacman/pacman;
         recursive = true;
     };
     ".config/qutebrowser" = {
-      source = ../../qutebrowser/qutebrowser;
+      source = ../qutebrowser;
       recursive = true;
     };
     ".config/sway" = {
-      source = ../../xdg/sway;
+      source = ../xdg/sway;
       recursive = true;
     };
     ".config/swayidle" = {
-      source = ../../xdg/swayidle;
+      source = ../xdg/swayidle;
       recursive = true;
     };
     ".config/swaylock" = {
-      source = ../../xdg/swaylock;
+      source = ../xdg/swaylock;
       recursive = true;
     };
-    ".config/user-dirs.dirs".source = ../../xdg/user-dirs.dirs;
-    ".config/user-dirs.locale".source = ../../xdg/user-dirs.locale;
-    ".gitconfig".source = ../../git/dot-gitconfig;
-    ".gitconfig.local".source = ../../git/dot-gitconfig.local;
-    ".tmux".source = ../../tmux/dot-tmux;
-    ".tmux.conf".source = ../../tmux/dot-tmux.conf;
-    ".zshenv".source = ../../zsh/dot-zshenv;
-    ".zshrc".source = ../../zsh/dot-zshrc;
+    ".config/user-dirs.dirs".source = ../xdg/user-dirs.dirs;
+    ".config/user-dirs.locale".source = ../xdg/user-dirs.locale;
+    ".gitconfig".source = ../git/gitconfig;
+    ".gitconfig.local".source = ../git/gitconfig.local;
+    ".tmux".source = ../tmux/tmux;
+    ".tmux.conf".source = ../tmux/tmux.conf;
+    ".zshenv".source = ../zsh/zshenv;
+    ".zshrc".source = ../zsh/zshrc;
   };
 
   home.sessionVariables = {

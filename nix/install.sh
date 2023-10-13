@@ -8,3 +8,8 @@ nix-channel \
 nix-channel --update
 
 nix-shell '<home-manager>' -A install
+mkdir -p ~/.config/home-manager
+pushd ~/.config/home-manager
+rm home.nix
+ln -s ~/.dotfiles/nix/home.nix
+popd

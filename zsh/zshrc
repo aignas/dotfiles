@@ -24,13 +24,11 @@ exists() {
 
 export DOTFILES="$HOME/.dotfiles"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-export GOENV_ROOT="${DOTFILES}/golang/goenv"
 export GOENV_SHELL=zsh
 export NVM_DIR="${HOME}/.nvm"
 
 path_prepend "${HOME}/.cargo/bin"
 path_prepend "${HOME}/.local/bin"
-path_prepend "${GOENV_ROOT}/shims"
 export PATH
 
 export EDITOR="vim"
@@ -92,21 +90,4 @@ fi
 exists direnv && eval "$(direnv hook zsh)"
 trysource "${NVM_DIR}"/nvm.sh
 
-trysource "${GOENV_ROOT}/completions/goenv.zsh"
 trysource "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-command goenv rehash 2>/dev/null
-goenv() {
-  local command
-  command="$1"
-  if [ "$#" -gt 0 ]; then
-    shift
-  fi
-
-  case "$command" in
-  rehash|shell)
-    eval "$(goenv "sh-$command" "$@")";;
-  *)
-    command goenv "$command" "$@";;
-  esac
-}
-goenv rehash --only-manage-paths
