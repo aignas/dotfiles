@@ -19,6 +19,7 @@
 
     # nvim dependencies
     pkgs.black
+    pkgs.buf
     pkgs.gopls
     pkgs.pyright
     pkgs.ruff
@@ -31,6 +32,13 @@
     pkgs.buildifier
     pkgs.buildozer
     pkgs.bazelisk
+
+    # generic dev deps
+    pkgs.direnv
+    pkgs.opentofu
+    pkgs.terragrunt
+    pkgs.tflint
+    pkgs.kubectl
   ];
 
   # Manage dotfiles
@@ -71,10 +79,10 @@
       source = ../xdg/newsboat;
       recursive = true;
     };
-    # ".config/nvim" = {
-    #     source = ../neovim/nvim;
-    #     recursive = false;
-    # };
+    ".config/nvim" = {
+        source = ../neovim/nvim;
+        recursive = false;
+    };
     ".config/pacman" = {
         source = ../pacman/pacman;
         recursive = true;

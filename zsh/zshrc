@@ -24,7 +24,6 @@ exists() {
 
 export DOTFILES="$HOME/.dotfiles"
 export XDG_DATA_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}"
-export GOENV_SHELL=zsh
 export NVM_DIR="${HOME}/.nvm"
 
 path_prepend "${HOME}/.cargo/bin"
@@ -58,15 +57,12 @@ alias se='sudo -E $(which e)'
 exists kubectl && alias k='kubectl'
 exists terragrunt && alias tg='terragrunt'
 exists fd && alias fd='fd --color=never'
-exists fdfind && alias fd='fdfind --color=never'
 
 exists eza && alias ls='eza --color=never'
 alias ll='ls -l'
 alias la='ls -a'
 
 exists task && alias t=task
-
-alias w='watchexec --clear --restart'
 
 setopt promptsubst
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html

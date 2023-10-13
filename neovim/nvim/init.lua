@@ -5,11 +5,24 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
-vim.cmd.packadd "pckr.nvim"
-require('pckr').setup{
-    package_root = vim.env.XDG_CONFIG_HOME .. '/nvim/pack',
-    auto_install = true,
-}
+local function bootstrap_pckr()
+  local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
+
+  if not vim.loop.fs_stat(pckr_path) then
+    vim.fn.system({
+      'git',
+      'clone',
+      "--filter=blob:none",
+      'https://github.com/lewis6991/pckr.nvim',
+      pckr_path
+    })
+  end
+
+  vim.opt.rtp:prepend(pckr_path)
+end
+
+bootstrap_pckr()
+
 require('pckr').add{
     {
         'lewis6991/pckr.nvim',
