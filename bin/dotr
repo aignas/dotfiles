@@ -32,11 +32,6 @@ while test $# -gt 0; do
         shift
         continue
         ;;
-    "--no-gitconfig")
-        [ -f "${DOTFILES_ROOT}/git/gitconfig.symlink" ] || touch "${DOTFILES_ROOT}/git/gitconfig.symlink"
-        shift
-        continue
-        ;;
     *)
         echo "Invalid option: $1"
         print_help

@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./sway.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "aignas";
@@ -8,37 +12,53 @@
 
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
-  home.packages = [
-    pkgs.aerc
-    pkgs.eza
-    pkgs.fd
-    pkgs.fzf
-    pkgs.jq
-    pkgs.lf
-    pkgs.newsboat
+  home.packages = with pkgs; [
+    curl
+    diskonaut
+    eza
+    fd
+    fzf
+    github-cli
+    htop
+    jq
+    lf
+    pre-commit
+    ripgrep
+
+    # mail
+    newsboat
+    aerc
+    dante
+    w3m
+    translate-shell
 
     # nvim dependencies
-    pkgs.black
-    pkgs.buf
-    pkgs.gopls
-    pkgs.pyright
-    pkgs.ruff
-    pkgs.shellcheck
-    pkgs.shfmt
-    pkgs.yamlfmt
-    pkgs.yamllint
+    black
+    buf
+    gopls
+    pyright
+    ruff
+    shellcheck
+    shfmt
+    skk-dicts
+    yamlfmt
+    yamllint
 
     # bazel and friends
-    pkgs.buildifier
-    pkgs.buildozer
-    pkgs.bazelisk
+    buildifier
+    buildozer
+    bazelisk
 
     # generic dev deps
-    pkgs.direnv
-    pkgs.opentofu
-    pkgs.terragrunt
-    pkgs.tflint
-    pkgs.kubectl
+    direnv
+    opentofu
+    terragrunt
+    tflint
+    kubectl
+
+    # media
+    imv
+    youtube-dl
   ];
 
   # Manage dotfiles
@@ -48,69 +68,40 @@
       recursive = true;
     };
 
-    ".config/aerc/aerc.conf".source = ../aerc/aerc.conf;
-    ".config/aerc/binds.conf".source = ../aerc/binds.conf;
-    ".config/aerc/scripts" = {
-      source = ../aerc/scripts;
-      recursive = true;
-    };
-    ".config/alacritty" = {
-      source = ../alacritty;
-      recursive = true;
-    };
-    ".config/gammastep" = {
-      source = ../xdg/gammastep;
-      recursive = true;
-    };
-    ".config/i3status-rust" = {
-      source = ../xdg/i3status-rust;
-      recursive = true;
-    };
-    ".config/kanshi" = {
-      source = ../xdg/kanshi;
-      recursive = true;
-    };
-    ".config/lf" = {
-      source = ../lf;
-      recursive = true;
-    };
-    ".config/mimeapps.list".source = ../xdg/mimeapps.list;
-    ".config/newsboat" = {
-      source = ../xdg/newsboat;
-      recursive = true;
-    };
-    ".config/nvim" = {
-        source = ../neovim/nvim;
-        recursive = false;
-    };
-    ".config/pacman" = {
-        source = ../pacman/pacman;
-        recursive = true;
-    };
-    ".config/qutebrowser" = {
-      source = ../qutebrowser;
-      recursive = true;
-    };
-    ".config/sway" = {
-      source = ../xdg/sway;
-      recursive = true;
-    };
-    ".config/swayidle" = {
-      source = ../xdg/swayidle;
-      recursive = true;
-    };
-    ".config/swaylock" = {
-      source = ../xdg/swaylock;
-      recursive = true;
-    };
-    ".config/user-dirs.dirs".source = ../xdg/user-dirs.dirs;
-    ".config/user-dirs.locale".source = ../xdg/user-dirs.locale;
     ".gitconfig".source = ../git/gitconfig;
     ".gitconfig.local".source = ../git/gitconfig.local;
     ".tmux".source = ../tmux/tmux;
     ".tmux.conf".source = ../tmux/tmux.conf;
     ".zshenv".source = ../zsh/zshenv;
     ".zshrc".source = ../zsh/zshrc;
+  };
+
+  xdg = {
+    enable = true;
+
+    configFile = {
+      "aerc/aerc.conf".source = ../aerc/aerc.conf;
+      "aerc/binds.conf".source = ../aerc/binds.conf;
+      "aerc/scripts/wait-for-creds.sh" = {
+        source = ../aerc/scripts/wait-for-creds.sh;
+        executable = true;
+      };
+      "alacritty/alacritty.yml".source = ../alacritty/alacritty.yml;
+      "lf/lfrc".source = ../lf/lfrc;
+      "newsboat/config".source = ../newsboat/config;
+      "newsboat/urls".source = ../newsboat/urls;
+      "nvim" = {
+        source = ../neovim/nvim;
+        recursive = false;
+      };
+      "pacman/makepkg.conf".source = ../pacman/makepkg.conf;
+    };
+
+    dataFile = {
+      "nvim/backup/.keep".text = "";
+      "nvim/swap/.keep".text = "";
+      "nvim/undo/.keep".text = "";
+    };
   };
 
   home.sessionVariables = {

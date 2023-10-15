@@ -12,22 +12,13 @@ _install() {
         adobe-source-han-serif-jp-fonts
         asp
         base-devel
-        direnv
-        diskonaut
         docker
-        github-cli
-        htop
         ipa-fonts
         nix
-        npm
         otf-ipaexfont
         python-pillow # required for qmk
-        python-pre-commit
-        ripgrep
         rsync
         rustup
-        stow
-        tmux
         ttf-hanazono
         ttf-sazanami
         xdg-utils
@@ -55,7 +46,6 @@ _install() {
         brightnessctl
         gammastep
         gnome-keyring
-        i3status-rust
         kanshi
         mako
         pamixer
@@ -77,13 +67,6 @@ _install() {
         yubikey-manager
         libfido2
         yubico-pam
-    )
-
-    # Mail + news
-    pkgs+=(
-        dante
-        translate-shell
-        w3m
     )
 
     # Photo
