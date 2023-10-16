@@ -1,3 +1,4 @@
 # Ignore the /tools dir, where we are installing various tools locally
 /tools
 /tmux/dot-tmux/plugins
+/nix/home.nix

@@ -1,15 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ./sway.nix
-  ];
-
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = "aignas";
-  home.homeDirectory = "/home/aignas";
-
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
   home.packages = with pkgs; [
