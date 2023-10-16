@@ -25,6 +25,7 @@
     pkgs.translate-shell
 
     # nvim dependencies
+    pkgs.neovim
     pkgs.black
     pkgs.buf
     pkgs.gopls
