@@ -1,57 +1,57 @@
 { config, pkgs, ... }:
 
+let
+  pkgsUnstable = import <nixpkgs-unstable> {};
+in
+
 {
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
-  home.packages = with pkgs; [
-    curl
-    diskonaut
-    eza
-    fd
-    fzf
-    ghostscript
-    github-cli
-    htop
-    jq
-    lf
-    pre-commit
-    ripgrep
+  home.packages = [
+    pkgs.curl
+    pkgs.diskonaut
+    pkgsUnstable.eza
+    pkgs.fd
+    pkgs.fzf
+    pkgs.ghostscript
+    pkgs.github-cli
+    pkgs.htop
+    pkgs.jq
+    pkgs.lf
+    pkgs.pre-commit
+    pkgs.ripgrep
 
     # mail
-    newsboat
-    aerc
-    dante
-    w3m
-    translate-shell
+    pkgs.newsboat
+    pkgs.aerc
+    pkgs.dante
+    pkgs.w3m
+    pkgs.translate-shell
 
     # nvim dependencies
-    black
-    buf
-    gopls
-    pyright
-    ruff
-    shellcheck
-    shfmt
-    skk-dicts
-    yamlfmt
-    yamllint
+    pkgs.black
+    pkgs.buf
+    pkgs.gopls
+    pkgs.pyright
+    pkgs.ruff
+    pkgs.shellcheck
+    pkgs.shfmt
+    pkgs.skk-dicts
+    pkgs.yamlfmt
+    pkgs.yamllint
 
     # bazel and friends
-    buildifier
-    buildozer
-    bazelisk
+    pkgs.buildifier
+    pkgs.buildozer
+    pkgs.bazelisk
 
     # generic dev deps
-    direnv
-    opentofu
-    terragrunt
-    tflint
-    kubectl
-    postgresql # for psql CLI tool
-
-    # media
-    imv
-    youtube-dl
+    pkgs.direnv
+    pkgsUnstable.opentofu
+    pkgs.terragrunt
+    pkgs.tflint
+    pkgs.kubectl
+    pkgs.postgresql # for psql CLI tool
   ];
 
   # Manage dotfiles
