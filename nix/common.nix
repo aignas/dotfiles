@@ -1,16 +1,11 @@
 { config, pkgs, ... }:
 
-let
-  pkgsUnstable = import <nixpkgs-unstable> {};
-in
-
 {
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
   home.packages = [
     pkgs.curl
     pkgs.diskonaut
-    pkgsUnstable.eza
     pkgs.fd
     pkgs.fzf
     pkgs.ghostscript
@@ -20,6 +15,7 @@ in
     pkgs.lf
     pkgs.pre-commit
     pkgs.ripgrep
+    pkgs.direnv
 
     # mail
     pkgs.newsboat
@@ -44,58 +40,7 @@ in
     pkgs.buildifier
     pkgs.buildozer
     pkgs.bazelisk
-
-    # generic dev deps
-    pkgs.direnv
-    pkgsUnstable.opentofu
-    pkgs.terragrunt
-    pkgs.tflint
-    pkgs.kubectl
-    pkgs.postgresql # for psql CLI tool
   ];
-
-  # Manage dotfiles
-  home.file = {
-    ".local/bin" = {
-      source = ../bin;
-      recursive = true;
-    };
-
-    ".gitconfig".source = ../git/gitconfig;
-    ".gitconfig.local".source = ../git/gitconfig.local;
-    ".tmux".source = ../tmux/tmux;
-    ".tmux.conf".source = ../tmux/tmux.conf;
-    ".zshenv".source = ../zsh/zshenv;
-    ".zshrc".source = ../zsh/zshrc;
-  };
-
-  xdg = {
-    enable = true;
-
-    configFile = {
-      "aerc/aerc.conf".source = ../aerc/aerc.conf;
-      "aerc/binds.conf".source = ../aerc/binds.conf;
-      "aerc/scripts/wait-for-creds.sh" = {
-        source = ../aerc/scripts/wait-for-creds.sh;
-        executable = true;
-      };
-      "alacritty/alacritty.yml".source = ../alacritty/alacritty.yml;
-      "lf/lfrc".source = ../lf/lfrc;
-      "newsboat/config".source = ../newsboat/config;
-      "newsboat/urls".source = ../newsboat/urls;
-      "nvim" = {
-        source = ../neovim/nvim;
-        recursive = false;
-      };
-      "pacman/makepkg.conf".source = ../pacman/makepkg.conf;
-    };
-
-    dataFile = {
-      "nvim/backup/.keep".text = "";
-      "nvim/swap/.keep".text = "";
-      "nvim/undo/.keep".text = "";
-    };
-  };
 
   home.sessionVariables = {
   };
