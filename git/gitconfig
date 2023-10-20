@@ -25,17 +25,6 @@
 [difftool]
     prompt = false
 
-[alias]
-    aa = add -A
-    au = add -u
-    br = branch
-    ca = commit --amend --no-edit
-    cc = commit
-    cm = commit -a
-    co = checkout
-    st = status
-    s  = status --short --branch --show-stash
-
 [init]
     defaultBranch = main
 
