@@ -41,6 +41,7 @@
     pkgs.buildifier
     pkgs.buildozer
     pkgs.bazelisk
+    pkgs.bazel-watcher
   ];
 
   home.sessionVariables = {
