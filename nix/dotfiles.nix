@@ -26,7 +26,7 @@
         source = ../aerc/scripts/wait-for-creds.sh;
         executable = true;
       };
-      "alacritty/alacritty.yml".source = ../alacritty/alacritty.yml;
+      "alacritty/alacritty.yml".source = ../alacritty/light.yml;
       "lf/lfrc".source = ../lf/lfrc;
       "newsboat/config".source = ../newsboat/config;
       "newsboat/urls".source = ../newsboat/urls;
