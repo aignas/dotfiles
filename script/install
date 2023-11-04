@@ -13,11 +13,8 @@ installs=(
     ./apt-get
     ./brew
     ./pacman
-    ./golang
     ./neovim
     ./nix
-    ./fzf
-    ./systemd
 )
 
 {
