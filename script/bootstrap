@@ -39,7 +39,7 @@ source script/logging.sh
 echo ''
 
 setup_gitconfig() {
-    [ -f git/dot-gitconfig.local ] && return
+    [ -f git/gitconfig.local ] && return
 
     info 'setup gitconfig'
 
