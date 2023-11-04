@@ -379,7 +379,7 @@ vim.g.lists_filetypes = {'md'}
 -- TODO @aignas 2023-10-15: configure the eskk to use nix managed dicts
 require'eskk'.setup({
     start_completion_length = 2,
-    directory = vim.env.HOME .. '.nix-profile/share',
+    directory = vim.env.XDG_DATA_HOME .. '/nvim/skk',
     select_cand_keys = 'aoeuhtns',
     show_annotation = 1,
     kakutei_when_unique_candidate = 1,
