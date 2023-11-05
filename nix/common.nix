@@ -16,6 +16,8 @@
     pkgs.pre-commit
     pkgs.ripgrep
     pkgs.direnv
+    pkgs.tig
+    pkgs.kind
 
     # mail
     pkgs.newsboat
@@ -26,11 +28,12 @@
 
     # nvim dependencies
     pkgs.neovim
-    pkgs.black
     pkgs.buf
+    pkgs.deno
     pkgs.gopls
     pkgs.pyright
     pkgs.ruff
+    pkgs.rust-analyzer
     pkgs.shellcheck
     pkgs.shfmt
     pkgs.skk-dicts
@@ -42,6 +45,9 @@
     pkgs.buildozer
     pkgs.bazelisk
     pkgs.bazel-watcher
+
+    # blog
+    pkgs.zola
   ];
 
   home.sessionVariables = {

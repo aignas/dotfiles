@@ -24,9 +24,9 @@ end
 bootstrap_pckr()
 require('pckr').add{
     {
-        'lewis6991/pckr.nvim',
-        branch = 'main',
-        opt = true,
+      'lewis6991/pckr.nvim',
+      branch = 'main',
+      opt = true,
     };
 
     'williamboman/mason-lspconfig.nvim';
@@ -38,27 +38,30 @@ require('pckr').add{
     'hrsh7th/vim-vsnip';
     'hrsh7th/vim-vsnip-integ';
     'lervag/lists.vim';
-    'lervag/vimtex';
     'lervag/wiki.vim';
     'mfussenegger/nvim-dap';
     'mfussenegger/nvim-lint';
     'neovim/nvim-lspconfig';
-    'nvim-lua/plenary.nvim';
-    'nvim-telescope/telescope.nvim';
+    { 'nvim-telescope/telescope.nvim'
+      requires = {'nvim-lua/plenary.nvim'},
+    };
     'rktjmp/lush.nvim';
     'tpope/vim-abolish';
     'tpope/vim-eunuch';
     'tpope/vim-fugitive';
     'tpope/vim-repeat';
-    'tpope/vim-rhubarb';
     'tpope/vim-surround';
     'tpope/vim-unimpaired';
-    'tyru/eskk.vim';
+
+    { 'vim-skk/skkeleton',
+      requires = {'vim-denops/denops.vim'},
+    };
+
     'williamboman/mason.nvim';
 
     {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdateSync',
+      'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdateSync',
     };
 }
 
@@ -69,6 +72,10 @@ imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab
 smap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+imap <C-j> <Plug>(skkeleton-toggle)
+cmap <C-j> <Plug>(skkeleton-toggle)
+tmap <C-j> <Plug>(skkeleton-toggle)
 ]]
 
 actions = require("telescope.actions")
@@ -218,11 +225,7 @@ require'nvim-treesitter.configs'.setup {
 
 vim.cmd [[
 set guioptions=ag termguicolors lazyredraw
-if exists('theme') && theme == 'light'
-  set background=light
-else
-  set background=dark
-endif
+set background=light
 ]]
 
 vim.cmd.colorscheme "simple"
@@ -376,20 +379,14 @@ vim.g.wiki_link_creation = {
 
 vim.g.lists_filetypes = {'md'}
 
+
 -- TODO @aignas 2023-10-15: configure the eskk to use nix managed dicts
-require'eskk'.setup({
-    start_completion_length = 2,
-    directory = vim.env.XDG_DATA_HOME .. '/nvim/skk',
-    select_cand_keys = 'aoeuhtns',
-    show_annotation = 1,
-    kakutei_when_unique_candidate = 1,
-    log_cmdline_level = 2,
-    log_file_level = 4,
-    server = {
-        host = '0.0.0.0',
-        port = 1178
-    }
-})
+vim.cmd [[
+call skkeleton#config({
+    \ 'globalDictionaries': ["~/.nix-profile/share/SKK-JISYO.L"],
+    \ 'selectCandidateKeys': 'aoeuhtns',
+    \})
+]]
 
 for rc in string.gmatch(vim.env.EXTRA_NVIMRC or '', '[^:]+') do
     vim.cmd('exec "source' .. rc .. '"')

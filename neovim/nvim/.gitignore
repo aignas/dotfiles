@@ -1,8 +1,0 @@
-/spell/
-/.netrwhist
-
-/pack/pckr
-!/pack/pckr/opt/pckr.nvim
-
-/pack/local/start/local/plugin/*
-!/pack/local/start/local/plugin/README.md

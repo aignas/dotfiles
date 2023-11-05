@@ -10,10 +10,7 @@ cd "${DOTFILES_ROOT}"
 source "./script/logging.sh"
 
 installs=(
-    ./apt-get
-    ./brew
     ./pacman
-    ./neovim
     ./nix
 )
 

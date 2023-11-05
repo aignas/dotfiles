@@ -31,7 +31,7 @@
       "newsboat/config".source = ../newsboat/config;
       "newsboat/urls".source = ../newsboat/urls;
       "nvim" = {
-        source = ../neovim/nvim;
+        source = ../nvim;
         recursive = false;
       };
     };
