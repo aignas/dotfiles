@@ -48,4 +48,28 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    withNodeJs = true;
+    withPython3 = true;
+    extraPackages = [
+      pkgs.buf
+      pkgs.deno
+      pkgs.gopls
+      pkgs.pyright
+      pkgs.ruff
+      pkgs.rust-analyzer
+      pkgs.shellcheck
+      pkgs.tree-sitter
+      pkgs.shfmt
+      pkgs.skk-dicts
+      pkgs.yamlfmt
+      pkgs.yamllint
+      pkgs.lua5_4_compat
+    ];
+    plugins = [
+      pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+    ];
+  };
 }

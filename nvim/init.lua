@@ -29,7 +29,6 @@ require('pckr').add{
       opt = true,
     };
 
-    'williamboman/mason-lspconfig.nvim';
     'hrsh7th/cmp-buffer';
     'hrsh7th/cmp-cmdline';
     'hrsh7th/cmp-nvim-lsp';
@@ -42,7 +41,7 @@ require('pckr').add{
     'mfussenegger/nvim-dap';
     'mfussenegger/nvim-lint';
     'neovim/nvim-lspconfig';
-    { 'nvim-telescope/telescope.nvim'
+    { 'nvim-telescope/telescope.nvim',
       requires = {'nvim-lua/plenary.nvim'},
     };
     'rktjmp/lush.nvim';
@@ -56,16 +55,7 @@ require('pckr').add{
     { 'vim-skk/skkeleton',
       requires = {'vim-denops/denops.vim'},
     };
-
-    'williamboman/mason.nvim';
-
-    {
-      'nvim-treesitter/nvim-treesitter',
-      run = ':TSUpdateSync',
-    };
 }
-
-require("mason").setup()
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
@@ -167,61 +157,11 @@ set_leader_mappings({
 
 local remap = vim.api.nvim_set_keymap
 
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = {
-        "bash",
-        "c",
-        "c_sharp",
-        "comment",
-        "comment",
-        "cpp",
-        "css",
-        "diff",
-        "dockerfile",
-        "git_config",
-        "git_rebase",
-        "gitattributes",
-        "gitcommit",
-        "gitignore",
-        "go",
-        "gomod",
-        "gosum",
-        "hcl",
-        "html",
-        "ini",
-        "java",
-        "javascript",
-        "jq",
-        "jsdoc",
-        "json",
-        "jsonnet",
-        "julia",
-        "lua",
-        "make",
-        "markdown",
-        "markdown_inline",
-        "php",
-        "proto",
-        "python",
-        "ql",
-        "query",
-        "r",
-        "regex",
-        "rst",
-        "rust",
-        "sql",
-        "starlark",
-        "terraform",
-        "toml",
-        "typescript",
-        "vim",
-        "yaml",
-        "zig",
-    },
-    highlight = {enable = true},
-    indent = {enable = true},
-    additional_vim_regex_highlighting = false,
-}
+-- require'nvim-treesitter.configs'.setup {
+--     highlight = {enable = true},
+--     indent = {enable = true},
+--     additional_vim_regex_highlighting = false,
+-- }
 
 vim.cmd [[
 set guioptions=ag termguicolors lazyredraw

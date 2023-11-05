@@ -27,10 +27,10 @@
     pkgs.translate-shell
 
     # nvim dependencies
-    pkgs.neovim
     pkgs.buf
     pkgs.deno
     pkgs.gopls
+    pkgs.lua5_4_compat
     pkgs.pyright
     pkgs.ruff
     pkgs.rust-analyzer
