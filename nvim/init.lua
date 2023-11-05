@@ -5,30 +5,7 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
-local function bootstrap_pckr()
-  local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
-
-  if not vim.loop.fs_stat(pckr_path) then
-    vim.fn.system({
-      'git',
-      'clone',
-      "--filter=blob:none",
-      'https://github.com/lewis6991/pckr.nvim',
-      pckr_path
-    })
-  end
-
-  vim.opt.rtp:prepend(pckr_path)
-end
-
-bootstrap_pckr()
-require('pckr').add{
-    {
-      'lewis6991/pckr.nvim',
-      branch = 'main',
-      opt = true,
-    };
-
+require("lazy").setup({
     'hrsh7th/cmp-buffer';
     'hrsh7th/cmp-cmdline';
     'hrsh7th/cmp-nvim-lsp';
@@ -42,7 +19,7 @@ require('pckr').add{
     'mfussenegger/nvim-lint';
     'neovim/nvim-lspconfig';
     { 'nvim-telescope/telescope.nvim',
-      requires = {'nvim-lua/plenary.nvim'},
+      dependencies = {'nvim-lua/plenary.nvim'},
     };
     'rktjmp/lush.nvim';
     'tpope/vim-abolish';
@@ -53,9 +30,11 @@ require('pckr').add{
     'tpope/vim-unimpaired';
 
     { 'vim-skk/skkeleton',
-      requires = {'vim-denops/denops.vim'},
+      dependencies = {'vim-denops/denops.vim'},
     };
-}
+})
+
+vim.cmd.colorscheme "simple"
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
@@ -97,12 +76,63 @@ require("telescope").setup {
 }
 
 require('lint').linters_by_ft = {
-    bzl = {'buildifier'},
-    py = {'ruff',},
-    sh = {'shellcheck',},
-    tf = {'tflint',},
-    yaml = {'yamllint',},
+  bzl = {'buildifier'},
+  python = {'ruff'},
+  sh = {'shellcheck'},
+  tf = {'tflint'},
+  yaml = {'yamllint'},
 }
+
+local ruff = require('lint').linters.ruff
+local function get_file_name()
+  return vim.api.nvim_buf_get_name(0)
+end
+
+local function get_severity(code)
+  local error_codes = {
+    ["F821"] = true, -- undefined name `name`
+    ["E902"] = true, -- `IOError`
+    ["E999"] = true, -- `SyntaxError`
+  }
+
+  if error_codes[code] then
+    return vim.diagnostic.severity.ERROR
+  else
+    return vim.diagnostic.severity.WARN
+  end
+end
+
+ruff.args = {
+    "--force-exclude",
+    "--quiet",
+    "--stdin-filename",
+    get_file_name,
+    "--no-fix",
+    "--output-format",
+    "json",
+    "-",
+}
+ruff.stream = "stdout"
+ruff.parser = function(output)
+    local diagnostics = {}
+    local ok, results = pcall(vim.json.decode, output)
+    if not ok then
+        return diagnostics
+    end
+    for _, result in ipairs(results or {}) do
+        local err = {
+            message = result.message,
+            col = result.location.column - 1,
+            end_col = result.end_location.column - 1,
+            lnum = result.location.row - 1,
+            end_lnum = result.end_location.row - 1,
+            code = result.code,
+            severity = get_severity(result.code),
+        }
+        table.insert(diagnostics, err)
+    end
+    return diagnostics
+end
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged" }, {
   callback = function()
@@ -152,6 +182,7 @@ set_leader_mappings({
     tg = '<CMD>Telescope grep_string<CR>',
     tq = '<CMD>Telescope quickfix<CR>',
     tl = '<CMD>Telescope loclist<CR>',
+    td = '<CMD>Telescope diagnostics<CR>',
     z = '<CMD>e %:h/BUILD<CR>',
 })
 
@@ -167,8 +198,6 @@ vim.cmd [[
 set guioptions=ag termguicolors lazyredraw
 set background=light
 ]]
-
-vim.cmd.colorscheme "simple"
 
 vim.opt.autoindent = true
 vim.opt.backspace = "eol,start,indent"

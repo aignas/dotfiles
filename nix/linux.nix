@@ -4,6 +4,7 @@
   imports = [
     ./common.nix
     ./dotfiles.nix
+    ./nvim.nix
     ./sway.nix
   ];
 
