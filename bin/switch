@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Light switch for my terminal
+set -euo pipefail
+
+alacritty() {
+    local -r theme="$1"
+    cat "${theme}.toml" >colors.toml
+}
+
+main() {
+    theme=light
+    case ${1:-} in
+    light | l) ;;
+
+    dark | d)
+        theme=dark
+        ;;
+    *)
+        echo "unknown theme: $*"
+        exit 1
+        ;;
+    esac
+
+    cd "${HOME}/.dotfiles/alacritty"
+    alacritty "$theme"
+}
+
+main "$@"
