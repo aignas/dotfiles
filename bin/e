@@ -1,13 +1,11 @@
 #!/bin/bash
 
-readonly bg=$(grep "background" "${HOME}/.config/alacritty/alacritty.yml")
-
 if [[ -n ${TMUX} ]]; then
     export TERM=tmux-256color
 fi
 
-if [[ $bg == "    background: '#3a3a3a'" ]]; then
-    exec env "$EDITOR" --cmd "let theme = 'dark'" $@
+if grep -q "background = \"0x3a3a3a\"" "${HOME}/.dotfiles/alacritty/colors.toml"; then
+    exec env "$EDITOR" --cmd "set background=dark" "$@"
 fi
 
-exec env "$EDITOR" --cmd "let theme = 'light'" $@
+exec env "$EDITOR" --cmd "let background=light" "$@"

@@ -36,6 +36,7 @@ font pango:Hack,10
 # Taken from
 # https://webbtelescope.org/contents/media/images/2022/031/01G77PKB8NKR7S8Z6HBXMYATGJ
 exec_always "pkill kanshi; kanshi"
+exec_always "pkill fcitx5; fcitx5"
 output * bg ~/.config/sway/bg.png fill
 
 # screen backlight, first set min and restore previous
@@ -71,9 +72,9 @@ exec swaymsg exec nm-applet --indicator
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 # Also read `man xkeyboard-config`
-    input type:keyboard {
+    input "936:42569:OLKB_Preonic" {
         xkb_layout us,lt
-        xkb_variant ,std
+        xkb_variant dvorak,std
         xkb_options grp:shifts_toggle
     }
     input "1:1:AT_Translated_Set_2_keyboard" {

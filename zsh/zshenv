@@ -3,4 +3,9 @@ if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
     export MOZ_ENABLE_WAYLAND=1
     # For steam
     export SDL_VIDEODRIVER=wayland
+
+    # For fcitx5
+    export GTK_IM_MODULE=fcitx
+    export QT_IM_MODULE=fcitx
+    export XMODIFIERS=@im=fcitx
 fi
