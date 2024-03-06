@@ -33,6 +33,7 @@
     pkgs.lua5_4_compat
     pkgs.pyright
     pkgs.ruff
+    pkgs.ruff-lsp
     pkgs.rust-analyzer
     pkgs.shellcheck
     pkgs.shfmt

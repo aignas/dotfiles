@@ -8,4 +8,4 @@ if grep -q "background = \"0x3a3a3a\"" "${HOME}/.dotfiles/alacritty/colors.toml"
     exec env "$EDITOR" --cmd "set background=dark" "$@"
 fi
 
-exec env "$EDITOR" --cmd "let background=light" "$@"
+exec env "$EDITOR" --cmd "set background=light" "$@"
