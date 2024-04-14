@@ -10,7 +10,6 @@ type pacman >/dev/null || exit 0
 _install() {
     local pkgs=(
         adobe-source-han-serif-jp-fonts
-        asp
         base-devel
         docker
         ipa-fonts
