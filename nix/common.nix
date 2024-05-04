@@ -45,7 +45,8 @@
     pkgs.buildifier
     pkgs.buildozer
     pkgs.bazelisk
-    pkgs.bazel-watcher
+    # TODO @aignas 2024-05-04: this is currently not building with nix properly
+    #pkgs.bazel-watcher
 
     # blog
     pkgs.zola
