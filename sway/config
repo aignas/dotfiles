@@ -214,8 +214,8 @@ exec swaymsg exec nm-applet --indicator
 #
 # Power keys:
 #
-    bindsym $mod+ctrl+q exec "systemctl suspend"
-    bindsym XF86Sleep exec systemctl suspend
+    bindsym $mod+ctrl+q exec "systemctl hibernate"
+    bindsym XF86Sleep exec systemctl hibernate
 
 #
 # Scratchpad:

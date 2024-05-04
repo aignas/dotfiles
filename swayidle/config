@@ -2,6 +2,6 @@
 
 timeout 120 '~/.config/swaylock/lock.sh'
 timeout 80 '~/.config/swaylock/inhibitor/pulse.sh && swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
-timeout 300 '~/.config/swaylock/inhibitor/pulse.sh && systemctl sleep'
+timeout 300 '~/.config/swaylock/inhibitor/pulse.sh && systemctl suspend-then-hibernate'
 before-sleep 'playerctl pause'
 before-sleep 'swaylock'
