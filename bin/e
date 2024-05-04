@@ -1,11 +1,16 @@
 #!/bin/bash
 
-if [[ -n ${TMUX} ]]; then
-    export TERM=tmux-256color
-fi
+main() {
+    if [[ -n ${TMUX} ]]; then
+        export TERM=tmux-256color
+    fi
 
-if grep -q "background = \"0x3a3a3a\"" "${HOME}/.dotfiles/alacritty/colors.toml"; then
-    exec env "$EDITOR" --cmd "set background=dark" "$@"
-fi
+    local background=light
+    if grep -q "background = \"0x3a3a3a\"" "${HOME}/.dotfiles/alacritty/colors.toml"; then
+        local background=dark
+    fi
 
-exec env "$EDITOR" --cmd "set background=light" "$@"
+    exec env "$EDITOR" -c "set background=$background" "$@"
+}
+
+main "$@"
