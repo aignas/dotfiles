@@ -1,6 +1,12 @@
 { config, pkgs, ... }:
 
+let
+  pkgsUnstable = import <nixpkgs-unstable> {};
+in
+
 {
+  manual.html.enable = false;
+  manual.manpages.enable = false;
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
   home.packages = [
@@ -27,19 +33,19 @@
     pkgs.translate-shell
 
     # nvim dependencies
-    pkgs.buf
-    pkgs.deno
-    pkgs.gopls
-    pkgs.lua5_4_compat
-    pkgs.pyright
-    pkgs.ruff
-    pkgs.ruff-lsp
-    pkgs.rust-analyzer
-    pkgs.shellcheck
-    pkgs.shfmt
-    pkgs.skk-dicts
-    pkgs.yamlfmt
-    pkgs.yamllint
+    pkgsUnstable.buf
+    pkgsUnstable.deno
+    pkgsUnstable.gopls
+    pkgsUnstable.lua5_4_compat
+    pkgsUnstable.pyright
+    pkgsUnstable.ruff
+    pkgsUnstable.ruff-lsp
+    pkgsUnstable.rust-analyzer
+    pkgsUnstable.shellcheck
+    pkgsUnstable.shfmt
+    pkgsUnstable.uv
+    pkgsUnstable.yamlfmt
+    pkgsUnstable.yamllint
 
     # bazel and friends
     pkgs.buildifier
