@@ -1,9 +1,5 @@
 { config, pkgs, ... }:
 
-let
-  pkgsUnstable = import <nixpkgs-unstable> {};
-in
-
 {
   manual.html.enable = false;
   manual.manpages.enable = false;
@@ -33,26 +29,22 @@ in
     pkgs.translate-shell
 
     # nvim dependencies
-    pkgsUnstable.buf
-    pkgsUnstable.deno
-    pkgsUnstable.gopls
-    pkgsUnstable.lua5_4_compat
-    pkgsUnstable.pyright
-    pkgsUnstable.ruff
-    pkgsUnstable.ruff-lsp
-    pkgsUnstable.rust-analyzer
-    pkgsUnstable.shellcheck
-    pkgsUnstable.shfmt
-    pkgsUnstable.uv
-    pkgsUnstable.yamlfmt
-    pkgsUnstable.yamllint
+    pkgs.buf
+    pkgs.deno
+    pkgs.gopls
+    pkgs.lua5_4_compat
+    pkgs.pyright
+    pkgs.ruff
+    pkgs.ruff-lsp
+    pkgs.rust-analyzer
+    pkgs.shellcheck
+    pkgs.shfmt
+    pkgs.uv
+    pkgs.yamlfmt
+    pkgs.yamllint
 
     # bazel and friends
-    pkgs.buildifier
-    pkgs.buildozer
     pkgs.bazelisk
-    # TODO @aignas 2024-05-04: this is currently not building with nix properly
-    #pkgs.bazel-watcher
 
     # blog
     pkgs.zola

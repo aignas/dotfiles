@@ -1,9 +1,5 @@
 { config, pkgs, ... }:
 
-let
-  pkgsUnstable = import <nixpkgs-unstable> {};
-in
-
 {
   imports = [
     ./common.nix
@@ -19,8 +15,8 @@ in
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
   home.packages = [
-    pkgsUnstable.eza
-    pkgsUnstable.opentofu
+    pkgs.eza
+    pkgs.opentofu
     pkgs.terragrunt
     pkgs.tflint
     pkgs.kind
