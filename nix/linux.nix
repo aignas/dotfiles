@@ -12,6 +12,7 @@
   home.packages = [
     pkgs.eza
     pkgs.opentofu
+    pkgs.watchexec
 
     # media
     pkgs.imv
