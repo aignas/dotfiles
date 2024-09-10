@@ -318,7 +318,8 @@ on_attach = function(client, bufnr)
 end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-require('lspconfig').ruff_lsp.setup {
+local lspconfig = require('lspconfig')
+lspconfig.ruff_lsp.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   init_options = {
@@ -328,13 +329,19 @@ require('lspconfig').ruff_lsp.setup {
     }
   }
 }
-require('lspconfig').pyright.setup {
+lspconfig.pyright.setup {
   capabilities = capabilities,
   settings = {
     pyright = {
       -- Using Ruff's import organizer
       disableOrganizeImports = true,
     },
+  },
+}
+lspconfig.rust_analyzer.setup {
+  -- Server-specific settings. See `:help lspconfig-setup`
+  settings = {
+    ['rust-analyzer'] = {},
   },
 }
 
