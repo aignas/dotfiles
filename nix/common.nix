@@ -30,7 +30,6 @@
 
     # nvim dependencies
     pkgs.buf
-    pkgs.deno
     pkgs.gopls
     pkgs.lua5_4_compat
     pkgs.pyright

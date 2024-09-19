@@ -27,7 +27,6 @@
     withPython3 = true;
     extraPackages = with pkgs; [
       buf
-      deno
       gopls
       pyright
       ruff
@@ -41,7 +40,6 @@
       lua5_4_compat
     ];
     plugins = with pkgs.vimPlugins; [
-      denops-vim
       lazy-nvim
       nvim-treesitter.withAllGrammars
     ];
