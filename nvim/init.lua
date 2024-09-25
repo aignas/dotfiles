@@ -20,7 +20,6 @@ require("lazy").setup({
     { 'nvim-telescope/telescope.nvim',
       dependencies = {'nvim-lua/plenary.nvim'},
     };
-    'rktjmp/lush.nvim';
     'tpope/vim-abolish';
     'tpope/vim-eunuch';
     'tpope/vim-fugitive';
@@ -28,8 +27,6 @@ require("lazy").setup({
     'tpope/vim-surround';
     'tpope/vim-unimpaired';
 })
-
-vim.cmd.colorscheme "simple"
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
