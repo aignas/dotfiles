@@ -74,7 +74,7 @@ exec swaymsg exec nm-applet --indicator
 # Also read `man xkeyboard-config`
     input "936:42569:OLKB_Preonic" {
         xkb_layout us,lt
-        xkb_variant dvorak,std
+        xkb_variant ,std
         xkb_options grp:shifts_toggle
     }
     input "1:1:AT_Translated_Set_2_keyboard" {
@@ -122,6 +122,7 @@ exec swaymsg exec nm-applet --indicator
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
     bindsym $mod+Escape exec swaylock
+    bindsym $mod+Shift+Escape inhibit_idle fullscreen
 #
 # Moving around:
 #
@@ -214,7 +215,7 @@ exec swaymsg exec nm-applet --indicator
 #
 # Power keys:
 #
-    bindsym $mod+ctrl+q exec "systemctl hibernate"
+    bindsym $mod+ctrl+q exec swaynag -t warning -m 'You pressed the hibernate shortcut. Do you really want to hibernate?' -b 'Yes' 'systemctl hibernate'
     bindsym XF86Sleep exec systemctl hibernate
 
 #
