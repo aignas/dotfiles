@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
     #i3status-rust
-    zathura
+    #zathura
   ];
 
   xdg = {
