@@ -21,11 +21,10 @@
     pkgs.kind
 
     # mail
-    pkgs.newsboat
     pkgs.aerc
-    pkgs.dante
-    pkgs.w3m
-    pkgs.translate-shell
+    #pkgs.dante
+    #upkgs.w3m
+    #pkgs.translate-shell
 
     # nvim dependencies
     pkgs.buf
