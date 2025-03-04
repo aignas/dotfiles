@@ -34,7 +34,6 @@
       shellcheck
       tree-sitter
       shfmt
-      skk-dicts
       yamlfmt
       yamllint
       lua5_4_compat
