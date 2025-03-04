@@ -16,7 +16,6 @@
 
     # media
     pkgs.imv
-    pkgs.youtube-dl
   ];
 
   xdg.configFile = {
