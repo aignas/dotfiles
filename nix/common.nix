@@ -21,7 +21,7 @@
     pkgs.kind
 
     # mail
-    #pkgs.aerc
+    pkgs.aerc
     #pkgs.dante
     #upkgs.w3m
     #pkgs.translate-shell
