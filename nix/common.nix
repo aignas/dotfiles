@@ -7,7 +7,6 @@
 
   home.packages = [
     pkgs.curl
-    pkgs.diskonaut
     pkgs.fd
     pkgs.fzf
     pkgs.ghostscript
