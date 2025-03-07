@@ -4,7 +4,6 @@
   home.packages = with pkgs; [
     avizo
     i3status-rust
-    #zathura
   ];
 
   xdg = {
