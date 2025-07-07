@@ -5,6 +5,7 @@
     ./common.nix
     ./dotfiles.nix
     ./nvim.nix
+    ./xdg.nix
     ./sway.nix
   ];
 
@@ -13,6 +14,7 @@
     pkgs.eza
     pkgs.opentofu
     pkgs.watchexec
+    pkgs.buildifier
 
     # media
     pkgs.imv

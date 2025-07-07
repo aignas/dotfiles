@@ -28,15 +28,16 @@
     extraPackages = with pkgs; [
       buf
       gopls
+      lua5_4_compat
       pyright
       ruff
       rust-analyzer
       shellcheck
-      tree-sitter
       shfmt
+      starpls
+      tree-sitter
       yamlfmt
       yamllint
-      lua5_4_compat
     ];
     plugins = with pkgs.vimPlugins; [
       lazy-nvim

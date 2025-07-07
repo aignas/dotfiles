@@ -87,4 +87,5 @@ fi
 exists direnv && eval "$(direnv hook zsh)"
 trysource "${NVM_DIR}"/nvm.sh
 
+trysource '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 trysource "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-type nix-channel >/dev/null || exit 0
+type home-manager >/dev/null || exit 0
 
 if ! type home-manager >/dev/null; then
     nix-channel \

@@ -37,12 +37,12 @@ font pango:Hack,10
 # https://webbtelescope.org/contents/media/images/2022/031/01G77PKB8NKR7S8Z6HBXMYATGJ
 exec_always "pkill kanshi; kanshi"
 exec_always "pkill fcitx5; fcitx5"
-output * bg ~/.config/sway/bg.png fill
+output * bg ~/.config/sway/bg.jpg fill
 
 # screen backlight, first set min and restore previous
-bindsym XF86MonBrightnessUp   exec "lightctl +5%"
-bindsym XF86MonBrightnessDown exec "lightctl -5%"
-exec "avizo-service"
+bindsym XF86MonBrightnessUp   exec "brightnessctl +5%"
+bindsym XF86MonBrightnessDown exec "brightnessctl -5%"
+exec "~/.nix-profile/bin/avizo-service"
 
 ### Idle configuration
 #
@@ -86,6 +86,12 @@ exec swaymsg exec nm-applet --indicator
         natural_scroll enabled
     }
     input "2:14:ETPS/2_Elantech_Touchpad" {
+        events disabled_on_external_mouse
+        dwt enabled
+        natural_scroll enabled
+        tap enabled
+    }
+    input "1739:52839:SYNA8022:00_06CB:CE67_Touchpad" {
         events disabled_on_external_mouse
         dwt enabled
         natural_scroll enabled
@@ -231,6 +237,10 @@ exec swaymsg exec nm-applet --indicator
     # If there are multiple scratchpad windows, this command cycles through them.
     bindsym $mod+minus scratchpad show
 
+    # Printscreen
+    bindsym print exec --no-startup-id slurp | grim -g - $(xdg-user-dir PICTURES)/screenshots/$(date +'screenshot_%Y-%m-%d-%H%M%S.png')
+    bindsym Shift+print exec --no-startup-id slurp | grim -g - - | wl-copy
+
 #
 # Resizing containers:
 #
@@ -264,7 +274,7 @@ bar {
     font pango:Hack, "Font Awesome 6 Free" 11
     position top
 
-    status_command i3status-rs ~/.config/i3status-rust/config.toml
+    status_command ~/.nix-profile/bin/i3status-rs ~/.config/i3status-rust/config.toml
     colors {
         separator #666666
         background #222222

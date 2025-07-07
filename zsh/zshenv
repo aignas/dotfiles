@@ -4,6 +4,9 @@ if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
     # For steam
     export SDL_VIDEODRIVER=wayland
 
+    # For Chrome
+    export XDG_CURRENT_DESKTOP=sway
+
     # For fcitx5
     export GTK_IM_MODULE=fcitx
     export QT_IM_MODULE=fcitx

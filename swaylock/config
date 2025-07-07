@@ -20,4 +20,4 @@ text-wrong-color=00000000
 text-ver-color=00000000
 separator-color=00000000
 layout-bg-color=3a3a3a30
-image="$HOME/.config/sway/bg.png"
+image="$HOME/.config/sway/bg.jpg"

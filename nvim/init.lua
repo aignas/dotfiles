@@ -5,28 +5,34 @@ if vim.env.XDG_DATA_HOME == nil then
     vim.env.XDG_DATA_HOME = vim.env.HOME .. '/.local/share'
 end
 
-require("lazy").setup({
-    'hrsh7th/cmp-buffer';
-    'hrsh7th/cmp-cmdline';
-    'hrsh7th/cmp-nvim-lsp';
-    'hrsh7th/cmp-path';
-    'hrsh7th/nvim-cmp';
-    'hrsh7th/vim-vsnip';
-    'hrsh7th/vim-vsnip-integ';
-    'lervag/lists.vim';
-    'lervag/wiki.vim';
-    'mfussenegger/nvim-lint';
-    'neovim/nvim-lspconfig';
-    { 'nvim-telescope/telescope.nvim',
-      dependencies = {'nvim-lua/plenary.nvim'},
-    };
-    'tpope/vim-abolish';
-    'tpope/vim-eunuch';
-    'tpope/vim-fugitive';
-    'tpope/vim-repeat';
-    'tpope/vim-surround';
-    'tpope/vim-unimpaired';
-})
+require("lazy").setup(
+    {
+        'hrsh7th/cmp-buffer';
+        'hrsh7th/cmp-cmdline';
+        'hrsh7th/cmp-nvim-lsp';
+        'hrsh7th/cmp-path';
+        'hrsh7th/nvim-cmp';
+        'hrsh7th/vim-vsnip';
+        'hrsh7th/vim-vsnip-integ';
+        'lervag/lists.vim';
+        'lervag/wiki.vim';
+        'mfussenegger/nvim-lint';
+        'neovim/nvim-lspconfig';
+        { 'nvim-telescope/telescope.nvim',
+          dependencies = {'nvim-lua/plenary.nvim'},
+        };
+        'tpope/vim-abolish';
+        'tpope/vim-eunuch';
+        'tpope/vim-fugitive';
+        -- 'github/copilot.vim';
+        'tpope/vim-repeat';
+        'tpope/vim-surround';
+        'tpope/vim-unimpaired';
+    },
+    {
+          lockfile = vim.fn.stdpath("cache") .. "/lazy-lock.json", -- lockfile generated after running update.
+    }
+)
 
 vim.cmd [[
 imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
@@ -104,7 +110,7 @@ end
 set_leader_mappings({
     WN = '<CMD>e ~/.notes/content/index.md<CR>',
     WW = '<CMD>e ~/.work/zettel/index.md<CR>',
-    ww = '<CMD>WikiJournal<CR>',
+    ww = '<CMD>WikiJournal!<CR>',
 
     cd = '<CMD>lcd %:p:h<CR>',
     e = ':e %:h/',
@@ -131,7 +137,7 @@ local remap = vim.api.nvim_set_keymap
 -- }
 
 vim.cmd [[
-set guioptions=ag termguicolors lazyredraw
+set termguicolors lazyredraw
 set background=light
 ]]
 
@@ -185,6 +191,7 @@ vim.g.wiki_journal = {
         monthly = '%Y_m%m',
     },
 }
+vim.g.wiki_ui_method = 'nvim'
 vim.g.wiki_link_extension = '.md'
 vim.g.wiki_link_target_type = 'md'
 vim.g.wiki_filetypes = {'md'}
@@ -316,6 +323,7 @@ end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local lspconfig = require('lspconfig')
+lspconfig.starpls.setup { }
 lspconfig.ruff_lsp.setup {
   capabilities = capabilities,
   on_attach = on_attach,

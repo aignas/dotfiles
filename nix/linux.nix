@@ -6,11 +6,13 @@
     ./dotfiles.nix
     ./nvim.nix
     ./sway.nix
+    ./xdg.nix
   ];
 
 
   home.packages = [
     pkgs.eza
+    pkgs.home-manager
     pkgs.opentofu
     pkgs.watchexec
 

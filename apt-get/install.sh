@@ -9,13 +9,14 @@ type apt-get >/dev/null || exit 0
 
 _install() {
     local pkgs=(
-        rustup
         zsh
+        aerc
+        docker-compose
     )
 
     # Laptop powersaving
     pkgs+=(
-        tp_smapi
+        # todo
     )
 
     # Steam
@@ -24,41 +25,37 @@ _install() {
 
     # Sway
     pkgs+=(
-        bemenu-wayland
         brightnessctl
-        gammastep
-        gnome-keyring
+        bemenu
+        fonts-font-awesome
+        fonts-hack-ttf
+        slurp
+        grim
+        wl-clipboard
         kanshi
-        mako
-        pamixer
+        kanshi
         playerctl
-        python-tldextract
-        qutebrowser
+        pulseaudio-utils
         sway
-        swaybg
         swayidle
         swaylock
-        ttf-font-awesome
-        ttf-hack
-        waybar
+        wev
     )
 
     # Yubikey
     pkgs+=(
-        yubikey-manager
-        libfido2
-        yubico-pam
     )
 
     # Photo
     pkgs+=(
-        darktable
+        nsxiv
         imv
+        darktable
     )
 
     debug "apt-get: install"
     sudo apt-get update
-    sudo apt-get upgrade
+    sudo apt-get --yes upgrade
     sudo apt-get install "${pkgs[@]}"
     ok "apt-get: install"
 }
