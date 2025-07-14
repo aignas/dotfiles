@@ -25,21 +25,24 @@ _install() {
 
     # Sway
     pkgs+=(
-        brightnessctl
         bemenu
+        brightnessctl
         fonts-font-awesome
         fonts-hack-ttf
-        slurp
         grim
-        wl-clipboard
         kanshi
         kanshi
         playerctl
         pulseaudio-utils
+        slurp
         sway
         swayidle
         swaylock
         wev
+        wl-clipboard
+        xdg-desktop-portal
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-wlr
     )
 
     # Yubikey

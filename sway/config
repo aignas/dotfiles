@@ -33,6 +33,8 @@ set $menu bemenu_path \
 
 font pango:Hack,10
 
+exec "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway"
+
 # Taken from
 # https://webbtelescope.org/contents/media/images/2022/031/01G77PKB8NKR7S8Z6HBXMYATGJ
 exec_always "pkill kanshi; kanshi"
@@ -40,18 +42,17 @@ exec_always "pkill fcitx5; fcitx5"
 output * bg ~/.config/sway/bg.jpg fill
 
 # screen backlight, first set min and restore previous
-bindsym XF86MonBrightnessUp   exec "brightnessctl +5%"
-bindsym XF86MonBrightnessDown exec "brightnessctl -5%"
-exec "~/.nix-profile/bin/avizo-service"
+bindsym XF86MonBrightnessUp   exec "brightnessctl s 5%+"
+bindsym XF86MonBrightnessDown exec "brightnessctl s 5%-"
 
 ### Idle configuration
 #
 # Example configuration:
 #
-exec swayidle
-exec swaymsg exec gammastep-indicator
-exec swaymsg exec blueman-applet
-exec swaymsg exec nm-applet --indicator
+exec "swayidle"
+exec "gammastep-indicator"
+exec "blueman-applet"
+exec "nm-applet --indicator"
 
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off

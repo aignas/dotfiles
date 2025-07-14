@@ -18,6 +18,7 @@
         "sway/config"               .source = ../sway/config;
         "swayidle/config"           .source = ../swayidle/config;
         "swaylock/config"           .source = ../swaylock/config;
+        "xdg-desktop-portal/sway-portals.conf".source = ../xdg-desktop-portal/sway-portals.conf;
         "swaylock/lock.sh" = {
           source = ../swaylock/lock.sh;
           executable = true;
