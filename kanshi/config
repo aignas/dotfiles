@@ -31,6 +31,11 @@ profile {
 
 profile {
     output eDP-1 disable
+    output "Philips Consumer Electronics Company PHL 499P9 AU02223003133" enable mode 5120x1440 position 0,0
+}
+
+profile {
+    output eDP-1 disable
     output "Dell Inc. DELL P3222QE 36HD7H3" enable mode 3840x2160 position 0,0 scale 1.3
 }
 

@@ -9,11 +9,12 @@
 
   xdg = {
     configFile = {
+        "environment.d/10-sway.conf".source = ../sway/env.conf;
         "gammastep/config.ini"      .source = ../gammastep/config.ini;
         "i3status-rust/config.toml" .source = ../i3status-rust/config.toml;
         "kanshi/config"             .source = ../kanshi/config;
+        "mako/config"               .source = ../mako/config;
         "qutebrowser/config.py"     .source = ../qutebrowser/config.py;
-        "environment.d/10-sway.conf".source = ../sway/env.conf;
         "sway/bg.jpg"               .source = ../sway/james-webb-1.jpg;
         "sway/config"               .source = ../sway/config;
         "swayidle/config"           .source = ../swayidle/config;

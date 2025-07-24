@@ -31,7 +31,7 @@ _install() {
         fonts-hack-ttf
         grim
         kanshi
-        kanshi
+        mako-notifier
         playerctl
         pulseaudio-utils
         slurp
