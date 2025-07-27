@@ -349,6 +349,7 @@ lspconfig.rust_analyzer.setup {
     ['rust-analyzer'] = {},
   },
 }
+lspconfig.starpls.setup {}
 
 for rc in string.gmatch(vim.env.EXTRA_NVIMRC or '', '[^:]+') do
     vim.cmd('exec "source' .. rc .. '"')

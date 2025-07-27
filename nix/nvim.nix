@@ -27,6 +27,7 @@
     withPython3 = true;
     extraPackages = with pkgs; [
       buf
+      buildifier
       gopls
       lua5_4_compat
       pyright

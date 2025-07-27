@@ -1,11 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    avizo
-    i3status-rust
-  ];
-
   xdg = {
     configFile = {
         "environment.d/10-sway.conf".source = ../sway/env.conf;
