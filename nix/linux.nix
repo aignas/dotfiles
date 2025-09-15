@@ -13,6 +13,7 @@
   home.packages = [
     pkgs.eza
     pkgs.home-manager
+    pkgs.opentofu
     pkgs.ruff
     pkgs.ty
     pkgs.watchexec

@@ -78,10 +78,10 @@ exec "nm-applet --indicator"
         xkb_variant ,std
         xkb_options grp:ctrls_toggle
     }
-    input "0:0:Preonic_(#1)_Keyboard" {
+    input "0:0:Preonic_(#2)_Keyboard" {
         xkb_layout us,lt
         xkb_variant ,std
-        xkb_options grp:ctrls_toggle
+        xkb_options grp:ctrls_toggle,caps:escape
     }
     input "1:1:AT_Translated_Set_2_keyboard" {
         xkb_layout us,lt
@@ -283,10 +283,10 @@ bindsym $mod+r mode "resize"
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    font pango:Hack, "Font Awesome 6 Free" 11
+    font pango:Hack, "Font Awesome 7 Free" 11
     position top
 
-    status_command ~/.nix-profile/bin/i3status-rs ~/.config/i3status-rust/config.toml
+    status_command i3status-rs ~/.config/i3status-rust/config.toml
     colors {
         separator #666666
         background #222222

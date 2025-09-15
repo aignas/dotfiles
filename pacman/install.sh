@@ -42,6 +42,7 @@ _install() {
     # Sway
     pkgs+=(
         bemenu-wayland
+        blueman
         brightnessctl
         fcitx5-im
         fcitx5-mozc
@@ -49,6 +50,7 @@ _install() {
         gnome-keyring
         kanshi
         mako
+        nsxiv
         pamixer
         playerctl
         python-tldextract
