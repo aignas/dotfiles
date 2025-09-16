@@ -324,6 +324,23 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local lspconfig = require('lspconfig')
 lspconfig.starpls.setup { }
+lspconfig.ts_ls.setup {
+    init_options = {
+        plugins = {
+            {
+                name = "@vue/typescript-plugin",
+                location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
+                languages = {"javascript", "typescript", "vue"},
+            },
+        },
+    },
+    filetypes = {
+        "javascript",
+        "typescript",
+        "vue",
+    }
+}
+lspconfig.volar.setup { }
 lspconfig.ruff_lsp.setup {
   capabilities = capabilities,
   on_attach = on_attach,

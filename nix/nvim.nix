@@ -37,6 +37,8 @@
       shfmt
       starpls
       tree-sitter
+      typescript-language-server
+      vue-language-server
       yamlfmt
       yamllint
     ];

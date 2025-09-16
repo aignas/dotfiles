@@ -26,6 +26,7 @@ _install() {
     # Sway
     pkgs+=(
         bemenu
+        blueman
         brightnessctl
         fonts-font-awesome
         fonts-hack-ttf

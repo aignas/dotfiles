@@ -78,6 +78,11 @@ exec "nm-applet --indicator"
         xkb_variant ,std
         xkb_options grp:shifts_toggle
     }
+    input "0:0:Preonic_(#1)_Keyboard" {
+        xkb_layout us,lt
+        xkb_variant ,std
+        xkb_options grp:shifts_toggle
+    }
     input "1:1:AT_Translated_Set_2_keyboard" {
         xkb_layout us,lt
         xkb_variant dvorak,std

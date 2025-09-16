@@ -2,4 +2,5 @@
 
 type home-manager >/dev/null || exit 0
 
+nix-channel --update
 time home-manager switch "$@"
