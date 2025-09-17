@@ -13,10 +13,11 @@
   home.packages = [
     pkgs.buildifier
     pkgs.eza
-    pkgs.yq-go
+    pkgs.i3status-rust
     pkgs.k9s
     pkgs.opentofu
     pkgs.watchexec
+    pkgs.yq-go
 
     # media
     pkgs.imv
