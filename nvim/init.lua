@@ -7,6 +7,7 @@ end
 
 require("lazy").setup(
     {
+        'goerz/jupytext.nvim';
         'hrsh7th/cmp-buffer';
         'hrsh7th/cmp-cmdline';
         'hrsh7th/cmp-nvim-lsp';

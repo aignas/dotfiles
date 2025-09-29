@@ -10,17 +10,18 @@
   ];
 
 
-  home.packages = [
-    pkgs.buildifier
-    pkgs.eza
-    pkgs.i3status-rust
-    pkgs.k9s
-    pkgs.opentofu
-    pkgs.watchexec
-    pkgs.yq-go
+  home.packages = with pkgs; [
+    buildifier
+    eza
+    i3status-rust
+    k9s
+    opentofu
+    python3Packages.jupytext
+    watchexec
+    yq-go
 
     # media
-    pkgs.imv
+    imv
   ];
 
   home.username = "ignas-anikevicius";
