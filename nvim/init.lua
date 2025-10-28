@@ -7,7 +7,10 @@ end
 
 require("lazy").setup(
     {
-        'goerz/jupytext.nvim';
+        {
+            'GCBallesteros/jupytext.nvim',
+            config= true,
+        };
         'hrsh7th/cmp-buffer';
         'hrsh7th/cmp-cmdline';
         'hrsh7th/cmp-nvim-lsp';
@@ -25,7 +28,6 @@ require("lazy").setup(
         'tpope/vim-abolish';
         'tpope/vim-eunuch';
         'tpope/vim-fugitive';
-        -- 'github/copilot.vim';
         'tpope/vim-repeat';
         'tpope/vim-surround';
         'tpope/vim-unimpaired';
@@ -42,6 +44,7 @@ imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-T
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 ]]
 
+require("jupytext").setup({ style = "light" })
 actions = require("telescope.actions")
 require("telescope").setup {
   pickers = {
@@ -316,17 +319,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 on_attach = function(client, bufnr)
-  if client.name == 'ruff_lsp' then
+  if client.name == 'ruff' then
     -- Disable hover in favor of Pyright
     client.server_capabilities.hoverProvider = false
   end
 end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-local lspconfig = require('lspconfig')
-lspconfig.yamlls.setup { }
-lspconfig.starpls.setup { }
-lspconfig.ts_ls.setup {
+vim.lsp.config.yamlls = { }
+vim.lsp.config.starpls = { }
+vim.lsp.config.ts_ls = {
     init_options = {
         plugins = {
             {
@@ -342,8 +344,8 @@ lspconfig.ts_ls.setup {
         "vue",
     }
 }
-lspconfig.volar.setup { }
-lspconfig.ruff_lsp.setup {
+vim.lsp.config.volar = { }
+vim.lsp.config.ruff = {
   capabilities = capabilities,
   on_attach = on_attach,
   init_options = {
@@ -353,7 +355,7 @@ lspconfig.ruff_lsp.setup {
     }
   }
 }
-lspconfig.pyright.setup {
+vim.lsp.config.pyright = {
   capabilities = capabilities,
   settings = {
     pyright = {
@@ -362,13 +364,13 @@ lspconfig.pyright.setup {
     },
   },
 }
-lspconfig.rust_analyzer.setup {
-  -- Server-specific settings. See `:help lspconfig-setup`
+vim.lsp.config.rust_analyzer = {
+  -- Server-specific settings. See `:help vim.lsp.config`
   settings = {
     ['rust-analyzer'] = {},
   },
 }
-lspconfig.starpls.setup {}
+vim.lsp.config.starpls = {}
 
 for rc in string.gmatch(vim.env.EXTRA_NVIMRC or '', '[^:]+') do
     vim.cmd('exec "source' .. rc .. '"')
