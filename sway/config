@@ -229,6 +229,7 @@ exec "nm-applet --indicator"
 #
     bindsym $mod+ctrl+q exec swaynag -t warning -m 'You pressed the hibernate shortcut. Do you really want to hibernate?' -b 'Yes' 'systemctl hibernate'
     bindsym XF86Sleep exec systemctl hibernate
+    bindsym XF86Display output eDP-1 toggle
 
 #
 # Scratchpad:
