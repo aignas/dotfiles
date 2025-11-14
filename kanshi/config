@@ -5,45 +5,50 @@ profile {
 
 profile {
     output eDP-1 disable
-    output "Dell Inc. DELL U2421E JFHVC23" enable mode 1920x1200 position 0,0 scale 1
+    output "Dell Inc. DELL U2421E JFHVC23" enable mode 1920x1200 position 0,1200 scale 1
 }
 
 profile {
     output eDP-1 disable
-    output "Dell Inc. DELL U2723QX HS5M4P3" enable mode 3840x2160 position 0,0 scale 1.4
+    output "Dell Inc. DELL U2723QX HS5M4P3" enable mode 3840x2160 position 0,1200 scale 1.4
 }
 
 profile {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003458" enable mode 5120x1440 position 0,0 scale 1
+    output "Philips Consumer Electronics Company PHL 499P9 AU02202003458" enable mode 5120x1440 position 0,1200 scale 1
 }
 
 profile {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003497" enable mode 5120x1440 position 0,0 scale 1
+    output "Philips Consumer Electronics Company PHL 499P9 AU02202003497" enable mode 5120x1440 position 0,1200 scale 1
 }
 
 profile {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003467" enable mode 5120x1440 position 0,0 scale 1
+    output "Philips Consumer Electronics Company PHL 499P9 AU02202003467" enable mode 5120x1440 position 0,1200 scale 1
 }
 
 profile {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003460" enable mode 5120x1440 position 0,0 scale 1
+    output "Philips Consumer Electronics Company PHL 499P9 AU02202003460" enable mode 5120x1440 position 0,1200 scale 1
 }
 
 profile {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003477" enable mode 5120x1440 position 0,0 scale 1
+    output "Philips Consumer Electronics Company PHL 499P9 AU02202003477" enable mode 5120x1440 position 0,1200 scale 1
 }
 
 profile {
     output eDP-1 disable
-    output "Dell Inc. DELL P3222QE 8ZDD7H3" enable mode 3840x2160 position 0,0 scale 1.4
+    output "Dell Inc. DELL P3222QE 8ZDD7H3" enable mode 3840x2160 position 0,1200 scale 1.4
 }
 
 profile {
     output eDP-1 disable
-    output "Dell Inc. DELL P3222QE 93FD7H3" enable mode 3840x2160 position 0,0 scale 1.4
+    output "Dell Inc. DELL P3222QE 93FD7H3" enable mode 3840x2160 position 0,1200 scale 1.4
+}
+
+profile {
+    output eDP-1 disable
+    output "Dell Inc. DELL P3222QE 82FD7H3" enable mode 3840x2160 position 0,1200 scale 1.4
 }
