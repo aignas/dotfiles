@@ -26,11 +26,11 @@
     withNodeJs = true;
     withPython3 = true;
     extraPackages = with pkgs; [
+      basedpyright
       buf
       buildifier
       gopls
       lua5_4_compat
-      pyright
       ruff
       rust-analyzer
       shellcheck

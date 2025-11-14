@@ -355,10 +355,10 @@ vim.lsp.config.ruff = {
     }
   }
 }
-vim.lsp.config.pyright = {
+vim.lsp.config.basedpyright = {
   capabilities = capabilities,
   settings = {
-    pyright = {
+    basedpyright = {
       -- Using Ruff's import organizer
       disableOrganizeImports = true,
     },
