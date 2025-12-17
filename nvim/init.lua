@@ -13,6 +13,7 @@ require("lazy").setup(
         };
         'hrsh7th/cmp-buffer';
         'hrsh7th/cmp-cmdline';
+        'jpalardy/vim-slime';
         'hrsh7th/cmp-nvim-lsp';
         'hrsh7th/cmp-path';
         'hrsh7th/nvim-cmp';
@@ -42,6 +43,8 @@ imap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab
 smap <expr> <Tab>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<Tab>'
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+let g:slime_target = "tmux"
 ]]
 
 require("jupytext").setup({ style = "light" })
@@ -133,12 +136,6 @@ set_leader_mappings({
 })
 
 local remap = vim.api.nvim_set_keymap
-
--- require'nvim-treesitter.configs'.setup {
---     highlight = {enable = true},
---     indent = {enable = true},
---     additional_vim_regex_highlighting = false,
--- }
 
 vim.cmd [[
 set termguicolors lazyredraw
@@ -355,14 +352,9 @@ vim.lsp.config.ruff = {
     }
   }
 }
-vim.lsp.config.basedpyright = {
+vim.lsp.config.ty = {
   capabilities = capabilities,
-  settings = {
-    basedpyright = {
-      -- Using Ruff's import organizer
-      disableOrganizeImports = true,
-    },
-  },
+  settings = {},
 }
 vim.lsp.config.rust_analyzer = {
   -- Server-specific settings. See `:help vim.lsp.config`

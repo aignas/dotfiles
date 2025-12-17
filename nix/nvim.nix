@@ -26,7 +26,6 @@
     withNodeJs = true;
     withPython3 = true;
     extraPackages = with pkgs; [
-      basedpyright
       buf
       buildifier
       gopls
@@ -37,6 +36,7 @@
       shfmt
       starpls
       tree-sitter
+      ty
       typescript-language-server
       vue-language-server
       yaml-language-server

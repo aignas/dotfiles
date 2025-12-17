@@ -17,6 +17,7 @@
     k9s
     opentofu
     python3Packages.jupytext
+    terragrunt
     watchexec
     yq-go
 

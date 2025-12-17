@@ -6,19 +6,23 @@
   home.stateVersion = "23.05"; # Please read the comment before changing.
 
   home.packages = [
+    pkgs.asdf
     pkgs.curl
+    pkgs.direnv
     pkgs.fd
     pkgs.fzf
     pkgs.ghostscript
     pkgs.github-cli
     pkgs.htop
     pkgs.jq
+    pkgs.kind
     pkgs.lf
+    pkgs.opentofu
     pkgs.pre-commit
     pkgs.ripgrep
-    pkgs.direnv
+    pkgs.terraform-docs
+    pkgs.terragrunt
     pkgs.tig
-    pkgs.kind
 
     # mail
     #pkgs.aerc
