@@ -36,7 +36,6 @@ _install() {
     pkgs+=(
         lib32-vulkan-mesa-layers
         pipewire-alsa
-        steam-native-runtime
     )
 
     # Sway
