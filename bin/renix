@@ -3,4 +3,5 @@
 type home-manager >/dev/null || exit 0
 
 nix-channel --update
-time home-manager switch "$@"
+home-manager switch "$@"
+sudo nix-collect-garbage -d

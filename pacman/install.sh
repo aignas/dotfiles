@@ -32,12 +32,6 @@ _install() {
         tp_smapi
     )
 
-    # Steam
-    pkgs+=(
-        lib32-vulkan-mesa-layers
-        pipewire-alsa
-    )
-
     # Sway
     pkgs+=(
         bemenu-wayland
@@ -47,6 +41,7 @@ _install() {
         fcitx5-mozc
         gammastep
         gnome-keyring
+        grim
         kanshi
         mako
         nsxiv
@@ -54,6 +49,7 @@ _install() {
         playerctl
         python-tldextract
         qutebrowser
+        slurp
         spotifyd
         sway
         swaybg
@@ -62,6 +58,11 @@ _install() {
         ttf-font-awesome
         ttf-hack
         waybar
+        wev
+        wl-clipboard
+        xdg-desktop-portal
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-wlr
     )
 
     # Yubikey
