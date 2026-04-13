@@ -13,6 +13,8 @@
   home.packages = [
     pkgs.eza
     pkgs.home-manager
+    pkgs.ruff
+    pkgs.ty
     pkgs.watchexec
 
     # media

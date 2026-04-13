@@ -15,6 +15,8 @@
     eza
     i3status-rust
     k9s
+    mise
+    opencode
     opentofu
     python3Packages.jupytext
     terragrunt

@@ -30,13 +30,11 @@
       buildifier
       gopls
       lua5_4_compat
-      ruff
       rust-analyzer
       shellcheck
       shfmt
       starpls
       tree-sitter
-      ty
       typescript-language-server
       vue-language-server
       yaml-language-server
