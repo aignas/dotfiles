@@ -76,12 +76,12 @@ exec "nm-applet --indicator"
     input "936:42569:OLKB_Preonic" {
         xkb_layout us,lt
         xkb_variant ,std
-        xkb_options grp:shifts_toggle
+        xkb_options grp:ctrls_toggle
     }
     input "0:0:Preonic_(#1)_Keyboard" {
         xkb_layout us,lt
         xkb_variant ,std
-        xkb_options grp:shifts_toggle
+        xkb_options grp:ctrls_toggle
     }
     input "1:1:AT_Translated_Set_2_keyboard" {
         xkb_layout us,lt
