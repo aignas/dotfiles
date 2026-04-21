@@ -28,6 +28,8 @@ _install() {
         bemenu
         blueman
         brightnessctl
+        fcitx5
+        fcitx5-mozc
         fonts-font-awesome
         fonts-hack-ttf
         grim

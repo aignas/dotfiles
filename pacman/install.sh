@@ -43,6 +43,8 @@ _install() {
     pkgs+=(
         bemenu-wayland
         brightnessctl
+        fcitx5-im
+        fcitx5-mozc
         gammastep
         gnome-keyring
         kanshi
