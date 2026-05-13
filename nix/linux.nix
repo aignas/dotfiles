@@ -12,7 +12,6 @@
 
   home.packages = [
     pkgs.eza
-    pkgs.home-manager
     pkgs.opencode
     pkgs.opentofu
     pkgs.ruff
