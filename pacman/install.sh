@@ -18,7 +18,6 @@ _install() {
         python-pillow # required for qmk
         rsync
         rustup
-        ttf-hanazono
         ttf-sazanami
         xdg-utils
         zsh
