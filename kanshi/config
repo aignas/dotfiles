@@ -30,6 +30,11 @@ profile {
 
 profile {
     output eDP-1 disable
+    output "Philips Consumer Electronics Company PHL 499P9 AU02202003464" enable position 0,1200 mode 5120x1440 scale 1
+}
+
+profile {
+    output eDP-1 disable
     output "Philips Consumer Electronics Company PHL 499P9 AU02202003460" enable position 0,1200 mode 5120x1440 scale 1
 }
 
