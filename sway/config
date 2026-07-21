@@ -37,7 +37,7 @@ exec "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_D
 
 # Taken from
 # https://webbtelescope.org/contents/media/images/2022/031/01G77PKB8NKR7S8Z6HBXMYATGJ
-exec_always "pkill kanshi; kanshi"
+exec_always "pkill kanshi; ~/.nix-profile/bin/kanshi"
 exec_always "pkill fcitx5; fcitx5"
 output * bg ~/.config/sway/bg.jpg fill
 

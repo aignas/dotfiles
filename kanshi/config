@@ -3,22 +3,12 @@ profile {
     output eDP-1 enable mode 1920x1200 position 0,0
 }
 
-profile work_wide {
+profile {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 *" {
-        enable
-        position 0,1200
-        mode 5120x1440
-        scale 1
-    }
+    output "Philips Consumer Electronics Company PHL 499P9 *" enable position 0,1200 mode 5120x1440 scale 1
 }
 
-profile work_simple {
+profile {
     output eDP-1 disable
-    output "Dell Inc. DELL P3222QE *" {
-        enable
-        mode 3840x2160
-        position 0,1200
-        scale 1.4
-    }
+    output "Dell Inc. DELL P3222QE *" enable mode 3840x2160 position 0,1200 scale 1.4
 }
