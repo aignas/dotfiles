@@ -14,6 +14,7 @@
     buildifier
     eza
     i3status-rust
+    kanshi # this is not ancient
     k9s
     mise
     opencode

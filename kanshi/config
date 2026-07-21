@@ -3,57 +3,22 @@ profile {
     output eDP-1 enable mode 1920x1200 position 0,0
 }
 
-profile {
-    output eDP-1 disable mode 1920x12000 position 3840,0
-    output "Dell Inc. DELL U2723QX HS5M4P3" enable mode 3840x2160 position 0,0 scale 1.4
+profile work_wide {
+    output eDP-1 disable
+    output "Philips Consumer Electronics Company PHL 499P9 *" {
+        enable
+        position 0,1200
+        mode 5120x1440
+        scale 1
+    }
 }
 
-profile {
+profile work_simple {
     output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003458" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003465" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003497" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003467" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003464" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003460" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Philips Consumer Electronics Company PHL 499P9 AU02202003477" enable position 0,1200 mode 5120x1440 scale 1
-}
-
-profile {
-    output eDP-1 disable
-    output "Dell Inc. DELL P3222QE 8ZDD7H3" enable mode 3840x2160 position 0,1200 scale 1.4
-}
-
-profile {
-    output eDP-1 disable
-    output "Dell Inc. DELL P3222QE 93FD7H3" enable mode 3840x2160 position 0,1200 scale 1.4
-}
-
-profile {
-    output eDP-1 disable
-    output "Dell Inc. DELL P3222QE 82FD7H3" enable mode 3840x2160 position 0,1200 scale 1.4
+    output "Dell Inc. DELL P3222QE *" {
+        enable
+        mode 3840x2160
+        position 0,1200
+        scale 1.4
+    }
 }
