@@ -28,7 +28,6 @@ _install() {
         tlp
         smartmontools
         ethtool
-        tp_smapi
     )
 
     # Sway
