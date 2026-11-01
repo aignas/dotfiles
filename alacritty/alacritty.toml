@@ -1,3 +1,4 @@
+[general]
 import = [
     "~/.dotfiles/alacritty/colors.toml"
 ]
