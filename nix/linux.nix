@@ -10,7 +10,11 @@
   ];
 
 
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (pkgs.lib.getName pkg) [ "claude-code" ];
+
   home.packages = [
+    pkgs.claude-code
     pkgs.eza
     pkgs.opencode
     pkgs.opentofu
