@@ -1,5 +1,14 @@
 { config, pkgs, ... }:
 
+let
+  # Track the upstream `stable` branch of the pi coding agent, which is not
+  # installed through the pinned nixpkgs channel.
+  piSrc = builtins.fetchGit {
+    url = "https://github.com/earendil-works/pi";
+    ref = "stable";
+  };
+  pi = pkgs.callPackage (piSrc + "/nix/package.nix") { source = piSrc; };
+in
 {
   manual.html.enable = false;
   manual.manpages.enable = false;
@@ -18,6 +27,7 @@
     pkgs.kind
     pkgs.lf
     pkgs.opentofu
+    pi
     pkgs.pre-commit
     pkgs.ripgrep
     pkgs.terraform-docs
