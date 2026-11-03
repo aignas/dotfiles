@@ -28,5 +28,11 @@
     "lf/lfrc".source = ../lf/lfrc;
     "newsboat/config".source = ../newsboat/config;
     "newsboat/urls".source = ../newsboat/urls;
+    # OpenCode installs the declared plugin from npm on first use. The config
+    # itself is read-only; `opencode plugin add` is not used.
+    "opencode/opencode.jsonc" = {
+      source = ../opencode/opencode.jsonc;
+      force = true;
+    };
   };
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   # Track the upstream `stable` branch of the pi coding agent, which is not
@@ -11,6 +11,14 @@ let
     shallow = true;
   };
   pi = pkgs.callPackage (piSrc + "/nix/package.nix") { source = piSrc; };
+
+  # Pi installs declared npm and git packages on first launch. Keep the
+  # declarations here so a fresh machine gets them without manual `pi install`
+  # commands.
+  piPackages = [
+    "npm:@narumitw/pi-caffeinate"
+    "https://github.com/elidickinson/pi-claude-bridge"
+  ];
 in
 {
   manual.html.enable = false;
@@ -93,6 +101,34 @@ in
 
   home.sessionVariables = {
   };
+
+  # Pi keeps its settings in a writable file and rewrites it while running, so
+  # it cannot be a read-only Home Manager symlink. Merge the package
+  # declarations into it during activation instead. Pi installs missing npm and
+  # git packages on the next launch.
+  home.activation.piPackages = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    settings="$HOME/.pi/agent/settings.json"
+
+    if [ ! -e "$settings" ]; then
+      mkdir -p "$(dirname "$settings")"
+      printf '{}\n' > "$settings"
+    fi
+
+    if ${pkgs.jq}/bin/jq empty "$settings" >/dev/null 2>&1; then
+      tmp="$(mktemp "$settings.XXXXXX")"
+      if ${pkgs.jq}/bin/jq \
+        --argjson packages '${builtins.toJSON piPackages}' \
+        '.packages = (((if (.packages | type) == "array" then .packages else [] end) + $packages) | unique)' \
+        "$settings" > "$tmp"; then
+        mv "$tmp" "$settings"
+      else
+        rm -f "$tmp"
+        echo "warning: could not update $settings; Pi packages were not updated" >&2
+      fi
+    else
+      echo "warning: $settings is not valid JSON; Pi packages were not updated" >&2
+    fi
+  '';
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

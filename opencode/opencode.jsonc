@@ -1,0 +1,8 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugins": [
+    // Keep the machine awake while an OpenCode session or one of its
+    // background shell commands is running.
+    "opencode-wakelock"
+  ]
+}
