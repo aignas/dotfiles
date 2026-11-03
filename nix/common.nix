@@ -12,6 +12,19 @@ let
   };
   pi = pkgs.callPackage (piSrc + "/nix/package.nix") { source = piSrc; };
 
+  # opencode 2.2.5 in the current nixpkgs has a stale fixed-output hash and
+  # fails to build. Pin the nixpkgs revision that still packaged 2.2.1. Its
+  # output is available from cache.nixos.org, so this does not build opencode
+  # locally.
+  opencodeNixpkgs = builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/3e662c7cafceb2a65f612e1da9dd39f82eb39ad0.tar.gz";
+  };
+  opencode = (import opencodeNixpkgs {
+    system = builtins.currentSystem;
+    config = { };
+    overlays = [ ];
+  }).opencode;
+
   # Pi installs declared npm and git packages on first launch. Keep the
   # declarations here so a fresh machine gets them without manual `pi install`
   # commands.
@@ -24,6 +37,14 @@ in
   manual.html.enable = false;
   manual.manpages.enable = false;
   home.stateVersion = "23.05"; # Please read the comment before changing.
+
+  # Use the pinned opencode 2.2.1 package from above everywhere `pkgs.opencode`
+  # is referenced (linux.nix and ubuntu.nix).
+  nixpkgs.overlays = [
+    (_final: _prev: {
+      opencode = opencode;
+    })
+  ];
 
   # Keep Nix builds within the memory budget of smaller machines. Building one
   # derivation at a time and only using one core avoids the large RAM spikes
