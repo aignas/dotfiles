@@ -17,7 +17,6 @@
     kanshi # this is not ancient
     k9s
     mise
-    opencode
     opentofu
     python3Packages.jupytext
     terragrunt

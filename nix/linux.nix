@@ -16,7 +16,6 @@
   home.packages = [
     pkgs.claude-code
     pkgs.eza
-    pkgs.opencode
     pkgs.opentofu
     pkgs.ruff
     pkgs.ty
