@@ -6,6 +6,9 @@ let
   piSrc = builtins.fetchGit {
     url = "https://github.com/earendil-works/pi";
     ref = "stable";
+    # Avoid the "could not update mtime" warning from Nix's packed-refs cache
+    # when refreshing a branch reference.
+    shallow = true;
   };
   pi = pkgs.callPackage (piSrc + "/nix/package.nix") { source = piSrc; };
 in
