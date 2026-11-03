@@ -1,7 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 type home-manager >/dev/null || exit 0
 
+# Nix uses all available cores for a single derivation by default and may run
+# several derivations in parallel. On memory-constrained machines that easily
+# leads to OOM kills, so default to one job with one core. Exporting the
+# variables also makes the limits available to Nix's build environment; callers
+# can opt in to more parallelism, e.g.
+#   NIX_MAX_JOBS=4 NIX_BUILD_CORES=4 renix
+: "${NIX_MAX_JOBS:=1}"
+: "${NIX_BUILD_CORES:=1}"
+export NIX_MAX_JOBS NIX_BUILD_CORES
+
+# Drop old user generations before building so that we do not run out of disk
+# space halfway through an update. The system profile is cleaned afterwards.
+nix-collect-garbage -d
+
 nix-channel --update
-home-manager switch "$@"
+home-manager switch \
+    --max-jobs "$NIX_MAX_JOBS" \
+    --cores "$NIX_BUILD_CORES" \
+    "$@"
 sudo nix-collect-garbage -d
