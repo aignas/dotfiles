@@ -1,25 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  # Track the upstream `stable` branch of the pi coding agent, which is not
-  # installed through the pinned nixpkgs channel.
-  piSrc = builtins.fetchGit {
-    url = "https://github.com/earendil-works/pi";
-    ref = "stable";
-    # Avoid the "could not update mtime" warning from Nix's packed-refs cache
-    # when refreshing a branch reference.
-    shallow = true;
-  };
-  pi = pkgs.callPackage (piSrc + "/nix/package.nix") { source = piSrc; };
-
-  # Pi installs declared npm and git packages on first launch. Keep the
-  # declarations here so a fresh machine gets them without manual `pi install`
-  # commands.
-  piPackages = [
-    "npm:@narumitw/pi-caffeinate"
-    "https://github.com/elidickinson/pi-claude-bridge"
-  ];
-in
 {
   manual.html.enable = false;
   manual.manpages.enable = false;
@@ -66,7 +46,7 @@ in
     pkgs.kind
     pkgs.lf
     pkgs.opentofu
-    pi
+    pkgs.pi-coding-agent
     pkgs.pre-commit
     pkgs.ripgrep
     pkgs.terraform-docs

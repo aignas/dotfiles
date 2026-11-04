@@ -17,7 +17,6 @@
     k9s
     mise
     opentofu
-    pi-coding-agent
     python3Packages.jupytext
     terragrunt
     tflint
