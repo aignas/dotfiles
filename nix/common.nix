@@ -48,6 +48,7 @@
     pkgs.opentofu
     pkgs.pi-coding-agent
     pkgs.pre-commit
+    pkgs.prek
     pkgs.ripgrep
     pkgs.terraform-docs
     pkgs.terragrunt
