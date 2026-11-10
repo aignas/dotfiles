@@ -22,4 +22,4 @@ home-manager switch \
     --max-jobs "$NIX_MAX_JOBS" \
     --cores "$NIX_BUILD_CORES" \
     "$@"
-sudo nix-collect-garbage -d
+nix-collect-garbage -d

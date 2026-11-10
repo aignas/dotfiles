@@ -286,7 +286,7 @@ bar {
     font pango:Hack, "Font Awesome 7 Free" 11
     position top
 
-    status_command i3status-rs ~/.config/i3status-rust/config.toml
+    status_command ~/.nix-profile/bin/i3status-rs ~/.config/i3status-rust/config.toml
     colors {
         separator #666666
         background #222222
