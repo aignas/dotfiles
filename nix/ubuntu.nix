@@ -10,6 +10,7 @@
   ];
 
   home.packages = with pkgs; [
+    azure-cli
     buildifier
     eza
     i3status-rust
