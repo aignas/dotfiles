@@ -33,8 +33,12 @@
     };
   };
 
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (pkgs.lib.getName pkg) [ "claude-code" ];
+
   home.packages = [
     pkgs.asdf
+    pkgs.claude-code
     pkgs.curl
     pkgs.direnv
     pkgs.fd
