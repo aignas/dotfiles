@@ -38,8 +38,27 @@ source script/logging.sh
 
 echo ''
 
+# Machine specific git configuration, which is included from git/gitconfig. It
+# is not tracked in git, so it cannot be a part of the nix flake and is written
+# straight to the home directory instead.
 setup_gitconfig() {
-    [ -f git/gitconfig.local ] && return
+    local -r target="${HOME}/.gitconfig.local"
+    local -r legacy="git/gitconfig.local"
+
+    if [[ -L ${target} && -e ${target} ]]; then
+        # Used to be managed by home-manager, which would remove the symlink
+        # on the next switch. Turn it into a regular file to keep the contents.
+        info 'migrating gitconfig.local out of the nix store'
+        cp --remove-destination "$(readlink -f "${target}")" "${target}"
+        chmod 600 "${target}"
+    fi
+    [[ -f ${target} ]] && return
+
+    if [[ -f ${legacy} ]]; then
+        info 'migrating gitconfig.local to the home directory'
+        cp "${legacy}" "${target}"
+        return
+    fi
 
     info 'setup gitconfig'
 
@@ -53,7 +72,7 @@ setup_gitconfig() {
 
     sed -e "s|AUTHOREMAIL|$git_authoremail|g" \
         -e "s|GIT_CREDENTIAL_HELPER|$git_credential|g" \
-        git/gitconfig.tmpl >git/gitconfig.local
+        git/gitconfig.tmpl >"${target}"
 
     ok 'gitconfig'
 }

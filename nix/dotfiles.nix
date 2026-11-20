@@ -9,7 +9,6 @@
     };
 
     ".gitconfig".source = ../git/gitconfig;
-    ".gitconfig.local".source = ../git/gitconfig.local;
     ".tmux".source = ../tmux/tmux;
     ".tmux.conf".source = ../tmux/tmux.conf;
     ".zshenv_local".source = ../zsh/zshenv;
