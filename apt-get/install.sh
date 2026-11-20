@@ -11,6 +11,7 @@ _install() {
     local pkgs=(
         zsh
         aerc
+        tmux
         docker-compose
     )
 
@@ -25,6 +26,7 @@ _install() {
 
     # Sway
     pkgs+=(
+        alacritty
         bemenu
         blueman
         brightnessctl
