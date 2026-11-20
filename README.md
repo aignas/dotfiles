@@ -2,34 +2,49 @@
 
 Highlights:
 - `XDG_DIR` support.
-- logging for timing the installations.
-- dependency framework to run the install.sh files are run in a particular order.
-- some consistency checks of the configuration.
+- Single command bootstrap with `nix run`.
+- [home-manager] configuration as a nix flake, with `nixpkgs` and
+  `home-manager` pinned in `flake.lock`.
 - `dotr` script, which is used to update system and sync with the github repo.
   Run this every time every day at the start of your working routine.
-- Usage of `stow` for dotfile management.
-- Usage of `<home-manager>` and `nix` on `ArchLinux`.
+- logging for timing the installations.
+
+[home-manager]: https://github.com/nix-community/home-manager
 
 ## Install
 
+The only prerequisite is [nix](https://nixos.org/download/). Then run:
+
 ```sh
-... setup brew
-$ git clone https://github.com/aignas/dotfiles ~/src/github/aignas/dotfiles
-$ ln -s ~/src/github/aignas/dotfiles ~/.dotfiles
-$ cd ~/.dotfiles
-$ dotr
+nix --extra-experimental-features 'nix-command flakes' run github:aignas/dotfiles
 ```
 
-This will symlink the appropriate files in `.dotfiles` to your home directory.
-Everything is configured and tweaked within `~/.dotfiles`.
+This will:
+1. Clone this repo to `~/src/github/aignas/dotfiles` and symlink it to
+   `~/.dotfiles`, unless `~/.dotfiles` already exists.
+2. Ask for the git author email and write `~/.gitconfig.local`.
+3. Install the system packages with `pacman` or `apt-get` (needs `sudo`).
+4. Apply the `home-manager` configuration from the flake, which installs the
+   rest of the packages and links the configuration files into the home
+   directory.
 
-The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
-which sets up a few paths that'll be different on your particular machine.
+The `home-manager` configuration is selected by the username, see
+`homeConfigurations` in [flake.nix](flake.nix). If `home-manager` refuses to
+overwrite files that already exist in the home directory, move them out of the
+way or run `~/.dotfiles/bin/renix -b bak` to back them up.
 
-`dotr` is a simple script that installs some dependencies, sets sane OS X
-defaults, and so on. Tweak this script, and occasionally run `dotr` from time to
-time to keep your environment fresh and up-to-date. You can find this script in
-`bin/`.
+## Usage
+
+Everything is configured and tweaked within `~/.dotfiles`. Once bootstrapped,
+the following scripts from `bin/` are on the `PATH`:
+
+- `dotr` pulls the latest changes, upgrades the system packages and applies
+  the configuration. Run it from time to time to keep your environment fresh
+  and up-to-date.
+- `renix` only applies the `home-manager` configuration, use it after changing
+  something in the repo. The flags are passed to `home-manager switch`.
+- `renix --update` additionally bumps `nixpkgs` and `home-manager` in
+  `flake.lock`. Commit the result to keep all machines on the same versions.
 
 ## Thanks
 

@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
+#
+# Apply the home-manager configuration from the dotfiles flake.
+#
+# Usage: renix [--update] [home-manager switch options]
+#
+#   --update  bump nixpkgs and home-manager in flake.lock before switching.
+#             Commit the resulting flake.lock to keep the machines in sync.
 set -euo pipefail
 
-type home-manager >/dev/null || exit 0
+type nix >/dev/null || exit 0
+
+# Flakes need a real path and are not enabled in nix by default; the latter is
+# only persisted in nix.conf by the first successful switch.
+flake="$(readlink -f "${DOTFILES:-${HOME}/.dotfiles}")"
+export NIX_CONFIG="extra-experimental-features = nix-command flakes
+${NIX_CONFIG:-}"
 
 # Nix uses all available cores for a single derivation by default and may run
 # several derivations in parallel. On memory-constrained machines that easily
@@ -13,12 +26,24 @@ type home-manager >/dev/null || exit 0
 : "${NIX_BUILD_CORES:=1}"
 export NIX_MAX_JOBS NIX_BUILD_CORES
 
+if [[ ${1:-} == "--update" ]]; then
+    shift
+    nix flake update --flake "$flake"
+fi
+
 # Drop old user generations before building so that we do not run out of disk
 # space halfway through an update. The system profile is cleaned afterwards.
 nix-collect-garbage -d
 
-nix-channel --update
-home-manager switch \
+# home-manager manages itself once the configuration has been applied. Until
+# then use the version that is pinned in the flake.
+home_manager=(home-manager)
+if ! type home-manager >/dev/null 2>&1; then
+    home_manager=(nix run "${flake}#home-manager" --)
+fi
+
+"${home_manager[@]}" switch \
+    --flake "$flake" \
     --max-jobs "$NIX_MAX_JOBS" \
     --cores "$NIX_BUILD_CORES" \
     "$@"

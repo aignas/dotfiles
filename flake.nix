@@ -26,10 +26,28 @@
         "ignas-anikevicius" = mkHome ./nix/ubuntu.nix;
       };
 
-      # The home-manager CLI at the version pinned in flake.lock, so that it
-      # can be used before it is installed into the profile:
-      #   nix run .#home-manager -- switch --flake .
-      packages.${system}.home-manager = home-manager.packages.${system}.default;
+      packages.${system} = {
+        # Single command bootstrap of a new machine:
+        #   nix run github:aignas/dotfiles
+        # Clones the repo, links it to ~/.dotfiles and hands over to
+        # script/bootstrap from the clone, which applies the configuration.
+        default = pkgs.writeShellApplication {
+          name = "dotfiles-bootstrap";
+          runtimeInputs = [ pkgs.git ];
+          text = builtins.readFile ./script/nix-bootstrap.sh;
+        };
+
+        # The home-manager CLI at the version pinned in flake.lock, so that it
+        # can be used before it is installed into the profile:
+        #   nix run .#home-manager -- switch --flake .
+        home-manager = home-manager.packages.${system}.default;
+      };
+
+      apps.${system}.default = {
+        type = "app";
+        program = "${self.packages.${system}.default}/bin/dotfiles-bootstrap";
+        meta.description = "Clone the dotfiles and apply them to this machine";
+      };
 
       formatter.${system} = pkgs.nixpkgs-fmt;
     };
