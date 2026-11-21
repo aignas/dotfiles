@@ -12,6 +12,9 @@
   nix = {
     package = pkgs.nix;
     settings = {
+      # The configuration is a flake, see flake.nix at the root of the repo.
+      experimental-features = [ "nix-command" "flakes" ];
+
       max-jobs = 1;
       cores = 1;
 
