@@ -8,6 +8,7 @@
       recursive = true;
     };
 
+    ".claude/CLAUDE.md".source = ../claude/CLAUDE.md;
     ".gitconfig".source = ../git/gitconfig;
     ".tmux".source = ../tmux/tmux;
     ".tmux.conf".source = ../tmux/tmux.conf;
