@@ -84,6 +84,12 @@
     pkgs.zola
   ];
 
+  # gh extensions are discovered in $XDG_DATA_HOME/gh/extensions/<name>/<name>.
+  # Only the extension binary is linked instead of adding the package to
+  # home.packages, because the package also ships a bin/test, which would
+  # shadow the coreutils one on the PATH.
+  xdg.dataFile."gh/extensions/gh-stack/gh-stack".source = "${pkgs.gh-stack}/bin/gh-stack";
+
   home.sessionVariables = {
   };
 
