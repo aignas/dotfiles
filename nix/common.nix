@@ -54,7 +54,7 @@
     pkgs.lf
     pkgs.opentofu
     pkgs.pi-coding-agent
-    pkgs.pre-commit
+    # A pre-commit replacement, bin/pre-commit forwards to it.
     pkgs.prek
     pkgs.ripgrep
     pkgs.terraform-docs
