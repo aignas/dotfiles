@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+# Use prek as a drop-in replacement for pre-commit.
+#
+# The git hooks that were installed by pre-commit fall back to the `pre-commit`
+# on the PATH, so this keeps them and the muscle memory working. Run
+# `prek install -f` in a repo to switch its hooks to prek for good.
+exec prek "$@"
