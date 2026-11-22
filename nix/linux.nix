@@ -11,6 +11,7 @@
 
 
   home.packages = [
+    pkgs.buildkite-cli # bk
     pkgs.eza
     pkgs.opentofu
     pkgs.ruff
