@@ -2,13 +2,13 @@
 # `prek install`.
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v2.3.0
+  rev: v6.0.0
   hooks:
   - id: check-yaml
   - id: end-of-file-fixer
   - id: trailing-whitespace
 - repo: https://github.com/jazzband/pip-tools
-  rev: 6.8.0
+  rev: v7.7.0
   hooks:
     - id: pip-compile
       files: ^python/requirements.(in|txt)$
