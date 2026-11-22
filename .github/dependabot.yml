@@ -1,0 +1,21 @@
+# Bump all of the dependencies in a single PR, see
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+version: 2
+
+multi-ecosystem-groups:
+  all:
+    schedule:
+      interval: "weekly"
+
+updates:
+  # flake.lock
+  - package-ecosystem: "nix"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "all"
+
+  # .pre-commit-config.yaml
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "all"
