@@ -20,21 +20,10 @@
       max-jobs = 1;
       cores = 1;
 
-      # Deduplicate identical files in the store and do not keep build inputs
-      # around after the packages have been built.
-      auto-optimise-store = true;
-      keep-derivations = false;
-
-      # Prefer binaries from the caches so that fewer derivations have to be
-      # built locally in the first place.
-      substituters = [
-        "https://cache.nixos.org/"
-        "https://nix-community.cachix.org/"
-      ];
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
+      # auto-optimise-store, keep-derivations, substituters and
+      # trusted-public-keys are only honoured by the nix daemon for trusted
+      # users, and ignored with a warning on every nix call otherwise. Set them
+      # in /etc/nix/nix.conf instead, see script/nix-system.conf.
     };
   };
 
