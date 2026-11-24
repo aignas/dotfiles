@@ -2,13 +2,28 @@
 #
 # Apply the home-manager configuration from the dotfiles flake.
 #
-# Usage: renix [--update] [home-manager switch options]
+# Usage: renix [--update] [-v...|--verbose] [home-manager switch options]
 #
-#   --update  bump nixpkgs and home-manager in flake.lock before switching.
-#             Commit the resulting flake.lock to keep the machines in sync.
+#   --update   bump nixpkgs and home-manager in flake.lock before switching.
+#              Commit the resulting flake.lock to keep the machines in sync.
+#   -v, -vvv   make home-manager verbose and list every store path that the
+#   --verbose  garbage collection deletes instead of only the summary.
 set -euo pipefail
 
 type nix >/dev/null || exit 0
+
+# home-manager only knows a single -v, so take any number of them here and
+# pass one on.
+verbose=0
+args=()
+for arg in "$@"; do
+    if [[ $arg =~ ^-v+$ || $arg == --verbose ]]; then
+        verbose=1
+    else
+        args+=("$arg")
+    fi
+done
+set -- "${args[@]}"
 
 # Flakes need a real path and are not enabled in nix by default; the latter is
 # only persisted in nix.conf by the first successful switch.
@@ -31,9 +46,22 @@ if [[ ${1:-} == "--update" ]]; then
     nix flake update --flake "$flake"
 fi
 
+# Remove old generations and unreachable store paths. Unless verbose, only the
+# summary, e.g. "15 store paths deleted, 210.2 MiB freed", warnings and errors
+# are shown instead of every deleted path. pipefail keeps the exit status of
+# nix.
+collect_garbage() {
+    if ((verbose)); then
+        nix-collect-garbage -d
+    else
+        nix-collect-garbage -d 2>&1 |
+            awk '/store paths deleted|warning|error/'
+    fi
+}
+
 # Drop old user generations before building so that we do not run out of disk
 # space halfway through an update. The system profile is cleaned afterwards.
-nix-collect-garbage -d
+collect_garbage
 
 # home-manager manages itself once the configuration has been applied. Until
 # then use the version that is pinned in the flake.
@@ -45,6 +73,9 @@ fi
 # The optional private extension lives outside of git (see nix/internal.nix),
 # so the flake can only reach it in impure mode.
 extra_args=()
+if ((verbose)); then
+    extra_args+=(--verbose)
+fi
 internal="${flake}/internal"
 if [[ -f "${internal}/default.nix" ]]; then
     internal="$(readlink -f "$internal")"
@@ -61,4 +92,4 @@ fi
     --max-jobs "$NIX_MAX_JOBS" \
     --cores "$NIX_BUILD_CORES" \
     "$@"
-nix-collect-garbage -d
+collect_garbage
