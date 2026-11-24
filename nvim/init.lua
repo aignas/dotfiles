@@ -317,23 +317,30 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 on_attach = function(client, bufnr)
   if client.name == 'ruff' then
-    -- Disable hover in favor of Pyright
+    -- Disable hover in favor of basedpyright
     client.server_capabilities.hoverProvider = false
   end
 end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-vim.lsp.config.yamlls = { }
-vim.lsp.config.starpls = { }
+vim.lsp.config('*', { capabilities = capabilities })
+
+-- vue_ls needs ts_ls to load the Vue TypeScript plugin, which ships with the
+-- vue-language-server package from nix.
+local vue_ls = vim.fn.exepath('vue-language-server')
+local vue_plugin = vue_ls ~= '' and vim.fs.joinpath(
+    vim.fs.dirname(vim.fs.dirname(vim.uv.fs_realpath(vue_ls))),
+    'lib/language-tools/packages/language-server'
+) or nil
 vim.lsp.config.ts_ls = {
     init_options = {
-        plugins = {
+        plugins = vue_plugin and {
             {
                 name = "@vue/typescript-plugin",
-                location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
+                location = vue_plugin,
                 languages = {"javascript", "typescript", "vue"},
             },
-        },
+        } or {},
     },
     filetypes = {
         "javascript",
@@ -341,9 +348,7 @@ vim.lsp.config.ts_ls = {
         "vue",
     }
 }
-vim.lsp.config.volar = { }
 vim.lsp.config.ruff = {
-  capabilities = capabilities,
   on_attach = on_attach,
   init_options = {
     settings = {
@@ -352,17 +357,39 @@ vim.lsp.config.ruff = {
     }
   }
 }
-vim.lsp.config.ty = {
-  capabilities = capabilities,
-  settings = {},
-}
 vim.lsp.config.rust_analyzer = {
   -- Server-specific settings. See `:help vim.lsp.config`
   settings = {
     ['rust-analyzer'] = {},
   },
 }
-vim.lsp.config.starpls = {}
+
+-- Language servers installed with nix (see nix/common.nix, nix/nvim.nix and
+-- the per-machine modules), keyed by the nvim-lspconfig name, with the
+-- executables they need. Only the ones that are all on the PATH are enabled,
+-- as the machines differ.
+local servers = {
+    buf_ls = { 'buf' },
+    -- The nvim-lspconfig root detection runs `go env`.
+    gopls = { 'gopls', 'go' },
+    basedpyright = { 'basedpyright-langserver' },
+    pyrefly = { 'pyrefly' },
+    ruff = { 'ruff' },
+    -- The nvim-lspconfig root detection runs `cargo metadata`.
+    rust_analyzer = { 'rust-analyzer', 'cargo' },
+    starpls = { 'starpls' },
+    ts_ls = { 'typescript-language-server' },
+    vue_ls = { 'vue-language-server' },
+    yamlls = { 'yaml-language-server' },
+}
+for name, exes in pairs(servers) do
+    local found = vim.iter(exes):all(function(exe)
+        return vim.fn.executable(exe) == 1
+    end)
+    if found then
+        vim.lsp.enable(name)
+    end
+end
 
 for rc in string.gmatch(vim.env.EXTRA_NVIMRC or '', '[^:]+') do
     vim.cmd('exec "source' .. rc .. '"')

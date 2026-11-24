@@ -61,7 +61,9 @@
     pkgs.buf
     pkgs.gopls
     pkgs.lua5_4_compat
-    pkgs.pyright
+    # Python: basedpyright and pyrefly for types, ruff for lint and format.
+    pkgs.basedpyright
+    pkgs.pyrefly
     pkgs.ruff
     pkgs.rust-analyzer
     pkgs.shellcheck

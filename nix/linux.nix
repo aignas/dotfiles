@@ -14,8 +14,6 @@
     pkgs.buildkite-cli # bk
     pkgs.eza
     pkgs.opentofu
-    pkgs.ruff
-    pkgs.ty
     pkgs.watchexec
 
     # media
