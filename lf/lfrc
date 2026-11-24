@@ -1,3 +1,20 @@
 set shellopts -eu
+set ifs "\n"
+
+# Text files open in $EDITOR in this terminal, whatever their extension
+# (detected by content), everything else with the desktop default app.
+cmd open ${{
+    case $(file --mime-type --dereference --brief -- "$f") in
+        text/* | inode/x-empty | application/x-empty | application/json | \
+        application/javascript | application/x-shellscript | application/xml | \
+        application/toml | application/x-yaml | application/x-ndjson)
+            ${EDITOR:-nvim} $fx ;;
+        *)
+            for file in $fx; do
+                setsid -f xdg-open "$file" >/dev/null 2>&1
+            done ;;
+    esac
+}}
+
 map P $nsxiv $f
 map w $darktable $f

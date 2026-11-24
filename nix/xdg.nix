@@ -6,6 +6,10 @@
 
     configFile = {
         "user-dirs.locale".text = "C";
+        # Desktop apps (e.g. browsers asking to become the default) replace
+        # the link with a copy, which would block activation. The defaults
+        # are managed by xdg.mimeApps, so overwrite the copy.
+        "mimeapps.list".force = true;
     };
 
     userDirs = {
