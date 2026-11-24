@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [ ./unfree.nix ];
+
   manual.html.enable = false;
   manual.manpages.enable = false;
   home.stateVersion = "23.05"; # Please read the comment before changing.
@@ -36,8 +38,7 @@
     };
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (pkgs.lib.getName pkg) [ "claude-code" ];
+  dotfiles.allowUnfree = [ "claude-code" ];
 
   home.packages = [
     pkgs.asdf

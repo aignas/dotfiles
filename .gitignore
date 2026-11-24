@@ -2,3 +2,5 @@
 /tools
 /tmux/dot-tmux/plugins
 /nix/home.nix
+# Private, employer-specific extension, see nix/internal.nix
+/internal

@@ -42,8 +42,22 @@ if ! type home-manager >/dev/null 2>&1; then
     home_manager=(nix run "${flake}#home-manager" --)
 fi
 
+# The optional private extension lives outside of git (see nix/internal.nix),
+# so the flake can only reach it in impure mode.
+extra_args=()
+internal="${flake}/internal"
+if [[ -f "${internal}/default.nix" ]]; then
+    internal="$(readlink -f "$internal")"
+    if [[ -x "${internal}/sync" ]]; then
+        "${internal}/sync" || echo "renix: ${internal}/sync failed, continuing" >&2
+    fi
+    export DOTFILES_INTERNAL="$internal"
+    extra_args+=(--impure)
+fi
+
 "${home_manager[@]}" switch \
     --flake "$flake" \
+    "${extra_args[@]}" \
     --max-jobs "$NIX_MAX_JOBS" \
     --cores "$NIX_BUILD_CORES" \
     "$@"

@@ -15,7 +15,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
       mkHome = module: home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [ module ];
+        modules = [ module ./nix/internal.nix ];
       };
     in
     {
